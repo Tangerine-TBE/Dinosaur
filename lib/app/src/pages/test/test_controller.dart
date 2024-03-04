@@ -5,8 +5,6 @@ class TestController extends BaseController{
     @override
   void onInit() {
     super.onInit();
-    BleTools().checkBleAvailable();
-
-
   }
+
 }

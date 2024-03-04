@@ -20,6 +20,7 @@ class BleTools {
       print(state);
       if (state == BluetoothAdapterState.on) {
         //start connect
+        bleScanner();
       } else {
         //
       }
