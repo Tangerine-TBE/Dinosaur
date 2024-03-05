@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class BleMSg {
   static const  List<int> headHex =[0x03,0x12];

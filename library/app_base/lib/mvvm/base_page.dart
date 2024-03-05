@@ -21,12 +21,12 @@ abstract class BasePage<C> extends BaseAppBarPage<C> {
   Color? get statusBarColor => Colors.white;
 
   @override
-  Color get appBarTitleColor => MyColors.ff232323;
+  Color get appBarTitleColor => Colors.yellow;
 
   @override
   Widget? buildLeftIcon() => const Icon(
         Icons.arrow_back_ios_new,
-        color: MyColors.ff333333,
+        color: Colors.amber,
       );
 
   @override

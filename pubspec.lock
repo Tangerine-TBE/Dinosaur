@@ -150,6 +150,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_advanced_seekbar:
+    dependency: "direct main"
+    description:
+      name: flutter_advanced_seekbar
+      sha256: "984874166dbea731a1b979799527d29567c506acfd54aa47fad500d10251aa49"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.2"
   flutter_blue_plus:
     dependency: transitive
     description:
