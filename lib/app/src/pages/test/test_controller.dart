@@ -38,7 +38,7 @@ class TestController extends BaseBleController {
     for (var element in resultList) {
       var resultDevice = element.device;
       if (resultDevice.platformName == deviceName) {
-         stopScan();
+        stopScan();
         connect(resultDevice, 20);
         break;
       }
@@ -57,6 +57,7 @@ class TestController extends BaseBleController {
   void onDeviceConnected(BluetoothDevice? device) async {
     //当连接达成后
     if(  device != null && device.isConnected == true) {
+      logE('达成连接');
       List<BluetoothService> services =
       await device.discoverServices();
       services.forEach((service) async {
@@ -74,9 +75,7 @@ class TestController extends BaseBleController {
   @override
   void onDeviceDisconnected() {
     //当设备断开连接后
-    sleep(Duration(seconds: 2));
     startScan(timeout: 20);
-
   }
 
   @override

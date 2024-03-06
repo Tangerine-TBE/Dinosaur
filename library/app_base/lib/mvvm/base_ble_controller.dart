@@ -11,11 +11,15 @@ import 'package:get/get.dart';
 abstract class BaseBleController extends BaseViewModel {
   //扫描状态监听器
   late StreamSubscription<BluetoothAdapterState> adapterStateStateSubscription;
+
   //扫描结果监听器
   late StreamSubscription<List<ScanResult>> scanResultsSubscription;
+
   //扫描状态监听器
   late StreamSubscription<bool> isScanningSubscription;
-  late BluetoothConnectionState bluetoothConnectionState = BluetoothConnectionState.disconnected;
+  late BluetoothConnectionState bluetoothConnectionState =
+      BluetoothConnectionState.disconnected;
+
   //正在连接的设备
   BluetoothDevice? _mDevice;
 
@@ -33,8 +37,7 @@ abstract class BaseBleController extends BaseViewModel {
   void handleUnAuthorizedError(String? message) {}
 
   @override
-  void onHidden() {
-  }
+  void onHidden() {}
 
   @override
   void showEmpty() {}
@@ -73,50 +76,51 @@ abstract class BaseBleController extends BaseViewModel {
       },
     );
     isScanningSubscription = FlutterBluePlus.isScanning.listen(
-          (state) {
+      (state) {
         onScanStateChanged(state);
-      },
-    );
-    scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
-          (event) {
-        onScanResultChanged(event);
       },
     );
   }
 
-  stopScan()  {
+  stopScan() {
     scanResultsSubscription.cancel();
     isScanningSubscription.pause();
-     FlutterBluePlus.stopScan();
+    FlutterBluePlus.stopScan();
   }
 
   void startScan({required int timeout}) {
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
-          (event) {
+      (event) {
         onScanResultChanged(event);
       },
     );
     isScanningSubscription.resume();
-    FlutterBluePlus.startScan(timeout: const Duration(seconds: timeOut),);
+    FlutterBluePlus.startScan(
+      timeout: const Duration(seconds: timeOut),
+    );
   }
 
-  Future<void> connect(BluetoothDevice device, int time) async {
+  connect(BluetoothDevice device, int time) async{
     _mDevice = device;
     //为这个设备注册一个连接监听器
     bluetoothConnectionState = BluetoothConnectionState.connecting;
-    connectionStateSubscription = device.connectionState.listen((state)  {
+    connectionStateSubscription = device.connectionState.listen((state) {
       if (state == BluetoothConnectionState.disconnected) {
-        if(bluetoothConnectionState != BluetoothConnectionState.connecting){
-          bluetoothConnectionState = state;
-          onDeviceDisconnected();
-          _writeChar = null;
-          _mDevice = null;
-        }else{
+        if (bluetoothConnectionState != BluetoothConnectionState.connecting) {
+          if(bluetoothConnectionState != BluetoothConnectionState.disconnected){
+            bluetoothConnectionState = state;
+            onDeviceDisconnected();
+            _writeChar = null;
+            _mDevice = null;
+          }
+        }else {
           //状态混乱中，Android bug处理
         }
       } else if (state == BluetoothConnectionState.connected) {
-        bluetoothConnectionState = state;
-        onDeviceConnected(_mDevice);
+        if(bluetoothConnectionState != BluetoothConnectionState.connected){
+          bluetoothConnectionState = state;
+          onDeviceConnected(_mDevice);
+        }
       } else {
         _writeChar = null;
         _mDevice = null;
@@ -125,6 +129,7 @@ abstract class BaseBleController extends BaseViewModel {
       }
     });
     await device.connect(timeout: Duration(seconds: time));
+    bluetoothConnectionState = BluetoothConnectionState.connected;
   }
 
   void write(List<int> cmd) {
@@ -151,6 +156,5 @@ extension IntToBytes on int {
     ];
   }
 }
-extension State on BluetoothConnectionState{
-}
 
+extension State on BluetoothConnectionState {}
