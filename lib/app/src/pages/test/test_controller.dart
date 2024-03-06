@@ -75,6 +75,7 @@ class TestController extends BaseBleController {
   @override
   void onDeviceDisconnected() {
     //当设备断开连接后
+    sleep(const Duration(seconds: 2));
     startScan(timeout: 20);
   }
 

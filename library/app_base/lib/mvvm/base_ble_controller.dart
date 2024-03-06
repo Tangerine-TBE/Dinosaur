@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:app_base/exports.dart';
 import 'package:common/base/mvvm/vm/base_view_model.dart';
@@ -80,20 +81,21 @@ abstract class BaseBleController extends BaseViewModel {
         onScanStateChanged(state);
       },
     );
+    scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
+          (event) {
+        onScanResultChanged(event);
+      },
+    );
   }
 
   stopScan() {
-    scanResultsSubscription.cancel();
+    scanResultsSubscription.pause();
     isScanningSubscription.pause();
     FlutterBluePlus.stopScan();
   }
 
   void startScan({required int timeout}) {
-    scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
-      (event) {
-        onScanResultChanged(event);
-      },
-    );
+    scanResultsSubscription.resume();
     isScanningSubscription.resume();
     FlutterBluePlus.startScan(
       timeout: const Duration(seconds: timeOut),
@@ -109,12 +111,28 @@ abstract class BaseBleController extends BaseViewModel {
         if (bluetoothConnectionState != BluetoothConnectionState.connecting) {
           if(bluetoothConnectionState != BluetoothConnectionState.disconnected){
             bluetoothConnectionState = state;
+            connectionStateSubscription.cancel();
             onDeviceDisconnected();
             _writeChar = null;
             _mDevice = null;
           }
         }else {
           //状态混乱中，Android bug处理
+          logE('状态发生混乱');
+          if(device.disconnectReason != null){
+            var disconnectReason = device.disconnectReason;
+            int? code = disconnectReason?.code;
+            if(code != null){
+              logE('混乱代码为：${code}');
+              if(code == 62){
+                bluetoothConnectionState = BluetoothConnectionState.disconnected;
+                connectionStateSubscription.cancel();
+                onDeviceDisconnected();
+                _writeChar = null;
+                _mDevice = null;
+              }
+            }
+          }
         }
       } else if (state == BluetoothConnectionState.connected) {
         if(bluetoothConnectionState != BluetoothConnectionState.connected){
