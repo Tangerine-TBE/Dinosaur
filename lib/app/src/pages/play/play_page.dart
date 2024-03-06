@@ -22,8 +22,9 @@ class PlayPage extends BaseEmptyPage {
       child: Scaffold(
         backgroundColor: MyColors.pageBgColor,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: AppBar(
+            automaticallyImplyLeading: false,
             elevation: 0.0,
             backgroundColor: MyColors.pageBgColor,
             title: const Row(
