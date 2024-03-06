@@ -68,9 +68,9 @@ class HomePage extends BaseEmptyPage<HomeController> {
         } else if (index == 1) {
           Get.toNamed(RouteName.testPage, id: 1);
         } else if (index == 2) {
-          Get.toNamed(RouteName.playPage, id: 1);
+          Get.toNamed(RouteName.test1Page, id: 1);
         } else {
-          Get.toNamed(RouteName.testPage, id: 1);
+          Get.toNamed(RouteName.test2Page, id: 1);
         }
       },
     );

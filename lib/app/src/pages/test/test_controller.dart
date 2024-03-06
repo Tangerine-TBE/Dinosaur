@@ -34,7 +34,6 @@ class TestController extends BaseBleController {
   @override
   void onScanResultChanged(List<ScanResult> resultList)async {
     //查询结果
-    logE('扫描有结果了！');
     for (var element in resultList) {
       var resultDevice = element.device;
       if (resultDevice.platformName == deviceName) {
@@ -59,6 +58,7 @@ class TestController extends BaseBleController {
     if(  device != null && device.isConnected == true) {
       logE('达成连接');
       List<BluetoothService> services =
+
       await device.discoverServices();
       services.forEach((service) async {
         var characteristics = service.characteristics;

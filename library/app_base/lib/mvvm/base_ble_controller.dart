@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:app_base/exports.dart';
 import 'package:common/base/mvvm/vm/base_view_model.dart';
 import 'package:common/common/network/status_code.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:get/get.dart';
 
 /** 这是为蓝牙定制的控制器 在binding的使用的时候必须是Get.put 不能采用lazy模式*/
 
@@ -95,6 +92,7 @@ abstract class BaseBleController extends BaseViewModel {
   }
 
   void startScan({required int timeout}) {
+    logE('开始扫描蓝牙');
     scanResultsSubscription.resume();
     isScanningSubscription.resume();
     FlutterBluePlus.startScan(
@@ -110,6 +108,7 @@ abstract class BaseBleController extends BaseViewModel {
       if (state == BluetoothConnectionState.disconnected) {
         if (bluetoothConnectionState != BluetoothConnectionState.connecting) {
           if(bluetoothConnectionState != BluetoothConnectionState.disconnected){
+            logE('断开连接');
             bluetoothConnectionState = state;
             connectionStateSubscription.cancel();
             onDeviceDisconnected();
@@ -136,10 +135,13 @@ abstract class BaseBleController extends BaseViewModel {
         }
       } else if (state == BluetoothConnectionState.connected) {
         if(bluetoothConnectionState != BluetoothConnectionState.connected){
+          logE('连接中');
           bluetoothConnectionState = state;
+          stopScan();
           onDeviceConnected(_mDevice);
         }
       } else {
+        logE('未知的连接状态');
         _writeChar = null;
         _mDevice = null;
         bluetoothConnectionState = state;
