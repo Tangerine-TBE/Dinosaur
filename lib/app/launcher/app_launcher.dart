@@ -1,8 +1,8 @@
-import 'dart:convert';
+import 'dart:io';
 
-import 'package:app_base/constant/constants.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test01/app/launcher/strategy/template_launcher_strategy.dart';
 
@@ -18,7 +18,13 @@ class AppLauncher {
     BuildConfig.envName = launcherStrategy.envName;
     BuildConfig.host = launcherStrategy.host;
     runApp(App(launcherStrategy, RouteConfig()));
-
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
 
   }
 }

@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -45,10 +46,12 @@ class HomePage extends BaseEmptyPage<HomeController> {
 
   BottomNavigationBar _getButtonNavigationBar() {
     return BottomNavigationBar(
+      backgroundColor: MyColors.homePageNaviBgColor,
       selectedFontSize: 11.sp,
       unselectedFontSize: 11.sp,
+      elevation: 0,
       unselectedItemColor: MyColors.homePageNaviItemNormalColor,
-      selectedItemColor: MyColors.homePageNaviItemNormalColor,
+      selectedItemColor: MyColors.homePageNaviItemSelectColor,
       type: BottomNavigationBarType.fixed,
       items: [
         _getNaviBarItem(

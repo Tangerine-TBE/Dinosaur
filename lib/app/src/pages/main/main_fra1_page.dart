@@ -8,7 +8,8 @@ import 'package:test01/app/src/pages/main/main_fra1_controller.dart';
 
 class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
   const MainFra1Page({super.key});
-
+  @override
+  Color get background => MyColors.pageBgColor;
   @override
   Widget buildContent(BuildContext context) {
     return Column(
