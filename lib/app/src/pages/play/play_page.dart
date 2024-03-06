@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:test01/app/src/pages/main/main_fra1_page.dart';
-import 'package:test01/app/src/pages/main/main_fra2_page.dart';
+import 'package:test01/app/src/pages/play/play_fra1_page.dart';
+import 'package:test01/app/src/pages/play/play_fra2_page.dart';
 
-class MainPage extends BaseEmptyPage {
-  const MainPage({super.key});
+class PlayPage extends BaseEmptyPage {
+  const PlayPage({super.key});
 
   @override
   Color get background => MyColors.pageBgColor;
@@ -55,8 +55,8 @@ class MainPage extends BaseEmptyPage {
         ),
         body: const TabBarView(
           children: [
-            MainFra1Page(),
-            MainFra2Page(),
+            PlayFra1Page(),
+            PlayFra2Page(),
           ],
         ),
       ),

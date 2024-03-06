@@ -4,12 +4,13 @@ import 'package:common/base/route/a_route.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/pages/home/home_controller.dart';
 import 'package:test01/app/src/pages/home/home_page.dart';
-import 'package:test01/app/src/pages/main/main_fra1_controller.dart';
+import 'package:test01/app/src/pages/play/play_page.dart';
 import 'package:test01/app/src/pages/test/test_controller.dart';
 import 'package:test01/app/src/pages/test/test_pages.dart';
 
-import '../src/pages/main/main_fra2_controller.dart';
-import '../src/pages/main/main_page.dart';
+import '../src/pages/play/play_fra1_controller.dart';
+import '../src/pages/play/play_fra2_controller.dart';
+
 
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
@@ -32,11 +33,11 @@ class RouteConfig extends ARoute {
         ),
         GetPage(
           name: RouteName.mainPage,
-          page: () => const MainPage(),
+          page: () => const PlayPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => MainFra1Controller());
-              Get.lazyPut(() => MainFra2Controller());
+              Get.lazyPut(() => PlayFra1Controller());
+              Get.lazyPut(() => PlayFra2Controller());
 
             },
           ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:test01/app/src/pages/home/home_controller.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/pages/main/main_page.dart';
+import 'package:test01/app/src/pages/play/play_page.dart';
 import 'package:test01/app/src/pages/test/test_pages.dart';
 
 class HomePage extends BaseEmptyPage<HomeController> {
@@ -21,7 +21,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
               children: [
                 Offstage(
                   offstage: !(controller.selectedTabIndex.value == 0),
-                  child: const MainPage(),
+                  child: const PlayPage(),
                 ),
                 Offstage(
                   offstage: !(controller.selectedTabIndex.value == 1),

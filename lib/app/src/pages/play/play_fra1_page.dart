@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:app_base/exports.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:test01/app/src/pages/main/main_fra1_controller.dart';
+import 'package:test01/app/src/pages/play/play_fra1_controller.dart';
 
-class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
-  const MainFra1Page({super.key});
+class PlayFra1Page extends BaseEmptyPage<PlayFra1Controller> {
+  const PlayFra1Page({super.key});
+
   @override
   Color get background => MyColors.pageBgColor;
+
   @override
   Widget buildContent(BuildContext context) {
     return Column(
@@ -31,15 +30,17 @@ class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       border: Border(
                         top: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
                         left: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
                         right: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
-                        bottom: BorderSide(color: Colors.black),
+                        bottom: BorderSide(
+                          color: MyColors.containerSideColor,
+                        ),
                       ),
                     ),
                   ),
@@ -54,15 +55,17 @@ class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                       border: Border(
                         top: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
                         left: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
                         right: BorderSide(
-                          color: Colors.black,
+                          color: MyColors.containerSideColor,
                         ),
-                        bottom: BorderSide(color: Colors.black),
+                        bottom: BorderSide(
+                          color: MyColors.containerSideColor,
+                        ),
                       ),
                     ),
                     child: const Row(
@@ -89,9 +92,24 @@ class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildButton(const Center(child: Text('button1',style: TextStyle(color: Colors.white),),)),
-                      buildButton(const Center(child: Text('button2',style: TextStyle(color: Colors.white),),)),
-                      buildButton(const Center(child: Text('button3',style: TextStyle(color: Colors.white),),)),
+                      _buildButton(const Center(
+                        child: Text(
+                          'button1',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )),
+                      _buildButton(const Center(
+                        child: Text(
+                          'button2',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )),
+                      _buildButton(const Center(
+                        child: Text(
+                          'button3',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )),
                     ],
                   ),
                 ),
@@ -99,12 +117,15 @@ class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
             ),
           ),
         ),
-        Flexible(flex: 3,child: Container(),)
+        Flexible(
+          flex: 3,
+          child: Container(),
+        )
       ],
     );
   }
 
-  Widget buildButton(Widget buttonStyle){
+  Widget _buildButton(Widget buttonStyle) {
     return Container(
       width: 80,
       height: 50,
@@ -112,30 +133,30 @@ class MainFra1Page extends BaseEmptyPage<MainFra1Controller>{
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(20)),
         border: Border(
-          top: BorderSide(
-            color: Colors.black,
-          ),
+          top: BorderSide(color: MyColors.buildButtonSideColor),
           left: BorderSide(
-            color: Colors.black,
+            color: MyColors.buildButtonSideColor,
           ),
           right: BorderSide(
-            color: Colors.black,
+            color: MyColors.buildButtonSideColor,
           ),
-          bottom: BorderSide(color: Colors.black),
+          bottom: BorderSide(
+            color: MyColors.buildButtonSideColor,
+          ),
         ),
       ),
       child: buttonStyle,
     );
   }
-
 }
+
 class PicAnimatorBanner extends StatefulWidget {
   const PicAnimatorBanner({super.key});
 
   @override
   State<PicAnimatorBanner> createState() => _PicAnimatorBannerState();
-
 }
+
 class _PicAnimatorBannerState extends State<PicAnimatorBanner> {
   int _imageIndex = 0;
   final List<String> _images = [
@@ -151,7 +172,7 @@ class _PicAnimatorBannerState extends State<PicAnimatorBanner> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
       setState(() {
         _imageIndex = (_imageIndex + 1) % _images.length;
       });
@@ -167,7 +188,7 @@ class _PicAnimatorBannerState extends State<PicAnimatorBanner> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       child: Image.network(
         _images[_imageIndex],
         key: ValueKey<int>(_imageIndex),
@@ -181,5 +202,3 @@ class _PicAnimatorBannerState extends State<PicAnimatorBanner> {
     );
   }
 }
-
-
