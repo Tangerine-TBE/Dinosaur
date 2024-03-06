@@ -24,6 +24,7 @@ class TestController extends BaseBleController {
       startScan(timeout: 15);
     }
   }
+
   @override
   void onInit() {
     mData = initData();
@@ -95,8 +96,6 @@ class TestController extends BaseBleController {
     return mData;
   }
 
-  /// 强度值为 0 - 1023
-  ///   时间为 1-63
 
   List<int> generateStrengthData({
     int streamFirstValue = 0,
@@ -113,13 +112,18 @@ class TestController extends BaseBleController {
     //streamSecond表示通道二设置
     List<int> streamSecond = List.generate(8, (index) => 00);
     //streamFirst配置设置 --频率单位设置
-
     //streamFirst强度值设置
     if (streamFirstValue != 0) {
       int streamFirstResult = streamFirstValue << 6 | streamFirstKeepTime;
       List<int> streamFirstResults = streamFirstResult.toBytes();
       streamFirstResults.removeWhere((element) => element == 00);
       streamFirst.replaceRange(6, 8, streamFirstResults);
+      logE('通道一的数据为 ==$streamFirst ');
+    }else if(streamSecondValue != 0){
+      int streamSecondResult = streamSecondValue << 6 | streamSecondKeepTime;
+      List<int> streamSecondResults = streamSecondResult.toBytes();
+      streamSecondResults.removeWhere((element) => element == 00);
+      streamFirst.replaceRange(17, 19, streamSecondResults);
       logE('通道一的数据为 ==$streamFirst ');
     }
     mData = initData();
@@ -140,7 +144,6 @@ class TestController extends BaseBleController {
     cmdData.addAll(mClearHeader);
     cmdData.addAll(mData);
     logE('发送的数据为 ==$cmdData ===size ==${cmdData.length}');
-
     return cmdData;
   }
 
@@ -165,7 +168,7 @@ class TestController extends BaseBleController {
       lastTime = currentTime;
       int value = (1023 / 100 * v).toInt();
       write(generateStrengthData(
-          streamFirstValue: value, streamFirstKeepTime: 50));
+          streamFirstValue: value, streamSecondValue: value));
     }
   }
 

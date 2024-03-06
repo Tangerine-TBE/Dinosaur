@@ -95,19 +95,19 @@ class PlayFra1Page extends BaseEmptyPage<PlayFra1Controller> {
                       _buildButton(const Center(
                         child: Text(
                           'button1',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       )),
                       _buildButton(const Center(
                         child: Text(
                           'button2',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       )),
                       _buildButton(const Center(
                         child: Text(
                           'button3',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.black),
                         ),
                       )),
                     ],

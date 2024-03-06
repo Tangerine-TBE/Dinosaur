@@ -13,34 +13,19 @@ class HomePage extends BaseEmptyPage<HomeController> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return Obx(
-      () => Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Offstage(
-                  offstage: !(controller.selectedTabIndex.value == 0),
-                  child: const PlayPage(),
-                ),
-                Offstage(
-                  offstage: !(controller.selectedTabIndex.value == 1),
-                  child: const TestPages(),
-                ),
-                Offstage(
-                  offstage: !(controller.selectedTabIndex.value == 2),
-                  child:  Container(),
-                ),
-                Offstage(
-                  offstage: !(controller.selectedTabIndex.value == 3),
-                  child: Container(),
-                ),
-              ],
-            ),
+    return Column(
+      children: [
+        Expanded(
+          child: Navigator(
+            key: Get.nestedKey(1),
+            initialRoute: RouteName.playPage,
+            onGenerateRoute: controller.onGenerateRoute,
           ),
-          _getButtonNavigationBar(),
-        ],
-      ),
+        ),
+        Obx(
+          () => _getButtonNavigationBar(),
+        ),
+      ],
     );
   }
 
@@ -78,6 +63,15 @@ class HomePage extends BaseEmptyPage<HomeController> {
       currentIndex: controller.selectedTabIndex.value,
       onTap: (index) {
         controller.selectedTabIndex.value = index;
+        if (index == 0) {
+          Get.toNamed(RouteName.playPage, id: 1);
+        } else if (index == 1) {
+          Get.toNamed(RouteName.testPage, id: 1);
+        } else if (index == 2) {
+          Get.toNamed(RouteName.playPage, id: 1);
+        } else {
+          Get.toNamed(RouteName.testPage, id: 1);
+        }
       },
     );
   }

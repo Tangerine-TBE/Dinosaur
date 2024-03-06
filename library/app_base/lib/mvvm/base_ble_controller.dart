@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_base/exports.dart';
 import 'package:common/base/mvvm/vm/base_view_model.dart';
 import 'package:common/common/network/status_code.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -32,7 +33,8 @@ abstract class BaseBleController extends BaseViewModel {
   void handleUnAuthorizedError(String? message) {}
 
   @override
-  void onHidden() {}
+  void onHidden() {
+  }
 
   @override
   void showEmpty() {}

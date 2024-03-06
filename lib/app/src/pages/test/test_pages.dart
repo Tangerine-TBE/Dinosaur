@@ -1,13 +1,9 @@
 import 'dart:async';
 
 import 'package:app_base/exports.dart';
-import 'package:common/base/mvvm/view/base_empty_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_advanced_seekbar/flutter_advanced_seekbar.dart';
 import 'package:test01/app/src/pages/test/test_controller.dart';
-import 'package:test01/app/src/pages/test/weight/circular_seek_bar.dart';
 
 class TestPages extends BaseEmptyPage<TestController> {
   const TestPages({super.key});
@@ -37,7 +33,7 @@ class TestPages extends BaseEmptyPage<TestController> {
           ),
           Flexible(
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: 200,
                 child: AdvancedSeekBar(
                   Colors.red,

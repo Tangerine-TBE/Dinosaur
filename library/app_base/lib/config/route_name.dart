@@ -1,5 +1,5 @@
 class RouteName {
     static const  String testPage  ='/test';
-    static const String mainPage = '/main';
+    static const String playPage = '/play';
     static const String homePage = '/home';
 }
