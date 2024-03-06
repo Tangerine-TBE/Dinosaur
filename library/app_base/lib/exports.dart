@@ -18,3 +18,4 @@ export 'package:common/common/top.dart';
 
 export 'util/date.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:common/base/mvvm/view/base_empty_page.dart';
