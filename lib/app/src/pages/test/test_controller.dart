@@ -1,122 +1,91 @@
 import 'dart:async';
-import 'dart:ffi';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:io';
+import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:app_base/ble/ble_msg.dart';
 
-class TestController extends BaseController {
-  BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
-  late StreamSubscription<BluetoothAdapterState> _adapterStateStateSubscription;
-  late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
-  List<ScanResult> _scanResults = [];
-  ValueNotifier<double> valueNotifier = ValueNotifier<double>(0);
-  late StreamSubscription<bool> _isScanningSubscription;
-  bool _isScanning = false;
+class TestController extends BaseBleController {
   String deviceName = 'XHTKJ';
   Timer? dataSendTimer;
-  //connect
-  int? _rssi;
-  int? _mtuSize;
-  BluetoothConnectionState _connectionState =
-      BluetoothConnectionState.disconnected;
-  List<BluetoothService> _services = [];
-  bool _isDiscoveringServices = false;
-  bool _isConnecting = false;
-  bool _isDisconnecting = false;
   bool queenSend = false;
-  late StreamSubscription<BluetoothConnectionState>
-      _connectionStateSubscription;
-  late StreamSubscription<bool> _isConnectingSubscription;
-  late StreamSubscription<bool> _isDisconnectingSubscription;
-  late StreamSubscription<int> _mtuSubscription;
   late BluetoothDevice connectedDevice;
   late List<int> mData;
-  List<int> mCustomHeader = [0x03, 0x12,0xf3];
-  List<int> mClearHeader = [0x03,0x12,0xf0];
+  List<int> mCustomHeader = [0x03, 0x12, 0xf3];
+  List<int> mClearHeader = [0x03, 0x12, 0xf0];
   List<int> mModel = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
-  late BluetoothCharacteristic writeChar;
   var lastTime = DateTime.now();
-  @override
-  void onInit() async {
-    valueNotifier.addListener(() {
-      logE('${valueNotifier.value}');
-    });
 
-    _adapterStateStateSubscription =
-        FlutterBluePlus.adapterState.listen((state) {
-      _adapterState = state;
-      if (_adapterState == BluetoothAdapterState.off) {
-        Get.snackbar('tips', 'open the bluetooth connection');
+  @override
+  void onAdapterStateChanged(BluetoothAdapterState state) {
+    if (state == BluetoothAdapterState.off) {
+      showToast('蓝牙已关闭!请打开蓝牙');
+    }else{
+      startScan(timeout: 15);
+    }
+  }
+  @override
+  void onInit() {
+    mData = initData();
+    super.onInit();
+  }
+
+  @override
+  void onScanResultChanged(List<ScanResult> resultList)async {
+    //查询结果
+    logE('扫描有结果了！');
+    for (var element in resultList) {
+      var resultDevice = element.device;
+      if (resultDevice.platformName == deviceName) {
+         stopScan();
+        connect(resultDevice, 20);
+        break;
       }
-    });
-    _isScanningSubscription = FlutterBluePlus.isScanning.listen((state) {
-      _isScanning = state;
-    });
-    _scanResultsSubscription = FlutterBluePlus.scanResults.listen(
-      (results) async {
-        _scanResults = results;
-        for (int i = 0; i < _scanResults.length; i++) {
-          var bleDevice = _scanResults[i].device;
-          if (bleDevice.platformName == deviceName) {
-            stop();
-            connectedDevice = bleDevice;
-            _connectionStateSubscription =
-                bleDevice.connectionState.listen((state) async {
-              _connectionState = state;
-              if (state == BluetoothConnectionState.connected) {
-                _services = []; // must rediscover services
-              }
-              if (state == BluetoothConnectionState.connected &&
-                  _rssi == null) {
-                _rssi = await bleDevice.readRssi();
-              }
-            });
-            _mtuSubscription = bleDevice.mtu.listen((value) {
-              _mtuSize = value;
-            });
-            try {
-              await connectedDevice.connect(
-                  timeout: const Duration(seconds: 20));
-            } catch (e) {
-              logE(e.toString());
-            }
-            if (connectedDevice.isConnected) {
-              List<BluetoothService> services =
-                  await connectedDevice.discoverServices();
-              services.forEach((service) async {
-                var characteristics = service.characteristics;
-                for (BluetoothCharacteristic c in characteristics) {
-                  if (c.characteristicUuid ==
-                      Guid.fromString(BleMSg.notifyUUID)) {
-                    List<int> msg = await c.read();
-                    logE('the notify msg is $msg');
-                  } else if (c.characteristicUuid ==
-                      Guid.fromString(BleMSg.writeUUID)) {
-                    writeChar = c;
-                  }
-                }
-              });
-            }
-            break;
+    }
+  }
+
+  @override
+  void onScanStateChanged(bool state) {
+    // if (!state) {
+    //   if(!getDeviceStatus()){
+    //     startScan(timeout: 15);
+    //   }
+    // }
+  }
+  @override
+  void onDeviceConnected(BluetoothDevice? device) async {
+    //当连接达成后
+    if(  device != null && device.isConnected == true) {
+      List<BluetoothService> services =
+      await device.discoverServices();
+      services.forEach((service) async {
+        var characteristics = service.characteristics;
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
+            setWriteChar(c) ;
           }
         }
-      },
-      onError: (e) {
-        Get.snackbar('tips', e);
-      },
-    );
-    FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+      });
+    }
+
   }
 
-  void stop() {
-    FlutterBluePlus.stopScan();
+  @override
+  void onDeviceDisconnected() {
+    //当设备断开连接后
+    sleep(Duration(seconds: 2));
+    startScan(timeout: 20);
+
   }
+
+  @override
+  void onDeviceUnKnowError(BluetoothConnectionState state) {
+  }
+
 
   void buttonClicked(int model) {
-    if (connectedDevice.isConnected) {
-      writeChar.write(generateModelData(model));
+    if (getDeviceStatus() == true) {
+        write(generateModelData(model));
     }
   }
 
@@ -129,8 +98,8 @@ class TestController extends BaseController {
   /// 强度值为 0 - 1023
   ///   时间为 1-63
 
-  List<int> generateStrengthData(
-      {int streamFirstValue = 0,
+  List<int> generateStrengthData({
+    int streamFirstValue = 0,
     int streamSecondValue = 0,
     int streamFirstHz = 0,
     int streamFirstTime = 0,
@@ -145,14 +114,12 @@ class TestController extends BaseController {
     List<int> streamSecond = List.generate(8, (index) => 00);
     //streamFirst配置设置 --频率单位设置
 
-
-
     //streamFirst强度值设置
-    if(streamFirstValue !=0){
+    if (streamFirstValue != 0) {
       int streamFirstResult = streamFirstValue << 6 | streamFirstKeepTime;
       List<int> streamFirstResults = streamFirstResult.toBytes();
       streamFirstResults.removeWhere((element) => element == 00);
-      streamFirst.replaceRange(6,  8, streamFirstResults);
+      streamFirst.replaceRange(6, 8, streamFirstResults);
       logE('通道一的数据为 ==$streamFirst ');
     }
     mData = initData();
@@ -165,7 +132,8 @@ class TestController extends BaseController {
     logE('发送的数据为 ==$cmdData ===size ==${cmdData.length}');
     return cmdData;
   }
-  List<int> clear(){
+
+  List<int> clear() {
     mData = initData();
     mData[0] = 0x03;
     var cmdData = <int>[];
@@ -175,7 +143,8 @@ class TestController extends BaseController {
 
     return cmdData;
   }
-  List<int> noQueen(){
+
+  List<int> noQueen() {
     mData = initData();
     mData[0] = 0x07;
     var cmdData = <int>[];
@@ -185,35 +154,20 @@ class TestController extends BaseController {
     return cmdData;
   }
 
-  @override
-  void onClose() {
-    _adapterStateStateSubscription.cancel();
-    _scanResultsSubscription.cancel();
-    _isScanningSubscription.cancel();
-  }
-
   List<int> initData() {
     return List.generate(17, (index) => 00);
   }
-  void writeData(int v){
+
+  void writeData(int v) {
     var currentTime = DateTime.now();
-    if(currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=500){
+    if (currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=
+        500) {
       lastTime = currentTime;
-      int value = (1023/100 * v) .toInt();
-      writeChar.write(generateStrengthData(streamFirstValue: value,streamFirstKeepTime: 50));
+      int value = (1023 / 100 * v).toInt();
+      write(generateStrengthData(
+          streamFirstValue: value, streamFirstKeepTime: 50));
     }
-
   }
-}
 
 
-extension IntToBytes on int {
-  List<int> toBytes() {
-    return <int>[
-      this & 0xFF,
-      (this >> 8) & 0xFF,
-      (this >> 16) & 0xFF,
-      (this >> 24) & 0xFF
-    ];
-  }
 }

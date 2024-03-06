@@ -53,7 +53,7 @@ class TestPages extends BaseEmptyPage<TestController> {
                   seekBarProgress: (v) {
                     if (!controller.queenSend) {
                       controller.queenSend = true;
-                      controller.writeChar.write(controller.noQueen());
+                      controller.write(controller.noQueen());
                     }
                     controller.writeData(v);
                   },

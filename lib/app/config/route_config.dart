@@ -10,7 +10,7 @@ import 'package:test01/app/src/pages/test/test_pages.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.mainPage;
+  String initialRoute = RouteName.testPage;
 
   @override
   String? loginRoute;
