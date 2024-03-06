@@ -51,9 +51,11 @@ class TestPages extends BaseEmptyPage<TestController> {
                       controller.queenSend = true;
                       controller.write(controller.noQueen());
                     }
-                    controller.writeData(v);
+                    controller.processWrite(v);
                   },
-                  seekBarFinished: (v) {},
+                  seekBarFinished: (v) {
+                    controller.finishWrite(v);
+                  },
                 ),
               ),
             ),

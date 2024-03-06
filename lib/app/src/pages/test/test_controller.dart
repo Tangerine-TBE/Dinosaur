@@ -119,12 +119,13 @@ class TestController extends BaseBleController {
       streamFirstResults.removeWhere((element) => element == 00);
       streamFirst.replaceRange(6, 8, streamFirstResults);
       logE('通道一的数据为 ==$streamFirst ');
-    }else if(streamSecondValue != 0){
+    }
+    if(streamSecondValue != 0){
       int streamSecondResult = streamSecondValue << 6 | streamSecondKeepTime;
       List<int> streamSecondResults = streamSecondResult.toBytes();
       streamSecondResults.removeWhere((element) => element == 00);
-      streamFirst.replaceRange(17, 19, streamSecondResults);
-      logE('通道一的数据为 ==$streamFirst ');
+      streamSecond.replaceRange(6, 8, streamSecondResults);
+      logE('通道二的数据为 ==$streamSecond ');
     }
     mData = initData();
     mData.replaceRange(0, 8, streamFirst);
@@ -161,7 +162,7 @@ class TestController extends BaseBleController {
     return List.generate(17, (index) => 00);
   }
 
-  void writeData(int v) {
+  void processWrite(int v) {
     var currentTime = DateTime.now();
     if (currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=
         500) {
@@ -170,6 +171,11 @@ class TestController extends BaseBleController {
       write(generateStrengthData(
           streamFirstValue: value, streamSecondValue: value));
     }
+  }
+  void finishWrite(int v){
+    int value = (1023 / 100 * v).toInt();
+    write(generateStrengthData(
+        streamFirstValue: value, streamSecondValue: value));
   }
 
 
