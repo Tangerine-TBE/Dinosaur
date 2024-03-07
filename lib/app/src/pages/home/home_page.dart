@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:test01/app/src/pages/home/home_controller.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/pages/play/play_page.dart';
-import 'package:test01/app/src/pages/test/test_pages.dart';
 
 class HomePage extends BaseEmptyPage<HomeController> {
   const HomePage({super.key});
+
+  @override
+  bool get resizeToAvoidBottomInset => true;
 
   @override
   Widget buildContent(BuildContext context) {
@@ -22,10 +23,14 @@ class HomePage extends BaseEmptyPage<HomeController> {
             onGenerateRoute: controller.onGenerateRoute,
           ),
         ),
-        Obx(
-          () => _getButtonNavigationBar(),
-        ),
       ],
+    );
+  }
+
+  @override
+  Widget? buildBottomNavigation() {
+    return Obx(
+      () => _getButtonNavigationBar(),
     );
   }
 

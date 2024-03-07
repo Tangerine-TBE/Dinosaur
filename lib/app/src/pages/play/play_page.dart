@@ -39,6 +39,7 @@ class PlayPage extends BaseEmptyPage {
                   indicatorColor: MyColors.indicatorColor,
                   indicatorPadding: EdgeInsets.only(bottom: 5),
                   indicatorSize: TabBarIndicatorSize.label,
+                  splashFactory: NoSplash.splashFactory,
                   dividerHeight: 0,
                   indicatorWeight: 1,
                   tabs: [

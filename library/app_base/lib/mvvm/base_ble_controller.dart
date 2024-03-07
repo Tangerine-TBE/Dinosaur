@@ -92,7 +92,6 @@ abstract class BaseBleController extends BaseViewModel {
   }
 
   void startScan({required int timeout}) {
-    logE('开始扫描蓝牙');
     scanResultsSubscription.resume();
     isScanningSubscription.resume();
     FlutterBluePlus.startScan(

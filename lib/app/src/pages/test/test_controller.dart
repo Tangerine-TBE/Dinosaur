@@ -38,6 +38,7 @@ class TestController extends BaseBleController {
       var resultDevice = element.device;
       if (resultDevice.platformName == deviceName) {
         stopScan();
+        await Future.delayed(Duration(seconds: 2));
         connect(resultDevice, 20);
         break;
       }
@@ -73,9 +74,9 @@ class TestController extends BaseBleController {
   }
 
   @override
-  void onDeviceDisconnected() {
+  void onDeviceDisconnected() async {
     //当设备断开连接后
-    sleep(const Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 2));
     startScan(timeout: 20);
   }
 
@@ -162,15 +163,33 @@ class TestController extends BaseBleController {
     return List.generate(17, (index) => 00);
   }
 
-  void processWrite(int v) {
-    var currentTime = DateTime.now();
-    if (currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=
-        500) {
-      lastTime = currentTime;
+
+  /// 1.process值 - n Int
+  /// 2.每200ms select一次Sliver的值 并且发送
+  /// 3.如果 - n Int >0 开始 200ms的循环
+  /// 4.如果 - n Int <=0 停止 200ms的循坏
+  var processValue = 0;
+   processWrite(int v)  {
+    //1.开始滑动，触发循环机制
+    processValue = v;
+    do{
       int value = (1023 / 100 * v).toInt();
       write(generateStrengthData(
           streamFirstValue: value, streamSecondValue: value));
-    }
+      sleep(Duration(milliseconds: 200));
+    }while(processValue > 0);
+
+    //
+    // var timer = Timer(Duration(milliseconds: 200),(){
+    //
+    // });
+    //
+    // var currentTime = DateTime.now();
+    // if (currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=
+    //     500) {
+    //   lastTime = currentTime;
+    //
+    // }
   }
   void finishWrite(int v){
     int value = (1023 / 100 * v).toInt();
