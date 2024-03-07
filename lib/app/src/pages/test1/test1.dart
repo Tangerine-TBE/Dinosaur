@@ -143,7 +143,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10),
+          margin: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
           padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 5,

@@ -31,14 +31,18 @@ class Test1Controller extends BaseController {
   }
 
   void startUdp() async {
-    /*开启UDP监听 本机地址 端口8080*/
-    List<InternetAddress> host =await _getIPAddress();
-    logE(host[0].host);
-    rawDatagramSocket = await RawDatagramSocket.bind(host[0].host, listen);
+    var interfaces = await NetworkInterface.list();
+    var addresses = interfaces[0].addresses;
+    rawDatagramSocket = await RawDatagramSocket.bind(addresses[0].address, listen);
+    rawDatagramSocket?.broadcastEnabled = true;
     rawDatagramSocket?.listen((event) {
       Datagram? dg = rawDatagramSocket?.receive();
       if (dg != null) {
-        logE('received ${String.fromCharCodes(dg.data)}');
+        charData.insert(0, MsgBean.create(msg: String.fromCharCodes(dg.data), type: 1));
+        update([chatListId]);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          scrollController.jumpTo(scrollController.position.minScrollExtent);
+        });
       }
     });
     if (rawDatagramSocket != null) {
