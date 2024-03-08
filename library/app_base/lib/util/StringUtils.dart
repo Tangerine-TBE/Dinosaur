@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'dart:convert';
 class StringUtils{
   static String bytesToHex(Uint8List bytes) {
     return bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join('');
@@ -13,6 +13,9 @@ class StringUtils{
       }
     }
     return result;
+  }
+  static Uint8List stringToByteList(String text){
+   return  Uint8List.fromList(utf8.encode(text));
   }
 
   // static String bytes

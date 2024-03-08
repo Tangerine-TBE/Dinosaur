@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/StringUtils.dart';
@@ -16,11 +17,14 @@ class Test1Controller extends BaseController {
   final int listen = 8081;
   String serverHost = '';
   int serverPort = 0;
+  String targetIp = '';
+  final originIp = ''.obs;
   final Rx<bool> sendInput = false.obs;
   RawDatagramSocket? rawDatagramSocket;
   late TextEditingController textEditingController;
   late ScrollController scrollController;
-
+  String needReply = '';
+  Timer? timer;
   final List<MsgBean> charData = <MsgBean>[];
 
   @override
@@ -39,14 +43,14 @@ class Test1Controller extends BaseController {
   void setting() {
     Get.dialog(
       HostEditDialog(
-        onConfirm: (value, loopModel) {
+        onConfirm: (value, target) {
           Get.back();
           List<String> hostAndPort = value.split('/');
           serverHost = hostAndPort.first;
           serverPort = int.parse(hostAndPort.last);
           SaveKey.sendPort.save(serverPort);
           SaveKey.sendHost.save(serverHost);
-          SaveKey.loopModel.save(loopModel);
+          targetIp = target;
           startUdp();
         },
         onCancel: () {
@@ -89,7 +93,9 @@ class Test1Controller extends BaseController {
               dataString += '.';
             }
           }
-          udpWrite('3:$dataString');
+          originIp.value = dataString;
+          sendInput.value = true;
+          _udpStartCommand('3:$dataString');
         } else if (needReply.startsWith(askForKeptAlive)) {
           var data = StringUtils.bytesToDecimalString(dg.data).split('.');
           if (data.isNotEmpty) {
@@ -98,9 +104,10 @@ class Test1Controller extends BaseController {
                   int.parse(data[5]) == 0 &&
                   int.parse(data[6]) == 0 &&
                   int.parse(data[7]) == 0) {
-                udpWrite('1');
+                sendInput.value = false;
+                _udpStartCommand('1');
               } else {
-                udpWrite('2:${needReply.split(':')[1]}');
+                _udpStartCommand('2:${needReply.split(':')[1]}');
               }
             }
           }
@@ -113,7 +120,7 @@ class Test1Controller extends BaseController {
                   int.parse(data[6]) == 0 &&
                   int.parse(data[7]) == 0) {
               } else {
-                udpWrite('2:${needReply.split(':')[1]}');
+                _udpStartCommand('2:${needReply.split(':')[1]}');
               }
             }
           }
@@ -122,18 +129,35 @@ class Test1Controller extends BaseController {
     });
     //开启自动询答模式
     //1.请求有效地址
-    udpWrite('1');
+    _udpStartCommand('1');
   }
 
-  String needReply = '';
-  Timer? timer;
+  void udpWriteContent(String text) {
+    List<int> data = <int>[];
+    //1.需要目标地址
+    var target = targetIp.split('.');
+    if (target.isNotEmpty) {
+      for (var e in target) {
+        var num = int.parse(e);
+        data.add(num);
+      }
+      var origin = originIp.split('.');
+      if (origin.isNotEmpty) {
+        for (var e in origin) {
+          var num = int.parse(e);
+          data.add(num);
+        }
+        data.addAll(StringUtils.stringToByteList(text));
+        rawDatagramSocket?.send(data, InternetAddress(serverHost), serverPort);
+      }
+    }
+  }
 
-  void udpWrite(String text) async {
+  void _udpStartCommand(String text) async {
     List<int> data = <int>[];
     needReply = text;
     if (text.startsWith(askForAddress)) {
       data.addAll(List.generate(8, (index) => 00));
-      text = '请求有效地址：指令--1';
     } else if (text.startsWith(askForCheckAvailable)) {
       var splitData = text.trim().split(':');
       if (splitData.isNotEmpty && splitData.length == 2) {
@@ -145,7 +169,6 @@ class Test1Controller extends BaseController {
           }
         }
         if (data.length == 4) {
-          text = '查询地址是否可用：${splitData[1]}--指令--3';
           var cacheData = <int>[...data];
           for (var g in cacheData) {
             data.add(g);
@@ -166,12 +189,6 @@ class Test1Controller extends BaseController {
           }
         }
       }
-      if (data.length == 8) {
-        text = '心跳发送一次：${splitData[1]} --指令--2';
-      }
-    } else if (text.startsWith(askFoContent)) {
-    } else {
-      text = '无效指令';
     }
     if (rawDatagramSocket != null) {
       sendInput.value = false;
@@ -179,23 +196,7 @@ class Test1Controller extends BaseController {
       rawDatagramSocket?.send(data, InternetAddress(serverHost), serverPort);
       timer = Timer(const Duration(seconds: 5), () {
         if (needReply.isNotEmpty) {
-          if (needReply.startsWith(askForAddress)) {
-            // tips = '请求有效地址超时,发送成功但没有回复';
-          } else if (needReply.startsWith(askForCheckAvailable)) {
-            // tips = '查询地址有效性超时,发送成功但没有回复';
-          } else if (needReply.startsWith(askForKeptAlive)) {
-            // tips = '请求心跳超时,发送成功但没有回复';
-          } else if (needReply.startsWith(askFoContent)) {
-            // tips = '请求内容超时,发送成功但没有回复';
-          } else {
-            // tips = '请求超时,内容不符合!';
-          }
-          // charData.insert(
-          //     0, MsgBean.create(msg: tips, type: 0, size: charData.length));
-          // update([chatListId]);
-          // WidgetsBinding.instance.addPostFrameCallback((_) {
-          //   scrollController.jumpTo(scrollController.position.minScrollExtent);
-          // });
+          _udpStartCommand(needReply);
         }
       });
       // textEditingController.clear();

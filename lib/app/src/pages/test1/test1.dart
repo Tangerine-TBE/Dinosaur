@@ -14,7 +14,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
     return AppBar(
       backgroundColor: MyColors.pageBgColor,
       centerTitle: true,
-      title: const Text('udp指令测试'),
+      title: Obx(() =>Text(controller.originIp.value) ) ,
       actions: [
         Container(
           padding: EdgeInsets.only(right: 10.h),
@@ -202,7 +202,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
           textBaseline: TextBaseline.alphabetic,
         ),
         onChanged: (value) => {},
-        onSubmitted: (value) => {controller.udpWrite(value)},
+        onSubmitted: (value) => {controller.udpWriteContent(value)},
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
           prefixIcon: const Icon(
