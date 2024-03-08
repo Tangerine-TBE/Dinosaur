@@ -106,7 +106,7 @@ class Test1Controller extends BaseController {
                 0,
                 MsgBean.create(
                     msg: StringUtils.decodeString(realData),
-                    type: 0,
+                    type: 1,
                     size: charData.length + 1));
             update([chatListId]);
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -223,7 +223,7 @@ class Test1Controller extends BaseController {
         rawDatagramSocket?.send(data, InternetAddress(serverHost), serverPort);
         textEditingController.clear();
         charData.insert(
-            0, MsgBean.create(msg: text, type: 1, size: charData.length + 1));
+            0, MsgBean.create(msg: text, type: 0, size: charData.length + 1));
         update([chatListId]);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           scrollController.jumpTo(scrollController.position.minScrollExtent);
