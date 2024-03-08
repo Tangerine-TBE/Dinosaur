@@ -17,6 +17,9 @@ class StringUtils{
   static Uint8List stringToByteList(String text){
    return  Uint8List.fromList(utf8.encode(text));
   }
+  static String decodeString(Uint8List bytes){
+    return utf8.decode(bytes);
+  }
 
   // static String bytes
 }

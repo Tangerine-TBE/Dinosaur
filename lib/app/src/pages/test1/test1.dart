@@ -75,10 +75,10 @@ class test1 extends BaseEmptyPage<Test1Controller> {
                             (e) {
                               return e.type == 0
                                   ? buildMessageSendWidget(
-                                      '${e.size}--${e.msg}',
+                                      e.msg,
                                     )
                                   : buildMessageRecepWidget(
-                                      '${e.size}--${e.msg}',
+                                      e.msg,
                                     );
                             },
                           ).toList(),
@@ -105,7 +105,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Expanded(
+        Flexible(
           child: Container(
             margin: const EdgeInsets.only(right: 10, bottom: 10, left: 20),
             padding: const EdgeInsets.symmetric(
@@ -148,7 +148,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
+        Flexible(
           child: Container(
             margin: const EdgeInsets.only(left: 10, bottom: 10, right: 20),
             padding: const EdgeInsets.symmetric(

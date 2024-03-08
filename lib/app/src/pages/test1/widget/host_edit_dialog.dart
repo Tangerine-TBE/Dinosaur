@@ -9,12 +9,10 @@ class HostEditDialog extends StatefulWidget {
   String host;
   String port;
   String target;
-  bool loopModel;
 
   HostEditDialog({super.key,
     required this.onConfirm,
     required this.onCancel,
-    this.loopModel = false,
     this.host = '',
     this.target = '',
     this.port = ''});
@@ -151,7 +149,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
                     fontSize: 18.sp,
                     textBaseline: TextBaseline.alphabetic,
                   ),
-                  onChanged: (value) => {widget.host = value},
+                  onChanged: (value) => {widget.target = value},
                   decoration: InputDecoration(
                       hintText: 'Host Edit',
                       contentPadding: const EdgeInsets.only(left: 10),

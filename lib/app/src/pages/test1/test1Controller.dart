@@ -44,6 +44,7 @@ class Test1Controller extends BaseController {
     Get.dialog(
       HostEditDialog(
         onConfirm: (value, target) {
+          rawDatagramSocket?.close();
           Get.back();
           List<String> hostAndPort = value.split('/');
           serverHost = hostAndPort.first;
@@ -51,6 +52,9 @@ class Test1Controller extends BaseController {
           SaveKey.sendPort.save(serverPort);
           SaveKey.sendHost.save(serverHost);
           targetIp = target;
+          if (targetIp.isNotEmpty) {
+            sendInput.value = true;
+          }
           startUdp();
         },
         onCancel: () {
@@ -82,7 +86,6 @@ class Test1Controller extends BaseController {
       Datagram? dg = rawDatagramSocket?.receive();
       if (dg != null) {
         timer?.cancel();
-        await Future.delayed(const Duration(seconds: 2));
         if (needReply.startsWith(askForAddress)) {
           var data = StringUtils.bytesToDecimalString(dg.data).split('.');
           data.removeRange(4, 8);
@@ -94,23 +97,91 @@ class Test1Controller extends BaseController {
             }
           }
           originIp.value = dataString;
-          sendInput.value = true;
           _udpStartCommand('3:$dataString');
         } else if (needReply.startsWith(askForKeptAlive)) {
-          var data = StringUtils.bytesToDecimalString(dg.data).split('.');
-          if (data.isNotEmpty) {
-            if (data.length == 8) {
-              if (int.parse(data[4]) == 0 &&
-                  int.parse(data[5]) == 0 &&
-                  int.parse(data[6]) == 0 &&
-                  int.parse(data[7]) == 0) {
-                sendInput.value = false;
-                _udpStartCommand('1');
-              } else {
-                _udpStartCommand('2:${needReply.split(':')[1]}');
+          if (dg.data.length > 8) {
+            //收到消息
+            var realData = dg.data.sublist(10);
+            charData.insert(
+                0,
+                MsgBean.create(
+                    msg: StringUtils.decodeString(realData),
+                    type: 0,
+                    size: charData.length + 1));
+            update([chatListId]);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollController
+                  .jumpTo(scrollController.position.minScrollExtent);
+            });
+          } else {
+            var data = StringUtils.bytesToDecimalString(dg.data).split('.');
+            if (data.isNotEmpty) {
+              if (data.length == 8) {
+                if (int.parse(data[0]) == int.parse(originIp.split('.')[0]) &&
+                    int.parse(data[1]) == int.parse(originIp.split('.')[1]) &&
+                    int.parse(data[2]) == int.parse(originIp.split('.')[2]) &&
+                    int.parse(data[3]) == int.parse(originIp.split('.')[3]) &&
+                    int.parse(data[4]) == 0 &&
+                    int.parse(data[5]) == 0 &&
+                    int.parse(data[6]) == 0 &&
+                    int.parse(data[7]) == 0) {
+                  //云端错误响应（终端地址失效）
+                  _udpStartCommand('1');
+                  logE('云端错误响应（终端地址失效）');
+                } else if (targetIp.isNotEmpty && int.parse(data[0]) ==
+                        int.parse(targetIp.split('.')[0]) &&
+                    int.parse(data[1]) == int.parse(targetIp.split('.')[1]) &&
+                    int.parse(data[2]) == int.parse(targetIp.split('.')[2]) &&
+                    int.parse(data[3]) == int.parse(targetIp.split('.')[3]) &&
+                    int.parse(data[4]) == 0 &&
+                    int.parse(data[5]) == 0 &&
+                    int.parse(data[6]) == 0 &&
+                    int.parse(data[7]) == 0) {
+                  //云端错误响应（目标地址失效）
+
+                  logE('云端错误响应（目标地址失效）');
+                } else if (int.parse(data[0]) == 0 &&
+                    int.parse(data[1]) == 0 &&
+                    int.parse(data[2]) == 0 &&
+                    int.parse(data[3]) == 0 &&
+                    int.parse(data[4]) == int.parse(originIp.split('.')[0]) &&
+                    int.parse(data[5]) == int.parse(originIp.split('.')[1]) &&
+                    int.parse(data[6]) == int.parse(originIp.split('.')[2]) &&
+                    int.parse(data[7]) == int.parse(originIp.split('.')[3])) {
+                  //云端错误响应（源地址非自身）：
+
+                  logE('云端错误响应（源地址非自身）');
+                } else if (targetIp.isNotEmpty && int.parse(data[0]) ==
+                        int.parse(targetIp.split('.')[0]) &&
+                    int.parse(data[1]) == int.parse(targetIp.split('.')[1]) &&
+                    int.parse(data[2]) == int.parse(targetIp.split('.')[2]) &&
+                    int.parse(data[3]) == int.parse(targetIp.split('.')[3]) &&
+                    int.parse(data[4]) == int.parse(originIp.split('.')[0]) &&
+                    int.parse(data[5]) == int.parse(originIp.split('.')[1]) &&
+                    int.parse(data[6]) == int.parse(originIp.split('.')[2]) &&
+                    int.parse(data[7]) == int.parse(originIp.split('.')[3])) {
+                  //发送成功（目标终端将接收到包）：
+
+                  logE('发送成功（目标终端将接收到包）');
+                } else if (int.parse(data[0]) ==
+                        int.parse(originIp.split('.')[0]) &&
+                    int.parse(data[1]) == int.parse(originIp.split('.')[1]) &&
+                    int.parse(data[2]) == int.parse(originIp.split('.')[2]) &&
+                    int.parse(data[3]) == int.parse(originIp.split('.')[3]) &&
+                    int.parse(data[4]) == int.parse(originIp.split('.')[0]) &&
+                    int.parse(data[5]) == int.parse(originIp.split('.')[1]) &&
+                    int.parse(data[6]) == int.parse(originIp.split('.')[2]) &&
+                    int.parse(data[7]) == int.parse(originIp.split('.')[3])) {
+                  //心跳成功
+                  _udpStartCommand('2:${needReply.split(':')[1]}');
+                }else{
+                  logE(StringUtils.decodeString(dg.data));
+                }
+                return;
               }
             }
           }
+          _udpStartCommand('1');
         } else if (needReply.startsWith(askForCheckAvailable)) {
           var data = StringUtils.bytesToDecimalString(dg.data).split('.');
           if (data.isNotEmpty) {
@@ -124,7 +195,7 @@ class Test1Controller extends BaseController {
               }
             }
           }
-        } else if (needReply.startsWith(askFoContent)) {}
+        }
       }
     });
     //开启自动询答模式
@@ -147,8 +218,16 @@ class Test1Controller extends BaseController {
           var num = int.parse(e);
           data.add(num);
         }
+        data.addAll([0xff, 0xff]);
         data.addAll(StringUtils.stringToByteList(text));
         rawDatagramSocket?.send(data, InternetAddress(serverHost), serverPort);
+        textEditingController.clear();
+        charData.insert(
+            0, MsgBean.create(msg: text, type: 1, size: charData.length + 1));
+        update([chatListId]);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          scrollController.jumpTo(scrollController.position.minScrollExtent);
+        });
       }
     }
   }
@@ -191,21 +270,12 @@ class Test1Controller extends BaseController {
       }
     }
     if (rawDatagramSocket != null) {
-      sendInput.value = false;
-      await Future.delayed(const Duration(seconds: 2));
       rawDatagramSocket?.send(data, InternetAddress(serverHost), serverPort);
       timer = Timer(const Duration(seconds: 5), () {
         if (needReply.isNotEmpty) {
           _udpStartCommand(needReply);
         }
       });
-      // textEditingController.clear();
-      // charData.insert(
-      //     0, MsgBean.create(msg: text, type: 0, size: charData.length));
-      // update([chatListId]);
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   scrollController.jumpTo(scrollController.position.minScrollExtent);
-      // });
     }
   }
 }
