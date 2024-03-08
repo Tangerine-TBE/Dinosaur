@@ -1,4 +1,3 @@
-
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
     return AppBar(
       backgroundColor: MyColors.pageBgColor,
       centerTitle: true,
-      title:const Text(
-          'udp指令测试'
-      ),
+      title: const Text('udp指令测试'),
       actions: [
         Container(
           padding: EdgeInsets.only(right: 10.h),
@@ -74,13 +71,17 @@ class test1 extends BaseEmptyPage<Test1Controller> {
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           controller: controller.scrollController,
                           reverse: true,
-                          children: controller.charData
-                              .map((e) {
-                                return e.type == 0
-                                  ? buildMessageSendWidget('${e.size}--${e.msg}')
-                                  : buildMessageRecepWidget('${e.size}--${e.msg}');
-                              })
-                              .toList(),
+                          children: controller.charData.map(
+                            (e) {
+                              return e.type == 0
+                                  ? buildMessageSendWidget(
+                                      '${e.size}--${e.msg}',
+                                    )
+                                  : buildMessageRecepWidget(
+                                      '${e.size}--${e.msg}',
+                                    );
+                            },
+                          ).toList(),
                         );
                       },
                       id: controller.chatListId,
@@ -106,7 +107,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       children: [
         Expanded(
           child: Container(
-            margin: const EdgeInsets.only(right: 10, bottom: 10,left: 20),
+            margin: const EdgeInsets.only(right: 10, bottom: 10, left: 20),
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 5,
@@ -130,6 +131,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
               ),
             ),
             child: Text(
+              textAlign: TextAlign.end,
               text,
               style: const TextStyle(
                 fontSize: 24,
@@ -148,7 +150,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       children: [
         Expanded(
           child: Container(
-            margin: const EdgeInsets.only(left: 10, bottom: 10,right: 20),
+            margin: const EdgeInsets.only(left: 10, bottom: 10, right: 20),
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 5,
@@ -172,6 +174,7 @@ class test1 extends BaseEmptyPage<Test1Controller> {
               ),
             ),
             child: Text(
+              textAlign: TextAlign.start,
               text,
               style: const TextStyle(
                 fontSize: 24,

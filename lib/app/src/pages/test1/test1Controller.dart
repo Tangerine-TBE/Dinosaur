@@ -66,11 +66,12 @@ class Test1Controller extends BaseController {
     rawDatagramSocket =
         await RawDatagramSocket.bind(InternetAddress.anyIPv4, listen);
     rawDatagramSocket?.broadcastEnabled = true;
-    rawDatagramSocket?.listen((event) {
+    rawDatagramSocket?.listen((event) async{
       Datagram? dg = rawDatagramSocket?.receive();
       if (dg != null) {
         var tips = '';
         timer?.cancel();
+        await Future.delayed(Duration(seconds: 2));
         if (needReply.startsWith(askForAddress)) {
           var data = StringUtils.bytesToDecimalString(dg.data).split('.');
           data.removeRange(4, 8);
@@ -95,10 +96,14 @@ class Test1Controller extends BaseController {
                   int.parse(data[6]) == 0 &&
                   int.parse(data[7]) == 0) {
                 tips = '${needReply.split(':')[1]} 心跳包发送失败-地址是无效的';
-                udpWrite('1');
+                if(loopModel){
+                  udpWrite('1');
+                }
               } else {
                 tips = '${needReply.split(':')[1]} 心跳包发送成功';
-                udpWrite('2:${needReply.split(':')[1]}');
+                if(loopModel){
+                  udpWrite('2:${needReply.split(':')[1]}');
+                }
               }
             } else {
               tips = '服务器回复不符合协议';
@@ -154,7 +159,7 @@ class Test1Controller extends BaseController {
   String needReply = '';
   Timer? timer;
 
-  void udpWrite(String text) {
+  void udpWrite(String text) async {
     List<int> data = <int>[];
     needReply = text;
     if (text.startsWith(askForAddress)) {
@@ -202,7 +207,7 @@ class Test1Controller extends BaseController {
     if (rawDatagramSocket != null) {
       sendInput.value = false;
       if(loopModel){
-        sleep(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
       }
       rawDatagramSocket?.send(data, InternetAddress(sendHost), sendPort);
       timer = Timer(const Duration(seconds: 5), () {
