@@ -54,7 +54,7 @@ class TestPages extends BaseEmptyPage<TestController> {
                     controller.processWrite(v);
                   },
                   seekBarFinished: (v) {
-                    controller.finishWrite(v);
+                    // controller.finishWrite(v);
                   },
                 ),
               ),

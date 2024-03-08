@@ -36,7 +36,7 @@ class TestController extends BaseBleController {
     //查询结果
     for (var element in resultList) {
       var resultDevice = element.device;
-      if (resultDevice.platformName == deviceName) {
+      if (resultDevice.platformName.startsWith(deviceName)) {
         stopScan();
         await Future.delayed(Duration(seconds: 2));
         connect(resultDevice, 20);
@@ -176,11 +176,19 @@ class TestController extends BaseBleController {
   Future<void> loopAndSend() async {
     do {
       int value = (1023 / 100 * processValue).toInt();
-      write(generateStrengthData(
-          streamFirstValue: value, streamSecondValue: value));
       await Future.delayed(Duration(milliseconds: 200));
-    } while (processValue > 0);
+      if(value >0){
+        write(generateStrengthData(
+            streamFirstValue: value, streamSecondValue: value));
+      }else{
+        mData = initData();
+        write(generateModelData(0));
+      }
+    } while (true);
     isLooperStart = false;
+  }
+  void stop(){
+    mData = initData();
   }
 
   void finishWrite(int v) {
