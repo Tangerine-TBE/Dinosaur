@@ -176,7 +176,6 @@ class TestController extends BaseBleController {
   Future<void> loopAndSend() async {
     do {
       int value = (1023 / 100 * processValue).toInt();
-      await Future.delayed(Duration(milliseconds: 200));
       if(value >0){
         write(generateStrengthData(
             streamFirstValue: value, streamSecondValue: value));
@@ -184,6 +183,7 @@ class TestController extends BaseBleController {
         mData = initData();
         write(generateModelData(0));
       }
+      await Future.delayed(Duration(milliseconds: 200));
     } while (true);
     isLooperStart = false;
   }
