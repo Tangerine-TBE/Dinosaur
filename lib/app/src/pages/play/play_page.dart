@@ -41,6 +41,7 @@ class PlayPage extends BaseEmptyPage {
                   indicatorSize: TabBarIndicatorSize.label,
                   splashFactory: NoSplash.splashFactory,
                   dividerHeight: 0,
+                  overlayColor: MaterialStatePropertyAll<Color>(Colors.transparent),
                   indicatorWeight: 1,
                   tabs: [
                     Tab(

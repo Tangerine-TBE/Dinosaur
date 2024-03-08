@@ -40,6 +40,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
       selectedFontSize: 11.sp,
       unselectedFontSize: 11.sp,
       elevation: 0,
+
       unselectedItemColor: MyColors.homePageNaviItemNormalColor,
       selectedItemColor: MyColors.homePageNaviItemSelectColor,
       type: BottomNavigationBarType.fixed,

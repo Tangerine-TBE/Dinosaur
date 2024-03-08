@@ -3,18 +3,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'my_dialog_widget.dart';
 
-class HostEditDialog extends StatelessWidget {
-  final Function(String value) onConfirm;
+class HostEditDialog extends StatefulWidget {
+  final Function(String value, bool loopModel) onConfirm;
   final Function() onCancel;
   String host;
   String port;
-   HostEditDialog({super.key,required this.onConfirm,required this.onCancel,this.host='',this.port=''});
+  bool loopModel;
+
+  HostEditDialog(
+      {super.key,
+      required this.onConfirm,
+      required this.onCancel,
+        this.loopModel = false,
+      this.host = '',
+      this.port = ''});
 
   @override
-  Widget build(BuildContext context) {
+  State<HostEditDialog> createState() => _HostEditDialogState();
+}
 
-    TextEditingController hostController = TextEditingController(text: host);
-    TextEditingController portController = TextEditingController(text: host);
+class _HostEditDialogState extends State<HostEditDialog> {
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController hostController = TextEditingController(text: widget.host);
+    TextEditingController portController = TextEditingController(text: widget.port);
     return BaseDialogWidget(
       title: 'Host Edit',
       titleStyle: TextStyle(color: Colors.black),
@@ -30,11 +42,9 @@ class HostEditDialog extends StatelessWidget {
               fontSize: 18.sp,
               textBaseline: TextBaseline.alphabetic,
             ),
-            onChanged: (value) => {
-              host = value
-            },
+            onChanged: (value) => {widget.host = value},
             decoration: InputDecoration(
-                hintText:'Host Edit',
+                hintText: 'Host Edit',
                 contentPadding: const EdgeInsets.only(left: 10),
                 alignLabelWithHint: true,
                 hintStyle: const TextStyle(
@@ -63,9 +73,11 @@ class HostEditDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 )),
           ),
-          SizedBox(height: 20.h,),
+          SizedBox(
+            height: 20.h,
+          ),
           TextField(
-            controller:portController,
+            controller: portController,
             enabled: true,
             autofocus: false,
             minLines: 1,
@@ -74,12 +86,10 @@ class HostEditDialog extends StatelessWidget {
               fontSize: 18.sp,
               textBaseline: TextBaseline.alphabetic,
             ),
-            onChanged: (value) => {
-              port = value
-            },
+            onChanged: (value) => {widget.port = value},
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 10),
-                hintText:'Port Edit',
+                hintText: 'Port Edit',
                 // suffixText: '发送',
                 // suffixIcon: Icon(Icons.send),
                 alignLabelWithHint: true,
@@ -109,33 +119,45 @@ class HostEditDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 )),
           ),
+          Switch(
+            value: widget.loopModel,
+            onChanged: (value) {
+              setState(() {
+                widget.loopModel = value;
+              });
+            },
+          )
         ],
       ),
       leftButton: MaterialButton(
         onPressed: () {
-          onCancel.call();
+          widget.onCancel.call();
         },
         color: Colors.blueAccent,
-        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10) ),
-        child: const Text('取消',style: TextStyle(color: Colors.white),),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: const Text(
+          '取消',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       rightButton: MaterialButton(
         onPressed: () {
-          if(host.isEmpty){
+          if (widget.host.isEmpty) {
             showToast('host不能为空');
             return;
           }
-          if(port.isEmpty){
+          if (widget.port.isEmpty) {
             showToast('port不能为空');
             return;
           }
-          onConfirm.call("$host/$port");
+          widget.onConfirm.call("${widget.host}/${widget.port}", widget.loopModel);
         },
         color: Colors.blueAccent,
-
-        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(10) ),
-        child: const Text('确定',style: TextStyle(color: Colors.white),),
-
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: const Text(
+          '确定',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

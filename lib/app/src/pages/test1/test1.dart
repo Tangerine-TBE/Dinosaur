@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,8 +15,8 @@ class test1 extends BaseEmptyPage<Test1Controller> {
     return AppBar(
       backgroundColor: MyColors.pageBgColor,
       centerTitle: true,
-      title: const Text(
-        'Sockect Disconnect',
+      title:const Text(
+          'udp指令测试'
       ),
       actions: [
         Container(
@@ -71,13 +70,16 @@ class test1 extends BaseEmptyPage<Test1Controller> {
                       builder: (Test1Controller controller) {
                         return ListView(
                           physics: const BouncingScrollPhysics(),
-                          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           controller: controller.scrollController,
                           reverse: true,
                           children: controller.charData
-                              .map((e) => e.type == 0
-                                  ? buildMessageSendWidget(e.msg)
-                                  : buildMessageRecepWidget(e.msg))
+                              .map((e) {
+                                return e.type == 0
+                                  ? buildMessageSendWidget('${e.size}--${e.msg}')
+                                  : buildMessageRecepWidget('${e.size}--${e.msg}');
+                              })
                               .toList(),
                         );
                       },
@@ -102,34 +104,36 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            border: Border(
-              top: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              left: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              right: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              bottom: BorderSide(
-                color: MyColors.containerSideColor,
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(right: 10, bottom: 10,left: 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.pink,
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              border: Border(
+                top: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                left: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                right: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                bottom: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
               ),
             ),
-          ),
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 24,
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 24,
+              ),
             ),
           ),
         )
@@ -142,34 +146,36 @@ class test1 extends BaseEmptyPage<Test1Controller> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          margin: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            border: Border(
-              top: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              left: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              right: BorderSide(
-                color: MyColors.containerSideColor,
-              ),
-              bottom: BorderSide(
-                color: MyColors.containerSideColor,
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(left: 10, bottom: 10,right: 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              border: Border(
+                top: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                left: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                right: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
+                bottom: BorderSide(
+                  color: MyColors.containerSideColor,
+                ),
               ),
             ),
-          ),
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 24,
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 24,
+              ),
             ),
           ),
         )
@@ -200,14 +206,11 @@ class test1 extends BaseEmptyPage<Test1Controller> {
             Icons.chat,
             color: Colors.black,
           ),
-          // suffixText: '发送',
-          // suffixIcon: Icon(Icons.send),
           alignLabelWithHint: true,
           hintStyle: const TextStyle(
             height: 2.0,
           ),
           enabledBorder: OutlineInputBorder(
-            /*边角*/
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: Colors.black, //边线颜色为白色

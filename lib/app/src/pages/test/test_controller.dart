@@ -6,7 +6,7 @@ import 'package:app_base/exports.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class TestController extends BaseBleController {
-  String deviceName = 'XHTKJ';
+  String deviceName = 'XHT';
   Timer? dataSendTimer;
   bool queenSend = false;
   late BluetoothDevice connectedDevice;
@@ -20,7 +20,7 @@ class TestController extends BaseBleController {
   void onAdapterStateChanged(BluetoothAdapterState state) {
     if (state == BluetoothAdapterState.off) {
       showToast('蓝牙已关闭!请打开蓝牙');
-    }else{
+    } else {
       startScan(timeout: 15);
     }
   }
@@ -32,7 +32,7 @@ class TestController extends BaseBleController {
   }
 
   @override
-  void onScanResultChanged(List<ScanResult> resultList)async {
+  void onScanResultChanged(List<ScanResult> resultList) async {
     //查询结果
     for (var element in resultList) {
       var resultDevice = element.device;
@@ -53,24 +53,22 @@ class TestController extends BaseBleController {
     //   }
     // }
   }
+
   @override
   void onDeviceConnected(BluetoothDevice? device) async {
     //当连接达成后
-    if(  device != null && device.isConnected == true) {
+    if (device != null && device.isConnected == true) {
       logE('达成连接');
-      List<BluetoothService> services =
-
-      await device.discoverServices();
+      List<BluetoothService> services = await device.discoverServices();
       services.forEach((service) async {
         var characteristics = service.characteristics;
         for (BluetoothCharacteristic c in characteristics) {
           if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
-            setWriteChar(c) ;
+            setWriteChar(c);
           }
         }
       });
     }
-
   }
 
   @override
@@ -81,13 +79,11 @@ class TestController extends BaseBleController {
   }
 
   @override
-  void onDeviceUnKnowError(BluetoothConnectionState state) {
-  }
-
+  void onDeviceUnKnowError(BluetoothConnectionState state) {}
 
   void buttonClicked(int model) {
     if (getDeviceStatus() == true) {
-        write(generateModelData(model));
+      write(generateModelData(model));
     }
   }
 
@@ -96,7 +92,6 @@ class TestController extends BaseBleController {
     mData[2] = mModel[i];
     return mData;
   }
-
 
   List<int> generateStrengthData({
     int streamFirstValue = 0,
@@ -121,7 +116,7 @@ class TestController extends BaseBleController {
       streamFirst.replaceRange(6, 8, streamFirstResults);
       logE('通道一的数据为 ==$streamFirst ');
     }
-    if(streamSecondValue != 0){
+    if (streamSecondValue != 0) {
       int streamSecondResult = streamSecondValue << 6 | streamSecondKeepTime;
       List<int> streamSecondResults = streamSecondResult.toBytes();
       streamSecondResults.removeWhere((element) => element == 00);
@@ -163,39 +158,34 @@ class TestController extends BaseBleController {
     return List.generate(17, (index) => 00);
   }
 
-
   /// 1.process值 - n Int
   /// 2.每200ms select一次Sliver的值 并且发送
   /// 3.如果 - n Int >0 开始 200ms的循环
   /// 4.如果 - n Int <=0 停止 200ms的循坏
   var processValue = 0;
-   processWrite(int v)  {
+  var isLooperStart = false;
+  Future<void> processWrite(int v) async{
     //1.开始滑动，触发循环机制
     processValue = v;
-    do{
-      int value = (1023 / 100 * v).toInt();
+    if(!isLooperStart){
+      isLooperStart = true;
+      await loopAndSend();
+    }
+  }
+
+  Future<void> loopAndSend() async {
+    do {
+      int value = (1023 / 100 * processValue).toInt();
       write(generateStrengthData(
           streamFirstValue: value, streamSecondValue: value));
-      sleep(Duration(milliseconds: 200));
-    }while(processValue > 0);
-
-    //
-    // var timer = Timer(Duration(milliseconds: 200),(){
-    //
-    // });
-    //
-    // var currentTime = DateTime.now();
-    // if (currentTime.millisecondsSinceEpoch - lastTime.millisecondsSinceEpoch >=
-    //     500) {
-    //   lastTime = currentTime;
-    //
-    // }
+      await Future.delayed(Duration(milliseconds: 200));
+    } while (processValue > 0);
+    isLooperStart = false;
   }
-  void finishWrite(int v){
+
+  void finishWrite(int v) {
     int value = (1023 / 100 * v).toInt();
     write(generateStrengthData(
         streamFirstValue: value, streamSecondValue: value));
   }
-
-
 }
