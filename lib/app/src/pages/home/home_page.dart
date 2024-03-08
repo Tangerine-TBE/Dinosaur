@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:test01/app/src/pages/home/home_controller.dart';
 import 'package:get/get.dart';
-
+/* 请求到有效地址
+*  1.
+*  2.
+* */
 class HomePage extends BaseEmptyPage<HomeController> {
   const HomePage({super.key});
 
