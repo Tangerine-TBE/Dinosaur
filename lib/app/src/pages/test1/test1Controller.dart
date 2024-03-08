@@ -62,11 +62,23 @@ class Test1Controller extends BaseController {
     );
   }
 
+  @override
+  void onResumed() {
+    super.onResumed();
+    //Todo
+  }
+
+  @override
+  void onPaused() {
+    super.onPaused();
+    //Todo
+  }
+
   void startUdp(bool loopModel) async {
     rawDatagramSocket =
         await RawDatagramSocket.bind(InternetAddress.anyIPv4, listen);
     rawDatagramSocket?.broadcastEnabled = true;
-    rawDatagramSocket?.listen((event) async{
+    rawDatagramSocket?.listen((event) async {
       Datagram? dg = rawDatagramSocket?.receive();
       if (dg != null) {
         var tips = '';
@@ -83,10 +95,9 @@ class Test1Controller extends BaseController {
             }
           }
           tips = '请求有效地址成功--$dataString';
-          if(loopModel){
+          if (loopModel) {
             udpWrite('3:$dataString');
           }
-
         } else if (needReply.startsWith(askForKeptAlive)) {
           var data = StringUtils.bytesToDecimalString(dg.data).split('.');
           if (data.isNotEmpty) {
@@ -96,12 +107,12 @@ class Test1Controller extends BaseController {
                   int.parse(data[6]) == 0 &&
                   int.parse(data[7]) == 0) {
                 tips = '${needReply.split(':')[1]} 心跳包发送失败-地址是无效的';
-                if(loopModel){
+                if (loopModel) {
                   udpWrite('1');
                 }
               } else {
                 tips = '${needReply.split(':')[1]} 心跳包发送成功';
-                if(loopModel){
+                if (loopModel) {
                   udpWrite('2:${needReply.split(':')[1]}');
                 }
               }
@@ -122,7 +133,7 @@ class Test1Controller extends BaseController {
                 tips = '${needReply.split(':')[1]} 地址是无效的';
               } else {
                 tips = '${needReply.split(':')[1]} 地址是有效的';
-                if(loopModel){
+                if (loopModel) {
                   udpWrite('2:${needReply.split(':')[1]}');
                 }
               }
@@ -136,12 +147,13 @@ class Test1Controller extends BaseController {
           tips = '请求内容成功';
         }
 
-        charData.insert(0, MsgBean.create(msg: tips, type: 1,size: charData.length));
+        charData.insert(
+            0, MsgBean.create(msg: tips, type: 1, size: charData.length));
         update([chatListId]);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           scrollController.jumpTo(scrollController.position.minScrollExtent);
         });
-        if(!loopModel){
+        if (!loopModel) {
           sendInput.value = true;
         }
       }
@@ -206,7 +218,7 @@ class Test1Controller extends BaseController {
     }
     if (rawDatagramSocket != null) {
       sendInput.value = false;
-      if(loopModel){
+      if (loopModel) {
         await Future.delayed(const Duration(seconds: 2));
       }
       rawDatagramSocket?.send(data, InternetAddress(sendHost), sendPort);
@@ -225,7 +237,8 @@ class Test1Controller extends BaseController {
             tips = '请求超时,内容不符合!';
           }
           sendInput.value = true;
-          charData.insert(0, MsgBean.create(msg: tips, type: 0,size: charData.length));
+          charData.insert(
+              0, MsgBean.create(msg: tips, type: 0, size: charData.length));
           update([chatListId]);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             scrollController.jumpTo(scrollController.position.minScrollExtent);
@@ -233,7 +246,8 @@ class Test1Controller extends BaseController {
         }
       });
       textEditingController.clear();
-      charData.insert(0, MsgBean.create(msg: text, type: 0,size:charData.length));
+      charData.insert(
+          0, MsgBean.create(msg: text, type: 0, size: charData.length));
       update([chatListId]);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         scrollController.jumpTo(scrollController.position.minScrollExtent);
