@@ -183,7 +183,7 @@ class TestController extends BaseBleController {
         mData = initData();
         write(generateModelData(0));
       }
-      await Future.delayed(Duration(milliseconds: 200));
+      await Future.delayed(const Duration(milliseconds: 200));
     } while (true);
     isLooperStart = false;
   }

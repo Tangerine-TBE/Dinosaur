@@ -20,6 +20,9 @@ class StringUtils{
   static String decodeString(Uint8List bytes){
     return utf8.decode(bytes);
   }
+  static String decimalStringListToUtf8String(List<String> data){
+    return data.map((decimalString) => String.fromCharCode(int.parse(decimalString))).join();
+  }
 
   // static String bytes
 }

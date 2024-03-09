@@ -26,7 +26,10 @@ class Test1Controller extends BaseController {
   String needReply = '';
   Timer? timer;
   final List<MsgBean> charData = <MsgBean>[];
-
+  setTargetIp(String targetIp){
+    this.targetIp = targetIp;
+    sendInput.value = true;
+  }
   @override
   void onInit() {
     super.onInit();
@@ -101,11 +104,14 @@ class Test1Controller extends BaseController {
         } else if (needReply.startsWith(askForKeptAlive)) {
           if (dg.data.length > 8) {
             //收到消息
-            var realData = dg.data.sublist(10);
+            logE(StringUtils.bytesToDecimalString(dg.data));
+            targetIp = StringUtils.bytesToDecimalString(dg.data.sublist(4,8));
+            setTargetIp(targetIp);
+            logE(targetIp);
             charData.insert(
                 0,
                 MsgBean.create(
-                    msg: StringUtils.decodeString(realData),
+                    msg: StringUtils.decodeString(dg.data.sublist(10)),
                     type: 1,
                     size: charData.length + 1));
             update([chatListId]);
