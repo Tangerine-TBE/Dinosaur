@@ -119,7 +119,14 @@ class PlayFra1Page extends BaseEmptyPage<PlayFra1Controller> {
         ),
         Flexible(
           flex: 3,
-          child: Container(),
+          child: Container(
+            child: Center(child: IconButton(
+              icon: Icon( Icons.share),
+              onPressed: (){
+                controller.onSharePress();
+              },
+            ),),
+          ),
         )
       ],
     );
