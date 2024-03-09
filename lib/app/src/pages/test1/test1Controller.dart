@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:io';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/StringUtils.dart';
@@ -23,24 +23,40 @@ class Test1Controller extends BaseController {
   RawDatagramSocket? rawDatagramSocket;
   late TextEditingController textEditingController;
   late ScrollController scrollController;
+  late StreamSubscription<ConnectivityResult> subscription;
+  ConnectivityResult currentResult = ConnectivityResult.none;
   String needReply = '';
   Timer? timer;
   final List<MsgBean> charData = <MsgBean>[];
-  setTargetIp(String targetIp){
+
+  setTargetIp(String targetIp) {
     this.targetIp = targetIp;
     sendInput.value = true;
   }
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    //初始化网络监听
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      currentResult = result;
+      if (result == ConnectivityResult.none) {
+        rawDatagramSocket?.close();
+        originIp.value = '当前网络不可用';
+      }else{
+        if(serverHost.isNotEmpty){
+          startUdp();
+        }
+      }
+    });
+
     textEditingController = TextEditingController();
     scrollController = ScrollController();
     serverHost = SaveKey.sendHost.read ?? '';
     serverPort = SaveKey.sendPort.read ?? 0;
 
-    if (serverHost.isNotEmpty) {
-      startUdp();
-    }
   }
 
   void setting() {
@@ -105,7 +121,7 @@ class Test1Controller extends BaseController {
           if (dg.data.length > 8) {
             //收到消息
             logE(StringUtils.bytesToDecimalString(dg.data));
-            targetIp = StringUtils.bytesToDecimalString(dg.data.sublist(4,8));
+            targetIp = StringUtils.bytesToDecimalString(dg.data.sublist(4, 8));
             setTargetIp(targetIp);
             logE(targetIp);
             charData.insert(
@@ -134,8 +150,8 @@ class Test1Controller extends BaseController {
                   //云端错误响应（终端地址失效）
                   _udpStartCommand('1');
                   logE('云端错误响应（终端地址失效）');
-                } else if (targetIp.isNotEmpty && int.parse(data[0]) ==
-                        int.parse(targetIp.split('.')[0]) &&
+                } else if (targetIp.isNotEmpty &&
+                    int.parse(data[0]) == int.parse(targetIp.split('.')[0]) &&
                     int.parse(data[1]) == int.parse(targetIp.split('.')[1]) &&
                     int.parse(data[2]) == int.parse(targetIp.split('.')[2]) &&
                     int.parse(data[3]) == int.parse(targetIp.split('.')[3]) &&
@@ -157,8 +173,8 @@ class Test1Controller extends BaseController {
                   //云端错误响应（源地址非自身）：
 
                   logE('云端错误响应（源地址非自身）');
-                } else if (targetIp.isNotEmpty && int.parse(data[0]) ==
-                        int.parse(targetIp.split('.')[0]) &&
+                } else if (targetIp.isNotEmpty &&
+                    int.parse(data[0]) == int.parse(targetIp.split('.')[0]) &&
                     int.parse(data[1]) == int.parse(targetIp.split('.')[1]) &&
                     int.parse(data[2]) == int.parse(targetIp.split('.')[2]) &&
                     int.parse(data[3]) == int.parse(targetIp.split('.')[3]) &&
@@ -180,7 +196,7 @@ class Test1Controller extends BaseController {
                     int.parse(data[7]) == int.parse(originIp.split('.')[3])) {
                   //心跳成功
                   _udpStartCommand('2:${needReply.split(':')[1]}');
-                }else{
+                } else {
                   logE(StringUtils.decodeString(dg.data));
                 }
                 return;

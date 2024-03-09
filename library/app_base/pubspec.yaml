@@ -11,6 +11,7 @@ dependencies:
   get_storage: ^2.1.1
   pull_to_refresh: 2.0.0 # 上拉加载下拉刷新
   flutter_blue_plus: 1.31.15
+  connectivity_plus: ^5.0.2
   common:
     git:
       url: https://github.com/Tangerine-TBE/base.git
