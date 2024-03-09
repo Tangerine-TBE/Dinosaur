@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:get/get.dart';
 import 'package:app_base/exports.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:test01/app/src/pages/test/test_controller.dart';
 
 class TestPages extends BaseEmptyPage<TestController> {
@@ -33,12 +35,15 @@ class TestPages extends BaseEmptyPage<TestController> {
             ),
           ),
           Flexible(
-            child: Row(
-              children: [
-                Flexible(
-                  child: Transform.rotate(
-                    angle: -90 * pi / 180,
+            flex: 1,
+            child: Container(
+              color: MyColors.pageBgColor,
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
                     child: SexSlider(
+                      0.0,
                       onValueChanged: (value) async {
                         if (!controller.queenSend) {
                           controller.queenSend = true;
@@ -48,22 +53,89 @@ class TestPages extends BaseEmptyPage<TestController> {
                       },
                     ),
                   ),
-                ),
-                Flexible(
-                  child: Transform.rotate(
-                    angle: -90 * pi / 180,
-                    child: SexSlider(
-                      onValueChanged: (value) async {
-                        // if (!controller.queenSend) {
-                        //   controller.queenSend = true;
-                        //   controller.write(controller.unQueue());
-                        // }
-                        // await controller.processWrite(value);
-                      },
+                  Flexible(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Obx(
+                            () => AbsorbPointer(
+                              absorbing: controller.absorb.value,
+                              child: Listener(
+                                onPointerDown: (_) {
+                                  controller.onSliverDown();
+                                },
+                                onPointerUp: (_) {
+                                  controller.onSliverUp();
+                                },
+                                child: Obx(
+                                  () => SexSlider(
+                                    controller.processCountDownValue.value,
+                                    onValueChanged: (value) {
+                                      controller
+                                          .onCountDownProcessChanged(value);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.add),
+                                          onPressed: () {
+                                            controller.addModel();
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.play_circle),
+                                          onPressed: () {
+                                            controller.playModel();
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: CircularCountDownTimer(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      duration: 0,
+                                      fillColor: Colors.black,
+                                      ringColor: Colors.red,
+                                      onChange: (value) {
+                                        controller.onCountChange(value);
+                                      },
+                                      controller:
+                                          controller.countDownController,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -71,23 +143,23 @@ class TestPages extends BaseEmptyPage<TestController> {
     );
   }
 }
-
 class SexSlider extends StatefulWidget {
   final Function(double value) onValueChanged;
+  double value = 0;
 
-  const SexSlider({super.key, required this.onValueChanged});
+  SexSlider(this.value, {super.key, required this.onValueChanged});
 
   @override
   State<SexSlider> createState() => _SexSliderState();
 }
 
 class _SexSliderState extends State<SexSlider> {
-  double value = 0;
-
   @override
   void initState() {
     super.initState();
   }
+
+  bool isTouchingsSlider = false;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +175,7 @@ class _SexSliderState extends State<SexSlider> {
         overlayShape: const RoundSliderOverlayShape(overlayRadius: 28.0),
       ),
       child: Slider(
-        value: value,
+        value: widget.value,
         min: 0,
         max: 1023,
         thumbColor: Colors.pink,
@@ -111,9 +183,9 @@ class _SexSliderState extends State<SexSlider> {
         activeColor: Colors.blue,
         onChanged: (value) {
           setState(() {
-            this.value = value;
-            widget.onValueChanged.call(value);
+            widget.value = value;
           });
+          widget.onValueChanged.call(value);
         },
       ),
     );

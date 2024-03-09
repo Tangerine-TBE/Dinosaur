@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_advanced_seekbar: ^0.0.2
+  circular_countdown_timer: ^0.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
