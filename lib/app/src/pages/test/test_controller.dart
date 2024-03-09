@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/exports.dart';
@@ -10,9 +9,8 @@ class TestController extends BaseBleController {
   Timer? dataSendTimer;
   bool queenSend = false;
   late BluetoothDevice connectedDevice;
-  late List<int> mData;
   List<int> mCustomHeader = [0x03, 0x12, 0xf3];
-  List<int> mClearHeader = [0x03, 0x12, 0xf0];
+  List<int> mUnQueueHeader = [0x03, 0x12, 0xf0];
   List<int> mModel = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12];
   var lastTime = DateTime.now();
 
@@ -27,7 +25,6 @@ class TestController extends BaseBleController {
 
   @override
   void onInit() {
-    mData = initData();
     super.onInit();
   }
 
@@ -46,13 +43,7 @@ class TestController extends BaseBleController {
   }
 
   @override
-  void onScanStateChanged(bool state) {
-    // if (!state) {
-    //   if(!getDeviceStatus()){
-    //     startScan(timeout: 15);
-    //   }
-    // }
-  }
+  void onScanStateChanged(bool state) {}
 
   @override
   void onDeviceConnected(BluetoothDevice? device) async {
@@ -73,8 +64,7 @@ class TestController extends BaseBleController {
 
   @override
   void onDeviceDisconnected() async {
-    //当设备断开连接后
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     startScan(timeout: 20);
   }
 
@@ -85,12 +75,6 @@ class TestController extends BaseBleController {
     if (getDeviceStatus() == true) {
       write(generateModelData(model));
     }
-  }
-
-  List<int> generateModelData(int i) {
-    mData.replaceRange(0, 2, mCustomHeader);
-    mData[2] = mModel[i];
-    return mData;
   }
 
   List<int> generateStrengthData({
@@ -109,48 +93,42 @@ class TestController extends BaseBleController {
     List<int> streamSecond = List.generate(8, (index) => 00);
     //streamFirst配置设置 --频率单位设置
     //streamFirst强度值设置
+    int streamFirstResult = 0;
+    int streamSecondResult = 0;
     if (streamFirstValue != 0) {
-      int streamFirstResult = streamFirstValue << 6 | streamFirstKeepTime;
+      streamFirstResult = streamFirstValue << 6 | streamFirstKeepTime;
       List<int> streamFirstResults = streamFirstResult.toBytes();
       streamFirstResults.removeWhere((element) => element == 00);
+      if (streamFirstResults.length == 1) {
+        streamFirstResults.add(0);
+      }
       streamFirst.replaceRange(6, 8, streamFirstResults);
-      logE('通道一的数据为 ==$streamFirst ');
     }
     if (streamSecondValue != 0) {
-      int streamSecondResult = streamSecondValue << 6 | streamSecondKeepTime;
+      streamSecondResult = streamSecondValue << 6 | streamSecondKeepTime;
       List<int> streamSecondResults = streamSecondResult.toBytes();
       streamSecondResults.removeWhere((element) => element == 00);
+      if (streamSecondResults.length == 1) {
+        streamSecondResults.add(0);
+      }
       streamSecond.replaceRange(6, 8, streamSecondResults);
-      logE('通道二的数据为 ==$streamSecond ');
     }
-    mData = initData();
-    mData.replaceRange(0, 8, streamFirst);
-    mData.replaceRange(8, 17, streamSecond);
+    List<int> data = initData();
+    data.replaceRange(0, 8, streamFirst);
+    data.replaceRange(8, 17, streamSecond);
     var cmdData = <int>[];
     cmdData.addAll(mCustomHeader);
-    cmdData.addAll(mData);
+    cmdData.addAll(data);
     cmdData.add(0);
-    logE('发送的数据为 ==$cmdData ===size ==${cmdData.length}');
     return cmdData;
   }
 
-  List<int> clear() {
-    mData = initData();
-    mData[0] = 0x03;
+  List<int> unQueue() {
+    List<int> data = initData();
+    data[0] = 0x07;
     var cmdData = <int>[];
-    cmdData.addAll(mClearHeader);
-    cmdData.addAll(mData);
-    logE('发送的数据为 ==$cmdData ===size ==${cmdData.length}');
-    return cmdData;
-  }
-
-  List<int> noQueen() {
-    mData = initData();
-    mData[0] = 0x07;
-    var cmdData = <int>[];
-    cmdData.addAll(mClearHeader);
-    cmdData.addAll(mData);
-    logE('发送的数据为 ==$cmdData ===size ==${cmdData.length}');
+    cmdData.addAll(mUnQueueHeader);
+    cmdData.addAll(data);
     return cmdData;
   }
 
@@ -158,42 +136,36 @@ class TestController extends BaseBleController {
     return List.generate(17, (index) => 00);
   }
 
-  /// 1.process值 - n Int
-  /// 2.每200ms select一次Sliver的值 并且发送
-  /// 3.如果 - n Int >0 开始 200ms的循环
-  /// 4.如果 - n Int <=0 停止 200ms的循坏
+  var isLooping = false;
   var processValue = 0;
-  var isLooperStart = false;
-  Future<void> processWrite(int v) async{
+
+  processWrite(double v) async {
     //1.开始滑动，触发循环机制
-    processValue = v;
-    if(!isLooperStart){
-      isLooperStart = true;
-      await loopAndSend();
+    processValue = v.toInt();
+    if (!isLooping) {
+      isLooping = true;
+      loopAndSend();
     }
   }
 
   Future<void> loopAndSend() async {
     do {
-      int value = (1023 / 100 * processValue).toInt();
-      if(value >0){
-        write(generateStrengthData(
-            streamFirstValue: value, streamSecondValue: value));
-      }else{
-        mData = initData();
-        write(generateModelData(0));
-      }
+      write(generateStrengthData(
+          streamFirstValue: processValue, streamSecondValue: processValue));
       await Future.delayed(const Duration(milliseconds: 200));
-    } while (true);
-    isLooperStart = false;
-  }
-  void stop(){
-    mData = initData();
+    } while (processValue > 50);
+    isLooping = false;
+    int i = 5;
+    while(i >=0){
+      write(generateModelData(0));
+      i--;
+    }
   }
 
-  void finishWrite(int v) {
-    int value = (1023 / 100 * v).toInt();
-    write(generateStrengthData(
-        streamFirstValue: value, streamSecondValue: value));
+  List<int> generateModelData(int i) {
+    List<int> data = initData();
+    data.replaceRange(0, 2, mCustomHeader);
+    data[2] = mModel[i];
+    return data;
   }
 }

@@ -68,6 +68,7 @@ abstract class BaseBleController extends BaseViewModel {
   void onInit() {
     super.onInit();
     //初始化控制器内部的监听
+    FlutterBluePlus.setLogLevel(LogLevel.none);
     adapterStateStateSubscription = FlutterBluePlus.adapterState.listen(
       (state) {
         onAdapterStateChanged(state);
