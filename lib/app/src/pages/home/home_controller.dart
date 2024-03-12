@@ -6,6 +6,7 @@ import 'package:test01/app/src/pages/test/test_pages.dart';
 import 'package:test01/app/src/pages/test1/test1.dart';
 import 'package:test01/app/src/pages/test1/test1Controller.dart';
 import 'package:test01/app/src/pages/test2/test2.dart';
+import 'package:test01/app/src/pages/test2/test2Controller.dart';
 
 import '../play/play_fra1_controller.dart';
 import '../play/play_fra2_controller.dart';
@@ -55,7 +56,9 @@ class HomeController extends BaseController {
         page: () => const test2(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {},
+          () {
+            Get.lazyPut(() => Test2Controller());
+          },
         ),
       );
     }
