@@ -1,15 +1,16 @@
+import 'dart:ffi';
+
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/pages/home/home_controller.dart';
-import 'package:test01/app/src/pages/home/home_page.dart';
-import 'package:test01/app/src/pages/play/play_page.dart';
-import 'package:test01/app/src/pages/test/test_controller.dart';
-import 'package:test01/app/src/pages/test/test_pages.dart';
+import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
+import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/play/play_page.dart';
 
-import '../src/pages/play/play_fra1_controller.dart';
-import '../src/pages/play/play_fra2_controller.dart';
+import '../src/moudle/test/pages/home/home_controller.dart';
+import '../src/moudle/test/pages/home/home_page.dart';
 
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
@@ -30,5 +31,78 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
+        GetPage(
+          name: RouteName.chartPage,
+          page: () => ChartPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => ChartController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.chartPage,
+          page: () => ChartPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => ChartController());
+            },
+          ),
+        ),
+        //     GetPage(
+        //       name: RouteName.mainPage,
+        //       page: () => const MainPage(),
+        //       binding: BindingsBuilder(
+        //         () {
+        //           Get.lazyPut(
+        //             () => MainController(),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //     GetPage(
+        //       name: RouteName.scanPage,
+        //       page: () => const ScannerPage(),
+        //       binding: BindingsBuilder(
+        //         () {
+        //           Get.lazyPut(
+        //             () => ScannerController(),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //     GetPage(
+        //       name: RouteName.instructionsPage,
+        //       page: () => InstructionsPage(),
+        //       binding: BindingsBuilder(
+        //         () {
+        //           Get.lazyPut(
+        //             () => InstructionsController(),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //     GetPage(
+        //       name: RouteName.playPage,
+        //       page: () => PlayPage(),
+        //       binding: BindingsBuilder(
+        //         () {
+        //           Get.lazyPut(
+        //             () => InstructionsController(),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        // GetPage(
+        //   name: RouteName.shakeItPage,
+        //   page: () => PlayPage(),
+        //   binding: BindingsBuilder(
+        //         () {
+        //       Get.lazyPut(
+        //             () => ShakeItPage(),
+        //       );
+        //     },
+        //   ),
+        // ),
       ];
 }

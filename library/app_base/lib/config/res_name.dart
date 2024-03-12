@@ -1,10 +1,23 @@
 class ResName {
-  static const String  buttonNaviIconBooking = 'assets/images/button_navi_icon_booking.png';
-  static const String  buttonNaviIconBookingHL = 'assets/images/button_navi_icon_booking_hl.png';
-  static const String  buttonNaviIconHome = 'assets/images/button_navi_icon_home.png';
-  static const String  buttonNaviIconHomeHL = 'assets/images/button_navi_icon_home_hl.png';
-  static const String  buttonNaviIconMe = 'assets/images/button_navi_icon_me.png';
-  static const String  buttonNaviIconMeHL = 'assets/images/button_navi_icon_me_hl.png';
-  static const String  buttonNaviIconMsg = 'assets/images/button_navi_icon_msg.png';
-  static const String  buttonNaviIconMsgHL = 'assets/images/button_navi_icon_msg_hl.png';
+
+  //fake shake
+  static const String iconLianjie = 'assets/images/icon_lianjie.png';
+  static const String imgBanner = 'assets/images/img_banner.png';
+  static const String imgMyModel = 'assets/images/img_my model.png';
+  static const String imgSideIt = 'assets/images/img_side_it.png';
+  static const String imgShakeIt= 'assets/images/img_shake_it.png';
+  static const String imgShare = 'assets/images/img_share.png';
+  static const String imgInstructions = 'assets/images/img_instructions.png';
+
+
+  //real shake
+   static const String iconPlay = 'assets/images/icon_chart.png';
+   static const String iconConvert = 'assets/images/icon_convert.png';
+   static const String iconGhost = 'assets/images/icon_ghost.png';
+   static const String iconMessage = 'assets/images/icon_message.png';
+   static const String iconGrammerly = 'assets/images/icon_grammerly.png';
+   static const String iconSide = 'assets/images/icon_side.png';
+   static const String iconShake = 'assets/images/icon_shake.png';
+   static const String iconModel = 'assets/images/icon_model.png';
+   static const String iconImg = 'assets/images/icon_img.png';
 }

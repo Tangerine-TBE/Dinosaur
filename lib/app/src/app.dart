@@ -20,6 +20,7 @@ class App extends BaseMaterialApp<TemplateLauncherStrategy> {
           child = GLoading.instance.init(context, child);
           return child;
         },
+        theme: ThemeData(splashColor: Colors.transparent,highlightColor: Colors.transparent),
         translations: Messages(),
         popGesture: true,
         getPages: route.getPages(),
