@@ -4,10 +4,13 @@ import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:get/get.dart';
+import 'package:test01/app/src/moudle/shake/pages/scanner/scanner_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_page.dart';
+import 'package:test01/app/src/moudle/test/pages/scan/scan_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/scan/scan_page.dart';
 
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
@@ -41,11 +44,11 @@ class RouteConfig extends ARoute {
           ),
         ),
         GetPage(
-          name: RouteName.chartPage,
-          page: () => ChartPage(),
+          name: RouteName.scanPage,
+          page: () => const ScanPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => ChartController());
+              Get.lazyPut(() => ScanController());
             },
           ),
         ),

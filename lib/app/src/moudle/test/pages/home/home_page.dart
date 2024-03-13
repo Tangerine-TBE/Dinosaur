@@ -36,16 +36,13 @@ class HomePage extends BaseEmptyPage<HomeController> {
         ),
         child: _getButtonNavigationBar(),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Navigator(
-              key: Get.nestedKey(1),
-              initialRoute: RouteName.playPage,
-              onGenerateRoute: controller.onGenerateRoute,
-            ),
-          ),
-        ],
+      body: SafeArea(
+        top: false,
+        child: Navigator(
+          key: Get.nestedKey(1),
+          initialRoute: RouteName.playPage,
+          onGenerateRoute: controller.onGenerateRoute,
+        ),
       ),
     );
   }

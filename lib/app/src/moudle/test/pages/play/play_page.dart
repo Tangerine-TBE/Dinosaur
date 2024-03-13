@@ -1,6 +1,7 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/res/my_colors.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
+import 'package:get/get.dart';
+import 'package:loadmore_listview/loadmore_listview.dart';
 
 class PlayPage extends BaseEmptyPage<PlayController> {
   const PlayPage({super.key});
@@ -74,138 +77,196 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                 ),
               ),
             ),
-            body: Container(
-              child: TabBarView(
-                children: [
-                  _buildFra1Content(),
-                  _buildFra2Content(),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  _buildFra1Content() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 282.h,
-            width: double.infinity,
-            child: Stack(
+            body: TabBarView(
               children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 26.h,
-                  child: Image.asset(
-                    ResName.iconImg,
-                    width: 150.w,
-                    height: 176.h,
-                  ),
-                ),
-                Positioned(
-                  left: 49.w,
-                  top: 50.h,
-                  child: Text(
-                    '点我\r\n连接设备哦',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: MyColors.textBlackColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    height: 100.h,
-                    decoration: BoxDecoration(
-                        color: MyColors.F7F7F7,
-                        borderRadius: BorderRadius.circular(8.w),
-                        boxShadow:  [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: const Offset(2, 2),
-                            blurRadius: 4.h,
-                            spreadRadius: 0,
-                          )
-                        ]),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              ResName.iconSide,
-                              width: 46.h,
-                              height: 46.h,
-                            ),
-                             Text('划一划',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w500,color: MyColors.textBlackColor,),)
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              ResName.iconShake,
-                              width: 46.h,
-                              height: 46.h,
-                            ),
-                             Text('摇一摇',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w500,color: MyColors.textBlackColor,),),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              ResName.iconModel,
-                              width: 46.h,
-                              height: 46.h,
-                            ),
-                             Text('模式',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w500,color: MyColors.textBlackColor,),),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                _buildFra1Content(
+                    controller.onScanClicked,
+                    controller.onSideItClicked,
+                    controller.onShakeItClicked,
+                    controller.onModelClicked),
+                _buildFra2Content(),
               ],
             ),
           ),
-          SizedBox(
-            height: 20.h,
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '话题中心',
-              style: TextStyle(
-                  color: MyColors.textBlackColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.sp),
-            ),
-          ),
-          Expanded(
-              child: ListView.builder(
-            itemBuilder: (context, index) {
-              return _centerItem(controller.data[index],(){});
-            },
-            itemCount: controller.data.length,
-          ))
         ],
       ),
     );
   }
 
-  _centerItem(TopPicCenterBean bean,Function onPress) {
+  _buildFra1Content(Function onScanCall, Function onSideCall, Function onShakeCall,
+      Function onModelCall) {
+    return LoadMoreListView.customScrollView(
+      onLoadMore: controller.loaMoreList,
+      loadMoreWidget: Container(
+        margin:  EdgeInsets.all(20.w),
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+        ),
+      ),
+      slivers: [
+        SliverToBoxAdapter(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 282.h,
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 26.h,
+                        child: GestureDetector(
+                          onTap: () {
+                            onScanCall.call();
+                          },
+                          child: Image.asset(
+                            ResName.iconImg,
+                            width: 150.w,
+                            height: 176.h,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 49.w,
+                        top: 50.h,
+                        child: Text(
+                          '点我\r\n连接设备哦',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: MyColors.textBlackColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          height: 100.h,
+                          decoration: BoxDecoration(
+                              color: MyColors.cardViewBgColor,
+                              borderRadius: BorderRadius.circular(8.w),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 4.h,
+                                  spreadRadius: 0,
+                                )
+                              ]),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    ResName.iconSide,
+                                    width: 46.h,
+                                    height: 46.h,
+                                  ),
+                                  Text(
+                                    '划一划',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyColors.textBlackColor,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    ResName.iconShake,
+                                    width: 46.h,
+                                    height: 46.h,
+                                  ),
+                                  Text(
+                                    '摇一摇',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyColors.textBlackColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    ResName.iconModel,
+                                    width: 46.h,
+                                    height: 46.h,
+                                  ),
+                                  Text(
+                                    '模式',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyColors.textBlackColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '话题中心',
+                    style: TextStyle(
+                        color: MyColors.textBlackColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.sp),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          sliver: GetBuilder<PlayController>(
+            builder: (controller) {
+              return controller.dataList.isNotEmpty? SliverList.list(
+                children: List.generate(
+                  controller.dataList.length,
+                  (index) => _centerItem(
+                    controller.dataList[index],
+                    () {},
+                  ),
+                ),
+              ):const SliverFillRemaining(child: NoDataWidget(),);
+            },
+            id: controller.dataListId,
+          ) ,
+        )
+      ],
+    );
+  }
+
+  _centerItem(TopPicCenterBean bean, Function onPress) {
     return SizedBox(
       height: 70.h,
       child: Row(
@@ -220,7 +281,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left:12.w ),
+              margin: EdgeInsets.only(left: 12.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -254,7 +315,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                           right: 0,
                           bottom: 0,
                           child: Text(
-                            bean. date,
+                            bean.date,
                             style: TextStyle(
                                 fontSize: 11.sp, color: MyColors.textGreyColor),
                           ),

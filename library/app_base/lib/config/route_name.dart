@@ -15,10 +15,10 @@ class RouteName {
   static const String sidePage = '/side';
   static const String shakePage = '/shake';
   static const String modelPage = '/model';
+  static const String scanPage = '/scan';
 
   //shake
   static const String mainPage = '/main';
-  static const String scanPage = '/scan';
   static const String instructionsPage = '/instructions';
   static const String shakeItPage = '/shakeIt';
   static const String sharePage = '/share';

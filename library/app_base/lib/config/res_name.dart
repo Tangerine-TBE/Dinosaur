@@ -20,4 +20,5 @@ class ResName {
    static const String iconShake = 'assets/images/icon_shake.png';
    static const String iconModel = 'assets/images/icon_model.png';
    static const String iconImg = 'assets/images/icon_img.png';
+   static const String gifAixin = 'assets/images/aixin.gif';
 }

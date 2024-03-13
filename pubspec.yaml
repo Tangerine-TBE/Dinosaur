@@ -38,6 +38,8 @@ dependencies:
   circular_countdown_timer: ^0.2.3
   share_plus: ^7.2.2
   uni_links: ^0.5.1
+  loadmore_listview: ^1.0.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
