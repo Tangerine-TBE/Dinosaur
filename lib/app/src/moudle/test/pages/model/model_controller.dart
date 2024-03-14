@@ -1,3 +1,5 @@
+import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ class ModelController extends BaseController {
   late PageController pageController;
   final currentModelPage = 0.obs;
   final process = 0.0.obs;
+  final currentModel = 0.obs;
 
   @override
   void onInit() {
@@ -26,6 +29,14 @@ class ModelController extends BaseController {
       duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
+  }
+  onIndexItemClick(int index){
+    currentModel.value = index;
+    if(Runtime.checkRuntimeBleEnable()){
+      Runtime.bleManager?.wwriteChar?.write(BleMSg().generateModelData(index));
+    }else{
+      showToast('请连接蓝牙设备!');
+    }
   }
 
 }

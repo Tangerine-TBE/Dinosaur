@@ -53,10 +53,53 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                       Positioned(
                         bottom: 60.h,
                         left: 26.w,
-                        child: Obx(() => Container(
+                        child: Obx(() => GestureDetector(
+                              onTap: () {
+                                controller.changePage();
+                              },
+                              child: Container(
+                                width: 136.w,
+                                height: 50.h,
+                                decoration:
+                                    controller.currentModelPage.value == 0
+                                        ? BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: Colors.pink, width: 2.w),
+                                            borderRadius:
+                                                BorderRadius.circular(25.w),
+                                          )
+                                        : BoxDecoration(
+                                            color: Colors.pink,
+                                            borderRadius:
+                                                BorderRadius.circular(25.w),
+                                          ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '经典模式',
+                                  style: controller.currentModelPage.value == 0
+                                      ? const TextStyle(
+                                          color: Colors.pink,
+                                        )
+                                      : const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                ),
+                              ),
+                            )),
+                      ),
+                      Positioned(
+                        bottom: 60.h,
+                        right: 26.w,
+                        child: Obx(
+                          () => GestureDetector(
+                            onTap: () {
+                              controller.changePage();
+                            },
+                            child: Container(
                               width: 136.w,
                               height: 50.h,
-                              decoration: controller.currentModelPage.value == 0
+                              decoration: controller.currentModelPage.value == 1
                                   ? BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -69,8 +112,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                                     ),
                               alignment: Alignment.center,
                               child: Text(
-                                '经典模式',
-                                style: controller.currentModelPage.value == 0
+                                '我的模式',
+                                style: controller.currentModelPage.value == 1
                                     ? const TextStyle(
                                         color: Colors.pink,
                                       )
@@ -78,36 +121,6 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                                         color: Colors.white,
                                       ),
                               ),
-                            )),
-                      ),
-                      Positioned(
-                        bottom: 60.h,
-                        right: 26.w,
-                        child: Obx(
-                          () => Container(
-                            width: 136.w,
-                            height: 50.h,
-                            decoration: controller.currentModelPage.value == 1
-                                ? BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.pink, width: 2.w),
-                                    borderRadius: BorderRadius.circular(25.w),
-                                  )
-                                : BoxDecoration(
-                                    color: Colors.pink,
-                                    borderRadius: BorderRadius.circular(25.w),
-                                  ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '我的模式',
-                              style: controller.currentModelPage.value == 1
-                                  ? const TextStyle(
-                                      color: Colors.pink,
-                                    )
-                                  : const TextStyle(
-                                      color: Colors.white,
-                                    ),
                             ),
                           ),
                         ),
@@ -115,7 +128,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                     ],
                   )),
               Positioned(
-                bottom: 0,
+                bottom: -1,
                 right: 0,
                 left: 0,
                 child: Container(
@@ -153,125 +166,186 @@ class ModelPage extends BaseEmptyPage<ModelController> {
   }
 
   _buildContentClassic() {
+    var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(1, false),
-              _buildItem(2, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(3, false),
-              _buildItem(4, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(5, false),
-              _buildItem(6, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(7, false),
-              _buildItem(8, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(9, false),
-              _buildItem(10, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildItem(11, false),
-              _buildItem(12, false),
-            ],
-          ),
-          SizedBox(
-            height: 13.h,
-          ),
-        ],
+      child: Obx(
+        () => Column(
+          children: [
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(1),
+                _buildItem(2),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(3),
+                _buildItem(4),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(5),
+                _buildItem(6),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(7),
+                _buildItem(8),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(9),
+                _buildItem(10),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildItem(11),
+                _buildItem(12),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+          ],
+        ),
       ),
     );
   }
-  _buildContentMine(){
+
+  _buildContentMine() {
     return Container();
   }
-  Widget _buildItem(int index, bool isSelect) {
-    AssetImage view;
-    switch (index) {
-      case 1:
-        view = AssetImage(ResName.imgNDycx);
-        break;
-      case 2:
-        view = AssetImage(ResName.imgNQymm);
-        break;
-      case 3:
-        view = AssetImage(ResName.imgNRyds);
-        break;
-      case 4:
-        view = AssetImage(ResName.imgNYfrh);
-        break;
-      case 5:
-        view = AssetImage(ResName.imgNNgsh);
-        break;
-      case 6:
-        view = AssetImage(ResName.imgNQsyh);
-        break;
-      case 7:
-        view = AssetImage(ResName.imgNMlmh);
-        break;
-      case 8:
-        view = AssetImage(ResName.imgBYbbn);
-        break;
-      case 9:
-        view = AssetImage(ResName.imgNKlwj);
-        break;
-      case 10:
-        view = AssetImage(ResName.imgNYszh);
-        break;
-      case 11:
-        view = AssetImage(ResName.imgNXhnf);
-        break;
-      case 12:
-        view = AssetImage(ResName.imgNGdck);
-        break;
-      default:
-        view = AssetImage(ResName.imgNDycx);
-        break;
+
+  Widget _buildItem(int index) {
+    AssetImage normal;
+    var isSelect = false;
+    if (controller.currentModel == index) {
+      isSelect = true;
+    } else {
+      isSelect = false;
     }
-    return Container(
-      height: 83.h,
-      width: 144.w,
-      decoration: BoxDecoration(
-        image: DecorationImage(image: view),
+    if (!isSelect) {
+      switch (index) {
+        case 1:
+          normal = const AssetImage(ResName.imgNDycx);
+          break;
+        case 2:
+          normal = const AssetImage(ResName.imgNQymm);
+          break;
+        case 3:
+          normal = const AssetImage(ResName.imgNRyds);
+          break;
+        case 4:
+          normal = const AssetImage(ResName.imgNYfrh);
+          break;
+        case 5:
+          normal = const AssetImage(ResName.imgNNgsh);
+          break;
+        case 6:
+          normal = const AssetImage(ResName.imgNQsyh);
+          break;
+        case 7:
+          normal = const AssetImage(ResName.imgNMlmh);
+          break;
+        case 8:
+          normal = const AssetImage(ResName.imgBYbbn);
+          break;
+        case 9:
+          normal = const AssetImage(ResName.imgNKlwj);
+          break;
+        case 10:
+          normal = const AssetImage(ResName.imgNYszh);
+          break;
+        case 11:
+          normal = const AssetImage(ResName.imgNXhnf);
+          break;
+        case 12:
+          normal = const AssetImage(ResName.imgNGdck);
+          break;
+        default:
+          normal = const AssetImage(ResName.imgNDycx);
+          break;
+      }
+    } else {
+      switch (index) {
+        case 1:
+          normal = const AssetImage(ResName.imgYDycx);
+          break;
+        case 2:
+          normal = const AssetImage(ResName.imgYQymm);
+          break;
+        case 3:
+          normal = const AssetImage(ResName.imgYRyds);
+          break;
+        case 4:
+          normal = const AssetImage(ResName.imgYYfrh);
+          break;
+        case 5:
+          normal = const AssetImage(ResName.imgYNqsh);
+          break;
+        case 6:
+          normal = const AssetImage(ResName.imgYQsyh);
+          break;
+        case 7:
+          normal = const AssetImage(ResName.imgYMlmh);
+          break;
+        case 8:
+          normal = const AssetImage(ResName.imgYYbbn);
+          break;
+        case 9:
+          normal = const AssetImage(ResName.imgYKlwj);
+          break;
+        case 10:
+          normal = const AssetImage(ResName.imgYYszh);
+          break;
+        case 11:
+          normal = const AssetImage(ResName.imgYXhnf);
+          break;
+        case 12:
+          normal = const AssetImage(ResName.imgYGdck);
+          break;
+        default:
+          normal = const AssetImage(ResName.imgYDycx);
+          break;
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        controller.onIndexItemClick(index);
+      },
+      child: Container(
+        width: 144.w,
+        height: 83.h,
+        decoration: BoxDecoration(
+          image: DecorationImage(image: normal),
+        ),
       ),
     );
   }

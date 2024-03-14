@@ -36,7 +36,7 @@ class ResName {
   static const String imgNKlwj = 'assets/images/img_n_klwj.png';
   static const String imgYMlmh = 'assets/images/img_y_mlmh.png';
   static const String imgNMlmh = 'assets/images/img_n_mlmh.png';
-  static const String imgYNqsh = 'assets/images/img_y_ngsh.png';
+  static const String imgYNqsh = 'assets/images/img_y_nqsh.png';
   static const String imgNNgsh = 'assets/images/img_n_nqsh.png';
   static const String imgYQdck = 'assets/images/img_y_qdck.png';
   static const String imgNQdck = 'assets/images/img_n_gdck.png';
