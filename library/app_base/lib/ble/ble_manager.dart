@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:app_base/exports.dart';
 import 'package:common/common/network/status_code.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:get/get.dart';
 
 class BleManager {
   late StreamSubscription<BluetoothAdapterState> adapterStateStateSubscription;
@@ -17,14 +18,14 @@ class BleManager {
       connectionStateSubscription;
 
   //正在连接的设备
-  BluetoothDevice? _mDevice;
+   final Rx<BluetoothDevice?> mDevice = Rx(null);
   BlueToothInterface interface;
 
   //正在连接设备的可写入通道
-  BluetoothCharacteristic? _writeChar;
+  BluetoothCharacteristic? wwriteChar;
 
   setWriteChar(BluetoothCharacteristic writeChar) {
-    _writeChar = writeChar;
+    wwriteChar = writeChar;
   }
 
   setInterface(BlueToothInterface interface) {
@@ -36,8 +37,8 @@ class BleManager {
   }
 
   bool getDeviceStatus() {
-    if (_mDevice != null) {
-      return _mDevice?.isConnected == true;
+    if (mDevice != null) {
+      return mDevice.value?.isConnected == true;
     } else {
       return false;
     }
@@ -61,6 +62,7 @@ class BleManager {
   }
 
   stopScan() {
+    adapterStateStateSubscription.pause();
     scanResultsSubscription.pause();
     timer = Timer(const Duration(seconds: 10), () {
       FlutterBluePlus.stopScan();
@@ -68,15 +70,24 @@ class BleManager {
   }
 
   startScan({required int timeout}) {
-    timer?.cancel();
-    scanResultsSubscription.resume();
-    FlutterBluePlus.startScan(
-      timeout: const Duration(seconds: timeOut),
-    );
+    if(timer != null){
+      timer?.cancel();
+    }
+    if(scanResultsSubscription.isPaused){
+      scanResultsSubscription.resume();
+    }
+    if(adapterStateStateSubscription.isPaused){
+      adapterStateStateSubscription.resume();
+    }
+    if(!FlutterBluePlus.isScanningNow){
+      FlutterBluePlus.startScan(
+        timeout: const Duration(seconds: timeOut),
+      );
+    }
   }
 
   void write(List<int> cmd) {
-    _writeChar?.write(cmd);
+    wwriteChar?.write(cmd);
   }
 
   void onClose() {
@@ -85,7 +96,7 @@ class BleManager {
   }
 
   connect(BluetoothDevice device, int time) async {
-    _mDevice = device;
+    mDevice.value = device;
     //为这个设备注册一个连接监听器
     bluetoothConnectionState = BluetoothConnectionState.connecting;
     connectionStateSubscription = device.connectionState.listen((state) {
@@ -97,8 +108,8 @@ class BleManager {
             bluetoothConnectionState = state;
             connectionStateSubscription?.cancel();
             interface.onDeviceDisconnected();
-            _writeChar = null;
-            _mDevice = null;
+            wwriteChar = null;
+            mDevice.value = null;
           }
         } else {
           //状态混乱中，Android bug处理
@@ -113,8 +124,8 @@ class BleManager {
                     BluetoothConnectionState.disconnected;
                 connectionStateSubscription?.cancel();
                 interface.onDeviceDisconnected();
-                _writeChar = null;
-                _mDevice = null;
+                wwriteChar = null;
+                mDevice.value = null;
               }
             }
           }
@@ -124,12 +135,12 @@ class BleManager {
           logE('连接中');
           bluetoothConnectionState = state;
           stopScan();
-          interface.onDeviceConnected(_mDevice);
+          interface.onDeviceConnected(mDevice.value);
         }
       } else {
         logE('未知的连接状态');
-        _writeChar = null;
-        _mDevice = null;
+        wwriteChar = null;
+        mDevice.value = null;
         bluetoothConnectionState = state;
         interface.onDeviceUnKnowError(state);
       }

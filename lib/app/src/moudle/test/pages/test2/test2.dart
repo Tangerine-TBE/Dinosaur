@@ -8,7 +8,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/test/pages/test2/test2Controller.dart';
 
-import 'charts_painter.dart';
+import '../sideIt/widget/charts_painter.dart';
 
 class test2 extends BaseEmptyPage<Test2Controller> {
   const test2({super.key});

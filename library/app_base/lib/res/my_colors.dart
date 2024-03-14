@@ -18,6 +18,8 @@ class MyColors {
   static const Color textBlackColor = Color(0xff21170B);
   static const Color textGreyColor = Color(0xff8F9098);
   static const Color cardViewBgColor = Color(0xffF7F7F7);
+  static const Color sliderInactiveTrackColor = Color(0xfffde8eb);
+  static const Color sliderActiveTrackColor = Color(0xfff98794);
 
   
   

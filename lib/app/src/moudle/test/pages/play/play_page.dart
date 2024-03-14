@@ -93,12 +93,12 @@ class PlayPage extends BaseEmptyPage<PlayController> {
     );
   }
 
-  _buildFra1Content(Function onScanCall, Function onSideCall, Function onShakeCall,
-      Function onModelCall) {
+  _buildFra1Content(Function onScanCall, Function onSideCall,
+      Function onShakeCall, Function onModelCall) {
     return LoadMoreListView.customScrollView(
       onLoadMore: controller.loaMoreList,
       loadMoreWidget: Container(
-        margin:  EdgeInsets.all(20.w),
+        margin: EdgeInsets.all(20.w),
         alignment: Alignment.center,
         child: const CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
@@ -164,62 +164,77 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    ResName.iconSide,
-                                    width: 46.h,
-                                    height: 46.h,
-                                  ),
-                                  Text(
-                                    '划一划',
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyColors.textBlackColor,
+                              GestureDetector(
+                                onTap: () {
+                                  controller.onSideItClicked();
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      ResName.iconSide,
+                                      width: 46.h,
+                                      height: 46.h,
                                     ),
-                                  )
-                                ],
+                                    Text(
+                                      '划一划',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: MyColors.textBlackColor,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    ResName.iconShake,
-                                    width: 46.h,
-                                    height: 46.h,
-                                  ),
-                                  Text(
-                                    '摇一摇',
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyColors.textBlackColor,
+                              GestureDetector(
+                                onTap: () {
+                                  controller.onShakeItClicked();
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      ResName.iconShake,
+                                      width: 46.h,
+                                      height: 46.h,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      '摇一摇',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: MyColors.textBlackColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    ResName.iconModel,
-                                    width: 46.h,
-                                    height: 46.h,
-                                  ),
-                                  Text(
-                                    '模式',
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: MyColors.textBlackColor,
+                              GestureDetector(
+                                onTap: () {
+                                  controller.onModelClicked();
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      ResName.iconModel,
+                                      width: 46.h,
+                                      height: 46.h,
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      '模式',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: MyColors.textBlackColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -249,18 +264,22 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           sliver: GetBuilder<PlayController>(
             builder: (controller) {
-              return controller.dataList.isNotEmpty? SliverList.list(
-                children: List.generate(
-                  controller.dataList.length,
-                  (index) => _centerItem(
-                    controller.dataList[index],
-                    () {},
-                  ),
-                ),
-              ):const SliverFillRemaining(child: NoDataWidget(),);
+              return controller.dataList.isNotEmpty
+                  ? SliverList.list(
+                      children: List.generate(
+                        controller.dataList.length,
+                        (index) => _centerItem(
+                          controller.dataList[index],
+                          () {},
+                        ),
+                      ),
+                    )
+                  : const SliverFillRemaining(
+                      child: NoDataWidget(),
+                    );
             },
             id: controller.dataListId,
-          ) ,
+          ),
         )
       ],
     );

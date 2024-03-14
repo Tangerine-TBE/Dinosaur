@@ -7,10 +7,16 @@ import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/shake/pages/scanner/scanner_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
+import 'package:test01/app/src/moudle/test/pages/model/model_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/model/model_page.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_page.dart';
 import 'package:test01/app/src/moudle/test/pages/scan/scan_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/scan/scan_page.dart';
+import 'package:test01/app/src/moudle/test/pages/shakeit/shake_it_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/shakeit/shake_it_page.dart';
+import 'package:test01/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/sideIt/side_it_page.dart';
 
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
@@ -18,7 +24,8 @@ import '../src/moudle/test/pages/home/home_page.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.homePage;
+  // String initialRoute = RouteName.homePage;
+  String initialRoute = RouteName.modelPage;
 
   @override
   String? loginRoute;
@@ -52,6 +59,35 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
+        GetPage(
+          name: RouteName.sidePage,
+          page: () => SideItPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => SideItController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.shakePage,
+          page: () => ShakeItPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => ShakeItController(),
+              );
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.modelPage,
+          page: () => ModelPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => ModelController());
+            },
+          ),
+        )
         //     GetPage(
         //       name: RouteName.mainPage,
         //       page: () => const MainPage(),
