@@ -38,14 +38,14 @@ class PlayController extends BaseController {
   }
 
   void onSideItClicked() {
-    // Get.toNamed(RouteName.sidePage);
+    navigateTo(RouteName.sidePage);
   }
 
   void onShakeItClicked() {
-    // Get.toNamed(RouteName.shakePage);
+    navigateTo(RouteName.shakePage);
   }
 
   void onModelClicked() {
-    // Get.toNamed(RouteName.modelPage);
+    navigateTo(RouteName.modelPage);
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:test01/app/src/moudle/shake/pages/scanner/scanner_controller.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/test/pages/scan/scan_controller.dart';
 
@@ -179,18 +178,19 @@ class ScanPage extends BaseEmptyPage<ScanController> {
               child: GetBuilder<ScanController>(
                 builder: (controller) {
                   return ListView.separated(
-                      itemBuilder: (context, index) {
-                        return _buildDeviceItem(
-                            controller.devices[index].device.platformName,
-                            index);
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 20.h,
-                        );
-                      },
-                      itemCount: controller.devices.length,);
-                },id: controller.devicesListId,
+                    itemBuilder: (context, index) {
+                      return _buildDeviceItem(
+                          controller.devices[index].device.platformName, index);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 20.h,
+                      );
+                    },
+                    itemCount: controller.devices.length,
+                  );
+                },
+                id: controller.devicesListId,
               ),
             ),
           ],
@@ -200,8 +200,23 @@ class ScanPage extends BaseEmptyPage<ScanController> {
   }
 
   _buildDeviceItem(String name, int index) {
-    return GestureDetector(onTap:(){
-      controller.onDeviceSelected(index);
-      },child: Text(name,style:  TextStyle(color: MyColors.textBlackColor,fontSize: 20.sp),));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          name,
+          style: TextStyle(color: MyColors.textBlackColor, fontSize: 20.sp),
+        ),
+        TextButton(
+          onPressed: () {
+            controller.onDeviceSelected(index);
+          },
+          child: const Text(
+            '连接',
+            style: TextStyle(color: Colors.pink),
+          ),
+        )
+      ],
+    );
   }
 }

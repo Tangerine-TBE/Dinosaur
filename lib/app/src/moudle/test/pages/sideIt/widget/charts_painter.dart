@@ -24,6 +24,7 @@ class ChartsPainter extends CustomPainter {
     _processes?[0] = data;
   }
 
+
   @override
   void paint(Canvas canvas, Size size) {
     var width = size.width;

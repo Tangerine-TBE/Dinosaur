@@ -166,15 +166,4 @@ abstract class BaseBleController extends BaseViewModel {
   }
 }
 
-extension IntToBytes on int {
-  List<int> toBytes() {
-    return <int>[
-      this & 0xFF,
-      (this >> 8) & 0xFF,
-      (this >> 16) & 0xFF,
-      (this >> 24) & 0xFF
-    ];
-  }
-}
 
-extension State on BluetoothConnectionState {}

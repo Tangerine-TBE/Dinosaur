@@ -1,4 +1,5 @@
 import 'package:app_base/ble/ble_manager.dart';
+import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/constant/constants.dart';
 import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
@@ -52,7 +53,19 @@ class ScanController extends BaseController implements BlueToothInterface {
   }
 
   @override
-  void onDeviceConnected(BluetoothDevice? device) {
+  void onDeviceConnected(BluetoothDevice? device) async {
+    if (device != null && device.isConnected == true) {
+      logE('达成连接');
+      List<BluetoothService> services = await device.discoverServices();
+      services.forEach((service) async {
+        var characteristics = service.characteristics;
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
+            manager.setWriteChar(c);
+          }
+        }
+      });
+    }
     Get.back();
   }
 
