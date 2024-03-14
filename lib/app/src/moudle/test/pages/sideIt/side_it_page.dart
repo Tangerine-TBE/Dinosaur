@@ -38,12 +38,15 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Obx(
-                    () => RepaintBoundary(
-                      child: CustomPaint(
-                        size: Size(280.w, 70.h),
-                        painter: ChartsPainter(
-                            process: controller.process.value.obx,
-                            processMax: 1023),
+                    () => Container(
+                      padding: EdgeInsets.symmetric(horizontal: 48.w),
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          size: Size(280.w, 70.h),
+                          painter: ChartsPainter(
+                              process: controller.process.value.obx,
+                              processMax: 1023),
+                        ),
                       ),
                     ),
                   ),

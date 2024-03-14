@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:test01/app/src/moudle/shake/pages/shakeit/shake_it_controller.dart';
 
 class ShakeItPage extends BaseEmptyPage<ShakeItController>{
+  const ShakeItPage({super.key});
+
   @override
   Widget buildContent(BuildContext context
       ) {

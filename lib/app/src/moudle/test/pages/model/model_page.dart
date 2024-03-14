@@ -29,18 +29,23 @@ class ModelPage extends BaseEmptyPage<ModelController> {
           Stack(
             children: [
               Container(
-                  height: 280.h,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(ResName.imgWdmsBg), fit: BoxFit.fill),
-                  ),
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Obx(
-                          () => RepaintBoundary(
+                height: 280.h,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(ResName.imgWdmsBg), fit: BoxFit.fill),
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 33,
+                      child: Obx(
+                        () => Container(
+                          padding: EdgeInsets.symmetric(horizontal: 48.w),
+                          child: RepaintBoundary(
                             child: CustomPaint(
                               size: Size(280.w, 70.h),
                               painter: ChartsPainter(
@@ -50,56 +55,18 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 60.h,
-                        left: 26.w,
-                        child: Obx(() => GestureDetector(
-                              onTap: () {
-                                controller.changePage();
-                              },
-                              child: Container(
-                                width: 136.w,
-                                height: 50.h,
-                                decoration:
-                                    controller.currentModelPage.value == 0
-                                        ? BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors.pink, width: 2.w),
-                                            borderRadius:
-                                                BorderRadius.circular(25.w),
-                                          )
-                                        : BoxDecoration(
-                                            color: Colors.pink,
-                                            borderRadius:
-                                                BorderRadius.circular(25.w),
-                                          ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '经典模式',
-                                  style: controller.currentModelPage.value == 0
-                                      ? const TextStyle(
-                                          color: Colors.pink,
-                                        )
-                                      : const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                ),
-                              ),
-                            )),
-                      ),
-                      Positioned(
-                        bottom: 60.h,
-                        right: 26.w,
-                        child: Obx(
-                          () => GestureDetector(
+                    ),
+                    Positioned(
+                      bottom: 60.h,
+                      left: 26.w,
+                      child: Obx(() => GestureDetector(
                             onTap: () {
                               controller.changePage();
                             },
                             child: Container(
                               width: 136.w,
                               height: 50.h,
-                              decoration: controller.currentModelPage.value == 1
+                              decoration: controller.currentModelPage.value == 0
                                   ? BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -112,8 +79,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                                     ),
                               alignment: Alignment.center,
                               child: Text(
-                                '我的模式',
-                                style: controller.currentModelPage.value == 1
+                                '经典模式',
+                                style: controller.currentModelPage.value == 0
                                     ? const TextStyle(
                                         color: Colors.pink,
                                       )
@@ -122,11 +89,48 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                                       ),
                               ),
                             ),
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 60.h,
+                      right: 26.w,
+                      child: Obx(
+                        () => GestureDetector(
+                          onTap: () {
+                            controller.changePage();
+                          },
+                          child: Container(
+                            width: 136.w,
+                            height: 50.h,
+                            decoration: controller.currentModelPage.value == 1
+                                ? BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.pink, width: 2.w),
+                                    borderRadius: BorderRadius.circular(25.w),
+                                  )
+                                : BoxDecoration(
+                                    color: Colors.pink,
+                                    borderRadius: BorderRadius.circular(25.w),
+                                  ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '我的模式',
+                              style: controller.currentModelPage.value == 1
+                                  ? const TextStyle(
+                                      color: Colors.pink,
+                                    )
+                                  : const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                ),
+              ),
               Positioned(
                 bottom: -1,
                 right: 0,

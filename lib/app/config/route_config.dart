@@ -43,7 +43,7 @@ class RouteConfig extends ARoute {
         ),
         GetPage(
           name: RouteName.chartPage,
-          page: () => ChartPage(),
+          page: () => const ChartPage(),
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => ChartController());
@@ -61,7 +61,7 @@ class RouteConfig extends ARoute {
         ),
         GetPage(
           name: RouteName.sidePage,
-          page: () => SideItPage(),
+          page: () => const SideItPage(),
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => SideItController());
@@ -70,7 +70,7 @@ class RouteConfig extends ARoute {
         ),
         GetPage(
           name: RouteName.shakePage,
-          page: () => ShakeItPage(),
+          page: () => const ShakeItPage(),
           binding: BindingsBuilder(
             () {
               Get.lazyPut(
@@ -81,7 +81,7 @@ class RouteConfig extends ARoute {
         ),
         GetPage(
           name: RouteName.modelPage,
-          page: () => ModelPage(),
+          page: () => const ModelPage(),
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => ModelController());
