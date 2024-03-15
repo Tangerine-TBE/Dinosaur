@@ -110,16 +110,17 @@ class BleManager {
             interface.onDeviceDisconnected();
             wwriteChar = null;
             mDevice.value = null;
+            showToast('蓝牙已断开');
           }
         } else {
-          //状态混乱中，Android bug处理
+          //状态混乱中，Android bug处理，扫描出来了但是连接失败
           logE('状态发生混乱');
           if (device.disconnectReason != null) {
             var disconnectReason = device.disconnectReason;
             int? code = disconnectReason?.code;
             if (code != null) {
               logE('混乱代码为：$code');
-              if (code == 62 || code == 23789258) {
+              if (code == 62 || code == 23789258 || code == 19) {
                 bluetoothConnectionState =
                     BluetoothConnectionState.disconnected;
                 connectionStateSubscription?.cancel();

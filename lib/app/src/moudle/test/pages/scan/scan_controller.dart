@@ -3,29 +3,16 @@ import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/constant/constants.dart';
 import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 
-class ScanController extends BaseController implements BlueToothInterface {
+class ScanController extends BaseBleController implements BlueToothInterface {
   final devicesListId = 1;
   List<ScanResult> devices = [];
   final devicesSize = 0.obs;
   final bluetoothState = '蓝牙状态: 未开启'.obs;
-  late BleManager manager;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    var runTimeManager = Runtime.bleManager;
-    if (runTimeManager == null) {
-      manager = BleManager.create(this);
-      Runtime.bleManager = manager;
-    } else {
-      manager = Runtime.bleManager!;
-      manager.setInterface(this);
-      onAdapterStateChanged(BluetoothAdapterState.on);
-    }
-  }
 
   @override
   void onClose() {
@@ -48,13 +35,15 @@ class ScanController extends BaseController implements BlueToothInterface {
 
   onDeviceSelected(int index) async {
     var resultDevice = devices[index];
+    showLoading(userInteraction: false);
     manager.stopScan();
-    Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     manager.connect(resultDevice.device, 10);
   }
 
   @override
   void onDeviceConnected(BluetoothDevice? device) async {
+    dismiss();
     if (device != null && device.isConnected == true) {
       logE('达成连接');
       List<BluetoothService> services = await device.discoverServices();
@@ -72,7 +61,11 @@ class ScanController extends BaseController implements BlueToothInterface {
 
   @override
   void onDeviceDisconnected() async {
+    devices.clear();
+    devicesSize.value = devices.length;
+    update([devicesListId]);
     await Future.delayed(const Duration(seconds: 2));
+    dismiss();
     manager.startScan(timeout: 20);
   }
 
