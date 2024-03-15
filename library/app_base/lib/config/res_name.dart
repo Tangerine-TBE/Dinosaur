@@ -62,6 +62,7 @@ class ResName {
   static const String iconRight = 'assets/images/icon_right.png';
   static const String iconXhbf = 'assets/images/icon_xhbf.png';
   static const String iconShake1 = 'assets/images/icon_shake1.png';
+  static const String iconBtBf = 'assets/images/icon_bt_bf.png';
 
 
 }

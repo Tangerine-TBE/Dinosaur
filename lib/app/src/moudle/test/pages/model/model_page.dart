@@ -44,6 +44,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                       bottom: 33,
                       child: Obx(
                         () => Container(
+                          width: 70,
                           padding: EdgeInsets.symmetric(horizontal: 48.w),
                           child: RepaintBoundary(
                             child: CustomPaint(
@@ -239,8 +240,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(0),
-                _buildItem(1),
+                _buildTemplateModelItem(0),
+                _buildTemplateModelItem(1),
               ],
             ),
             SizedBox(
@@ -249,8 +250,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(2),
-                _buildItem(3),
+                _buildTemplateModelItem(2),
+                _buildTemplateModelItem(3),
               ],
             ),
             SizedBox(
@@ -259,8 +260,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(4),
-                _buildItem(5),
+                _buildTemplateModelItem(4),
+                _buildTemplateModelItem(5),
               ],
             ),
             SizedBox(
@@ -269,8 +270,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(6),
-                _buildItem(7),
+                _buildTemplateModelItem(6),
+                _buildTemplateModelItem(7),
               ],
             ),
             SizedBox(
@@ -279,8 +280,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(8),
-                _buildItem(9),
+                _buildTemplateModelItem(8),
+                _buildTemplateModelItem(9),
               ],
             ),
             SizedBox(
@@ -289,8 +290,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
-                _buildItem(10),
-                _buildItem(11),
+                _buildTemplateModelItem(10),
+                _buildTemplateModelItem(11),
               ],
             ),
             SizedBox(
@@ -303,13 +304,49 @@ class ModelPage extends BaseEmptyPage<ModelController> {
   }
 
   _buildContentMine() {
-    return Container();
+    return SingleChildScrollView(
+      child: Column(
+        children:
+        List.generate(controller.mRecordBean.dataList.length, (index) => _buildCustomModelItem(controller.mRecordBean.dataList[index].recordName,index))
+        ,
+      ),
+    );
   }
 
-  Widget _buildItem(int index) {
+  _buildCustomModelItem(String name, int index) {
+    return GestureDetector(
+      onTap: () {
+        controller.onCustomModelClick(index);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        height: 60.w,
+        width: double.infinity,
+        child: Row(
+          children: [
+            Image.asset(
+              ResName.iconBtBf,
+              width: 60.w,
+              height: 60.w,
+            ),
+            SizedBox(width: 20.w,),
+            Expanded(
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTemplateModelItem(int index) {
     AssetImage normal;
     var isSelect = false;
-    if (controller.currentModel.value == index) {
+    if (controller.currentClassicModel.value == index) {
       isSelect = true;
     } else {
       isSelect = false;
@@ -402,7 +439,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
 
     return GestureDetector(
       onTap: () {
-        controller.onIndexItemClick(index);
+        controller.onClassicItemClick(index);
       },
       child: Container(
         width: 144.w,

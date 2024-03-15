@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/shake/pages/scanner/scanner_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
+import 'package:test01/app/src/moudle/test/pages/custom/custom_model_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/custom/custom_model_page.dart';
 import 'package:test01/app/src/moudle/test/pages/model/model_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/model/model_page.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
@@ -24,7 +26,8 @@ import '../src/moudle/test/pages/home/home_page.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.homePage;
+  String initialRoute = RouteName.sidePage;
+
   // String initialRoute = RouteName.modelPage;
 
   @override
@@ -85,6 +88,15 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => ModelController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.customPage,
+          page: () => const CustomModelPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => CustomModelController());
             },
           ),
         )

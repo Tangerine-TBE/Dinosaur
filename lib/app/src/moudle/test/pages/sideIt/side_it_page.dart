@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/sideIt/widget/image_slider_thumb.dart';
+import 'package:test01/app/src/moudle/test/pages/sideIt/widget/timer_count_down.dart';
 
 import 'widget/charts_painter.dart';
 
@@ -16,8 +17,12 @@ class SideItPage extends BaseEmptyPage<SideItController> {
   Color get background => Colors.white;
 
   @override
+  bool get resizeToAvoidBottomInset => false;
+
+  @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: MyColors.pageBgColor,
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -105,24 +110,29 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                   Positioned(
                     right: 30.w,
                     top: 50.h,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          ResName.iconYjbz,
-                          width: 100.w,
-                          height: 100.w,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        Text(
-                          '一键暴走',
-                          style: TextStyle(
-                              color: MyColors.textBlackColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.onSuperModelClick();
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            ResName.iconYjbz,
+                            width: 100.w,
+                            height: 100.w,
+                          ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          Text(
+                            '一键暴走',
+                            style: TextStyle(
+                                color: MyColors.textBlackColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Center(
@@ -188,45 +198,55 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                   Positioned(
                     left: 30.w,
                     bottom: 50.h,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          ResName.iconCjms,
-                          width: 100.w,
-                          height: 100.w,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        Text('创建模式',
-                            style: TextStyle(
-                                color: MyColors.textBlackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500)),
-                      ],
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.onCustomModelClick();
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            ResName.iconCjms,
+                            width: 100.w,
+                            height: 100.w,
+                          ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          Text('创建模式',
+                              style: TextStyle(
+                                  color: MyColors.textBlackColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500)),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
                     right: 30.w,
                     bottom: 50.h,
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          ResName.iconDqxh,
-                          width: 100.w,
-                          height: 100.w,
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
-                        Text(
-                          '播放',
-                          style: TextStyle(
-                              color: MyColors.textBlackColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.onPlayClick();
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            ResName.iconDqxh,
+                            width: 100.w,
+                            height: 100.w,
+                          ),
+                          SizedBox(
+                            height: 12.h,
+                          ),
+                          Text(
+                            '播放',
+                            style: TextStyle(
+                                color: MyColors.textBlackColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -239,6 +259,39 @@ class SideItPage extends BaseEmptyPage<SideItController> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
+            ),
+            alignment: Alignment.bottomCenter,
+            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+            child: Obx(
+              () => Visibility(
+                visible: controller.slideItModel.value == 1,
+                child: Countdown(
+                  seconds: 10,
+                  controller: controller.countdownController,
+                  onFinished: () {
+                    controller.onCountDownFinish();
+                  },
+                  build: (context, double time) {
+                    return Text(
+                      time.toString(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.bold),
+                    );
+                  },
+                  buildPause: (context) {
+                    return Text(
+                      '请滑动滑条',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.bold),
+                    );
+                  },
+                  interval: const Duration(milliseconds: 100),
+                ),
+              ),
             ),
           ),
         ],
