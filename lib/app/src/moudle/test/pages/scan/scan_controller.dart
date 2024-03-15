@@ -49,7 +49,8 @@ class ScanController extends BaseController implements BlueToothInterface {
   onDeviceSelected(int index) async {
     var resultDevice = devices[index];
     manager.stopScan();
-    manager.connect(resultDevice.device, 20);
+    Future.delayed(const Duration(seconds: 2));
+    manager.connect(resultDevice.device, 10);
   }
 
   @override

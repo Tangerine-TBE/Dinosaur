@@ -56,5 +56,12 @@ class ResName {
   static const String imgNYszh = 'assets/images/img_n_yszh.png';
   static const String imgYGdck = 'assets/images/img_y_qdck.png';
   static const String imgNGdck = 'assets/images/img_n_qdck.png';
+  static const String iconZt = 'assets/images/icon_zt.png';
+  static const String iconBf ='assets/images/icon_bf.png';
+  static const String iconLeft = 'assets/images/icon_left.png';
+  static const String iconRight = 'assets/images/icon_right.png';
+  static const String iconXhbf = 'assets/images/icon_xhbf.png';
+  static const String iconShake1 = 'assets/images/icon_shake1.png';
+
 
 }

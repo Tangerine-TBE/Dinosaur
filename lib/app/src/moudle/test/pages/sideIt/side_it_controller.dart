@@ -47,7 +47,7 @@ class SideItController extends BaseController {
     int i = 5;
     while (i >= 0) {
       wwriteChar?.write(
-        bleMsg.generateModelData(0),
+        bleMsg.generateStopData(),
       );
       i--;
     }
@@ -77,6 +77,7 @@ class SideItController extends BaseController {
       || Runtime.bleManager?.mDevice.value?.isConnected == false){
       navigateTo(RouteName.scanPage);
     }else{
+      _releaseTimer();
       navigateTo(RouteName.modelPage);
     }
   }

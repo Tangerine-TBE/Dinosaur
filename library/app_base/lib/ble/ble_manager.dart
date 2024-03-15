@@ -119,7 +119,7 @@ class BleManager {
             int? code = disconnectReason?.code;
             if (code != null) {
               logE('混乱代码为：$code');
-              if (code == 62) {
+              if (code == 62 || code == 23789258) {
                 bluetoothConnectionState =
                     BluetoothConnectionState.disconnected;
                 connectionStateSubscription?.cancel();
@@ -134,7 +134,6 @@ class BleManager {
         if (bluetoothConnectionState != BluetoothConnectionState.connected) {
           logE('连接中');
           bluetoothConnectionState = state;
-          stopScan();
           interface.onDeviceConnected(mDevice.value);
         }
       } else {

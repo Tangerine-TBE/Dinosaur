@@ -43,6 +43,17 @@ class BleMSg {
     cmdData.add(0);
     return cmdData;
   }
+  List<int> generateStopData(){
+    List<int> data = initData();
+    data[0] = 0;
+    var cmdData = <int>[];
+    cmdData.addAll(headHex);
+    cmdData.addAll(data);
+    cmdData.add(0);
+    return cmdData;
+  }
+
+
   /*强度变更*/
   List<int> generateStrengthSilentData({
     int streamFirstValue = 0,
@@ -92,9 +103,12 @@ class BleMSg {
   /*模式变更*/
   List<int> generateModelData(int i) {
     List<int> data = initData();
-    data.replaceRange(0, 2, _mCustomHeader);
-    data[2] = _mModel[i];
-    return data;
+    data[0] = _mModel[i];
+    var cmdData = <int>[];
+    cmdData.addAll(headHex);
+    cmdData.addAll(data);
+    cmdData.add(0);
+    return cmdData;
   }
   List<int> generateStrengthData({
     int streamFirstValue = 0,

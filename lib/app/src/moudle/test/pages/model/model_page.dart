@@ -61,7 +61,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                       left: 26.w,
                       child: Obx(() => GestureDetector(
                             onTap: () {
-                              controller.changePage();
+                              controller.changePage(0);
                             },
                             child: Container(
                               width: 136.w,
@@ -97,7 +97,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                       child: Obx(
                         () => GestureDetector(
                           onTap: () {
-                            controller.changePage();
+                            controller.changePage(1);
                           },
                           child: Container(
                             width: 136.w,
@@ -163,6 +163,66 @@ class ModelPage extends BaseEmptyPage<ModelController> {
               image: DecorationImage(
                   image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
             ),
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.only(bottom: 23.h),
+            child: Container(
+              width: double.infinity,
+              height: 75.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    ResName.iconShake1,
+                    width: 16.w,
+                    height: 16.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.onLastClick();
+                    },
+                    child: Image.asset(
+                      ResName.iconLeft,
+                      width: 16.w,
+                      height: 16.w,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.onPlayClick();
+                    },
+                    child: Obx(
+                      () => controller.playModel.value
+                          ? Image.asset(
+                              ResName.iconZt,
+                              width: 75.w,
+                              height: 75.w,
+                            )
+                          : Image.asset(
+                              ResName.iconBf,
+                              width: 75.w,
+                              height: 75.w,
+                            ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.onNextClick();
+                    },
+                    child: Image.asset(
+                      ResName.iconRight,
+                      width: 16.w,
+                      height: 16.w,
+                    ),
+                  ),
+                  Image.asset(
+                    ResName.iconXhbf,
+                    width: 16.w,
+                    height: 16.w,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -179,48 +239,48 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
+                _buildItem(0),
                 _buildItem(1),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
                 _buildItem(2),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
                 _buildItem(3),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
                 _buildItem(4),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
                 _buildItem(5),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
                 _buildItem(6),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
                 _buildItem(7),
+              ],
+            ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
                 _buildItem(8),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
                 _buildItem(9),
-                _buildItem(10),
               ],
             ),
             SizedBox(
@@ -229,8 +289,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
             Row(
               mainAxisAlignment: mainAxisAlignment,
               children: [
+                _buildItem(10),
                 _buildItem(11),
-                _buildItem(12),
               ],
             ),
             SizedBox(
@@ -249,47 +309,47 @@ class ModelPage extends BaseEmptyPage<ModelController> {
   Widget _buildItem(int index) {
     AssetImage normal;
     var isSelect = false;
-    if (controller.currentModel == index) {
+    if (controller.currentModel.value == index) {
       isSelect = true;
     } else {
       isSelect = false;
     }
     if (!isSelect) {
       switch (index) {
-        case 1:
+        case 0:
           normal = const AssetImage(ResName.imgNDycx);
           break;
-        case 2:
+        case 1:
           normal = const AssetImage(ResName.imgNQymm);
           break;
-        case 3:
+        case 2:
           normal = const AssetImage(ResName.imgNRyds);
           break;
-        case 4:
+        case 3:
           normal = const AssetImage(ResName.imgNYfrh);
           break;
-        case 5:
+        case 4:
           normal = const AssetImage(ResName.imgNNgsh);
           break;
-        case 6:
+        case 5:
           normal = const AssetImage(ResName.imgNQsyh);
           break;
-        case 7:
+        case 6:
           normal = const AssetImage(ResName.imgNMlmh);
           break;
-        case 8:
+        case 7:
           normal = const AssetImage(ResName.imgBYbbn);
           break;
-        case 9:
+        case 8:
           normal = const AssetImage(ResName.imgNKlwj);
           break;
-        case 10:
+        case 9:
           normal = const AssetImage(ResName.imgNYszh);
           break;
-        case 11:
+        case 10:
           normal = const AssetImage(ResName.imgNXhnf);
           break;
-        case 12:
+        case 11:
           normal = const AssetImage(ResName.imgNGdck);
           break;
         default:
@@ -298,40 +358,40 @@ class ModelPage extends BaseEmptyPage<ModelController> {
       }
     } else {
       switch (index) {
-        case 1:
+        case 0:
           normal = const AssetImage(ResName.imgYDycx);
           break;
-        case 2:
+        case 1:
           normal = const AssetImage(ResName.imgYQymm);
           break;
-        case 3:
+        case 2:
           normal = const AssetImage(ResName.imgYRyds);
           break;
-        case 4:
+        case 3:
           normal = const AssetImage(ResName.imgYYfrh);
           break;
-        case 5:
+        case 4:
           normal = const AssetImage(ResName.imgYNqsh);
           break;
-        case 6:
+        case 5:
           normal = const AssetImage(ResName.imgYQsyh);
           break;
-        case 7:
+        case 6:
           normal = const AssetImage(ResName.imgYMlmh);
           break;
-        case 8:
+        case 7:
           normal = const AssetImage(ResName.imgYYbbn);
           break;
-        case 9:
+        case 8:
           normal = const AssetImage(ResName.imgYKlwj);
           break;
-        case 10:
+        case 9:
           normal = const AssetImage(ResName.imgYYszh);
           break;
-        case 11:
+        case 10:
           normal = const AssetImage(ResName.imgYXhnf);
           break;
-        case 12:
+        case 11:
           normal = const AssetImage(ResName.imgYGdck);
           break;
         default:
