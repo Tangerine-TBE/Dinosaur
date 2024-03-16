@@ -1,27 +1,22 @@
+import 'dart:async';
+
 import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/ble/event/ble_event.dart';
 import 'package:app_base/constant/constants.dart';
-import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 
-class ScanController extends BaseBleController implements BlueToothInterface {
+class ScanController extends BaseBleController {
   final devicesListId = 1;
   List<ScanResult> devices = [];
   final devicesSize = 0.obs;
   final bluetoothState = '蓝牙状态: 未开启'.obs;
 
-
   @override
-  void onClose() {
-    super.onClose();
-    manager.stopScan();
-  }
-
-  @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {
+  onAdapterStateChanged(BluetoothAdapterState state) {
     if (state == BluetoothAdapterState.off) {
       bluetoothState.value = '蓝牙状态: 未开启';
       devicesSize.value = 0;
@@ -33,21 +28,13 @@ class ScanController extends BaseBleController implements BlueToothInterface {
     }
   }
 
-  onDeviceSelected(int index) async {
-    var resultDevice = devices[index];
-    showLoading(userInteraction: false);
-    manager.stopScan();
-    await Future.delayed(const Duration(seconds: 2));
-    manager.connect(resultDevice.device, 10);
-  }
-
   @override
-  void onDeviceConnected(BluetoothDevice? device) async {
+  onDeviceConnected(BluetoothDevice device) async {
     dismiss();
-    if (device != null && device.isConnected == true) {
+    if (device.isConnected == true) {
       logE('达成连接');
       List<BluetoothService> services = await device.discoverServices();
-      services.forEach((service) async {
+      services.forEach((service) {
         var characteristics = service.characteristics;
         for (BluetoothCharacteristic c in characteristics) {
           if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
@@ -60,7 +47,10 @@ class ScanController extends BaseBleController implements BlueToothInterface {
   }
 
   @override
-  void onDeviceDisconnected() async {
+  onDeviceUnKnownError() {}
+
+  @override
+  onDeviceDisconnect() async {
     devices.clear();
     devicesSize.value = devices.length;
     update([devicesListId]);
@@ -70,11 +60,8 @@ class ScanController extends BaseBleController implements BlueToothInterface {
   }
 
   @override
-  void onDeviceUnKnowError(BluetoothConnectionState state) {}
-
-  @override
-  void onScanResultChanged(List<ScanResult> resultList) {
-    for (var element in resultList) {
+  onScanResultChanged(List<ScanResult> result) {
+    for (var element in result) {
       var resultDevice = element.device;
       if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {
         bool shouldAdd = true;
@@ -96,5 +83,25 @@ class ScanController extends BaseBleController implements BlueToothInterface {
         }
       }
     }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    eventBus.fire(AdapterStateChangedEvent(BluetoothAdapterState.on));
+  }
+
+  @override
+  void onClose() {
+    manager.stopScan();
+    super.onClose();
+  }
+
+  onDeviceSelected(int index) async {
+    var resultDevice = devices[index];
+    showLoading(userInteraction: false);
+    manager.stopScan();
+    await Future.delayed(const Duration(seconds: 2));
+    manager.connect(resultDevice.device, 10);
   }
 }

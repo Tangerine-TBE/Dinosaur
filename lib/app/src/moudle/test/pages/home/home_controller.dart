@@ -27,18 +27,7 @@ class HomeController extends BaseController {
           },
         ),
       );
-    } else if (settings.name == RouteName.testPage) {
-      return GetPageRoute(
-        settings: settings,
-        page: () => const TestPages(),
-        transition: Transition.noTransition,
-        binding: BindingsBuilder(
-          () {
-            Get.put(TestController());
-          },
-        ),
-      );
-    } else if (settings.name == RouteName.test1Page) {
+    }  else if (settings.name == RouteName.test1Page) {
       return GetPageRoute(
         settings: settings,
         page: () => const test1(),
