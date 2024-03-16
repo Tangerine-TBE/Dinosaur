@@ -1,9 +1,9 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
-
-import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/ble/event/ble_event.dart';
 import 'package:app_base/constant/constants.dart';
+import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -32,7 +32,7 @@ class ScanController extends BaseBleController {
   onDeviceConnected(BluetoothDevice device) async {
     dismiss();
     if (device.isConnected == true) {
-      logE('达成连接');
+      EasyLoading.showSuccess('连接成功');
       List<BluetoothService> services = await device.discoverServices();
       services.forEach((service) {
         var characteristics = service.characteristics;
@@ -43,6 +43,7 @@ class ScanController extends BaseBleController {
         }
       });
     }
+    Runtime.lastConnectDevice = manager.mDevice!.platformName;
     Get.back();
   }
 

@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
-import 'package:app_base/constant/constants.dart';
+import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -47,7 +46,6 @@ class SideItController extends BaseBleController {
     listen = true;
     loopTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
       if (sliderValue.value > 50) {
-        logE('正在写入');
         manager.wwriteChar?.write(
           bleMsg.generateStrengthData(
               streamFirstValue: sliderValue.value,
@@ -77,15 +75,14 @@ class SideItController extends BaseBleController {
 
   onCountDownFinish() {
     slideItModel.value = 0;
+    recordTimer?.cancel();
     Get.dialog(
       CreateCustomModelDialog(
         onCancelCallBack: () {
-          recordTimer?.cancel();
           sliderValue.value = 0;
         },
         onConfirmCallBack: (value) {
           //创建订单
-          recordTimer?.cancel();
           sliderValue.value = 0;
           dynamic data = SaveKey.dataList.read;
           var dataList = DataList(recordList: recordList, recordName: value);
@@ -96,6 +93,7 @@ class SideItController extends BaseBleController {
             recordBean = RecordBean.fromJson(data);
           }
           recordBean.dataList.add(dataList);
+          logE(dataList.recordList.length.toString());
           SaveKey.dataList.save(recordBean.toJson());
         },
       ),
@@ -123,7 +121,10 @@ class SideItController extends BaseBleController {
   onSliverDown() async {
     if (slideItModel.value == 1) {
       countdownController.resume();
+      int i = 0;
       recordTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+        i++;
+        logE('第$i个数添加');
         if (sliderValue.value > 50) {
           recordList.add(sliderValue.value);
         } else {
@@ -203,8 +204,9 @@ class SideItController extends BaseBleController {
   @override
   void onDeviceDisconnect() async {
     await Future.delayed(const Duration(seconds: 2));
-    logE('正在开始重新扫描');
-    manager.startScan(timeout: 20);
+    if(Runtime.lastConnectDevice.isNotEmpty){
+      manager.startScan(timeout: 20);
+    }
   }
 
   @override
@@ -216,7 +218,7 @@ class SideItController extends BaseBleController {
     logE('扫描有结果了');
     for (var element in result) {
       var resultDevice = element.device;
-      if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {
+      if (resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
         await Future.delayed(
           const Duration(seconds: 2),

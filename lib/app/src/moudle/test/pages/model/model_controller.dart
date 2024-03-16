@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
-import 'package:app_base/constant/constants.dart';
+import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter/material.dart';
@@ -322,8 +322,9 @@ class ModelController extends BaseBleController {
   @override
   void onDeviceDisconnect() async {
     await Future.delayed(const Duration(seconds: 2));
-    logE('正在开始重新扫描');
-    manager.startScan(timeout: 20);
+    if(Runtime.lastConnectDevice.isNotEmpty){
+      manager.startScan(timeout: 20);
+    }
   }
 
 
@@ -336,9 +337,11 @@ class ModelController extends BaseBleController {
     logE('扫描有结果了');
     for (var element in result) {
       var resultDevice = element.device;
-      if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {
+      if (resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
-        await Future.delayed(const Duration(seconds: 2),);
+        await Future.delayed(
+          const Duration(seconds: 2),
+        );
         manager.connect(resultDevice, 20);
       }
     }
