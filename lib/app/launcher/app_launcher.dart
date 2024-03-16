@@ -22,7 +22,7 @@ class AppLauncher {
       SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness:Brightness.dark ,
-          systemNavigationBarColor: Colors.transparent);
+         );
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }

@@ -165,13 +165,12 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                   image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
             ),
             alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.only(bottom: 23.h),
-            child: Container(
+            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+            child: SizedBox(
               width: double.infinity,
               height: 75.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
                     ResName.iconShake1,
