@@ -25,9 +25,8 @@ class SideItController extends BaseBleController {
   Timer? loopTimer;
   Timer? recordTimer;
   late CountdownController countdownController;
-  final BleManager bleManager = BleManager();
-
-
+  final play = false.obs;
+  bool isCustom = false;
   List<int> recordList = <int>[];
 
   Future<ui.Image> loadImage(String imagePath) async {
@@ -42,20 +41,20 @@ class SideItController extends BaseBleController {
   void onInit() async {
     super.onInit();
     countdownController = CountdownController();
-    _initTimer();
   }
 
   _initTimer() {
     listen = true;
     loopTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
-      if(sliderValue.value > 50){
-        bleManager.wwriteChar?.write(
+      if (sliderValue.value > 50) {
+        logE('正在写入');
+        manager.wwriteChar?.write(
           bleMsg.generateStrengthData(
               streamFirstValue: sliderValue.value,
               streamSecondValue: sliderValue.value),
         );
-      }else{
-        bleManager.wwriteChar?.write(
+      } else {
+        manager.wwriteChar?.write(
           bleMsg.generateStopData(),
         );
       }
@@ -69,7 +68,7 @@ class SideItController extends BaseBleController {
     listen = false;
     int i = 5;
     while (i >= 0) {
-      bleManager.wwriteChar?.write(
+      manager.wwriteChar?.write(
         bleMsg.generateStopData(),
       );
       i--;
@@ -110,6 +109,14 @@ class SideItController extends BaseBleController {
   }
 
   onSliverProcessChanged(double process) {
+    if (loopTimer == null) {
+      _initTimer();
+    } else {
+      if (!loopTimer!.isActive) {
+        _initTimer();
+      }
+    }
+    play.value = true;
     sliderValue.value = process.toInt();
   }
 
@@ -117,7 +124,11 @@ class SideItController extends BaseBleController {
     if (slideItModel.value == 1) {
       countdownController.resume();
       recordTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
-        recordList.add(sliderValue.value);
+        if (sliderValue.value > 50) {
+          recordList.add(sliderValue.value);
+        } else {
+          recordList.add(0);
+        }
       });
     }
   }
@@ -130,9 +141,7 @@ class SideItController extends BaseBleController {
   }
 
   onClassicClick() async {
-    if (bleManager.mDevice == null ||
-        bleManager.wwriteChar == null ||
-        bleManager.mDevice?.isConnected == false) {
+    if (!manager.checkRuntimeBleEnable()) {
       _releaseTimer();
       await navigateForResult(RouteName.scanPage);
       _initTimer();
@@ -144,6 +153,7 @@ class SideItController extends BaseBleController {
   }
 
   onCustomModelClick() {
+    play.value = false;
     _releaseTimer();
     Get.dialog(
       CountDownConfirmDialog(
@@ -160,12 +170,18 @@ class SideItController extends BaseBleController {
     onSliverProcessChanged(1023.0);
   }
 
-  onPlayClick() {}
+  onPlayClick() {
+    if (!play.value) {
+      //开始循环
+      _initTimer();
+    } else {
+      _releaseTimer();
+    }
+    play.value = !play.value;
+  }
 
   @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {
-
-  }
+  void onAdapterStateChanged(BluetoothAdapterState state) {}
 
   @override
   void onDeviceConnected(BluetoothDevice device) async {
@@ -192,8 +208,7 @@ class SideItController extends BaseBleController {
   }
 
   @override
-  void onDeviceUnKnownError() {
-  }
+  void onDeviceUnKnownError() {}
 
   @override
   void onScanResultChanged(List<ScanResult> result) async {
@@ -202,11 +217,12 @@ class SideItController extends BaseBleController {
     for (var element in result) {
       var resultDevice = element.device;
       if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {
-          manager.stopScan();
-          await Future.delayed(const Duration(seconds: 2),);
-          manager.connect(resultDevice, 20);
+        manager.stopScan();
+        await Future.delayed(
+          const Duration(seconds: 2),
+        );
+        manager.connect(resultDevice, 20);
       }
     }
-
   }
 }

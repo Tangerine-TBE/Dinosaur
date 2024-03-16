@@ -156,10 +156,18 @@ class BleMSg {
     return cmdData;
   }
 
-  /*队列清除*/
+  /*无队列*/
   List<int> unQueue() {
     List<int> data = initData();
     data[0] = 0x07;
+    var cmdData = <int>[];
+    cmdData.addAll(_mUnQueueHeader);
+    cmdData.addAll(data);
+    return cmdData;
+  }
+  List<int> clearQueue(){
+    List<int> data = initData();
+    data[0] = 0x03;
     var cmdData = <int>[];
     cmdData.addAll(_mUnQueueHeader);
     cmdData.addAll(data);

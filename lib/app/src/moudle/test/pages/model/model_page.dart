@@ -44,13 +44,13 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                       bottom: 33,
                       child: Obx(
                         () => Container(
-                          width: 70,
-                          padding: EdgeInsets.symmetric(horizontal: 48.w),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 48.w, vertical: 90.h),
                           child: RepaintBoundary(
                             child: CustomPaint(
                               size: Size(280.w, 70.h),
                               painter: ChartsPainter(
-                                  process: controller.process.value,
+                                  process: controller.process.value.obx,
                                   processMax: 1023),
                             ),
                           ),
@@ -305,15 +305,24 @@ class ModelPage extends BaseEmptyPage<ModelController> {
 
   _buildContentMine() {
     return SingleChildScrollView(
-      child: Column(
-        children:
-        List.generate(controller.mRecordBean.dataList.length, (index) => _buildCustomModelItem(controller.mRecordBean.dataList[index].recordName,index))
-        ,
+        child: Obx(
+      () => Column(
+        children: List.generate(
+          controller.mRecordBean.dataList.length,
+          (index) => _buildCustomModelItem(
+              controller.mRecordBean.dataList[index].recordName, index),
+        ),
       ),
-    );
+    ));
   }
 
   _buildCustomModelItem(String name, int index) {
+    var isSelect = false;
+    if (controller.currentCustomModel.value == index) {
+      isSelect = true;
+    } else {
+      isSelect = false;
+    }
     return GestureDetector(
       onTap: () {
         controller.onCustomModelClick(index);
@@ -326,11 +335,13 @@ class ModelPage extends BaseEmptyPage<ModelController> {
         child: Row(
           children: [
             Image.asset(
-              ResName.iconBtBf,
+              !isSelect ? ResName.iconBtMr : ResName.iconBtBf,
               width: 60.w,
               height: 60.w,
             ),
-            SizedBox(width: 20.w,),
+            SizedBox(
+              width: 20.w,
+            ),
             Expanded(
               child: Text(
                 name,

@@ -228,24 +228,50 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                       onTap: () {
                         controller.onPlayClick();
                       },
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            ResName.iconDqxh,
-                            width: 100.w,
-                            height: 100.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.onPlayClick();
+                        },
+                        child: Obx(
+                          () => !controller.play.value?Column(
+                            children: [
+                              Image.asset(
+                                ResName.iconDqxh,
+                                width: 100.w,
+                                height: 100.w,
+                              ),
+                              SizedBox(
+                                height: 12.h,
+                              ),
+                              Text(
+                                '开始享受',
+                                style: TextStyle(
+                                    color: MyColors.textBlackColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ):
+                          Column(
+                            children: [
+                              Image.asset(
+                                ResName.iconXh,
+                                width: 100.w,
+                                height: 100.w,
+                              ),
+                              SizedBox(
+                                height: 12.h,
+                              ),
+                              Text(
+                                '休息一下',
+                                style: TextStyle(
+                                    color: MyColors.textBlackColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 12.h,
-                          ),
-                          Text(
-                            '播放',
-                            style: TextStyle(
-                                color: MyColors.textBlackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   )
