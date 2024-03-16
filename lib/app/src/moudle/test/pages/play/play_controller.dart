@@ -1,7 +1,9 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-class PlayController extends BaseController {
+class PlayController extends BaseBleController {
    List<TopPicCenterBean> dataList =[];
   final dataListId = 1;
 
@@ -47,5 +49,25 @@ class PlayController extends BaseController {
 
   void onModelClicked() {
     navigateTo(RouteName.modelPage);
+  }
+
+  @override
+  void onAdapterStateChanged(BluetoothAdapterState state) {
+  }
+
+  @override
+  void onDeviceConnected(BluetoothDevice device) {
+  }
+
+  @override
+  void onDeviceDisconnect() {
+  }
+
+  @override
+  void onDeviceUnKnownError() {
+  }
+
+  @override
+  void onScanResultChanged(List<ScanResult> result) {
   }
 }
