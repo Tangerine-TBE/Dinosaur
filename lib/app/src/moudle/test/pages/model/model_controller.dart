@@ -62,7 +62,7 @@ class ModelController extends BaseBleController {
       return;
     }
 
-    if (index > 12) {
+    if (index >= 12) {
       showToast('已经是最后的模式了');
       return;
     }
@@ -121,7 +121,7 @@ class ModelController extends BaseBleController {
         } else {
           if (bleManager.checkRuntimeBleEnable()) {
             // if (!playModel.value) {
-            bleManager.wwriteChar
+           await bleManager.wwriteChar
                 ?.write(BleMSg().generateModelData(currentClassicModel.value));
             processLoopClassicTimer = Timer.periodic(
               const Duration(milliseconds: 200),
@@ -143,7 +143,7 @@ class ModelController extends BaseBleController {
           currentCustomModel >= 0) {
         if (playModel.value) {
           playModel.value = false;
-          bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+        await  bleManager.wwriteChar?.write(mBleMsg.generateStopData());
         } else {
           if (bleManager.checkRuntimeBleEnable()) {
             bleManager.wwriteChar?.write(mBleMsg.generateStopData());

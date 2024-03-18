@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -165,7 +166,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                   image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
             ),
             alignment: Alignment.bottomCenter,
-            padding:  EdgeInsets.only(bottom: 26.h),
+            padding: EdgeInsets.only(bottom: 26.h),
             child: SizedBox(
               width: double.infinity,
               height: 75.w,
@@ -177,14 +178,17 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                     width: 16.w,
                     height: 16.w,
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       controller.onLastClick();
                     },
-                    child: Image.asset(
-                      ResName.iconLeft,
-                      width: 16.w,
-                      height: 16.w,
+                    child: Container(
+                      padding: EdgeInsets.all(20.w),
+                      child: Image.asset(
+                        ResName.iconLeft,
+                        width: 16.w,
+                        height: 16.w,
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -205,14 +209,17 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                             ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       controller.onNextClick();
                     },
-                    child: Image.asset(
-                      ResName.iconRight,
-                      width: 16.w,
-                      height: 16.w,
+                    child: Container(
+                      padding: EdgeInsets.all(20.w),
+                      child: Image.asset(
+                        ResName.iconRight,
+                        width: 16.w,
+                        height: 16.w,
+                      ),
                     ),
                   ),
                   Image.asset(
@@ -303,16 +310,30 @@ class ModelPage extends BaseEmptyPage<ModelController> {
   }
 
   _buildContentMine() {
-    return SingleChildScrollView(
-        child: Obx(
-      () => Column(
-        children: List.generate(
-          controller.mRecordBean.dataList.length,
-          (index) => _buildCustomModelItem(
-              controller.mRecordBean.dataList[index].recordName, index),
-        ),
-      ),
-    ));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: controller.mRecordBean.dataList.length > 0
+              ? Obx(
+                  () => Column(
+                    children: List.generate(
+                      controller.mRecordBean.dataList.length,
+                      (index) => _buildCustomModelItem(
+                          controller.mRecordBean.dataList[index].recordName,
+                          index),
+                    ),
+                  ),
+                )
+              : Container(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: NoDataWidget(
+                    title: '暂无记录',
+                  ),
+                ),
+        );
+      },
+    );
   }
 
   _buildCustomModelItem(String name, int index) {
