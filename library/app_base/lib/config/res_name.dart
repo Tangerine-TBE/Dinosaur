@@ -70,4 +70,13 @@ class ResName {
   static const String iconScan = 'assets/images/icon_scan.png';
   static const String looperGroup  = 'assets/images/LooperGroup.png';
   static const String iconDevice01 = 'assets/images/icon_device_01.png';
+  static const String iconClassicModel = 'assets/images/icon_classic.png';
+  static const String iconTapMax ='assets/images/icon_tapMax.png';
+  static const String iconCreateModel = 'assets/images/icon_create.png';
+  static const String iconFreeTime ='assets/images/icon_freeTime.png';
+  static const String cloud_plus ='assets/images/cloud-plus.png';
+  static const String flash = 'assets/images/flash.png';
+  static const String magic_star = 'assets/images/magic-star.png';
+  static const String moon = 'assets/images/moon.png';
+  static const String button = 'assets/images/Button.png';
 }

@@ -18,7 +18,6 @@ class HomePage extends BaseEmptyPage<HomeController> {
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       bottomNavigationBar: Container(
         decoration:  BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -55,10 +54,8 @@ class HomePage extends BaseEmptyPage<HomeController> {
       ),
       child: BottomNavigationBar(
         backgroundColor: MyColors.homePageNaviBgColor,
-        selectedFontSize: 11.sp,
-        unselectedFontSize: 11.sp,
-        unselectedLabelStyle: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.w500),
-        selectedLabelStyle: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.w500),
+        unselectedLabelStyle: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.w500),
+        selectedLabelStyle: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.w500),
         unselectedItemColor: MyColors.homePageNaviItemNormalColor,
         selectedItemColor: MyColors.homePageNaviItemSelectColor,
         type: BottomNavigationBarType.fixed,
@@ -113,7 +110,6 @@ class HomePage extends BaseEmptyPage<HomeController> {
   ) {
     return BottomNavigationBarItem(
       activeIcon: Container(
-        margin: EdgeInsets.only(bottom: 8.h, top: 16.h),
         child: Image.asset(
           highlightIcon,
           color: MyColors.iconSelectedColor,
@@ -122,7 +118,6 @@ class HomePage extends BaseEmptyPage<HomeController> {
         ),
       ),
       icon: Container(
-        margin: EdgeInsets.only(bottom: 8.h, top: 16.h),
         child: Image.asset(
           icon,
           color: Colors.grey,
