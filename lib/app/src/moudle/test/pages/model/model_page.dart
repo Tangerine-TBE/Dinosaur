@@ -165,7 +165,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                   image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
             ),
             alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+            padding:  EdgeInsets.only(bottom: 26.h),
             child: SizedBox(
               width: double.infinity,
               height: 75.w,

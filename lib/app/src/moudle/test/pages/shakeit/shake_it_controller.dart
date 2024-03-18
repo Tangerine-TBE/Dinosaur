@@ -11,7 +11,7 @@ import 'dart:async';
 
 class ShakeItController extends BaseBleController {
   final threshold = 0.0.obs;
-  final vector = 20;
+  final vector = 15;
   final bleMsg = BleMSg();
   final _processes = List.generate(10, (index) => 0.0);
   Timer? looperTimer;
@@ -20,8 +20,8 @@ class ShakeItController extends BaseBleController {
   @override
   void onInit() {
     super.onInit();
-    steam = userAccelerometerEventStream().listen(
-      (UserAccelerometerEvent event) {
+    steam = userAccelerometerEventStream().listen (
+      (UserAccelerometerEvent event) async {
         // logD(
         //     'x:${event.x.toInt()}   y:${event.y.toInt()}   z:${event.z.toInt()}');
         //1.这里通过判断同一间的xyz的绝对值中的最大值取震动基数
@@ -41,22 +41,22 @@ class ShakeItController extends BaseBleController {
 
   onShakeIt(double value) {
     add(value);
-    looperTimer ??= Timer(
-      const Duration(milliseconds: 200),
-      () {
-        var belValue = 1023 / vector * _processes[0];
-        manager.wwriteChar?.write(bleMsg.generateStrengthData(
-            streamFirstValue: belValue.toInt(),
-            streamSecondValue: belValue.toInt()));
-      },
-    );
+    looperTimer ??= Timer.periodic(const Duration(milliseconds: 600), (timer) async{
+      logE('${_processes[0]}');
+      var belValue = 1023 / vector * _processes[0];
+      manager.wwriteChar?.write(bleMsg.generateStrengthData(
+          streamFirstValue: belValue.toInt(),
+          streamSecondValue: belValue.toInt()));
+    },);
   }
+
   @override
   void onClose() {
     looperTimer?.cancel();
     steam.cancel();
     super.onClose();
   }
+
   @override
   void onAdapterStateChanged(BluetoothAdapterState state) {}
 
@@ -80,7 +80,7 @@ class ShakeItController extends BaseBleController {
   @override
   void onDeviceDisconnect() async {
     await Future.delayed(const Duration(seconds: 2));
-    if(Runtime.lastConnectDevice.isNotEmpty){
+    if (Runtime.lastConnectDevice.isNotEmpty) {
       manager.startScan(timeout: 20);
     }
   }

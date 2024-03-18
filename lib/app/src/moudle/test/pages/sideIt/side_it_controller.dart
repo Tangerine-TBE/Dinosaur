@@ -44,9 +44,10 @@ class SideItController extends BaseBleController {
 
   _initTimer() {
     listen = true;
-    loopTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+    loopTimer = Timer.periodic(const Duration(milliseconds:200), (timer) async {
       if (sliderValue.value > 50) {
-        manager.wwriteChar?.write(
+        logE('${sliderValue.value}');
+       await manager.wwriteChar?.write(
           bleMsg.generateStrengthData(
               streamFirstValue: sliderValue.value,
               streamSecondValue: sliderValue.value),
@@ -64,13 +65,9 @@ class SideItController extends BaseBleController {
     recordTimer?.cancel();
     loopTimer?.cancel();
     listen = false;
-    int i = 5;
-    while (i >= 0) {
       manager.wwriteChar?.write(
         bleMsg.generateStopData(),
       );
-      i--;
-    }
   }
 
   onCountDownFinish() {
@@ -114,7 +111,9 @@ class SideItController extends BaseBleController {
         _initTimer();
       }
     }
-    play.value = true;
+    if(!play.value){
+      play.value = true;
+    }
     sliderValue.value = process.toInt();
   }
 
