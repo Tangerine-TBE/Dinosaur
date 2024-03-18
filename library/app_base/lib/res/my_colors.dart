@@ -21,7 +21,13 @@ class MyColors {
   static const Color sliderInactiveTrackColor = Color(0xfffde8eb);
   static const Color sliderActiveTrackColor = Color(0xfff98794);
   static const Color shakeCardBgColor = Color(0xffF6F6FF);
-  
+
+  //scan
+  static const Color scanIndicatorColor = Color(0xffff5e65);
+  static const Color scanIndicatorTextSelectedColor = textBlackColor;
+  static const Color scanIndicatorTextNormalColor = Color(0xff929292);
+  static const Color scanItemDeviceBgColor01 = Color(0xffFFE8E9);
+  static const Color scanItemDeviceBgColor02 = Color(0xffF8F9FE);
   
 
 

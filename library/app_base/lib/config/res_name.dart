@@ -67,4 +67,7 @@ class ResName {
   static const String iconFill = 'assets/images/icon_Fill.png';
   static const String iconFill1 = 'assets/images/icon_Fill_1.png';
   static const String imgYao = 'assets/images/img_yaoyiyao.png';
+  static const String iconScan = 'assets/images/icon_scan.png';
+  static const String looperGroup  = 'assets/images/LooperGroup.png';
+  static const String iconDevice01 = 'assets/images/icon_device_01.png';
 }

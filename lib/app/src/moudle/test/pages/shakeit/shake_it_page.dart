@@ -67,16 +67,16 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                       )),
                             ),
                             Obx(
-                              () => TweenAnimationBuilder<double>(
+                              () {
+                                controller.onShakeIt(controller.threshold.value);
+                                return TweenAnimationBuilder<double>(
                                 tween: Tween(end: controller.threshold.value),
                                 duration: const Duration(milliseconds: 500),
                                 builder: (BuildContext context, double value,
                                     Widget? child) {
-                                  //
-                                  controller.onShakeIt(value);
                                   return ClipRect(
                                     clipper:
-                                        FillIconClipper(offsetValue: value,vector:controller.vector),
+                                        FillIconClipper(offsetValue: value,vector:controller.vector.round()),
                                     child: Row(
                                       children: List.generate(
                                         8,
@@ -89,7 +89,8 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                     ),
                                   );
                                 },
-                              ),
+                              );
+                              },
                             ),
                           ],
                         );

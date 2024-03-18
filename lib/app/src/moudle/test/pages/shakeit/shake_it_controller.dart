@@ -11,7 +11,7 @@ import 'dart:async';
 
 class ShakeItController extends BaseBleController {
   final threshold = 0.0.obs;
-  final vector = 15;
+  final vector = 10;
   final bleMsg = BleMSg();
   final _processes = List.generate(10, (index) => 0.0);
   Timer? looperTimer;
@@ -21,13 +21,14 @@ class ShakeItController extends BaseBleController {
   void onInit() {
     super.onInit();
     steam = userAccelerometerEventStream().listen (
-      (UserAccelerometerEvent event) async {
+      (UserAccelerometerEvent event)  {
         // logD(
         //     'x:${event.x.toInt()}   y:${event.y.toInt()}   z:${event.z.toInt()}');
         //1.这里通过判断同一间的xyz的绝对值中的最大值取震动基数
         var x = event.x.round().abs();
         var y = event.y.round().abs();
         var z = event.z.round().abs();
+        //x2 + y2+ z2 再 根号
         //晃动的最大值为20
         var thresholdSeed = min(max(max(x, y), z), vector);
         //50-1023 为蓝牙数值  //低于50判定为不震动
@@ -42,9 +43,9 @@ class ShakeItController extends BaseBleController {
   onShakeIt(double value) {
     add(value);
     looperTimer ??= Timer.periodic(const Duration(milliseconds: 600), (timer) async{
-      logE('${_processes[0]}');
       var belValue = 1023 / vector * _processes[0];
-      manager.wwriteChar?.write(bleMsg.generateStrengthData(
+      logE('$belValue}');
+      await  manager.wwriteChar?.write(bleMsg.generateStrengthData(
           streamFirstValue: belValue.toInt(),
           streamSecondValue: belValue.toInt()));
     },);
