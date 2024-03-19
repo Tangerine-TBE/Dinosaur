@@ -79,4 +79,30 @@ class ResName {
   static const String magic_star = 'assets/images/magic-star.png';
   static const String moon = 'assets/images/moon.png';
   static const String button = 'assets/images/Button.png';
+  static const String imgShake = 'assets/images/img_shake.png';
+  static const String playerBack = 'assets/images/Player Back.png';
+  static const String playerSkip = 'assets/images/Player Skip.png';
+  static const String buttonL = 'assets/images/Button／L.png';
+  static const String buttonR = 'assets/images/Button／R.png';
+  static const String path25 = 'assets/images/path25.png';
+  static const String group38 = 'assets/images/group38.png';
+  static const String pic33 = 'assets/images/33.png';
+  static const String pic42 = 'assets/images/42.png';
+  static const String pic43 = 'assets/images/43.png';
+  static const String pic59 = 'assets/images/59.png';
+  static const String pic61 = 'assets/images/61.png';
+  static const String pic66 = 'assets/images/66.png';
+  static const String pic79 = 'assets/images/79.png';
+  static const String pic84 = 'assets/images/84.png';
+  static const String mineBg = 'assets/images/mine_bg.png';
+  static const String container = 'assets/images/容器.png';
+  static const String messageQuestion = 'assets/images/message-question.png';
+  static const String like = 'assets/images/like.png';
+  static const String star = 'assets/images/star.png';
+  static const String documentText = 'assets/images/document-text.png';
+  static const String messageNotif = 'assets/images/message-notif.png';
+  static const String ghost = 'assets/images/ghost.png';
+
+
+
 }

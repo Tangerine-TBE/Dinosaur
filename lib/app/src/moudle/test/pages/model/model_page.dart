@@ -3,13 +3,15 @@ import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:test01/app/src/app.dart';
 import '../sideIt/widget/charts_painter.dart';
 import 'model_controller.dart';
 
-class ModelPage extends BaseEmptyPage<ModelController> {
+class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerProviderStateMixin{
   const ModelPage({super.key});
 
   @override
@@ -17,6 +19,173 @@ class ModelPage extends BaseEmptyPage<ModelController> {
 
   @override
   Widget buildContent(BuildContext context) {
+    return _buildContent02();
+  }
+
+  _buildContent02() {
+    TabController tabController = TabController(length: 2, vsync: this);
+    tabController.addListener(() {
+      controller.currentModelPage.value = tabController.index;
+    });
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: MyColors.pageBgColor,
+        automaticallyImplyLeading: false,
+        leading: BackButton(
+          color: Colors.white,
+        ),
+        title: TabBar(
+          controller: tabController,
+            dividerHeight: 0,
+            tabAlignment: TabAlignment.center,
+            isScrollable: true,
+            indicatorPadding: EdgeInsets.only(left: 22.w, right: 22.w),
+            indicator: UnderlineTabIndicator(
+              borderRadius: BorderRadius.all(
+                Radius.circular(2.w),
+              ),
+              borderSide: BorderSide(
+                width: 4.h,
+                color: Color(0xffFF5E65),
+              ),
+            ),
+            unselectedLabelStyle:
+                TextStyle(color: Colors.white, fontSize: 18.sp),
+            splashFactory: NoSplash.splashFactory,
+            overlayColor:
+                const MaterialStatePropertyAll<Color>(Colors.transparent),
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: MyColors.scanIndicatorTextSelectedColor,
+                fontSize: 18.sp),
+            tabs: [
+              Tab(
+                text: '经典模式',
+              ),
+              Tab(
+                text: '我的模式',
+              )
+            ]),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xffFF676D), Colors.white],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0, 0.3]),
+            ),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 4,
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      Container(
+                        child: _buildContentClassic01(),
+                      ),
+                      Container(
+                        child: _buildContentMine01(),
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: _buildBottomBar(),
+                  flex: 1,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _buildBottomBar() {
+    return Column(
+      children: [
+        Obx(
+          () => Container(
+            padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 2.h),
+            child: RepaintBoundary(
+              child: CustomPaint(
+                size: Size(280.w, 60.h),
+                painter: ChartsPainter(
+                    process: controller.process.value.obx, processMax: 1023),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: double.infinity,
+              height: 75.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      controller.onLastClick();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(20.w),
+                      child: Image.asset(
+                        ResName.playerBack,
+                        width: 36.w,
+                        height: 36.w,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      controller.onPlayClick();
+                    },
+                    child: Obx(
+                      () => controller.playModel.value
+                          ? Image.asset(
+                              ResName.buttonL,
+                              width: 64.w,
+                              height: 64.w,
+                            )
+                          : Image.asset(
+                              ResName.buttonR,
+                              width: 64.w,
+                              height: 64.w,
+                            ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      controller.onNextClick();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(20.w),
+                      child: Image.asset(
+                        ResName.playerSkip,
+                        width: 36.w,
+                        height: 36.w,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _buildContent01() {
     return Scaffold(
       backgroundColor: MyColors.pageBgColor,
       appBar: AppBar(
@@ -151,7 +320,7 @@ class ModelPage extends BaseEmptyPage<ModelController> {
           ),
           Expanded(
             child: PageView(
-              controller: controller.pageController,
+              // controller: controller.pageController,
               children: [
                 _buildContentClassic(),
                 _buildContentMine(),
@@ -236,6 +405,78 @@ class ModelPage extends BaseEmptyPage<ModelController> {
     );
   }
 
+  _buildContentClassic01() {
+    var mainAxisAlignment = MainAxisAlignment.spaceBetween;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      child: Obx(
+        () => Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(0),
+                _buildTemplateModelItem(1),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(2),
+                _buildTemplateModelItem(3),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(4),
+                _buildTemplateModelItem(5),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(6),
+                _buildTemplateModelItem(7),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(8),
+                _buildTemplateModelItem(9),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: [
+                _buildTemplateModelItem(10),
+                _buildTemplateModelItem(11),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  _buildContentMine01() {
+    return GetBuilder<ModelController>(builder: (controller) {
+      return GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        mainAxisSpacing: 16.h,
+        crossAxisSpacing: 20.w,
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
+        childAspectRatio: 2,
+        children: List.generate(
+          controller.mRecordBean.dataList.length,
+              (index) => _buildCustomModelItem01(
+              controller.mRecordBean.dataList[index].recordName, index),
+        ),
+      );
+    },id: controller.customPageId,);
+  }
   _buildContentClassic() {
     var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return SingleChildScrollView(
@@ -309,6 +550,8 @@ class ModelPage extends BaseEmptyPage<ModelController> {
     );
   }
 
+
+
   _buildContentMine() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -333,6 +576,54 @@ class ModelPage extends BaseEmptyPage<ModelController> {
                 ),
         );
       },
+    );
+  }
+
+  _buildCustomModelItem01(String name, int index) {
+    var isSelect = false;
+    if (controller.currentCustomModel.value == index) {
+      isSelect = true;
+    } else {
+      isSelect = false;
+    }
+    return GestureDetector(
+      onTap: () {
+        controller.onCustomModelClick(index);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: !isSelect?Color(0xffFFD5D7):Color(0xffFF5E65),
+          borderRadius: BorderRadius.circular(10.w),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              ResName.path25,
+              width: 69.w,
+              height: 42.h,
+              color: isSelect?Colors.white:Color(0xffFF5E65),
+            ),
+            SizedBox(
+              width: 11.w,
+            ),
+            Expanded(
+              child: Text(
+                name,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: isSelect?Colors.white:Color(0xffFF5E65),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -481,4 +772,50 @@ class ModelPage extends BaseEmptyPage<ModelController> {
       ),
     );
   }
+
+  @override
+  void activate() {
+  }
+
+  @override
+  BuildContext get context => throw UnimplementedError();
+
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
+  }
+
+  @override
+  void deactivate() {
+  }
+
+  @override
+  void didChangeDependencies() {
+  }
+
+  @override
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {
+  }
+
+  @override
+  void dispose() {
+  }
+
+  @override
+  void initState() {
+  }
+
+  @override
+  bool get mounted => throw UnimplementedError();
+
+  @override
+  void reassemble() {
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+  }
+
+  @override
+  StatefulWidget get widget => throw UnimplementedError();
 }

@@ -15,6 +15,10 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
 
   @override
   Widget buildContent(BuildContext context) {
+    return _buildContent02();
+  }
+
+  _buildContent01() {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -50,33 +54,33 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 SizedBox(
                   height: 24.h,
                 ),
-                Container(
-                  child: FittedBox(
-                    alignment: Alignment.centerLeft,
-                    child: LayoutBuilder(
-                      builder: (context, c) {
-                        return Stack(
-                          children: [
-                            Row(
-                              children: List.generate(
-                                  8,
-                                  (index) => Image.asset(
-                                        ResName.iconFill1,
-                                        width: 35.w,
-                                        height: 27.h,
-                                      )),
-                            ),
-                            Obx(
-                              () {
-                                controller.onShakeIt(controller.threshold.value);
-                                return TweenAnimationBuilder<double>(
+                FittedBox(
+                  alignment: Alignment.centerLeft,
+                  child: LayoutBuilder(
+                    builder: (context, c) {
+                      return Stack(
+                        children: [
+                          Row(
+                            children: List.generate(
+                                8,
+                                (index) => Image.asset(
+                                      ResName.iconFill1,
+                                      width: 35.w,
+                                      height: 27.h,
+                                    )),
+                          ),
+                          Obx(
+                            () {
+                              controller.onShakeIt(controller.threshold.value);
+                              return TweenAnimationBuilder<double>(
                                 tween: Tween(end: controller.threshold.value),
                                 duration: const Duration(milliseconds: 500),
                                 builder: (BuildContext context, double value,
                                     Widget? child) {
                                   return ClipRect(
-                                    clipper:
-                                        FillIconClipper(offsetValue: value,vector:controller.vector.round()),
+                                    clipper: FillIconClipper(
+                                        offsetValue: value,
+                                        vector: controller.vector.round()),
                                     child: Row(
                                       children: List.generate(
                                         8,
@@ -90,12 +94,11 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                   );
                                 },
                               );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -109,6 +112,103 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
             width: 253.w,
             height: 253.w,
           )
+        ],
+      ),
+    );
+  }
+
+  _buildContent02() {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        centerTitle: true,
+        title: Text(
+          '摇一摇',
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w700,
+            color: MyColors.textBlackColor,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          Flexible(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                ResName.imgShake,
+                width: 299.w,
+                height: 299.w,
+              ),
+            ),
+            flex: 4,
+          ),
+          Flexible(
+            child:  Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  '试着用手晃动手机,体验不同的震感快乐',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(
+                  height: 24.h,
+                ),
+                FittedBox(
+                  alignment: Alignment.centerLeft,
+                  child: LayoutBuilder(
+                    builder: (context, c) {
+                      return Stack(
+                        children: [
+                          Row(
+                            children: List.generate(
+                                8,
+                                    (index) => Image.asset(
+                                  ResName.iconFill1,
+                                  width: 35.w,
+                                  height: 27.h,
+                                )),
+                          ),
+                          Obx(
+                                () {
+                              controller.onShakeIt(controller.threshold.value);
+                              return TweenAnimationBuilder<double>(
+                                tween: Tween(end: controller.threshold.value),
+                                duration: const Duration(milliseconds: 500),
+                                builder: (BuildContext context, double value,
+                                    Widget? child) {
+                                  return ClipRect(
+                                    clipper: FillIconClipper(
+                                        offsetValue: value,
+                                        vector: controller.vector.round()),
+                                    child: Row(
+                                      children: List.generate(
+                                        8,
+                                            (index) => Image.asset(
+                                          ResName.iconFill,
+                                          width: 35.w,
+                                          height: 27.h,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            flex: 3,
+          ),
         ],
       ),
     );

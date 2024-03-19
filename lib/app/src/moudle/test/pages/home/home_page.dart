@@ -33,7 +33,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
             ),
           ],
         ),
-        child: _getButtonNavigationBar(),
+        child: Obx(() => _getButtonNavigationBar()),
       ),
       body: SafeArea(
         top: false,
@@ -89,15 +89,17 @@ class HomePage extends BaseEmptyPage<HomeController> {
         currentIndex: controller.selectedTabIndex.value,
         onTap: (index) {
           controller.selectedTabIndex.value = index;
-          // if (index == 0) {
-          //   Get.toNamed(RouteName.playPage, id: 1);
-          // } else if (index == 1) {
-          //   Get.toNamed(RouteName.testPage, id: 1);
-          // } else if (index == 2) {
-          //   Get.toNamed(RouteName.test1Page, id: 1);
-          // } else {
-          //   Get.toNamed(RouteName.test2Page, id: 1);
-          // }
+          if (index == 0) {
+            Get.toNamed(RouteName.playPage, id: 1);
+          } else if (index == 1) {
+            Get.toNamed(RouteName.chartPage, id: 1);
+          } else if (index == 2) {
+            Get.toNamed(RouteName.petPage, id: 1);
+          } else if (index == 3){
+            Get.toNamed(RouteName.message, id: 1);
+          }else if(index == 4){
+            Get.toNamed(RouteName.minePage, id: 1);
+          }
         },
       ),
     );
@@ -109,21 +111,17 @@ class HomePage extends BaseEmptyPage<HomeController> {
     String icon,
   ) {
     return BottomNavigationBarItem(
-      activeIcon: Container(
-        child: Image.asset(
-          highlightIcon,
-          color: MyColors.iconSelectedColor,
-          width: 22.w,
-          height: 22.w,
-        ),
+      activeIcon: Image.asset(
+        highlightIcon,
+        color: MyColors.iconSelectedColor,
+        width: 22.w,
+        height: 22.w,
       ),
-      icon: Container(
-        child: Image.asset(
-          icon,
-          color: Colors.grey,
-          width: 22.w,
-          height: 22.w,
-        ),
+      icon: Image.asset(
+        icon,
+        color: Colors.grey,
+        width: 22.w,
+        height: 22.w,
       ),
       label: title,
     );

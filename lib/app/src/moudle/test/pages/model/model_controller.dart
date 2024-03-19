@@ -6,13 +6,15 @@ import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import '../sideIt/obxBean/double_bean.dart';
 
-class ModelController extends BaseBleController {
-  late PageController pageController; //主要用于监听页面变化的
+class ModelController extends BaseBleController   {
+  final customPageId = 1;
+  // late PageController pageController; //主要用于监听页面变化的
   final currentModelPage = 0.obs; //主要用于与PageController联合作用，监听本次页面
   final Rx<DoubleBean> process = Rx(DoubleBean.create(obx: 0.0));
   final currentClassicModel = 13.obs; //当前在经典模式下选择的模式， 13 = 无
@@ -23,18 +25,19 @@ class ModelController extends BaseBleController {
   Timer? processLoopClassicTimer; //主要用于与process作用改变chartPainter的形态
   Timer? processLoopCustomTimer; //与上相同
   final BleManager bleManager = BleManager();
-
+  late TabController tabController;
   @override
   void onInit() {
     super.onInit();
-    pageController = PageController();
-    pageController.addListener(() {
-      if (pageController.page! <= 0.1) {
-        currentModelPage.value = 0;
-      } else if (pageController.page! >= 0.9) {
-        currentModelPage.value = 1;
-      }
-    });
+    // pageController = PageController();
+    // pageController.addListener(() {
+    //   if (pageController.page! <= 0.1) {
+    //     currentModelPage.value = 0;
+    //   } else if (pageController.page! >= 0.9) {
+    //     currentModelPage.value = 1;
+    //   }
+    // });
+
     dynamic data = SaveKey.dataList.read;
     if (data.runtimeType.toString() == 'Null') {
       mRecordBean = RecordBean(dataList: []);
@@ -49,11 +52,11 @@ class ModelController extends BaseBleController {
     if (currentPage == index) {
       return;
     }
-    pageController.animateToPage(
-      currentPage == 0 ? 1 : 0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.ease,
-    );
+    // pageController.animateToPage(
+    //   currentPage == 0 ? 1 : 0,
+    //   duration: const Duration(milliseconds: 500),
+    //   curve: Curves.ease,
+    // );
   }
 
   onClassicItemClick(int index) {
@@ -219,6 +222,7 @@ class ModelController extends BaseBleController {
       bleManager.wwriteChar?.write(mBleMsg.generateStopData());
       playModel.value = false;
       showLoading(userInteraction: false);
+      update([customPageId]);
       currentCustomModel.value = index;
       bleManager.wwriteChar?.write(mBleMsg.clearQueue());
       await sendCustomTemplate(index);

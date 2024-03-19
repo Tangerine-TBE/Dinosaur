@@ -1,6 +1,14 @@
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
+import 'package:test01/app/src/moudle/test/pages/message/message_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/message/message_page.dart';
+import 'package:test01/app/src/moudle/test/pages/mine/mine_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/mine/mine_page.dart';
+import 'package:test01/app/src/moudle/test/pages/pet/pet_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/pet/pet_page.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
 
 import '../play/play_page.dart';
@@ -27,25 +35,47 @@ class HomeController extends BaseController {
           },
         ),
       );
-    }  else if (settings.name == RouteName.test1Page) {
+    }  else if (settings.name == RouteName.chartPage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const test1(),
+        page: () => const ChartPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
-            Get.lazyPut(() => Test1Controller());
+            Get.lazyPut(() => ChartController());
           },
         ),
       );
-    } else if (settings.name == RouteName.test2Page) {
+    } else if (settings.name == RouteName.minePage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const test2(),
+        page: () => const MinePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
-            Get.lazyPut(() => Test2Controller());
+            Get.lazyPut(() => MineController());
+          },
+        ),
+      );
+    }else if(settings.name == RouteName.petPage){
+      return GetPageRoute(
+        settings: settings,
+        page: () =>  PetPage(),
+        transition: Transition.noTransition,
+        binding: BindingsBuilder(
+              () {
+            Get.lazyPut(() => PetController());
+          },
+        ),
+      );
+    }else if(settings.name == RouteName.message){
+      return GetPageRoute(
+        settings: settings,
+        page: () =>  MessagePage(),
+        transition: Transition.noTransition,
+        binding: BindingsBuilder(
+              () {
+            Get.lazyPut(() => MessageController());
           },
         ),
       );

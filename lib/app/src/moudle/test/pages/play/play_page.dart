@@ -134,13 +134,19 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                       Positioned(
                         left: 49.w,
                         top: 50.h,
-                        child: Text(
-                          '点我\r\n连接设备哦',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: MyColors.textBlackColor,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        child: Obx(
+                              () =>
+                              Text(
+                                controller.manager.mDevice.value == null
+                                    ? '点我\r\n连接设备哦'
+                                    : '\r\n${controller.manager.mDevice.value!
+                                    .platformName}\r\n已链接',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: MyColors.textBlackColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                         ),
                       ),
                       Positioned(
@@ -266,17 +272,18 @@ class PlayPage extends BaseEmptyPage<PlayController> {
             builder: (controller) {
               return controller.dataList.isNotEmpty
                   ? SliverList.list(
-                      children: List.generate(
-                        controller.dataList.length,
-                        (index) => _centerItem(
-                          controller.dataList[index],
-                          () {},
-                        ),
+                children: List.generate(
+                  controller.dataList.length,
+                      (index) =>
+                      _centerItem(
+                        controller.dataList[index],
+                            () {},
                       ),
-                    )
+                ),
+              )
                   : const SliverFillRemaining(
-                      child: NoDataWidget(),
-                    );
+                child: NoDataWidget(),
+              );
             },
             id: controller.dataListId,
           ),
@@ -352,8 +359,75 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   }
 
   _buildFra2Content() {
-    return Container(
-      color: Colors.red,
+    return Column(
+      children: [
+        Image.asset(
+          ResName.group38,
+          width: 223.w,
+          height: 223.w,
+        ),
+        Text(
+          '点击\r\n分享遥控',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: MyColors.textBlackColor,
+            fontWeight: FontWeight.w500,
+            fontSize: 18.sp,
+          ),
+        ),
+        SizedBox(height: 42.h,),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: GetBuilder<PlayController>(builder: (controller) {
+              return Wrap(
+                runSpacing: 16.h,
+                spacing: 24.w,
+                children: controller.shareData.map<Widget>((e) => _buildWrapChild(e.assetName, e.text)).toList(),
+              );
+            },),
+          ),
+        ),
+        Text(
+          '互动需双方同时链接，离开此界面自动将断开',
+          style: TextStyle(
+            fontSize: 11.sp,
+            color: MyColors.textGreyColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  _buildWrapChild(String assetPath, String text) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.w),),
+
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14.w),
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xffff5e65),
+              const Color(0xffff5e65).withAlpha(54),
+            ],
+            begin: Alignment.center,
+            end: Alignment.centerLeft,
+          ),
+        ),
+        child: FittedBox(
+          child: Row(
+            children: [
+              Image.asset(assetPath,width: 22.w,height: 22.w,),
+              SizedBox(width: 6.w,),
+              Text(text,style: TextStyle(color: Colors.white,fontSize: 14.sp,fontWeight: FontWeight.w500,),),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

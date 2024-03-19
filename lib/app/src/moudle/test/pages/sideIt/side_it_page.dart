@@ -600,15 +600,15 @@ class SideItPage extends BaseEmptyPage<SideItController> {
               ),
               Flexible(
                 flex: 1,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Obx(
-                          () => Container(
-                            padding: EdgeInsets.symmetric(horizontal: 48.w),
-                            child: RepaintBoundary(
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Obx(
+                            () => RepaintBoundary(
                               child: CustomPaint(
                                 size: Size(280.w, 70.h),
                                 painter: ChartsPainter(
@@ -619,10 +619,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 30.h),
-                      child: Obx(
+                      Obx(
                             () => Visibility(
                           visible: controller.slideItModel.value == 1,
                           child: Countdown(
@@ -654,9 +651,8 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                           ),
                         ),
                       ),
-                    ),
-
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

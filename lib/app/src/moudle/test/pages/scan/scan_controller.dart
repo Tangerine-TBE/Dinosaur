@@ -43,7 +43,7 @@ class ScanController extends BaseBleController {
         }
       });
     }
-    Runtime.lastConnectDevice = manager.mDevice!.platformName;
+    Runtime.lastConnectDevice = manager.mDevice.value!.platformName;
     Get.back();
   }
 
