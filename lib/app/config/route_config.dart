@@ -1,6 +1,7 @@
 
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
@@ -37,6 +38,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => HomeController());
+              Get.lazyPut(() => LoginRepo());
             },
           ),
         ),
