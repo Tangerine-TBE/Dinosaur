@@ -6,7 +6,7 @@ import '../ble/ble_manager.dart';
 import '../ble/event/ble_event.dart';
 import 'package:event_bus/event_bus.dart';
 
-/** 这是为蓝牙定制的控制器 在binding的使用的时候必须是Get.put 不能采用lazy模式*/
+/// 这是为蓝牙定制的控制器 在binding的使用的时候必须是Get.put 不能采用lazy模式
 
 abstract class BaseBleController extends BaseViewModel {
   late EventBus eventBus;

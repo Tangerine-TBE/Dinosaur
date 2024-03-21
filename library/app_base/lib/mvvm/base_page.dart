@@ -1,7 +1,4 @@
-import 'dart:ui';
 import 'package:get/get.dart';
-import 'package:app_base/exports.dart';
-import 'package:common/base/helper/navigation_helper.dart';
 import 'package:common/base/mvvm/view/base_appbar_page.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +29,7 @@ abstract class BasePage<C> extends BaseAppBarPage<C> {
   @override
   Widget? buildRightIcon() => null;
 
+  @override
   void offNavigateTo(String route, {dynamic args}) {
     Get.offNamed(route, arguments: args);
   }

@@ -1,12 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:app_base/config/save_key.dart';
-import 'package:app_base/exports.dart';
 import 'package:dio/dio.dart' as dio;
-import '../../constant/constants.dart';
-import '../api.dart';
-import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
 
 class SignInterceptor extends dio.Interceptor {

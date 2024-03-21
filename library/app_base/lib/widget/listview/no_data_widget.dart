@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class NoDataWidget extends StatelessWidget {
   const NoDataWidget({
     this.title = "暫無記錄",
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String title;
 
   @override

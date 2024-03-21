@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 import 'package:get/get.dart';
@@ -135,18 +136,16 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                         left: 49.w,
                         top: 50.h,
                         child: Obx(
-                              () =>
-                              Text(
-                                controller.manager.mDevice.value == null
-                                    ? '点我\r\n连接设备哦'
-                                    : '\r\n${controller.manager.mDevice.value!
-                                    .platformName}\r\n已链接',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: MyColors.textBlackColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                          () => Text(
+                            controller.manager.mDevice.value == null
+                                ? '点我\r\n连接设备哦'
+                                : '\r\n${controller.manager.mDevice.value!.platformName}\r\n已链接',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: MyColors.textBlackColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
                       Positioned(
@@ -271,24 +270,38 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           sliver: GetBuilder<PlayController>(
             builder: (controller) {
               return controller.dataList.isNotEmpty
-                  ? SliverList.list(
-                children: List.generate(
-                  controller.dataList.length,
-                      (index) =>
-                      _centerItem(
-                        controller.dataList[index],
-                            () {},
-                      ),
-                ),
-              )
-                  : const SliverFillRemaining(
-                child: NoDataWidget(),
-              );
+                  ? _buildSliverList()
+                  : controller.refreshing
+                      ?  SliverFillRemaining(
+                          child: Center(
+                            child: LoadingAnimationWidget.newtonCradle(
+                              color:  MyColors.homePageNaviItemSelectColor,
+                              size: 100.w,
+                            ),
+                          ),
+                        )
+                      : const SliverFillRemaining(
+                          child: NoDataWidget(),
+                        );
             },
             id: controller.dataListId,
           ),
         )
       ],
+    );
+  }
+
+  _buildSliverList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return _centerItem(
+            controller.dataList[index],
+            () {},
+          );
+        },
+        childCount: controller.dataList.length,
+      ),
     );
   }
 
@@ -375,17 +388,23 @@ class PlayPage extends BaseEmptyPage<PlayController> {
             fontSize: 18.sp,
           ),
         ),
-        SizedBox(height: 42.h,),
+        SizedBox(
+          height: 42.h,
+        ),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: GetBuilder<PlayController>(builder: (controller) {
-              return Wrap(
-                runSpacing: 16.h,
-                spacing: 24.w,
-                children: controller.shareData.map<Widget>((e) => _buildWrapChild(e.assetName, e.text)).toList(),
-              );
-            },),
+            child: GetBuilder<PlayController>(
+              builder: (controller) {
+                return Wrap(
+                  runSpacing: 16.h,
+                  spacing: 24.w,
+                  children: controller.shareData
+                      .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
+                      .toList(),
+                );
+              },
+            ),
           ),
         ),
         Text(
@@ -403,8 +422,9 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   _buildWrapChild(String assetPath, String text) {
     return Card(
       elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.w),),
-
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14.w),
+      ),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
         decoration: BoxDecoration(
@@ -421,9 +441,22 @@ class PlayPage extends BaseEmptyPage<PlayController> {
         child: FittedBox(
           child: Row(
             children: [
-              Image.asset(assetPath,width: 22.w,height: 22.w,),
-              SizedBox(width: 6.w,),
-              Text(text,style: TextStyle(color: Colors.white,fontSize: 14.sp,fontWeight: FontWeight.w500,),),
+              Image.asset(
+                assetPath,
+                width: 22.w,
+                height: 22.w,
+              ),
+              SizedBox(
+                width: 6.w,
+              ),
+              Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ],
           ),
         ),

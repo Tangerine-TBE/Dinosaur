@@ -1,8 +1,5 @@
 import 'dart:ui';
 
-import 'package:app_base/config/save_key.dart';
-import 'package:app_base/constant/constants.dart';
-import 'package:app_base/exports.dart';
 import 'package:get/get.dart';
 
 import 'msg_cn.dart';

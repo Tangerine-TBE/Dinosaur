@@ -10,7 +10,7 @@ export 'package:pull_to_refresh/pull_to_refresh.dart';
 /// 支持下拉刷新、上拉加载更多
 class SmartLoadMoreListView<T> extends StatefulWidget {
   const SmartLoadMoreListView({
-    Key? key,
+    super.key,
     this.pageSize = 20,
     this.padding,
     this.runSpacing = 0,
@@ -21,7 +21,7 @@ class SmartLoadMoreListView<T> extends StatefulWidget {
     required this.dataList,
     required this.adapter,
     required this.onListHeightChanged,
-  }) : super(key: key);
+  });
 final void Function(double newHeight) onListHeightChanged;
   /// 每頁數據量
   final int pageSize;

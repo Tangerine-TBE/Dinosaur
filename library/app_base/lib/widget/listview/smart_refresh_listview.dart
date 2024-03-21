@@ -10,7 +10,7 @@ export 'package:pull_to_refresh/pull_to_refresh.dart';
 /// 支持下拉刷新、上拉加载更多
 class SmartRefreshListView<T> extends StatefulWidget {
   const SmartRefreshListView({
-    Key? key,
+    super.key,
     this.pageSize = 20,
     this.padding,
     this.runSpacing = 0,
@@ -20,7 +20,7 @@ class SmartRefreshListView<T> extends StatefulWidget {
     required this.onRefresh,
     this.onLoadMore,
     required this.adapter,
-  }) : super(key: key);
+  });
 
   /// 每頁數據量
   final int pageSize;

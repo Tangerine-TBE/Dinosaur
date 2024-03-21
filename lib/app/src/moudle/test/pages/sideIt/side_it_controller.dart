@@ -46,7 +46,6 @@ class SideItController extends BaseBleController {
     listen = true;
     loopTimer = Timer.periodic(const Duration(milliseconds:200), (timer) async {
       if (sliderValue.value > 50) {
-        logE('${sliderValue.value}');
        await manager.wwriteChar?.write(
           bleMsg.generateStrengthData(
               streamFirstValue: sliderValue.value,
@@ -90,7 +89,6 @@ class SideItController extends BaseBleController {
             recordBean = RecordBean.fromJson(data);
           }
           recordBean.dataList.add(dataList);
-          logE(dataList.recordList.length.toString());
           SaveKey.dataList.save(recordBean.toJson());
         },
       ),
@@ -123,7 +121,6 @@ class SideItController extends BaseBleController {
       int i = 0;
       recordTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
         i++;
-        logE('第$i个数添加');
         if (sliderValue.value > 50) {
           recordList.add(sliderValue.value);
         } else {
@@ -214,7 +211,6 @@ class SideItController extends BaseBleController {
   @override
   void onScanResultChanged(List<ScanResult> result) async {
     //对扫描结果进行一次判断
-    logE('扫描有结果了');
     for (var element in result) {
       var resultDevice = element.device;
       if (resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {

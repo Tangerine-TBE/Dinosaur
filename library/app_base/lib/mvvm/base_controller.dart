@@ -1,4 +1,3 @@
-import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:common/base/mvvm/vm/base_view_model.dart';
 import 'package:common/common/widget/loading/g_loading.dart';
