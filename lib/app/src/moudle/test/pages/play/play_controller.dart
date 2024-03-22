@@ -1,56 +1,119 @@
+import 'dart:async';
+
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
+import 'package:app_base/network/response/center_response.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:app_base/mvvm/model/share_device_bean.dart';
+import 'package:get/get.dart';
+import 'package:app_base/mvvm/repository/play_repo.dart';
 
-class PlayController extends BaseBleController {
-  List<TopPicCenterBean> dataList = [];
+class PlaySelfContentManager {
+  final Function update;
+
+  PlaySelfContentManager({required this.update});
+
+  List<TopicList> dataList = [];
+  final _repo = Get.find<PlayRepo>();
+  final dataListId = 1;
+  bool refreshing = true;
+
+  _Create() async {
+    for (int i = 0; i < 10; i++) {
+      await _createTopCenter(
+          subtitle: '小标题$i',
+          imgUrl: 'https://via.placeholder.com/150/0000F$i/808080?Text=Image$i',
+          content: '这是内容$i',
+          title: '大标题$i');
+    }
+  }
+
+  Future loaMoreList() async {}
+
+  _fetchTopCenterList() async {
+    final response = await _repo.callTopCenter(
+      topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
+    );
+    if (response.isSuccess) {
+      CenterResponse? centerResponse = response.data;
+      if (centerResponse != null && !centerResponse.isEmpty()) {
+        dataList = centerResponse.data!.topicList;
+      }
+    }
+    refreshing = false;
+    update([dataListId]);
+  }
+
+  _createTopCenter(
+      {required String subtitle,
+      required String imgUrl,
+      required String content,
+      required String title}) async {
+    await _repo.createTopCenter(
+        topiCenterCreateReq: TopiCenterCreateReq(
+            subtitle: subtitle, icon: imgUrl, title: title, content: content));
+  }
+}
+
+class RemoteControlContentManager {
+  final Function update;
   var shareData = <ShareDeviceBean>[];
   bool refreshing = true;
   final shareWorldsId = 2;
-  final dataListId = 1;
+  late StreamSubscription<ConnectivityResult> subscription;
+
+  RemoteControlContentManager({required this.update}) {
+    _init();
+  }
+
+  _init() {
+    // 1.监听网络变化
+    subscription =
+    subscription = Connectivity().onConnectivityChanged.listen((event) {
+      if (event == ConnectivityResult.none) {
+        logE('网络不可用');
+      }else {
+        logE('网络可用');
+      }
+    });
+  }
+
+  _close() {
+    // subscription.cancel();
+  }
+
+  _fetchShareWorld() {
+    shareData.add(ShareDeviceBean(assetName: ResName.pic33, text: '我准备好了~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic42, text: '停一会儿~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic43, text: '喜欢~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic59, text: '有感觉了~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic61, text: '太强啦~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic66, text: '还没玩够~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic79, text: '就要这个不要停~'));
+    shareData.add(ShareDeviceBean(assetName: ResName.pic84, text: '换一个试试~'));
+    update([shareWorldsId]);
+  }
+}
+
+class PlayController extends BaseBleController {
+  late PlaySelfContentManager playSelfContentManager;
+  late RemoteControlContentManager remoteControlContentManager;
 
   @override
   void onInit() async {
     super.onInit();
-    await Future.delayed(const Duration(seconds: 5));
-    fetchTopCenterList();
-    refreshing = false;
-    update([dataListId]);
-    _fetchShareWorld();
+    playSelfContentManager = PlaySelfContentManager(update: update);
+    remoteControlContentManager = RemoteControlContentManager(update: update);
+    remoteControlContentManager._fetchShareWorld();
+    playSelfContentManager._fetchTopCenterList();
   }
 
-  _fetchShareWorld() {
-    shareData.add(ShareDeviceBean(assetName: ResName.pic33, text: '我准备好了'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic42, text: '听一会儿'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic43, text: '喜欢'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic59, text: '有感觉了'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic61, text: '太强啦'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic66, text: '还没玩够'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic79, text: '就要这个不要停'));
-    shareData.add(ShareDeviceBean(assetName: ResName.pic84, text: '换一个试试'));
-    update([shareWorldsId]);
-  }
-
-  Future loaMoreList() async {
-    await Future.delayed(const Duration(seconds: 1)); //await API Response
-    dataList.addAll(List.generate(20, (index) => TopPicCenterBean.mock()));
-    update([dataListId]);
-  }
-
-  Future fetchTopCenterList() async {
-    dataList = List.generate(20, (index) => TopPicCenterBean.mock());
-  }
-
-  Future<List<TopPicCenterBean>> mockLoadedMore() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return List.generate(20, (index) => TopPicCenterBean.mock());
-  }
-
-  Future<List<TopPicCenterBean>> mockRefreshData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return List.generate(20, (index) => TopPicCenterBean.mock());
+  @override
+  void onClose() {
+    remoteControlContentManager._close();
+    super.onClose();
   }
 
   void onScanClicked() {
@@ -67,6 +130,10 @@ class PlayController extends BaseBleController {
 
   void onModelClicked() {
     navigateTo(RouteName.modelPage);
+  }
+
+  onCenterDetailsIndexTap(TopicList bean) {
+    navigateTo(RouteName.centerDetailsPage, args: bean);
   }
 
   @override

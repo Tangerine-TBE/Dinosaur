@@ -97,7 +97,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   _buildFra1Content(Function onScanCall, Function onSideCall,
       Function onShakeCall, Function onModelCall) {
     return LoadMoreListView.customScrollView(
-      onLoadMore: controller.loaMoreList,
+      onLoadMore: controller.playSelfContentManager.loaMoreList,
       loadMoreWidget: Container(
         margin: EdgeInsets.all(20.w),
         alignment: Alignment.center,
@@ -269,13 +269,13 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           sliver: GetBuilder<PlayController>(
             builder: (controller) {
-              return controller.dataList.isNotEmpty
+              return controller.playSelfContentManager.dataList.isNotEmpty
                   ? _buildSliverList()
-                  : controller.refreshing
-                      ?  SliverFillRemaining(
+                  : controller.playSelfContentManager.refreshing
+                      ? SliverFillRemaining(
                           child: Center(
                             child: LoadingAnimationWidget.newtonCradle(
-                              color:  MyColors.homePageNaviItemSelectColor,
+                              color: MyColors.homePageNaviItemSelectColor,
                               size: 100.w,
                             ),
                           ),
@@ -284,7 +284,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                           child: NoDataWidget(),
                         );
             },
-            id: controller.dataListId,
+            id: controller.playSelfContentManager.dataListId,
           ),
         )
       ],
@@ -293,80 +293,88 @@ class PlayPage extends BaseEmptyPage<PlayController> {
 
   _buildSliverList() {
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return _centerItem(
-            controller.dataList[index],
-            () {},
-          );
-        },
-        childCount: controller.dataList.length,
-      ),
+      delegate: SliverChildBuilderDelegate((context, index) {
+        return _centerItem(
+          controller.playSelfContentManager.dataList[index],
+          () {
+            controller.onCenterDetailsIndexTap(
+              controller.playSelfContentManager.dataList[index],
+            );
+          },
+        );
+      }, childCount: controller.playSelfContentManager.dataList.length
+          // childCount: controller.dataList.length,
+          ),
     );
   }
 
-  _centerItem(TopPicCenterBean bean, Function onPress) {
+  _centerItem(TopicList bean, Function onPress) {
     return SizedBox(
       height: 70.h,
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.h),
-            child: Image.network(
-              bean.imgUrl,
-              width: 64.h,
-              height: 64.h,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(left: 12.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    bean.title,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    bean.preTitle,
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 0,
-                          bottom: 0,
-                          child: Text(
-                            bean.subTitle,
-                            style: TextStyle(
-                                fontSize: 11.sp, color: MyColors.textGreyColor),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Text(
-                            bean.date,
-                            style: TextStyle(
-                                fontSize: 11.sp, color: MyColors.textGreyColor),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+      child: InkWell(
+        onTap: (){
+          onPress.call();
+        },
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.h),
+              child: Image.network(
+                bean.icon,
+                width: 64.h,
+                height: 64.h,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 12.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      bean.title,
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      bean.subtitle,
+                      style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            bottom: 0,
+                            child: Text(
+                              bean.subtitle,
+                              style: TextStyle(
+                                  fontSize: 11.sp, color: MyColors.textGreyColor),
+                            ),
+                          ),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: Text(
+                              bean.deletedTime,
+                              style: TextStyle(
+                                  fontSize: 11.sp, color: MyColors.textGreyColor),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -399,7 +407,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                 return Wrap(
                   runSpacing: 16.h,
                   spacing: 24.w,
-                  children: controller.shareData
+                  children: controller.remoteControlContentManager.shareData
                       .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
                       .toList(),
                 );

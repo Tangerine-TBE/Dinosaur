@@ -16,7 +16,7 @@ dependencies:
   common:
     git:
       url: https://github.com/Tangerine-TBE/base.git
-      branch: 375x812
+      ref: 375x812
 
 dev_dependencies:
   flutter_test:

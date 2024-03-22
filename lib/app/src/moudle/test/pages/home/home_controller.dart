@@ -1,5 +1,6 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
+import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
@@ -21,14 +22,14 @@ class HomeController extends BaseController {
   @override
   void onInit() async {
     super.onInit();
-    await _loginRepo.login(
-      userReqBean: UserReqBean(
-          password: '100344',
-          application: '',
-          organization: '',
-          userName: 'tan',
-          type: ''),
-    );
+    // await _loginRepo.login(
+    //   userReqBean: UserReqBean(
+    //       password: '100344',
+    //       application: '',
+    //       organization: '',
+    //       userName: 'tan',
+    //       type: ''),
+    // );
   }
 
   Route? onGenerateRoute(RouteSettings settings) {
@@ -40,6 +41,7 @@ class HomeController extends BaseController {
         binding: BindingsBuilder(
           () {
             Get.lazyPut(() => PlayController());
+            Get.lazyPut(() => PlayRepo());
           },
         ),
       );

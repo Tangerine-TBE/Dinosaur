@@ -88,6 +88,9 @@ class HomePage extends BaseEmptyPage<HomeController> {
         ],
         currentIndex: controller.selectedTabIndex.value,
         onTap: (index) {
+          if(index == controller.selectedTabIndex.value){
+            return;
+          }
           controller.selectedTabIndex.value = index;
           if (index == 0) {
             Get.toNamed(RouteName.playPage, id: 1);

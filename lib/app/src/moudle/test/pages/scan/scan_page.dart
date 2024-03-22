@@ -77,34 +77,17 @@ class ScanPage extends BaseEmptyPage<ScanController> {
     return Column(
       children: [
         Flexible(
+          flex: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AnimatedScale(
-                scale: 1,
-                duration: Duration(
-                  milliseconds: 200,
-                ),
-                child: Image.asset(
-                  ResName.looperGroup,
-                  width: 144.w,
-                  height: 144.w,
-                ),
-              ),
+              HeartbeatAnimation(),
               SizedBox(
                 height: 61.h,
               ),
-              Text(
-                '搜索设备中...',
-                style: TextStyle(
-                  color: MyColors.textBlackColor,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12.sp,
-                ),
-              )
+              DotAnimation(),
             ],
           ),
-          flex: 1,
         ),
         Flexible(
           child: Padding(
@@ -395,12 +378,16 @@ class ScanPage extends BaseEmptyPage<ScanController> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       controller.onDeviceSelected(index);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 12.h),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.w),border:Border.fromBorderSide(BorderSide(color: Colors.red,width: 1.w))),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.w, vertical: 12.h),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.w),
+                          border: Border.fromBorderSide(
+                              BorderSide(color: Colors.red, width: 1.w))),
                       child: Text(
                         '连接',
                         style: TextStyle(
@@ -417,6 +404,105 @@ class ScanPage extends BaseEmptyPage<ScanController> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class DotAnimation extends StatefulWidget {
+  const DotAnimation({super.key});
+
+  @override
+  _DotAnimationState createState() => _DotAnimationState();
+}
+
+class _DotAnimationState extends State<DotAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<int> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+
+    _animation = IntTween(begin: 0, end: 3).animate(_controller);
+
+    _controller.repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        String dots = '.' * _animation.value;
+        return Text(
+          '设备搜索中$dots',
+          style: TextStyle(
+            color: MyColors.textBlackColor,
+            fontWeight: FontWeight.w400,
+            fontSize: 12.sp,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class HeartbeatAnimation extends StatefulWidget {
+  const HeartbeatAnimation({super.key});
+
+  @override
+  _HeartbeatAnimationState createState() => _HeartbeatAnimationState();
+}
+
+class _HeartbeatAnimationState extends State<HeartbeatAnimation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+
+    _animation = Tween<double>(begin: 1.0, end: 1.3).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _animation.value,
+          child: Image.asset(ResName.iconScan, width: 80.w, height: 80.w),
+        );
+      },
     );
   }
 }

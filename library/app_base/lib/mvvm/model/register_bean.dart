@@ -21,11 +21,11 @@ class RegisterReqBean {
     String userName;
 
     factory RegisterReqBean.fromJson(Map<dynamic, dynamic> json) => RegisterReqBean(
-        password: json["password"],
-        application: json["application"],
-        nickName: json["nickName"],
-        organization: json["organization"],
-        userName: json["userName"],
+        password: json["password"]??'',
+        application: json["application"]??'',
+        nickName: json["nickName"]??'',
+        organization: json["organization"]??'',
+        userName: json["userName"]??'',
     );
 
     Map<String, dynamic> toJson() => {

@@ -1,52 +1,181 @@
-/// YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
-library;
 
-import 'dart:convert';
-
-TopPicCenterBean topPicBeanFromJson(String str) =>
-    TopPicCenterBean.fromJson(json.decode(str));
-
-String topPicBeanToJson(TopPicCenterBean data) => json.encode(data.toJson());
-
-class TopPicCenterBean {
-  TopPicCenterBean({
-    required this.date,
-    required this.imgUrl,
-    required this.preTitle,
-    required this.subTitle,
-    required this.title,
+class TopicCenterRsp {
+  TopicCenterRsp({
+    required this.topicList,
   });
 
-  String date;
-  String imgUrl;
-  String preTitle;
-  String subTitle;
+  List<TopicList> topicList;
+
+  factory TopicCenterRsp.fromJson(Map<dynamic, dynamic> json) => TopicCenterRsp(
+    topicList: List<TopicList>.from(json["topicList"].map((x) => TopicList.fromJson(x))),
+  );
+
+  Map<dynamic, dynamic> toJson() => {
+    "topicList": List<dynamic>.from(topicList.map((x) => x.toJson())),
+  };
+}
+
+class TopicCenterReq {
+  TopicCenterReq({
+    required this.orderBy,
+  });
+
+  String orderBy;
+
+  factory TopicCenterReq.fromJson(Map<dynamic, dynamic> json) => TopicCenterReq(
+    orderBy: json["orderBy"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "orderBy": orderBy,
+  };
+}
+
+class TopicList {
+  TopicList({
+    required this.icon,
+    required this.creatorId,
+    required this.modifierId,
+    required this.deletedId,
+    required this.title,
+    required this.content,
+    required this.modifyTime,
+    required this.isDeleted,
+    required this.createTime,
+    required this.subtitle,
+    required this.appId,
+    required this.tenantId,
+    required this.checksum,
+    required this.id,
+    required this.deletedTime,
+  });
+
+  String icon;
+  String creatorId;
+  String modifierId;
+  String deletedId;
   String title;
+  String content;
+  int modifyTime;
+  String isDeleted;
+  int createTime;
+  String subtitle;
+  String appId;
+  String tenantId;
+  String checksum;
+  String id;
+  String deletedTime;
 
-  factory TopPicCenterBean.fromJson(Map<dynamic, dynamic> json) =>
-      TopPicCenterBean(
-        date: json["date"],
-        imgUrl: json["imgUrl"],
-        preTitle: json["preTitle"],
-        subTitle: json["subTitle"],
-        title: json["title"],
-      );
+  factory TopicList.fromJson(Map<dynamic, dynamic> json) => TopicList(
+    icon: json["icon"]??'',
+    creatorId: json["creatorId"]??'',
+    modifierId: json["modifierId"]??'',
+    deletedId: json["deletedId"]??'',
+    title: json["title"]??'',
+    content: json["content"]??'',
+    modifyTime: json["modifyTime"]??0,
+    isDeleted: json["isDeleted"]??'',
+    createTime: json["createTime"]??0,
+    subtitle: json["subtitle"]??'',
+    appId: json["appId"]??'',
+    tenantId: json["tenantId"]??'',
+    checksum: json["checksum"]??'',
+    id: json["id"]??'',
+    deletedTime: json["deletedTime"]??'',
+  );
 
-  factory TopPicCenterBean.mock(){
-    return TopPicCenterBean(date: '2024/3/4',
-        imgUrl: 'https://via.placeholder.com/150/0000FF/808080?Text=FirstImage',
-        preTitle: '说说你对2024的展望',
-        subTitle: '2024我劝你善良',
-        title: '#2024愿景');
-  }
+  Map<dynamic, dynamic> toJson() => {
+    "icon": icon,
+    "creatorId": creatorId,
+    "modifierId": modifierId,
+    "deletedId": deletedId,
+    "title": title,
+    "content": content,
+    "modifyTime": modifyTime,
+    "isDeleted": isDeleted,
+    "createTime": createTime,
+    "subtitle": subtitle,
+    "appId": appId,
+    "tenantId": tenantId,
+    "checksum": checksum,
+    "id": id,
+    "deletedTime": deletedTime,
+  };
+}
 
 
-  Map<dynamic, dynamic> toJson() =>
-      {
-        "date": date,
-        "imgUrl": imgUrl,
-        "preTitle": preTitle,
-        "subTitle": subTitle,
-        "title": title,
-      };
+class TopiCenterCreateReq {
+  TopiCenterCreateReq({
+    required this.subtitle,
+    required this.icon,
+    required this.title,
+    required this.content,
+  });
+
+  String subtitle;
+  String icon;
+  String title;
+  String content;
+
+  factory TopiCenterCreateReq.fromJson(Map<dynamic, dynamic> json) => TopiCenterCreateReq(
+    subtitle: json["subtitle"]??'',
+    icon: json["icon"]??'',
+    title: json["title"]??'',
+    content: json["content"]??'',
+  );
+
+  Map<String , dynamic> toJson() => {
+    "subtitle": subtitle,
+    "icon": icon,
+    "title": title,
+    "content": content,
+  };
+}
+
+class TopiCenterCreateRsp {
+  TopiCenterCreateRsp({
+    required this.isDeleted,
+    required this.createTime,
+    required this.subtitle,
+    required this.icon,
+    required this.creatorId,
+    required this.checksum,
+    required this.id,
+    required this.title,
+    required this.content,
+  });
+
+  String isDeleted;
+  int createTime;
+  String subtitle;
+  String icon;
+  String creatorId;
+  String checksum;
+  String id;
+  String title;
+  String content;
+
+  factory TopiCenterCreateRsp.fromJson(Map<dynamic, dynamic> json) => TopiCenterCreateRsp(
+    isDeleted: json["isDeleted"]??'',
+    createTime: json["createTime"]??'',
+    subtitle: json["subtitle"]??'',
+    icon: json["icon"]??'',
+    creatorId: json["creatorId"]??'',
+    checksum: json["checksum"]??'',
+    id: json["id"]??'',
+    title: json["title"]??'',
+    content: json["content"]??'',
+  );
+
+  Map<String, dynamic> toJson() => {
+    "isDeleted": isDeleted,
+    "createTime": createTime,
+    "subtitle": subtitle,
+    "icon": icon,
+    "creatorId": creatorId,
+    "checksum": checksum,
+    "id": id,
+    "title": title,
+    "content": content,
+  };
 }

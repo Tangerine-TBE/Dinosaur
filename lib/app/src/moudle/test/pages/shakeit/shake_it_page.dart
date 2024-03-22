@@ -133,18 +133,15 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
       ),
       body: Column(
         children: [
-          Flexible(
+          const Flexible(
+            flex: 4,
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                ResName.imgShake,
-                width: 299.w,
-                height: 299.w,
-              ),
+              child: PicShakeAnimation(),
             ),
-            flex: 4,
           ),
           Flexible(
+            flex: 3,
             child:  Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -207,10 +204,67 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 ),
               ],
             ),
-            flex: 3,
           ),
         ],
       ),
     );
   }
 }
+class PicShakeAnimation extends StatefulWidget {
+  const PicShakeAnimation({super.key});
+
+  @override
+  State<PicShakeAnimation> createState() => _PicShakeAnimationState();
+}
+
+class _PicShakeAnimationState extends State<PicShakeAnimation> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _rotateAnimation;
+  late Animation<double> _shakeAnimation;
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
+
+    _rotateAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _shakeAnimation = Tween<double>(begin: -10, end: 10 ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _controller.repeat(reverse: true);
+
+
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: _rotateAnimation.value,
+          child: Transform.translate(
+            offset: Offset(_shakeAnimation.value, 0),
+            child: Image.asset(ResName.imgShake,
+              width: 299.w,
+              height: 299.w,),
+          ),
+        );
+      },
+    );
+  }
+}
+

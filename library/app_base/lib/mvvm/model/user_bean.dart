@@ -19,11 +19,11 @@ class UserRspBean {
   String refreshToken;
 
   factory UserRspBean.fromJson(Map<dynamic, dynamic> json) => UserRspBean(
-    expiresIn: json["expiresIn"],
-    scope: json["scope"],
-    accessToken: json["accessToken"],
-    tokenType: json["tokenType"],
-    refreshToken: json["refreshToken"],
+    expiresIn: json["expiresIn"]??'',
+    scope: json["scope"]??'',
+    accessToken: json["accessToken"]??'',
+    tokenType: json["tokenType"]??'',
+    refreshToken: json["refreshToken"]??'',
   );
 
   Map<String, dynamic> toJson() => {

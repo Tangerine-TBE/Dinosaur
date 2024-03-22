@@ -1,9 +1,11 @@
-
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:get/get.dart';
+import 'package:test01/app/src/moudle/test/pages/center/center_details_controller.dart';
+import 'package:test01/app/src/moudle/test/pages/center/center_detial_page.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:test01/app/src/moudle/test/pages/chart/chart_page.dart';
 import 'package:test01/app/src/moudle/test/pages/custom/custom_model_controller.dart';
@@ -32,6 +34,19 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.centerDetailsPage,
+          page: () => const CenterDetailsPage(),
+          binding: BindingsBuilder(
+            () {
+              TopicList topicList = Get.arguments;
+              Get.lazyPut(
+                () => CenterDetailsController(topCenterList: topicList),
+              );
+            },
+          ),
+        ),
+
         GetPage(
           name: RouteName.homePage,
           page: () => const HomePage(),

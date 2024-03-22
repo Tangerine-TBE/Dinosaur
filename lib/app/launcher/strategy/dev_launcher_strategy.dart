@@ -6,5 +6,5 @@ class  DevLauncherStrategy extends TemplateLauncherStrategy{
   String get envName => 'dev';
 
   @override
-  String get host => 'http://127.0.0.1:4523/m1/3578732-0-default';
+  String get host => 'http://1.13.6.34:8844';
 }
