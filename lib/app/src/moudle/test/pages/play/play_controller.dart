@@ -30,7 +30,23 @@ class PlaySelfContentManager {
     }
   }
 
-  Future loaMoreList() async {}
+  Future loaMoreList() async {
+
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await _repo.callTopCenter(
+      topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
+    );
+    if (response.isSuccess) {
+      CenterResponse? centerResponse = response.data;
+      if (centerResponse != null && !centerResponse.isEmpty()) {
+        dataList.addAll(centerResponse.data!.topicList);
+      }
+    }
+    refreshing = false;
+    update([dataListId]);
+
+
+  }
 
   _fetchTopCenterList() async {
     final response = await _repo.callTopCenter(
