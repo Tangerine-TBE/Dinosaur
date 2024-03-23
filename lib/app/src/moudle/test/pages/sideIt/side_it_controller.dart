@@ -28,12 +28,16 @@ class SideItController extends BaseBleController {
   bool isCustom = false;
   List<int> recordList = <int>[];
 
-  Future<ui.Image> loadImage(String imagePath) async {
-    ByteData data = await rootBundle.load(imagePath);
-    Uint8List bytes = data.buffer.asUint8List();
-    ui.Codec codec = await ui.instantiateImageCodec(bytes);
-    ui.FrameInfo frameInfo = await codec.getNextFrame();
-    return frameInfo.image;
+  Future<List<ui.Image>> loadImage(List<String> imagePath) async {
+    var images = <ui.Image>[];
+    for (int i = 0; i < imagePath.length; i++) {
+      ByteData data = await rootBundle.load(imagePath[i]);
+      Uint8List bytes = data.buffer.asUint8List();
+      ui.Codec codec = await ui.instantiateImageCodec(bytes);
+      ui.FrameInfo frameInfo = await codec.getNextFrame();
+      images.add(frameInfo.image);
+    }
+    return images;
   }
 
   @override
@@ -44,9 +48,10 @@ class SideItController extends BaseBleController {
 
   _initTimer() {
     listen = true;
-    loopTimer = Timer.periodic(const Duration(milliseconds:200), (timer) async {
+    loopTimer =
+        Timer.periodic(const Duration(milliseconds: 200), (timer) async {
       if (sliderValue.value > 50) {
-       await manager.wwriteChar?.write(
+        await manager.wwriteChar?.write(
           bleMsg.generateStrengthData(
               streamFirstValue: sliderValue.value,
               streamSecondValue: sliderValue.value),
@@ -64,9 +69,9 @@ class SideItController extends BaseBleController {
     recordTimer?.cancel();
     loopTimer?.cancel();
     listen = false;
-      manager.wwriteChar?.write(
-        bleMsg.generateStopData(),
-      );
+    manager.wwriteChar?.write(
+      bleMsg.generateStopData(),
+    );
   }
 
   onCountDownFinish() {
@@ -109,7 +114,7 @@ class SideItController extends BaseBleController {
         _initTimer();
       }
     }
-    if(!play.value){
+    if (!play.value) {
       play.value = true;
     }
     sliderValue.value = process.toInt();
@@ -200,7 +205,7 @@ class SideItController extends BaseBleController {
   @override
   void onDeviceDisconnect() async {
     await Future.delayed(const Duration(seconds: 2));
-    if(Runtime.lastConnectDevice.isNotEmpty){
+    if (Runtime.lastConnectDevice.isNotEmpty) {
       manager.startScan(timeout: 20);
     }
   }

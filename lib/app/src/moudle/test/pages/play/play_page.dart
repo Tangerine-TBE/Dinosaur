@@ -309,7 +309,8 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   }
 
   _centerItem(TopicList bean, Function onPress) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       height: 70.h,
       child: InkWell(
         onTap: (){
@@ -440,10 +441,12 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           gradient: LinearGradient(
             colors: [
               const Color(0xffff5e65),
-              const Color(0xffff5e65).withAlpha(54),
+              const Color(0xffFF5E65).withAlpha(54),
+              const Color(0xffD8D8D8).withAlpha(0),
             ],
             begin: Alignment.center,
-            end: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            transform: GradientRotation(1.2),
           ),
         ),
         child: FittedBox(

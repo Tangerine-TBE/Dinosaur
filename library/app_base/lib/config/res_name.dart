@@ -102,7 +102,7 @@ class ResName {
   static const String documentText = 'assets/images/document-text.png';
   static const String messageNotif = 'assets/images/message-notif.png';
   static const String ghost = 'assets/images/ghost.png';
-
+  static const String sideItBarBg = 'assets/images/side_bar_bg.png';
 
 
 }

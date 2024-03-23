@@ -233,7 +233,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                 height: double.infinity,
                                 width: 300.h,
                                 child: FutureBuilder(
-                                  future: controller.loadImage(ResName.button),
+                                  future: controller.loadImage(<String>[ResName.button,ResName.sideItBarBg]),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<dynamic> snapshot) {
                                     return Listener(
@@ -249,19 +249,21 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                               MyColors.sliderActiveTrackColor,
                                           inactiveTrackColor:
                                               MyColors.sliderInactiveTrackColor,
-                                          trackShape: snapshot.data == null
-                                              ?null:CustomShape(image: snapshot.data)
+                                          trackShape: snapshot.data==null?null:snapshot.data[1] == null
+                                              ?null:CustomShape(image: snapshot.data[1])
                                           ,
                                           trackHeight: 70.w,
                                           minThumbSeparation: 0,
                                           rangeTrackShape:
                                               const RoundedRectRangeSliderTrackShape(),
-                                          thumbShape: snapshot.data == null
+                                          thumbShape: snapshot.data==null? const RoundSliderThumbShape(
+                                              disabledThumbRadius: 20,
+                                              enabledThumbRadius: 20) :snapshot.data[0]== null
                                               ? const RoundSliderThumbShape(
                                                   disabledThumbRadius: 20,
                                                   enabledThumbRadius: 20)
                                               : ImageSliderThumb(
-                                                  image: snapshot.data,
+                                                  image: snapshot.data[0],
                                                   size: Size(106.w, 106.w)),
                                           overlayColor: Colors.red.withAlpha(32),
                                           overlayShape:

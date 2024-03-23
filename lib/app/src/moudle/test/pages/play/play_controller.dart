@@ -31,7 +31,6 @@ class PlaySelfContentManager {
   }
 
   Future loaMoreList() async {
-
     await Future.delayed(const Duration(seconds: 1));
     final response = await _repo.callTopCenter(
       topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
@@ -44,8 +43,6 @@ class PlaySelfContentManager {
     }
     refreshing = false;
     update([dataListId]);
-
-
   }
 
   _fetchTopCenterList() async {
@@ -87,10 +84,10 @@ class RemoteControlContentManager {
   _init() {
     // 1.监听网络变化
     subscription =
-    subscription = Connectivity().onConnectivityChanged.listen((event) {
+        subscription = Connectivity().onConnectivityChanged.listen((event) {
       if (event == ConnectivityResult.none) {
         logE('网络不可用');
-      }else {
+      } else {
         logE('网络可用');
       }
     });

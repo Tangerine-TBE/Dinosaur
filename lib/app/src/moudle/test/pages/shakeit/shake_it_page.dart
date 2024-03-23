@@ -10,7 +10,6 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
   const ShakeItPage({super.key});
 
   @override
-  // TODO: implement background
   Color get background => MyColors.pageBgColor;
 
   @override
@@ -226,7 +225,7 @@ class _PicShakeAnimationState extends State<PicShakeAnimation> with SingleTicker
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 400),
     );
 
     _rotateAnimation = Tween<double>(begin: 0, end: 1).animate(
