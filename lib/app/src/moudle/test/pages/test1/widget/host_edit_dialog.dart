@@ -107,29 +107,29 @@ class _HostEditDialogState extends State<HostEditDialog> {
                     hintStyle: const TextStyle(
                       height: 2.0,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      /*边角*/
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        color: Colors.black, //边线颜色为白色
-                        width: 1, //边线宽度为2
+                      enabledBorder: OutlineInputBorder(
+                        /*边角*/
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: Colors.black, //边线颜色为白色
+                          width: 1, //边线宽度为2
+                        ),
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.blue, //边框颜色为白色
-                        width: 1, //宽度为5
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.blue, //边框颜色为白色
+                          width: 1, //宽度为5
+                        ),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.black, //边框颜色为白色
-                        width: 1, //宽度为5
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    )),
-              ),
+                      disabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.black, //边框颜色为白色
+                          width: 1, //宽度为5
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      )),
+                ),
             )
             ],
           ),

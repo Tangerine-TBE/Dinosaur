@@ -18,6 +18,7 @@ class RouteName {
   static const String scanPage = '/scan';
   static const String customPage = '/custom';
   static const String centerDetailsPage = '/centerDetails';
+  static const String login = '/login';
 
   //shake
   static const String mainPage = '/main';

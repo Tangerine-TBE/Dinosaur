@@ -3,6 +3,8 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
@@ -25,7 +27,7 @@ import '../src/moudle/test/pages/home/home_page.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.homePage;
+  String initialRoute = RouteName.login;
 
   // String initialRoute = RouteName.modelPage;
 
@@ -43,6 +45,15 @@ class RouteConfig extends ARoute {
               Get.lazyPut(
                 () => CenterDetailsController(topCenterList: topicList),
               );
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.login,
+          page: () => const LoginPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => LoginController());
             },
           ),
         ),

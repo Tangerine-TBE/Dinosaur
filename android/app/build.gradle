@@ -68,14 +68,28 @@ android {
             v2SigningEnabled true
         }
     }
-
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                //输出apk名称为：渠道名_版本名_时间.apk
+//                def fileName = "${variant.productFlavors[0].name}_${releaseTime()}.apk"
+                def fileName = "怪兽_v${flutterVersionName}.apk"
+                outputFileName = fileName
+            }
+        }
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
         }
     }
 }
-
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 flutter {
     source '../..'
 }
