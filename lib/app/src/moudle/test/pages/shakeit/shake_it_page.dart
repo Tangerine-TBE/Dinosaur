@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/moudle/test/pages/shakeit/shake_it_controller.dart';
-import 'package:test01/app/src/moudle/test/pages/shakeit/weight/fill_icon_clipper.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/shakeit/weight/fill_icon_clipper.dart';
 
 class ShakeItPage extends BaseEmptyPage<ShakeItController> {
   const ShakeItPage({super.key});

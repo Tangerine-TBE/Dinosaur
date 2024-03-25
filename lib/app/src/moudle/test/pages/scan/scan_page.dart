@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/moudle/test/pages/scan/scan_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/scan/scan_controller.dart';
 import 'package:app_base/res/my_colors.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
-import 'package:test01/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 
 class ScanPage extends BaseEmptyPage<ScanController> {
   const ScanPage({super.key});

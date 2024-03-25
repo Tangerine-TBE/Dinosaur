@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/image_slider_thumb.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/timer_count_down.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/image_slider_thumb.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/timer_count_down.dart';
 
 import 'widget/charts_painter.dart';
 import 'widget/slider_bg_linear.dart';

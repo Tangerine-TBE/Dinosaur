@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:test01/app/src/moudle/test/pages/mine/mine_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/mine_controller.dart';
 
 class MinePage extends BaseEmptyPage<MineController> {
   const MinePage({super.key});

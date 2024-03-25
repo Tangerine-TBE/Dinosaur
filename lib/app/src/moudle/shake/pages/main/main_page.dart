@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:test01/app/src/moudle/shake/pages/main/main_controller.dart';
+import 'package:dinosaur/app/src/moudle/shake/pages/main/main_controller.dart';
 import 'package:app_base/res/shake_colors.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 

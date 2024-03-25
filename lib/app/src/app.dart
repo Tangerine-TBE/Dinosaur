@@ -3,7 +3,7 @@ import 'package:common/common/widget/loading/g_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_base/exports.dart';
-import 'package:test01/app/launcher/strategy/template_launcher_strategy.dart';
+import 'package:dinosaur/app/launcher/strategy/template_launcher_strategy.dart';
 
 class App extends BaseMaterialApp<TemplateLauncherStrategy> {
   App(super.launcherStrategy, super.route, {super.key});

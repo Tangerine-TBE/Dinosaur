@@ -9,10 +9,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:app_base/exports.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/obxBean/double_bean.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/count_down_confirm_dialog.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/create_custom_model_dialog.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/timer_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/obxBean/double_bean.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/count_down_confirm_dialog.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/create_custom_model_dialog.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/timer_controller.dart';
 
 class SideItController extends BaseBleController {
   final slideItModel = 0.obs;

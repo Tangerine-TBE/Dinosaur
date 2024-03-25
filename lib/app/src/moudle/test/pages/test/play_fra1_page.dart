@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:app_base/exports.dart';
 import 'package:flutter/material.dart';
-import 'package:test01/app/src/moudle/test/pages/test/play_fra1_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/test/play_fra1_controller.dart';
 
 class PlayFra1Page extends BaseEmptyPage<PlayFra1Controller> {
   const PlayFra1Page({super.key});

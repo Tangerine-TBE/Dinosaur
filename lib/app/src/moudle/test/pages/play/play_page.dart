@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:test01/app/src/moudle/test/pages/play/play_controller.dart';
-import 'package:test01/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 import 'package:get/get.dart';
 import 'package:loadmore_listview/loadmore_listview.dart';
 

@@ -1,4 +1,4 @@
-import 'package:test01/app/launcher/strategy/template_launcher_strategy.dart';
+import 'package:dinosaur/app/launcher/strategy/template_launcher_strategy.dart';
 
 class  UatLauncherStrategy extends TemplateLauncherStrategy{
   @override

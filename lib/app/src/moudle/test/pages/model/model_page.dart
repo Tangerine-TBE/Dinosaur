@@ -7,7 +7,7 @@ import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/app.dart';
+import 'package:dinosaur/app/src/app.dart';
 import '../sideIt/widget/charts_painter.dart';
 import 'model_controller.dart';
 

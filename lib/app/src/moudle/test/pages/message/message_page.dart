@@ -1,7 +1,7 @@
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:test01/app/src/moudle/test/pages/message/message_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/message/message_controller.dart';
 
 class MessagePage extends BaseEmptyPage<MessageController>{
   @override

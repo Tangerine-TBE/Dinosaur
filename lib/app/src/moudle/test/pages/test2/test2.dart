@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:test01/app/src/moudle/test/pages/test2/test2Controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/test2/test2Controller.dart';
 
 import '../sideIt/widget/charts_painter.dart';
 

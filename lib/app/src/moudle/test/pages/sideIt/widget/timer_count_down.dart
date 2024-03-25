@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:test01/app/src/moudle/test/pages/sideIt/widget/timer_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/timer_controller.dart';
 
 ///
 /// Simple countdown timer.
