@@ -21,6 +21,7 @@ class RouteName {
   static const String login = '/login';
   static const String passWorld = '/passWorld';
   static const String register = '/register';
+  static const String search = '/search';
 
   //shake
   static const String mainPage = '/main';

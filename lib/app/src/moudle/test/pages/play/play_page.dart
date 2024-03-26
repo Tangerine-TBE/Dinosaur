@@ -41,7 +41,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                 backgroundColor: MyColors.pageBgColor,
                 automaticallyImplyLeading: false,
                 elevation: 0.0,
-                bottom: PreferredSize(
+                title: PreferredSize(
                   preferredSize: const Size.fromHeight(kToolbarHeight),
                   child: Align(
                     alignment: Alignment.centerLeft,

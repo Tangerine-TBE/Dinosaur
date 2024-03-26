@@ -36,7 +36,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
               height: kToolbarHeight * 3,
             ),
             Text(
-              '开启小怪兽',
+              '开启小萌宠',
               style: TextStyle(
                 color: MyColors.themeTextColor,
                 fontSize: 18.sp,
