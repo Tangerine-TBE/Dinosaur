@@ -23,7 +23,8 @@ class MessageController extends BaseController {
       notifyPageManager.init();
     }
   }
-  onSearchClicked(){
+
+  onSearchClicked() {
     navigateTo(RouteName.search);
   }
 }
@@ -53,6 +54,12 @@ class FriendPageManager {
   onFriendItemClicked(int index) {
     //Todo 点击单个朋友
   }
+  onFvkClicked(){
+
+  }
+  onWeekClicked(){
+
+  }
 }
 
 class MsgPageManager {
@@ -79,6 +86,9 @@ class MsgPageManager {
   onMsgItemClicked() {
     //Todo
   }
+
+  onFvkClicked() {}
+  onWeekClicked(){}
 }
 
 class NotifyPageManager {

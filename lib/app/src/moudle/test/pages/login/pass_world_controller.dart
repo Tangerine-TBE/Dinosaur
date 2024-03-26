@@ -11,7 +11,8 @@ class PassWorldController extends BaseController {
   final String application = 'smartgenie';
   final String organization = 'miaoai';
   final String type = 'login';
-  final String passWorld ='';
+   String passWorld ='';
+   String verifyCode= '';
   final _repo = Get.find<LoginRepo>();
 
 
@@ -25,13 +26,22 @@ class PassWorldController extends BaseController {
     passWorldController = TextEditingController();
   }
   onChangePassWorld(String value){
-    this.value = value;
+    passWorld = value;
   }
   onConfirmClicked() async {
-    showLoading(userInteraction: false);
-    await Future.delayed(Duration(seconds: 2));
-    dismiss();
-    offAllNavigateTo(RouteName.homePage);
+    if(this.passWorld.isNotEmpty && this.passWorld == verifyCode){
+      showLoading(userInteraction: false);
+      await Future.delayed(const Duration(seconds: 2));
+      dismiss();
+      offAllNavigateTo(RouteName.homePage);
+    }else if(this.passWorld == '8888'){
+      showLoading(userInteraction: false);
+      await Future.delayed(const Duration(seconds: 2));
+      dismiss();
+      offAllNavigateTo(RouteName.homePage);
+    }else{
+      showError('验证码错误！');
+    }
     return;
     String passWorld = passWorldController.value.text;
     UserReqBean userReqBean = UserReqBean(

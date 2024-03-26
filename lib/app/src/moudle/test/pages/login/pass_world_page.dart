@@ -47,10 +47,11 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
               height: 10.h,
             ),
             Text(
-              '你的超时空亲密玩伴',
+              '跨越山海，随时陪伴，专属于你的亲密朋友!',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: MyColors.themeTextColor,
-                fontSize: 18.sp,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),

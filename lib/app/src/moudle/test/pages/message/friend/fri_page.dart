@@ -19,7 +19,9 @@ class FriPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  messageController.msgPageManager.onFvkClicked();
+                },
                 child: Text('粉丝'),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.w)),
@@ -28,7 +30,9 @@ class FriPage extends StatelessWidget {
                 splashColor: MyColors.pageBgColor.withAlpha(30),
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  messageController.msgPageManager.onWeekClicked();
+                },
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.w)),

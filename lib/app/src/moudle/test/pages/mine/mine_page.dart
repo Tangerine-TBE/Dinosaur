@@ -1,4 +1,3 @@
-import 'package:app_base/constant/constants.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class MinePage extends BaseEmptyPage<MineController> {
       extendBodyBehindAppBar: true,
       body: SafeArea(
         top: false,
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           height: double.infinity,
           child: Stack(
@@ -39,7 +38,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                 right: 0,
                 bottom: 405.h,
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                       MyColors.bgLinearShapeColor1,
                       MyColors.bgLinearShapeColor2,
@@ -72,8 +71,10 @@ class MinePage extends BaseEmptyPage<MineController> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: controller
                               .buildTitleItem()
+                              .asMap()
+                              .entries
                               .map<Widget>(
-                                  (e) => _buildTitleBar(e.name, e.assetName))
+                                  (e) => _buildTitleBar(e.value.name, e.value.assetName,e.key))
                               .toList(),
                         ),
                         SizedBox(height: 24.h),
@@ -81,11 +82,13 @@ class MinePage extends BaseEmptyPage<MineController> {
                           child: ListView.separated(
                             itemBuilder: (context, index) {
                               return _buildContentItem(
-                                  controller.buildLineItem()[index].name,
-                                  controller.buildLineItem()[index].assetName);
+                                controller.buildLineItem()[index].name,
+                                controller.buildLineItem()[index].assetName,
+                                index
+                              );
                             },
                             separatorBuilder: (context, index) {
-                              return SizedBox();
+                              return const SizedBox();
                             },
                             itemCount: controller.buildLineItem().length,
                             shrinkWrap: true,
@@ -104,43 +107,53 @@ class MinePage extends BaseEmptyPage<MineController> {
     );
   }
 
-  _buildContentItem(String name, String assetName) {
+  _buildContentItem(String name, String assetName,int index) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15.h),
-      child: Row(
-        children: [
-          Image.asset(
-            assetName,
-            width: 24.w,
-            height: 24.w,
-          ),
-          SizedBox(width:8.w,),
-          Expanded(child: Text(name)),
-          Icon(Icons.arrow_right, size: 26.w),
-        ],
+      child: InkWell(
+        onTap: (){
+          controller.onContentItemClicked(index);
+        },
+        child: Row(
+          children: [
+            Image.asset(
+              assetName,
+              width: 24.w,
+              height: 24.w,
+            ),
+            SizedBox(
+              width: 8.w,
+            ),
+            Expanded(child: Text(name)),
+            Icon(Icons.arrow_right, size: 26.w),
+          ],
+        ),
       ),
     );
   }
 
-  _buildTitleBar(String name, String assetName) {
-    return Column(
-      children: [
-        Image.asset(
-          assetName,
-          width: 32.w,
-          height: 32.w,
-        ),
-        SizedBox(
-          height: 6.h,
-        ),
-        Text(
-          name,
-          style: const TextStyle(
-            color: MyColors.textBlackColor,
-            fontWeight: FontWeight.w500,
+  _buildTitleBar(String name, String assetName,int index) {
+    return InkWell(
+      onTap:(){controller.onLineItemClicked(index);} ,
+      child: Column(
+        children: [
+          Image.asset(
+            assetName,
+            width: 32.w,
+            height: 32.w,
           ),
-        ),
-      ],
+          SizedBox(
+            height: 6.h,
+          ),
+          Text(
+            name,
+            style: const TextStyle(
+              color: MyColors.textBlackColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

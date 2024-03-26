@@ -19,22 +19,26 @@ class MsgPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MaterialButton(
-                onPressed: () {},
-                child: Text('搭讪'),
+                onPressed: () {
+                  messageController.msgPageManager.onFvkClicked();
+                },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.w)),
                 color: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
+                child: const Text('搭讪'),
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  messageController.msgPageManager.onWeekClicked();
+                },
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.w)),
-                child: Text('评论'),
                 padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
+                child: const Text('评论'),
               ),
             ],
           ),

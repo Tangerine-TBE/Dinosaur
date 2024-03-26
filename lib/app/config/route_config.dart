@@ -33,7 +33,7 @@ import '../src/moudle/test/pages/home/home_page.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.login;
+  String initialRoute = RouteName.homePage;
 
   // String initialRoute = RouteName.modelPage;
 
