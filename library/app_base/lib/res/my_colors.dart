@@ -21,6 +21,7 @@ class MyColors {
   static const Color sliderInactiveTrackColor = Color(0xfffde8eb);
   static const Color sliderActiveTrackColor = Color(0xfff98794);
   static const Color shakeCardBgColor = Color(0xffF6F6FF);
+  static  Color themeTextColor = bgLinearShapeColor1;
 
   //scan
   static const Color scanIndicatorColor = Color(0xffff5e65);

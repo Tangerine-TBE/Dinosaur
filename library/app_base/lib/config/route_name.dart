@@ -19,6 +19,8 @@ class RouteName {
   static const String customPage = '/custom';
   static const String centerDetailsPage = '/centerDetails';
   static const String login = '/login';
+  static const String passWorld = '/passWorld';
+  static const String register = '/register';
 
   //shake
   static const String mainPage = '/main';

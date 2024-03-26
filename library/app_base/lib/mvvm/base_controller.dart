@@ -1,6 +1,8 @@
 import 'package:app_base/exports.dart';
 import 'package:common/base/mvvm/vm/base_view_model.dart';
 import 'package:common/common/widget/loading/g_loading.dart';
+import 'package:get/get.dart';
+import 'package:common/base/helper/navigation_helper.dart';
 
 class BaseController extends BaseViewModel {
   @override
@@ -25,4 +27,9 @@ class BaseController extends BaseViewModel {
 
   @override
   void onHidden() {}
+}
+extension Navi on NavigationHelper{
+  void offAllNavigateTo(String rout, {dynamic args}) {
+    Get.offAllNamed(rout, arguments: args);
+  }
 }

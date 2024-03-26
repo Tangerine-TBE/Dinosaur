@@ -5,6 +5,10 @@ import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/register/register_page.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
@@ -36,6 +40,37 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.register,
+          page: () => const RegisterPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => RegisterController(),
+              );
+              Get.lazyPut(
+                () => LoginRepo(),
+              );
+            },
+          ),
+        ),
+
+        GetPage(
+          name: RouteName.passWorld,
+          page: () => const PassWorldPage(),
+          binding: BindingsBuilder(
+            () {
+              String phone = Get.arguments;
+              Get.lazyPut(
+                () => PassWorldController(phone: phone),
+              );
+              Get.lazyPut(
+                () => LoginRepo(),
+              );
+            },
+          ),
+        ),
+
         GetPage(
           name: RouteName.centerDetailsPage,
           page: () => const CenterDetailsPage(),
