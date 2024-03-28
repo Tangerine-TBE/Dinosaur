@@ -460,6 +460,18 @@ class _DotAnimationState extends State<DotAnimation>
 }
 
 class HeartbeatAnimation extends StatefulWidget {
+
+  //1.开始
+  //2.会动的心跳，easyInOut
+  //3.完毕
+
+
+
+
+
+
+
+
   const HeartbeatAnimation({super.key});
 
   @override

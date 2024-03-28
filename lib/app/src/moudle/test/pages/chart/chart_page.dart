@@ -1,13 +1,20 @@
 import 'dart:math';
 
 import 'package:app_base/exports.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/weight/awesome_chart.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/chart/double/double_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/chart/single/single_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/chart/special/special_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
+import 'package:flutter/widgets.dart';
 
-class ChartPage extends BaseEmptyPage<ChartController> {
+import '../play/weight/curved_indicator.dart';
+
+class ChartPage extends BaseEmptyPage<ChartController>
+    implements SingleTickerProviderStateMixin {
   const ChartPage({super.key});
 
   @override
@@ -15,69 +22,125 @@ class ChartPage extends BaseEmptyPage<ChartController> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      alignment: Alignment.center,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.w)),
-        child: AwesomeChartView(
-          dataList: controller.list,
+    TabController tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(() {
+      controller.onPageChanged(tabController.index);
+    });
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+              MyColors.bgLinearShapeColor1,
+              MyColors.bgLinearShapeColor2,
+            ], begin: Alignment.topCenter, end: Alignment.center),
+          ),
         ),
-      ),
+        Scaffold(
+          backgroundColor: MyColors.pageBgColor,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight),
+            child: AppBar(
+              backgroundColor: MyColors.pageBgColor,
+              automaticallyImplyLeading: false,
+              elevation: 0.0,
+              title: TabBar(
+                controller: tabController,
+                automaticIndicatorColorAdjustment: true,
+                tabAlignment: TabAlignment.start,
+                isScrollable: true,
+                unselectedLabelStyle: TextStyle(
+                    color: MyColors.indicatorNormalTextColor, fontSize: 16.sp),
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.indicatorSelectedTextColor,
+                    fontSize: 18.sp),
+                indicator: CurvedIndicator(),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorPadding: EdgeInsets.only(bottom: 10.h),
+                splashFactory: NoSplash.splashFactory,
+                dividerHeight: 0,
+                labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
+                overlayColor:
+                    const MaterialStatePropertyAll<Color>(Colors.transparent),
+                tabs: const [
+                  Tab(
+                    text: '单震',
+                  ),
+                  Tab(
+                    text: '双震',
+                  ),
+                  Tab(
+                    text: '允吸',
+                  )
+                ],
+              ),
+            ),
+          ),
+          body: SafeArea(
+            child: TabBarView(
+              controller: tabController,
+              children: [
+                SinglePage(controller: controller),
+                DoublePage(controller: controller),
+                SpecialPage(controller: controller),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
-}
 
-class AwesomeChartView extends StatefulWidget {
-  final List<int> dataList;
 
-  const AwesomeChartView({super.key, required this.dataList});
+
+
 
   @override
-  State<AwesomeChartView> createState() => _AwesomeChartViewState();
-}
+  void activate() {
+  }
 
-class _AwesomeChartViewState extends State<AwesomeChartView>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<int> _animation;
+  @override
+  BuildContext get context => throw UnimplementedError();
+
+  @override
+  Ticker createTicker(TickerCallback onTick) {
+    return Ticker(onTick);
+  }
+
+  @override
+  void deactivate() {
+  }
+
+  @override
+  void didChangeDependencies() {
+  }
+
+  @override
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {
+  }
+
+  @override
+  void dispose() {
+  }
 
   @override
   void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-
-    _animation = IntTween(begin: 0, end: 10).animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeInOut)
-    );
-    _controller.repeat(reverse: true);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        logE('${_animation.value}');
-        return CustomPaint(
-          size: const Size(400, 200),
-          painter: AwesomeChart(
-              controllerDot: _animation.value,
-              dataList: widget.dataList,
-              panColor: MyColors.themeTextColor),
-        );
-      },
-    );
-    // return CustomPaint(
-    //   size: const Size(400, 200),
-    //   painter: AwesomeChart(
-    //       dataList: List.generate(50, (index) => Random().nextInt(1024)),
-    //       panColor: MyColors.themeTextColor),
-    // );
+  bool get mounted => throw UnimplementedError();
+
+  @override
+  void reassemble() {
   }
+
+  @override
+  void setState(VoidCallback fn) {
+  }
+
+  @override
+  StatefulWidget get widget => throw UnimplementedError();
 }
+
+

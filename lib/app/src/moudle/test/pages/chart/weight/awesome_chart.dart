@@ -1,9 +1,102 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+
+var gradientBoldLine = LinearGradient(
+  colors: [const Color(0xff5E94FF).withOpacity(0.43), const Color(0xffFF5E65)],
+  // 定义渐变色
+  begin: Alignment.centerLeft,
+  // 渐变起始位置
+  end: Alignment.centerRight, // 渐变结束位置
+);
+var gradientBoldCircle = LinearGradient(
+  colors: [const Color(0xff5E94FF).withOpacity(0.43), const Color(0xffFF5E65)],
+  // 定义渐变色
+  begin: Alignment.topCenter,
+  // 渐变起始位置
+  end: Alignment.bottomCenter, // 渐变结束位置
+);
+var gradientYLine = LinearGradient(
+  colors: [
+    const Color(0xffCA2626).withOpacity(0),
+    const Color(0xffCA2626),
+    const Color(0xffCA2626).withOpacity(0)
+  ], // 定义渐变色
+  begin: Alignment.topCenter, // 渐变起始位置
+  end: Alignment.bottomCenter,
+);
+
+class AwesomeChartView extends StatefulWidget {
+  final List<List<int>> dataList;
+  final double width;
+  final double height;
+  int type;
+  List<int> shakeLevel = <int>[];
+  int controlDot;
+  int level1;
+
+  int level2;
+
+  AwesomeChartView({
+    super.key,
+    required this.dataList,
+    required this.width,
+    required this.height,
+    this.controlDot = 5,
+    this.type = 0,
+    this.level1 = 0,
+    this.level2 = 10,
+  });
+
+  @override
+  State<AwesomeChartView> createState() => _AwesomeChartViewState();
+}
+
+class _AwesomeChartViewState extends State<AwesomeChartView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<int> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+
+    _animation = IntTween(begin: widget.level1, end: widget.level2)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return CustomPaint(
+          size: Size(widget.width, widget.height),
+          painter: AwesomeChart(
+              controllerDot: _animation.value,
+              lineList: widget.dataList,
+              type: widget.type,
+              panColor: MyColors.themeTextColor),
+        );
+      },
+    );
+  }
+}
 
 class AwesomeChart extends CustomPainter {
   int controllerDot;
@@ -11,47 +104,56 @@ class AwesomeChart extends CustomPainter {
   Color shakeShapeColor;
   Paint shakeBoldLinePaint = Paint();
   Paint shakeShapeLinePaint = Paint();
-  Paint xLinePaint = Paint();
+  Paint shakeBoldCirclePaint = Paint();
+  Paint shakeShapeCirclePaint = Paint();
   Paint yLinePaint = Paint();
-  Paint chuckPanPaint = Paint();
   double strokeWidth;
   Color panColor;
-  final List<int> dataList;
-
+  int type = 0;
+  final List<List<int>> lineList;
   int totalTime = 0;
+  var textHeight = 0;
 
   AwesomeChart({
     required this.controllerDot,
-    required this.dataList,
+    required this.lineList,
     required this.panColor,
+    this.type = 0,
     this.shakeBoldColor = Colors.blueAccent,
     this.shakeShapeColor = Colors.pinkAccent,
     this.strokeWidth = 6.0,
   }) {
-    xLinePaint
-      ..isAntiAlias = true
-      ..color = Colors.white
-      ..strokeWidth = 0.3;
     yLinePaint
       ..isAntiAlias = true
-      ..color = Colors.white
-      ..strokeWidth = 0.3;
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.w;
     shakeBoldLinePaint
       ..isAntiAlias = true
-      ..color = shakeBoldColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
     shakeShapeLinePaint
       ..isAntiAlias = true
-      ..color = shakeBoldColor.withAlpha(90)
+      ..color = const Color(0xffFF5E65).withOpacity(0.35)
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = strokeWidth;
+    shakeBoldCirclePaint
+      ..isAntiAlias = true
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.w;
+    shakeShapeCirclePaint
+      ..isAntiAlias = true
+      ..color = const Color(0xffFF5E65).withOpacity(0.15)
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
-    chuckPanPaint.isAntiAlias = true;
-    for (int i = 0; i < dataList.length; i++) {
-      totalTime += i * 200;
+    for (int i = 0; i < lineList.length; i++) {
+      totalTime = 0;
+      for (int j = 1; j <= lineList[i].length; j++) {
+        totalTime += 200;
+      }
     }
   }
 
@@ -60,23 +162,112 @@ class AwesomeChart extends CustomPainter {
     if (size.width < size.height) {
       throw "the view has width  < height";
     }
-
     _changeCanvasAis(canvas, size);
     _drawPan(canvas, size);
-    _drawCurve(canvas, size);
+    if (type == 0) {
+      for (int i = 0; i < lineList.length; i++) {
+        _drawCurve(canvas, size, lineList[i]);
+      }
+    } else {
+      for (int i = 0; i < lineList.length; i++) {
+        _drawCircle(canvas, size, lineList[i]);
+      }
+    }
   }
 
-  _drawCurve(Canvas canvas, Size size) {
+  ///关系数据有x轴的变化 与 y轴的变化 ，和圆自身大小无关
+  ///
+  _drawCircle(Canvas canvas, Size size, List<int> list) {
+    //数据压缩
+    var dataList = <int>[];
+    if (list.length > 20) {
+      var chuckSize = list.length ~/ 20;
+
+      var j = 1;
+      for (int i = 0; i < list.length; i++) {
+        if (i / (chuckSize - 1) == j || chuckSize - 1 == 0) {
+          dataList.add(list[i]);
+          j = j + 1;
+        }
+      }
+    } else {
+      dataList.addAll(list);
+    }
+    var cellStrengthY = (size.height - textHeight) / 1024;
+    for (int i = 0; i < dataList.length - 6; i++) {
+      var circleY = cellStrengthY * dataList[i];
+      var diameter = size.width / (dataList.length - 10);
+      var circleX = diameter + diameter * i - diameter / 6;
+      if (circleX <= 0) {
+        continue;
+      } else if (circleX >= size.width) {
+        continue;
+      }
+      if(i % 2 == 0){
+        shakeBoldCirclePaint.shader = gradientBoldCircle.createShader(
+          Rect.fromCenter(
+              center: Offset(circleX, circleY + controllerDot),
+              width: diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+              height: diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2),
+        );
+
+        canvas.drawCircle(
+            Offset(circleX, circleY + controllerDot),
+            diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+            shakeBoldCirclePaint);
+        canvas.drawCircle(
+            Offset(circleX, circleY - controllerDot),
+            diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+            shakeShapeCirclePaint);
+      }else{
+        shakeBoldCirclePaint.shader = gradientBoldCircle.createShader(
+          Rect.fromCenter(
+              center: Offset(circleX, circleY - controllerDot),
+              width: diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+              height: diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2),
+        );
+
+        canvas.drawCircle(
+            Offset(circleX, circleY - controllerDot),
+            diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+            shakeBoldCirclePaint);
+        canvas.drawCircle(
+            Offset(circleX, circleY + controllerDot),
+            diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
+            shakeShapeCirclePaint);
+      }
+
+    }
+  }
+
+  _drawCurve(Canvas canvas, Size size, List<int> list) {
+    var dataList = <int>[];
+    if (list.length > 20) {
+      var chuckSize = list.length ~/ 20;
+      var j = 1;
+      for (int i = 0; i < list.length; i++) {
+        if (i / (chuckSize - 1) == j || chuckSize - 1 == 0) {
+          dataList.add(list[i]);
+          j = j + 1;
+        }
+      }
+    } else {
+      dataList.addAll(list);
+    }
     Path boldPath = Path();
     Path shapePath = Path();
-    var cellStrengthY = size.height / 1024;
-    var cellTimeX = size.width / (dataList.length - 1);
-    var startIndex = 2;
     var endIndex = dataList.length - 2;
-    boldPath.moveTo(cellTimeX * startIndex,
-        cellStrengthY * (dataList[startIndex] - (controllerDot + 5)));
-    shapePath.moveTo(cellTimeX * startIndex,
-        cellStrengthY * (dataList[startIndex] + (controllerDot + 5)));
+    var startIndex = 2;
+    var cellStrengthY = (size.height - textHeight) / 1024;
+    var cellTimeX = size.width / endIndex;
+    boldPath.moveTo(
+        cellTimeX * startIndex,
+        cellStrengthY * (dataList[startIndex] - (controllerDot + 5)) +
+            textHeight);
+    shapePath.moveTo(
+        cellTimeX * startIndex,
+        cellStrengthY * (dataList[startIndex] + (controllerDot + 5)) +
+            textHeight);
     for (int i = startIndex + 1; i < endIndex; i++) {
       double prevX;
       double prevY;
@@ -86,34 +277,38 @@ class AwesomeChart extends CustomPainter {
       double nextY;
       if (i % 2 == 0) {
         prevX = (cellTimeX) * (i - 1);
-        prevY = cellStrengthY * (dataList[i - 1]) + controllerDot;
+        prevY = cellStrengthY * (dataList[i - 1]) + textHeight + controllerDot;
         currentX = (cellTimeX) * i;
-        currentY = cellStrengthY * (dataList[i]) - controllerDot;
+        currentY = cellStrengthY * (dataList[i]) + textHeight - controllerDot;
         nextX = (cellTimeX) * (i + 1);
-        nextY = cellStrengthY * (dataList[i + 1]) + controllerDot;
+        nextY = cellStrengthY * (dataList[i + 1]) + textHeight + controllerDot;
       } else {
         prevX = (cellTimeX) * (i - 1);
-        prevY = cellStrengthY * (dataList[i - 1]) - controllerDot;
+        prevY = cellStrengthY * (dataList[i - 1]) + textHeight - controllerDot;
         currentX = (cellTimeX) * i;
-        currentY = cellStrengthY * (dataList[i]) + controllerDot;
+        currentY = cellStrengthY * (dataList[i]) + textHeight + controllerDot;
         nextX = (cellTimeX) * (i + 1);
-        nextY = cellStrengthY * (dataList[i + 1]) - controllerDot;
+        nextY = cellStrengthY * (dataList[i + 1]) + textHeight - controllerDot;
       }
       if (i == endIndex - 1) {
         if (i % 2 == 0) {
           prevX = (cellTimeX) * (i - 1);
-          prevY = cellStrengthY * (dataList[i - 1]) + controllerDot;
+          prevY =
+              cellStrengthY * (dataList[i - 1]) + textHeight + controllerDot;
           currentX = (cellTimeX) * i;
-          currentY = cellStrengthY * (dataList[i]) - controllerDot;
+          currentY = cellStrengthY * (dataList[i]) + textHeight - controllerDot;
           nextX = (cellTimeX) * (i + 1);
-          nextY = cellStrengthY * (dataList[i + 1]) + controllerDot;
+          nextY =
+              cellStrengthY * (dataList[i + 1]) + textHeight + controllerDot;
         } else {
           prevX = (cellTimeX) * (i - 1);
-          prevY = cellStrengthY * (dataList[i - 1]) - controllerDot;
+          prevY =
+              cellStrengthY * (dataList[i - 1]) + textHeight - controllerDot;
           currentX = (cellTimeX) * i;
-          currentY = cellStrengthY * (dataList[i]) + controllerDot;
+          currentY = cellStrengthY * (dataList[i]) + textHeight + controllerDot;
           nextX = (cellTimeX) * (i + 1);
-          nextY = cellStrengthY * (dataList[i + 1]) - controllerDot;
+          nextY =
+              cellStrengthY * (dataList[i + 1]) + textHeight - controllerDot;
         }
       }
       double controlPoint1X = (prevX + currentX) / 2;
@@ -132,26 +327,30 @@ class AwesomeChart extends CustomPainter {
       double nextY;
       if (i % 2 == 0) {
         prevX = (cellTimeX) * (i - 1);
-        prevY = cellStrengthY * (dataList[i - 1]) - (controllerDot);
+        prevY =
+            cellStrengthY * (dataList[i - 1]) + textHeight - (controllerDot);
         currentX = (cellTimeX) * i;
-        currentY = cellStrengthY * (dataList[i]) + (controllerDot);
+        currentY = cellStrengthY * (dataList[i]) + textHeight + (controllerDot);
         nextX = (cellTimeX) * (i + 1);
-        nextY = cellStrengthY * (dataList[i + 1]) - (controllerDot);
+        nextY =
+            cellStrengthY * (dataList[i + 1]) + textHeight - (controllerDot);
       } else {
         prevX = (cellTimeX) * (i - 1);
-        prevY = cellStrengthY * (dataList[i - 1]) + (controllerDot);
+        prevY =
+            cellStrengthY * (dataList[i - 1]) + textHeight + (controllerDot);
         currentX = (cellTimeX) * i;
-        currentY = cellStrengthY * (dataList[i]) - (controllerDot);
+        currentY = cellStrengthY * (dataList[i]) + textHeight - (controllerDot);
         nextX = (cellTimeX) * (i + 1);
-        nextY = cellStrengthY * (dataList[i + 1]) + (controllerDot);
+        nextY =
+            cellStrengthY * (dataList[i + 1]) + textHeight + (controllerDot);
       }
       if (i == endIndex - 1) {
         prevX = (cellTimeX) * (i - 1);
-        prevY = cellStrengthY * (dataList[i - 1]) - controllerDot;
+        prevY = cellStrengthY * (dataList[i - 1]) + textHeight - controllerDot;
         currentX = (cellTimeX) * i;
-        currentY = cellStrengthY * (dataList[i]) + controllerDot;
+        currentY = cellStrengthY * (dataList[i]) + textHeight + controllerDot;
         nextX = (cellTimeX) * (i + 1);
-        nextY = cellStrengthY * (dataList[i + 1]) - controllerDot;
+        nextY = cellStrengthY * (dataList[i + 1]) + textHeight - controllerDot;
       }
       double controlPoint1X = (prevX + currentX) / 2;
       double controlPoint1Y = (prevY + currentY) / 2;
@@ -161,6 +360,8 @@ class AwesomeChart extends CustomPainter {
           controlPoint2X, controlPoint2Y);
     }
     canvas.drawPath(shapePath, shakeShapeLinePaint);
+    shakeBoldLinePaint.shader =
+        gradientBoldLine.createShader(boldPath.getBounds());
     canvas.drawPath(boldPath, shakeBoldLinePaint);
   }
 
@@ -169,27 +370,9 @@ class AwesomeChart extends CustomPainter {
     canvas.scale(1, -1); // 垂直方向翻转坐标系
   }
 
-  //绘制面板图
   _drawPan(Canvas canvas, Size size) {
-    var chuckHeight = size.height / 3;
-    var chuck = 255 ~/ 3;
-    var chuckTime = totalTime / 3;
-    var endX = size.width;
-    var endY = size.height;
-    var chuckWidth = size.width / 3;
-    for (int i = 0; i < 3; i++) {
-      chuckPanPaint.color = panColor.withAlpha(chuck + chuck * i);
-      canvas.drawRect(
-          Rect.fromLTRB(
-              0, chuckHeight + chuckHeight * i, size.width, chuckHeight * i),
-          chuckPanPaint);
-    }
-    for (int i = 0; i < 2; i++) {
-      canvas.drawLine(Offset(0, chuckHeight + chuckHeight * i),
-          Offset(endX, chuckHeight + chuckHeight * i), yLinePaint);
-      canvas.drawLine(Offset(chuckWidth + chuckWidth * i, 0),
-          Offset(chuckWidth + chuckWidth * i, endY), xLinePaint);
-    }
+    var chuckWidth = size.width / 4;
+    var chuckTime = totalTime / 4;
     for (int i = 0; i < 3; i++) {
       canvas.save();
       canvas.scale(1, -1);
@@ -202,10 +385,18 @@ class AwesomeChart extends CustomPainter {
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
-      double textX = chuckWidth + chuckWidth * i - textPainter.width;
-      double textY = -endY + textPainter.height / 4; // 考虑文字高度
+      double textX = chuckWidth + chuckWidth * i - (textPainter.width / 2);
+      double textY = -textPainter.height;
+      textHeight = max(textHeight, textPainter.height.toInt());
       textPainter.paint(canvas, Offset(textX, textY));
       canvas.restore();
+    }
+    for (int i = 0; i < 3; i++) {
+      var path = Path();
+      path.moveTo(chuckWidth + chuckWidth * i, textHeight.toDouble());
+      path.lineTo(chuckWidth + chuckWidth * i, size.height);
+      yLinePaint.shader = gradientYLine.createShader(path.getBounds());
+      canvas.drawPath(path, yLinePaint);
     }
   }
 
@@ -215,8 +406,6 @@ class AwesomeChart extends CustomPainter {
     var min = millTime ~/ 60;
     return "$min'$seconds''";
   }
-
-  _drawBorder() {}
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {

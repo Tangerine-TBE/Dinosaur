@@ -103,6 +103,10 @@ class ResName {
   static const String messageNotif = 'assets/images/message-notif.png';
   static const String ghost = 'assets/images/ghost.png';
   static const String sideItBarBg = 'assets/images/side_bar_bg.png';
+  static const String start1 = 'assets/images/star(1).png';
+  static const String start2 = 'assets/images/star(2).png';
+  static const String heart = 'assets/images/heart.png';
+  static const String heart1 = 'assets/images/heart(1).png';
 
 
 }
