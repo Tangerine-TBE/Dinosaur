@@ -70,7 +70,7 @@ class HomeController extends BaseController {
     } else if (settings.name == RouteName.petPage) {
       return GetPageRoute(
         settings: settings,
-        page: () => PetPage(),
+        page: () => const PetPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
@@ -81,7 +81,7 @@ class HomeController extends BaseController {
     } else if (settings.name == RouteName.message) {
       return GetPageRoute(
         settings: settings,
-        page: () => MessagePage(),
+        page: () => const MessagePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/char_bean.dart';

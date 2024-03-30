@@ -117,15 +117,15 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
-        GetPage(
-          name: RouteName.chartPage,
-          page: () => const ChartPage(),
-          binding: BindingsBuilder(
-            () {
-              Get.lazyPut(() => ChartController());
-            },
-          ),
-        ),
+        // GetPage(
+        //   name: RouteName.chartPage,
+        //   page: () => const ChartPage(),
+        //   binding: BindingsBuilder(
+        //     () {
+        //       Get.lazyPut(() => ChartController());
+        //     },
+        //   ),
+        // ),
         GetPage(
           name: RouteName.scanPage,
           page: () => const ScanPage(),

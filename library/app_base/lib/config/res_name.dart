@@ -107,6 +107,11 @@ class ResName {
   static const String start2 = 'assets/images/star(2).png';
   static const String heart = 'assets/images/heart.png';
   static const String heart1 = 'assets/images/heart(1).png';
-
+  static const String homeAdd0 = 'assets/images/home_add_0.jpeg';
+  static const String homeAdd1 = 'assets/images/home_add_1.jpeg';
+  static const String homeAdd2 = 'assets/images/home_add_2.jpeg';
+  static const String homeAdd3 = 'assets/images/home_add_3.png';
+  static const String lovely1 = 'assets/images/lovely_1.png';
+  static const String lovely2 = 'assets/images/lovely_2.png';
 
 }
