@@ -6,6 +6,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
+var gradientBoldLineDouble =  LinearGradient(
+  colors: [
+    const Color(0xff5EFFF8),
+    const Color(0xff5E94FF).withOpacity(0.43),
+  ],
+  begin: Alignment.centerLeft,
+  end: Alignment.centerRight,
+);
+
 var gradientBoldLine = LinearGradient(
   colors: [const Color(0xff5E94FF).withOpacity(0.43), const Color(0xffFF5E65)],
   // 定义渐变色
@@ -166,7 +175,7 @@ class AwesomeChart extends CustomPainter {
     _drawPan(canvas, size);
     if (type == 0) {
       for (int i = 0; i < lineList.length; i++) {
-        _drawCurve(canvas, size, lineList[i]);
+        _drawCurve(canvas, size, lineList[i],i);
       }
     } else {
       for (int i = 0; i < lineList.length; i++) {
@@ -179,6 +188,7 @@ class AwesomeChart extends CustomPainter {
   ///
   _drawCircle(Canvas canvas, Size size, List<int> list) {
     //数据压缩
+
     var dataList = <int>[];
     if (list.length > 20) {
       var chuckSize = list.length ~/ 20;
@@ -203,7 +213,7 @@ class AwesomeChart extends CustomPainter {
       } else if (circleX >= size.width) {
         continue;
       }
-      if(i % 2 == 0){
+      if (i % 2 == 0) {
         shakeBoldCirclePaint.shader = gradientBoldCircle.createShader(
           Rect.fromCenter(
               center: Offset(circleX, circleY + controllerDot),
@@ -219,7 +229,7 @@ class AwesomeChart extends CustomPainter {
             Offset(circleX, circleY - controllerDot),
             diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
             shakeShapeCirclePaint);
-      }else{
+      } else {
         shakeBoldCirclePaint.shader = gradientBoldCircle.createShader(
           Rect.fromCenter(
               center: Offset(circleX, circleY - controllerDot),
@@ -236,11 +246,10 @@ class AwesomeChart extends CustomPainter {
             diameter / 2 - shakeBoldCirclePaint.strokeWidth / 2,
             shakeShapeCirclePaint);
       }
-
     }
   }
 
-  _drawCurve(Canvas canvas, Size size, List<int> list) {
+  _drawCurve(Canvas canvas, Size size, List<int> list,int i ) {
     var dataList = <int>[];
     if (list.length > 20) {
       var chuckSize = list.length ~/ 20;
@@ -359,9 +368,15 @@ class AwesomeChart extends CustomPainter {
       shapePath.cubicTo(controlPoint1X, controlPoint1Y, currentX, currentY,
           controlPoint2X, controlPoint2Y);
     }
+    if(i == 0){
+      shakeBoldLinePaint.shader =
+          gradientBoldLine.createShader(boldPath.getBounds());
+    }else{
+      shakeBoldLinePaint.shader =
+          gradientBoldLineDouble.createShader(boldPath.getBounds());
+      shakeShapeLinePaint.color = const Color(0xff5E94FF).withOpacity(0.2);
+    }
     canvas.drawPath(shapePath, shakeShapeLinePaint);
-    shakeBoldLinePaint.shader =
-        gradientBoldLine.createShader(boldPath.getBounds());
     canvas.drawPath(boldPath, shakeBoldLinePaint);
   }
 
