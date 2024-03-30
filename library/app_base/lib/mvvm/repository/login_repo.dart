@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/network/api.dart';
 import 'package:common/common/network/dio_client.dart';
@@ -23,5 +25,9 @@ class LoginRepo extends BaseRepo {
   }
   Future<AResponse<dynamic>> logOut({required LogoutReqBean bean}){
     return requestOnFuture(Api.logoutClient,method: Method.post,params: bean.toJson());
+  }
+  Future<AResponse<dynamic>> authCode({required String phone}){
+    var map = {"mobile":phone};
+    return requestOnFuture(Api.sendAuthCode,method: Method.post,params: map);
   }
 }

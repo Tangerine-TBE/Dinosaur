@@ -1,9 +1,6 @@
 import 'dart:math';
 
 import 'package:app_base/exports.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/double/double_page.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/single/single_page.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/special/special_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/common/common_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/dynamic/dynamic_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/handpick/hand_pick_page.dart';
@@ -13,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:flutter/widgets.dart';
 
 import '../play/weight/curved_indicator.dart';
@@ -67,7 +63,7 @@ class PetPage extends BaseEmptyPage<PetController>
                 dividerHeight: 0,
                 labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
                 overlayColor:
-                const MaterialStatePropertyAll<Color>(Colors.transparent),
+                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '推荐',
@@ -89,10 +85,18 @@ class PetPage extends BaseEmptyPage<PetController>
             child: TabBarView(
               controller: tabController,
               children: [
-                  CommonPage(controller: controller,),
-                DynamicPage(),
-                HandPickPage(),
-                RefreshPage(),
+                CommonPage(
+                  controller: controller,
+                ),
+                DynamicPage(
+                  controller: controller,
+                ),
+                HandPickPage(
+                  controller: controller,
+                ),
+                RefreshPage(
+                  controller: controller,
+                ),
               ],
             ),
           ),
@@ -101,13 +105,8 @@ class PetPage extends BaseEmptyPage<PetController>
     );
   }
 
-
-
-
-
   @override
-  void activate() {
-  }
+  void activate() {}
 
   @override
   BuildContext get context => throw UnimplementedError();
@@ -118,38 +117,29 @@ class PetPage extends BaseEmptyPage<PetController>
   }
 
   @override
-  void deactivate() {
-  }
+  void deactivate() {}
 
   @override
-  void didChangeDependencies() {
-  }
+  void didChangeDependencies() {}
 
   @override
-  void didUpdateWidget(covariant StatefulWidget oldWidget) {
-  }
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {}
 
   @override
-  void dispose() {
-  }
+  void dispose() {}
 
   @override
-  void initState() {
-  }
+  void initState() {}
 
   @override
   bool get mounted => throw UnimplementedError();
 
   @override
-  void reassemble() {
-  }
+  void reassemble() {}
 
   @override
-  void setState(VoidCallback fn) {
-  }
+  void setState(VoidCallback fn) {}
 
   @override
   StatefulWidget get widget => throw UnimplementedError();
 }
-
-

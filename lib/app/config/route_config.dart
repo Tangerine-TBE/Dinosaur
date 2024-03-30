@@ -14,8 +14,6 @@ import 'package:dinosaur/app/src/moudle/test/pages/search/search_page.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/custom/custom_model_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/custom/custom_model_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/model/model_controller.dart';
@@ -103,6 +101,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => LoginController());
+              Get.lazyPut(() => LoginRepo());
             },
           ),
         ),

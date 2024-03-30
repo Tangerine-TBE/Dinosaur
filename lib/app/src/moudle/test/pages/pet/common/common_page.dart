@@ -29,6 +29,7 @@ class CommonPage extends StatelessWidget {
                     height: 106.h,
                     banners: controller.commonManager.listBanners,
                     showIndicator: true,
+                    indicatorBottom: false,
                     borderRadius: 10.w,
                     disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
                     activeColor: const Color(0xffFFFFFF),
@@ -39,6 +40,8 @@ class CommonPage extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: 10.h,),
+                
               ],
             ),
           ),

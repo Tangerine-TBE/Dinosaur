@@ -9,10 +9,12 @@ class PrivacyCheckboxWidget extends StatefulWidget {
     required this.onChanged,
     required this.onTapPrivacy,
     required this.controller,
+    required this.onTapAgreement,
     Key? key,
   }) : super(key: key);
   final Function(bool) onChanged;
   final Function() onTapPrivacy;
+  final Function() onTapAgreement;
   final BaseController controller;
 
   @override
@@ -32,7 +34,6 @@ class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
           child: Checkbox(
             fillColor: MaterialStateProperty.all(MyColors.pageBgColor),
             side: BorderSide(color:MyColors.themeTextColor),
-
             checkColor: MyColors.bgLinearShapeColor1,
             value: checked,
             onChanged: (value) {
@@ -54,12 +55,13 @@ class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
               _getTappableTextSpan(
                 '《小萌宠用户协议》',
                 textColor: MyColors.themeTextColor,
-                onTap: widget.onTapPrivacy,
+                onTap: widget.onTapAgreement,
               ),
               _getTappableTextSpan('、',
               ),
               _getTappableTextSpan('《小萌宠隐私协议》',
                 textColor: MyColors.themeTextColor,
+                onTap: widget.onTapPrivacy,
               ),
             ]),
           ),

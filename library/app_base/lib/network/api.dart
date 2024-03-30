@@ -6,4 +6,8 @@ class Api {
   static const topCenterClient = '/api/v1/meng/topic/list';
   static const topCenterCreate = '/api/v1/meng/topic';
 
+
+  //
+ static const sendAuthCode = '/api/v1/meng/user/mobile/sendAuthCode';
+
 }

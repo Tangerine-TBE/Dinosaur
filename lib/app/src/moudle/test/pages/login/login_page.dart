@@ -19,7 +19,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: kToolbarHeight * 3,
           ),
           Obx(
@@ -94,7 +94,12 @@ class LoginPage extends BaseEmptyPage<LoginController> {
             onChanged: (checked) {
               controller.isChecked = checked;
             },
-            onTapPrivacy: (){},
+            onTapPrivacy: (){
+              controller.onTapPrivacy();
+            },
+            onTapAgreement: (){
+              controller.onTapAgreement();
+            },
             // onTapPrivacy: _showProtocolDialog,
             controller: controller,
           ),
