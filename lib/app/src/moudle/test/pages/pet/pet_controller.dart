@@ -1,9 +1,13 @@
 
 import 'package:app_base/config/res_name.dart';
+import 'package:app_base/config/route_name.dart';
 import 'package:app_base/mvvm/base_controller.dart';
 import 'package:banner_carousel/banner_carousel.dart';
+import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
+import 'package:get/get.dart';
 
 class PetController extends BaseController{
   late CommonManager commonManager;
@@ -18,6 +22,9 @@ class PetController extends BaseController{
     refreshManager = RefreshManager(controller: this);
     commonManager.init();
     super.onInit();
+  }
+  naviToDetails(Recommon item){
+    navigateTo(RouteName.details,args: item);
   }
 
   onPageChanged(int index) {
@@ -39,10 +46,13 @@ class CommonManager {
   final dataList =<Recommon>[];
   CommonManager({required this.controller});
   init() {
-    if (!isInit) {
+    if (!isInit)  {
       getList();
       isInit = true;
     }
+  }
+  showTipDialog(){
+    Get.dialog(TipsDialogWidget());
   }
   getList() async {
     controller.showLoading(userInteraction: false);
@@ -50,6 +60,7 @@ class CommonManager {
     dataList.addAll(RecommonRsp.mock().recommon);
     controller.update([listId]);
     controller.dismiss();
+
   }
   List<BannerModel> get listBanners {
     return [

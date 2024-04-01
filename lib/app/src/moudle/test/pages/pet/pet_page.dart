@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/common/common_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/dynamic/dynamic_page.dart';
@@ -101,6 +99,22 @@ class PetPage extends BaseEmptyPage<PetController>
             ),
           ),
         ),
+        Positioned(
+            bottom: 12.w,
+            right: 10.w,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              shape: const CircleBorder(),
+              onPressed: () {
+                // controller.commonManager.showTipDialog();
+               controller.navigateTo(RouteName.push);
+              },
+              child: Image.asset(
+                ResName.add70,
+                width: 54.w,
+                height: 54.w,
+              ),
+            ))
       ],
     );
   }

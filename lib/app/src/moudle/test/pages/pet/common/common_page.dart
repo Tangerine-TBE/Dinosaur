@@ -40,8 +40,9 @@ class CommonPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10.h,),
-                
+                SizedBox(
+                  height: 10.h,
+                ),
               ],
             ),
           ),
@@ -49,7 +50,7 @@ class CommonPage extends StatelessWidget {
             builder: (controller) {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildItem(
+                  (context, index) => _buildItem(
                       index, controller.commonManager.dataList[index]),
                   childCount: controller.commonManager.dataList.length,
                 ),
@@ -66,7 +67,7 @@ class CommonPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.only(top: 32.h,left: 18.w,right: 18.w),
+      padding: EdgeInsets.only(top: 32.h, left: 18.w, right: 18.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -140,7 +141,10 @@ class CommonPage extends StatelessWidget {
               ),
             ],
           ),
-          _buildContent(index, item),
+          InkWell(
+            onTap: () { controller.naviToDetails(item);},
+            child: _buildContent(index, item),
+          ),
           SizedBox(
             height: 20.w,
           ),

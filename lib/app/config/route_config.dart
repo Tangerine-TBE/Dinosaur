@@ -1,12 +1,17 @@
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_controller.dart';
@@ -40,18 +45,40 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
-    GetPage(
-      name: RouteName.search,
-      page: () => const SearchPage(),
-      binding: BindingsBuilder(
+        GetPage(
+          name: RouteName.push,
+          page: () => PushMsgPage(),
+          binding: BindingsBuilder(
             () {
-          Get.lazyPut(
-                () => SearchFriController(),
-          );
+              Get.lazyPut(
+                () => PushMsgController(),
+              );
+            },
+          ),
+        ),
 
-        },
-      ),
-    ),
+        GetPage(
+          name: RouteName.details,
+          page: () => const DetailsPage(),
+          binding: BindingsBuilder(
+            () {
+              Recommon recommon = Get.arguments;
+
+              Get.lazyPut(() => DetailsController(item: recommon));
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.search,
+          page: () => const SearchPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => SearchFriController(),
+              );
+            },
+          ),
+        ),
         GetPage(
           name: RouteName.register,
           page: () => const RegisterPage(),

@@ -71,6 +71,68 @@ class MyDialogWidget extends StatelessWidget {
   }
 }
 
+class TipsDialogWidget extends StatelessWidget {
+  const TipsDialogWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: EdgeInsets.zero,
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      children: [
+        Container(
+          height: 475.h,
+          width: 277.w,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 13.w,
+                right: 13.w,
+                top: 40.h,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xffFFFFFE),
+                        Color(0xffFF5E65),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.w),
+                      topRight: Radius.circular(12.w),
+                    ),
+                  ),
+                  width: 251.w,
+                  height: 77.h,
+                ),
+              ),
+              Positioned(
+                top: 80.h,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [
+                      Color(0xffFAE5EA),
+                      Color(0xffFFFFFE),
+                    ],
+                  )),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
 
 class BaseDialogWidget extends StatelessWidget {
   const BaseDialogWidget({
@@ -97,8 +159,8 @@ class BaseDialogWidget extends StatelessWidget {
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          padding:  EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
-          decoration:  BoxDecoration(
+          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
+          decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(20.r),
@@ -108,15 +170,15 @@ class BaseDialogWidget extends StatelessWidget {
             children: [
               Text(
                 title,
-                style:  TextStyle(
+                style: TextStyle(
                       fontSize: 18.sp,
                       color: Colors.pink,
                     ) ??
                     titleStyle,
               ),
-               SizedBox(height: 8.h),
+              SizedBox(height: 8.h),
               info ?? const SizedBox(),
-               SizedBox(height: 8.h),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   leftButton != null
@@ -124,7 +186,7 @@ class BaseDialogWidget extends StatelessWidget {
                           child: leftButton ?? const SizedBox(),
                         )
                       : const SizedBox(),
-                   SizedBox(width: 8.w),
+                  SizedBox(width: 8.w),
                   rightButton != null
                       ? Expanded(
                           child: rightButton ?? const SizedBox(),

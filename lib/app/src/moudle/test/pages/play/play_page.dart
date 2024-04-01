@@ -61,7 +61,6 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                       indicatorSize: TabBarIndicatorSize.label,
                       splashFactory: NoSplash.splashFactory,
                       dividerHeight: 0,
-                      padding: EdgeInsets.only(left: 20.w),
                       labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
                       overlayColor: const MaterialStatePropertyAll<Color>(
                           Colors.transparent),

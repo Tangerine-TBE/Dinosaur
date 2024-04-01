@@ -11,7 +11,8 @@ import 'package:dinosaur/app/src/app.dart';
 import '../sideIt/widget/charts_painter.dart';
 import 'model_controller.dart';
 
-class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerProviderStateMixin{
+class ModelPage extends BaseEmptyPage<ModelController>
+    implements SingleTickerProviderStateMixin {
   const ModelPage({super.key});
 
   @override
@@ -31,41 +32,46 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
       appBar: AppBar(
         backgroundColor: MyColors.pageBgColor,
         automaticallyImplyLeading: false,
-        leading: BackButton(
-          color: Colors.white,
-        ),
-        title: TabBar(
-          controller: tabController,
-            dividerHeight: 0,
-            tabAlignment: TabAlignment.center,
-            isScrollable: true,
-            indicatorPadding: EdgeInsets.only(left: 22.w, right: 22.w),
-            indicator: UnderlineTabIndicator(
-              borderRadius: BorderRadius.all(
-                Radius.circular(2.w),
+        centerTitle: true,
+        title: Stack(
+          children: [
+            TabBar(
+              controller: tabController,
+              dividerHeight: 0,
+              tabAlignment: TabAlignment.center,
+              isScrollable: true,
+              indicatorPadding: EdgeInsets.only(left: 22.w, right: 22.w),
+              indicator: UnderlineTabIndicator(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(2.w),
+                ),
+                borderSide: BorderSide(
+                  width: 4.h,
+                  color: Color(0xffFF5E65),
+                ),
               ),
-              borderSide: BorderSide(
-                width: 4.h,
-                color: Color(0xffFF5E65),
-              ),
+              padding: EdgeInsets.zero,
+              unselectedLabelStyle:
+                  TextStyle(color: Colors.white, fontSize: 18.sp),
+              splashFactory: NoSplash.splashFactory,
+              overlayColor:
+                  const MaterialStatePropertyAll<Color>(Colors.transparent),
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: MyColors.scanIndicatorTextSelectedColor,
+                  fontSize: 18.sp),
+              tabs: [
+                Tab(
+                  text: '经典模式',
+                ),
+                Tab(
+                  text: '我的模式',
+                )
+              ],
             ),
-            unselectedLabelStyle:
-                TextStyle(color: Colors.white, fontSize: 18.sp),
-            splashFactory: NoSplash.splashFactory,
-            overlayColor:
-                const MaterialStatePropertyAll<Color>(Colors.transparent),
-            labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: MyColors.scanIndicatorTextSelectedColor,
-                fontSize: 18.sp),
-            tabs: [
-              Tab(
-                text: '经典模式',
-              ),
-              Tab(
-                text: '我的模式',
-              )
-            ]),
+            const BackButton(),
+          ],
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -460,23 +466,28 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
       ),
     );
   }
+
   _buildContentMine01() {
-    return GetBuilder<ModelController>(builder: (controller) {
-      return GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        mainAxisSpacing: 16.h,
-        crossAxisSpacing: 20.w,
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
-        childAspectRatio: 2,
-        children: List.generate(
-          controller.mRecordBean.dataList.length,
-              (index) => _buildCustomModelItem01(
-              controller.mRecordBean.dataList[index].recordName, index),
-        ),
-      );
-    },id: controller.customPageId,);
+    return GetBuilder<ModelController>(
+      builder: (controller) {
+        return GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          mainAxisSpacing: 16.h,
+          crossAxisSpacing: 20.w,
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
+          childAspectRatio: 2,
+          children: List.generate(
+            controller.mRecordBean.dataList.length,
+            (index) => _buildCustomModelItem01(
+                controller.mRecordBean.dataList[index].recordName, index),
+          ),
+        );
+      },
+      id: controller.customPageId,
+    );
   }
+
   _buildContentClassic() {
     var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return SingleChildScrollView(
@@ -550,8 +561,6 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
     );
   }
 
-
-
   _buildContentMine() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -593,7 +602,7 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: !isSelect?Color(0xffFFD5D7):Color(0xffFF5E65),
+          color: !isSelect ? Color(0xffFFD5D7) : Color(0xffFF5E65),
           borderRadius: BorderRadius.circular(10.w),
         ),
         child: Row(
@@ -604,7 +613,7 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
               ResName.path25,
               width: 69.w,
               height: 42.h,
-              color: isSelect?Colors.white:Color(0xffFF5E65),
+              color: isSelect ? Colors.white : Color(0xffFF5E65),
             ),
             SizedBox(
               width: 11.w,
@@ -614,7 +623,7 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
                 name,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: isSelect?Colors.white:Color(0xffFF5E65),
+                  color: isSelect ? Colors.white : Color(0xffFF5E65),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -774,8 +783,7 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
   }
 
   @override
-  void activate() {
-  }
+  void activate() {}
 
   @override
   BuildContext get context => throw UnimplementedError();
@@ -786,35 +794,28 @@ class ModelPage extends BaseEmptyPage<ModelController> implements SingleTickerPr
   }
 
   @override
-  void deactivate() {
-  }
+  void deactivate() {}
 
   @override
-  void didChangeDependencies() {
-  }
+  void didChangeDependencies() {}
 
   @override
-  void didUpdateWidget(covariant StatefulWidget oldWidget) {
-  }
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {}
 
   @override
-  void dispose() {
-  }
+  void dispose() {}
 
   @override
-  void initState() {
-  }
+  void initState() {}
 
   @override
   bool get mounted => throw UnimplementedError();
 
   @override
-  void reassemble() {
-  }
+  void reassemble() {}
 
   @override
-  void setState(VoidCallback fn) {
-  }
+  void setState(VoidCallback fn) {}
 
   @override
   StatefulWidget get widget => throw UnimplementedError();
