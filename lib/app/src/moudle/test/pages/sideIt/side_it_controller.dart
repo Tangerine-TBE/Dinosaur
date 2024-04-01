@@ -218,7 +218,7 @@ class SideItController extends BaseBleController {
     //对扫描结果进行一次判断
     for (var element in result) {
       var resultDevice = element.device;
-      if (resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
+      if (Runtime.lastConnectDevice.isNotEmpty&&resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
         await Future.delayed(
           const Duration(seconds: 2),

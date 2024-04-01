@@ -64,7 +64,7 @@ class ScanController extends BaseBleController {
   onScanResultChanged(List<ScanResult> result) {
     for (var element in result) {
       var resultDevice = element.device;
-      if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {
+      if (Runtime.lastConnectDevice.isNotEmpty&&resultDevice.platformName.startsWith(Constants.bleSearchName)) {
         bool shouldAdd = true;
         for (var i in devices) {
           if (resultDevice.platformName == i.device.platformName) {

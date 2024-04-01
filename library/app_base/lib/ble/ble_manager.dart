@@ -94,7 +94,6 @@ class BleManager {
     }
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
           (event) {
-        logE('有结果');
         eventBus?.fire(ScanResultChangedEvent(event));
       },
     );
