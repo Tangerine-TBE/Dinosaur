@@ -2,6 +2,7 @@ import 'package:app_base/config/route_name.dart';
 import 'package:app_base/config/translations/msg_cn.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_controller.dart';
+import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -34,11 +35,17 @@ class LoginController extends BaseController {
       showError('请阅读并勾选用户协议与隐私政策');
       return;
     }
-    final response = await _repo.authCode(phone: phone);
+    final AuthCReqBean authCReqBean = AuthCReqBean(mobile: phone);
+    final response = await _repo.authCode(authCReqBean: authCReqBean);
     if(response.isSuccess){
-      navigateTo(RouteName.passWorld, args: phone);
+      if(response.data?.data == null){
+        showError('验证信息请求失败!');
+      }else{
+        final AuthCRspBean authCRspBean = response.data!.data!;
+        Map<String ,dynamic > args= {'phone':phone,'code':authCRspBean.expiresIn};
+        navigateTo(RouteName.passWorld, args: args);
+      }
     }
-
   }
   onTapPrivacy(){
     _showPrivacyDialog();

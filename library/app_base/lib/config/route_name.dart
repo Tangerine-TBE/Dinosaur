@@ -24,6 +24,7 @@ class RouteName {
   static const String search = '/search';
   static const String details ='/details';
   static const String push ='/push';
+  static const String imageView = '/imageView';
 
   //shake
   static const String mainPage = '/main';

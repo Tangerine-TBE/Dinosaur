@@ -51,7 +51,7 @@ class CommonPage extends StatelessWidget {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => _buildItem(
-                      index, controller.commonManager.dataList[index]),
+                      index, controller.commonManager.dataList[index], context),
                   childCount: controller.commonManager.dataList.length,
                 ),
               );
@@ -63,7 +63,7 @@ class CommonPage extends StatelessWidget {
     );
   }
 
-  _buildItem(int index, Recommon item) {
+  _buildItem(int index, Recommon item, BuildContext context) {
     return Container(
       width: double.infinity,
       color: Colors.white,
@@ -141,10 +141,7 @@ class CommonPage extends StatelessWidget {
               ),
             ],
           ),
-          InkWell(
-            onTap: () { controller.naviToDetails(item);},
-            child: _buildContent(index, item),
-          ),
+          _buildContent(index, item, context),
           SizedBox(
             height: 20.w,
           ),
@@ -171,38 +168,50 @@ class CommonPage extends StatelessWidget {
               SizedBox(
                 width: 122.w,
               ),
-              Image.asset(
-                ResName.lovely1,
-                width: 22.w,
-                height: 22.w,
-              ),
-              Text(
-                item.likeNUm,
-                style: TextStyle(
-                  color: Color(0xff8F9098),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10.sp,
+              InkWell(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Image.asset(
+                      ResName.lovely1,
+                      width: 22.w,
+                      height: 22.w,
+                    ),
+                    Text(
+                      item.likeNUm,
+                      style: TextStyle(
+                        color: Color(0xff8F9098),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.sp,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(
-                      Icons.message,
-                      size: 22.w,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Text(
-                      '评论',
-                      style: TextStyle(
-                          color: Color(0xff8F9098),
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    controller.naviToDetails(item);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.message,
+                        size: 22.w,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        '评论',
+                        style: TextStyle(
+                            color: Color(0xff8F9098),
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -212,7 +221,7 @@ class CommonPage extends StatelessWidget {
     );
   }
 
-  _buildContent(int index, Recommon item) {
+  _buildContent(int index, Recommon item, BuildContext context) {
     // 区分内容
     return Row(
       children: [
@@ -229,13 +238,16 @@ class CommonPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(7.w),
-              child: Image.network(
-                item.avatar,
-                width: 202.w,
-                height: 202.w,
-                fit: BoxFit.cover,
+            InkWell(
+              onTap: () {
+                controller.naviToImageView(item.avatar);
+              },
+              child: controller.imagePreView(
+                index < 9
+                    ? List.generate(index + 1, (index) => item.avatar)
+                    : <String>[item.avatar],
+                context,
+                250.w,
               ),
             ),
           ],

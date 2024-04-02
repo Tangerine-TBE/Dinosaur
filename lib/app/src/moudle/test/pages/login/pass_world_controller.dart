@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PassWorldController extends BaseController {
-  final String phone;
   final String application = 'smartgenie';
   final String organization = 'miaoai';
   final String type = 'login';
    String passWorld ='';
-   String verifyCode= '';
+  final int verifyCode;
+  final String phone ;
   final _repo = Get.find<LoginRepo>();
 
 
-  PassWorldController({required this.phone});
+  PassWorldController({required this.verifyCode,required this.phone});
 
   late TextEditingController passWorldController;
 
@@ -29,12 +29,22 @@ class PassWorldController extends BaseController {
     passWorld = value;
   }
   onConfirmClicked() async {
-    if(this.passWorld.isNotEmpty && this.passWorld == verifyCode){
-      showLoading(userInteraction: false);
-      await Future.delayed(const Duration(seconds: 2));
-      dismiss();
+    if(passWorld.isNotEmpty && verifyCode.toString() == passWorld){
+      String passWorld = passWorldController.value.text;
+      LoginReqBean loginReqBean = LoginReqBean(
+        mobile: phone,
+        authCode: passWorld,
+      );
+      final response = await _repo.login(loginReqBean: loginReqBean);
+      if (response.isSuccess) {
+        LoginRspBean? responseData = response.data?.data;
+        if (responseData != null) {
+          SaveKey.userInfo.save(responseData.toJson());
+          offAllNavigateTo(RouteName.homePage);
+        }
+      }
       offAllNavigateTo(RouteName.homePage);
-    }else if(this.passWorld == '8888'){
+    }else if(passWorld == '8888'){
       showLoading(userInteraction: false);
       await Future.delayed(const Duration(seconds: 2));
       dismiss();
@@ -43,20 +53,6 @@ class PassWorldController extends BaseController {
       showError('验证码错误！');
     }
     return;
-    String passWorld = passWorldController.value.text;
-    UserReqBean userReqBean = UserReqBean(
-        password: passWorld,
-        application: application,
-        organization: organization,
-        userName: phone,
-        type: type);
-    final response = await _repo.login(userReqBean: userReqBean);
-    if (response.isSuccess) {
-      UserRspBean? responseData = response.data?.data;
-      if (responseData != null) {
-        SaveKey.userInfo.save(responseData.toJson());
-        offAllNavigateTo(RouteName.homePage);
-      }
-    }
+
   }
 }

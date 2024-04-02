@@ -2,10 +2,13 @@ import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
+import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
@@ -16,6 +19,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_page.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
@@ -46,8 +50,18 @@ class RouteConfig extends ARoute {
   @override
   List<GetPage> getPages() => [
         GetPage(
+          name: RouteName.imageView,
+          page: () => const ImageViewPage(),
+          binding: BindingsBuilder(
+              (){
+                final String url = Get.arguments;
+                Get.lazyPut(() => ImageViewController(url: url));
+              }
+          ),
+        ),
+        GetPage(
           name: RouteName.push,
-          page: () => PushMsgPage(),
+          page: () => const PushMsgPage(),
           binding: BindingsBuilder(
             () {
               Get.lazyPut(
@@ -99,9 +113,10 @@ class RouteConfig extends ARoute {
           page: () => const PassWorldPage(),
           binding: BindingsBuilder(
             () {
-              String phone = Get.arguments;
+              Map<String, dynamic> maps = Get.arguments;
               Get.lazyPut(
-                () => PassWorldController(phone: phone),
+                () => PassWorldController(
+                    phone: maps['phone'], verifyCode: maps['code']),
               );
               Get.lazyPut(
                 () => LoginRepo(),

@@ -13,7 +13,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
   const HomePage({super.key});
 
   @override
-  bool get resizeToAvoidBottomInset => true;
+  bool get resizeToAvoidBottomInset => false;
 
   @override
   Widget buildContent(BuildContext context) {
