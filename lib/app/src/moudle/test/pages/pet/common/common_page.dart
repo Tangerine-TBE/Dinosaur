@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+
 class CommonPage extends StatelessWidget {
   final PetController controller;
 
@@ -64,6 +65,7 @@ class CommonPage extends StatelessWidget {
   }
 
   _buildItem(int index, Recommon item, BuildContext context) {
+    logE('index : $index');
     return Container(
       width: double.infinity,
       color: Colors.white,
@@ -238,17 +240,13 @@ class CommonPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            InkWell(
-              onTap: () {
-                controller.naviToImageView(item.avatar);
-              },
-              child: controller.imagePreView(
-                index < 9
-                    ? List.generate(index + 1, (index) => item.avatar)
-                    : <String>[item.avatar],
-                context,
-                250.w,
-              ),
+            controller.imagePreView(
+              index < 9
+                  ? List.generate(index + 1, (index) => item.avatar)
+                  : <String>[item.avatar],
+              context,
+              250.w,
+              index
             ),
           ],
         ),

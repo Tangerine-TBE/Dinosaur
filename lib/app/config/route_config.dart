@@ -50,16 +50,6 @@ class RouteConfig extends ARoute {
   @override
   List<GetPage> getPages() => [
         GetPage(
-          name: RouteName.imageView,
-          page: () => const ImageViewPage(),
-          binding: BindingsBuilder(
-              (){
-                final String url = Get.arguments;
-                Get.lazyPut(() => ImageViewController(url: url));
-              }
-          ),
-        ),
-        GetPage(
           name: RouteName.push,
           page: () => const PushMsgPage(),
           binding: BindingsBuilder(

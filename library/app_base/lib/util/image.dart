@@ -11,6 +11,5 @@ Future<ui.Image> loadImageWithUrl(String url, BuildContext context) async {
       completer.complete(info.image);
     }),
   );
-  await precacheImage(image.image, context);
   return completer.future;
 }

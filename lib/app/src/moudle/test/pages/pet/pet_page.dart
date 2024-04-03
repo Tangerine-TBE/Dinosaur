@@ -107,7 +107,7 @@ class PetPage extends BaseEmptyPage<PetController>
               shape: const CircleBorder(),
               onPressed: () {
                 // controller.commonManager.showTipDialog();
-               controller.navigateTo(RouteName.push);
+                controller.navigateTo(RouteName.push);
               },
               child: Image.asset(
                 ResName.add70,

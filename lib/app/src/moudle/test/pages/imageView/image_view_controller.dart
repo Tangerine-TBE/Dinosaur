@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 class ImageViewController extends BaseController{
   final String url;
-  ImageViewController({required this.url});
+  final String tag;
+  ImageViewController({required this.url,required this.tag});
   @override
   void onInit() {
     super.onInit();

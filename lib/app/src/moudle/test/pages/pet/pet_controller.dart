@@ -7,10 +7,13 @@ import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/util/image.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/image_preview_single.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:get/get.dart';
+
+import '../home/home_controller.dart';
 
 class PetController extends BaseController {
   late CommonManager commonManager;
@@ -48,81 +51,22 @@ class PetController extends BaseController {
     }
   }
 
-  imagePreView(List<String> images, BuildContext context, double size) {
+  imagePreView(List<String> images, BuildContext context, double size,int parentIndex) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
       ///只有一张的情况 大小限制为202.w的正方形
       if (images.length == 1) {
-        return FutureBuilder<ui.Image>(
-          future: loadImageWithUrl(images[0], context),
-          builder: (BuildContext context, AsyncSnapshot<ui.Image> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              ///图片完成后检举一下图片
-              var image = snapshot.data;
-              if (image != null) {
-                var imageWidth = image.width; //图片的实际宽度
-                var imageHeight = image.height; //图片的实际高度
-                ///比对一下图片的比例
-                if (imageWidth ~/ imageHeight == 1) {
-                  ///正方形的图片 直接返回我们需要的实际大小的容器并包裹
-                  return SizedBox(
-                    width: size.toDouble(),
-                    height: size.toDouble(),
-                    child: RawImage(
-                      image: image,
-                      fit: BoxFit.fill,
-                    ),
-                  );
-                } else if (imageWidth ~/ imageHeight < 1) {
-                  /// 长方形图片，宽比高多类型，所以BoxFit。最好就是以宽优先
-                  return SizedBox(
-                    width: size.toDouble(),
-                    child: RawImage(
-                      image: image,
-                      fit: BoxFit.fill,
-                    ),
-                  );
-                } else if (imageWidth ~/ imageHeight > 1) {
-                  /// 长方形图片，高比宽多类型，所以BoxFit。最好就是以高优先
-                  return SizedBox(
-                    height: size.toDouble(),
-                    child: RawImage(
-                      image: image,
-                      fit: BoxFit.fill,
-                    ),
-                  );
-                } else {
-                  return SizedBox(
-                    height: size.toDouble(),
-                    child: RawImage(
-                      image: image,
-                      fit: BoxFit.fill,
-                    ),
-                  );
-                }
-              } else {
-                return Container(
-                  width: size.toDouble(),
-                  height: size.toDouble(),
-                  color: Colors.purple,
-                );
-              }
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container(
-                width: size.toDouble(),
-                height: size.toDouble(),
-                color: Colors.red,
-              );
-            } else {
-              return Container(
-                width: size.toDouble(),
-                height: size.toDouble(),
-                color: Colors.purple,
-              );
-            }
+        var tag = '$parentIndex${0.toString()}';
+        return InkWell(
+          onTap: () {
+            final homeController = Get.find<HomeController>();
+            homeController.toImageView(images[0],tag);
           },
+          child: Hero(
+            tag: tag,
+            child:ImagePreViewSingle(url: images[0],size: size,),
+          ),
         );
       } else {
         ///3x3摆放
@@ -149,75 +93,26 @@ class PetController extends BaseController {
         return SizedBox(
           width: reSizeWidth,
           height: reSizeHeight,
-          child: IgnorePointer(
-            child: GridView.builder(
-              gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                mainAxisSpacing: 2.w,
-                crossAxisSpacing: 2.w,
-              ),
-              itemBuilder: ((context, index) {
-                return FutureBuilder(
-                  future: loadImageWithUrl(images[index], context),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
-                      var image = snapshot.data;
-                      if (image != null) {
-                        var imageWidth = image.width; //图片的实际宽度
-                        var imageHeight = image.height; //图片的实际高度
-                        ///比对一下图片的比例
-                        if (imageWidth ~/ imageHeight == 1) {
-                          ///正方形的图片 直接返回我们需要的实际大小的容器并包裹
-                          return SizedBox(
-                            child: RawImage(
-                              image: image,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        } else if (imageWidth ~/ imageHeight < 1) {
-                          /// 长方形图片，宽比高多类型，所以BoxFit。最好就是以宽优先
-                          return SizedBox(
-                            child: RawImage(
-                              image: image,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        } else if (imageWidth ~/ imageHeight > 1) {
-                          /// 长方形图片，高比宽多类型，所以BoxFit。最好就是以高优先
-                          return SizedBox(
-                            child: RawImage(
-                              image: image,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        } else {
-                          return SizedBox(
-                            child: RawImage(
-                              image: image,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        }
-                      } else {
-                        return Container(
-                          color: Colors.purple,
-                        );
-                      }
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return Container(
-                        child: Icon(Icons.downloading),
-                      );
-                    } else {
-                      return Container(
-                        child: Icon(Icons.picture_in_picture_alt_outlined),
-                      );
-                    }
-                  },
-                );
-              }),itemCount: images.length,
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              mainAxisSpacing: 2.w,
+              crossAxisSpacing: 2.w,
             ),
+            itemBuilder: ((context, index) {
+              var tag = '$parentIndex${index.toString()}';
+              return InkWell(
+                onTap: () {
+                  final homeController = Get.find<HomeController>();
+                  homeController.toImageView(images[index],tag);
+                },
+                child: Hero(
+                  tag: tag,
+                  child: ImagePreViewSingle(url: images[index],size: size,),
+                ),
+              );
+            }),itemCount: images.length,
           ),
         );
         // return FutureBuilder<ui.Image>(

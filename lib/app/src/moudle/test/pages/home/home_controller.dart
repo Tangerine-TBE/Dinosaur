@@ -1,7 +1,10 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_page.dart';
@@ -31,7 +34,14 @@ class HomeController extends BaseController {
     //       type: ''),
     // );
   }
-
+  toImageView(String url,String tag){
+    Get.lazyPut(
+          () => ImageViewController(url: url,tag: tag,),tag: tag
+    );
+    final Route route =
+    MaterialPageRoute(builder: (context) =>  ImageViewPage(tagString: tag,));
+    Navigator.of(Get.context!).push(route);
+  }
   Route? onGenerateRoute(RouteSettings settings) {
     if (settings.name == RouteName.playPage) {
       return GetPageRoute(
@@ -39,7 +49,7 @@ class HomeController extends BaseController {
         page: () => const PlayPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {
+              () {
             Get.lazyPut(() => PlayController());
             Get.lazyPut(() => PlayRepo());
           },
@@ -51,7 +61,7 @@ class HomeController extends BaseController {
         page: () => const ChartPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {
+              () {
             Get.lazyPut(() => ChartController());
           },
         ),
@@ -62,7 +72,7 @@ class HomeController extends BaseController {
         page: () => const MinePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {
+              () {
             Get.lazyPut(() => MineController());
           },
         ),
@@ -73,7 +83,7 @@ class HomeController extends BaseController {
         page: () => const PetPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {
+              () {
             Get.lazyPut(() => PetController());
           },
         ),
@@ -84,7 +94,7 @@ class HomeController extends BaseController {
         page: () => const MessagePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-          () {
+              () {
             Get.lazyPut(() => MessageController());
           },
         ),
