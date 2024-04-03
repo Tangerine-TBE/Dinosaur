@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/config/user.dart';
 import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
@@ -13,6 +14,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/sideIt/obxBean/double_bean.da
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/count_down_confirm_dialog.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/create_custom_model_dialog.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/timer_controller.dart';
+import 'package:app_base/mvvm/repository/model_repo.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class SideItController extends BaseBleController {
   final slideItModel = 0.obs;
@@ -27,6 +30,7 @@ class SideItController extends BaseBleController {
   final play = false.obs;
   bool isCustom = false;
   List<int> recordList = <int>[];
+  final _repo = Get.find<ModelRepo>();
 
   Future<List<ui.Image>> loadImage(List<String> imagePath) async {
     var images = <ui.Image>[];
@@ -48,21 +52,23 @@ class SideItController extends BaseBleController {
 
   _initTimer() {
     listen = true;
-    loopTimer =
-        Timer.periodic(const Duration(milliseconds: 200), (timer) async {
-      if (sliderValue.value > 50) {
-        await manager.wwriteChar?.write(
-          bleMsg.generateStrengthData(
-              streamFirstValue: sliderValue.value,
-              streamSecondValue: sliderValue.value),
-        );
-      } else {
-        manager.wwriteChar?.write(
-          bleMsg.generateStopData(),
-        );
-      }
-      process.value = DoubleBean.create(obx: sliderValue.value.toDouble());
-    });
+    loopTimer = Timer.periodic(
+      const Duration(milliseconds: 200),
+      (timer) {
+        if (sliderValue.value > 50) {
+           manager.wwriteChar?.write(
+            bleMsg.generateStrengthData(
+                streamFirstValue: sliderValue.value,
+                streamSecondValue: sliderValue.value),
+          );
+        } else {
+          manager.wwriteChar?.write(
+            bleMsg.generateStopData(),
+          );
+        }
+        process.value = DoubleBean.create(obx: sliderValue.value.toDouble());
+      },
+    );
   }
 
   _releaseTimer() {
@@ -76,25 +82,27 @@ class SideItController extends BaseBleController {
 
   onCountDownFinish() {
     slideItModel.value = 0;
+    sliderValue.value = 0;
     recordTimer?.cancel();
     Get.dialog(
       CreateCustomModelDialog(
-        onCancelCallBack: () {
-          sliderValue.value = 0;
-        },
-        onConfirmCallBack: (value) {
+        onCancelCallBack: () {},
+        onConfirmCallBack: (value) async {
           //创建订单
-          sliderValue.value = 0;
-          dynamic data = SaveKey.dataList.read;
-          var dataList = DataList(recordList: recordList, recordName: value);
-          RecordBean recordBean;
-          if (data.runtimeType.toString() == 'Null') {
-            recordBean = RecordBean(dataList: []);
-          } else {
-            recordBean = RecordBean.fromJson(data);
+          final response = await _repo.sendModel(
+            recordReq: RecordReq(
+                kcal: 12.9,
+                name: value,
+                description: '',
+                attribute: '',
+                type: 'Single',
+                actions: Data(record: recordList),
+                userId: User.loginRspBean!.userId,
+                tags: '标签1'),
+          );
+          if (response.isSuccess) {
+            EasyLoading.showSuccess('上传成功');
           }
-          recordBean.dataList.add(dataList);
-          SaveKey.dataList.save(recordBean.toJson());
         },
       ),
     );
@@ -218,7 +226,8 @@ class SideItController extends BaseBleController {
     //对扫描结果进行一次判断
     for (var element in result) {
       var resultDevice = element.device;
-      if (Runtime.lastConnectDevice.isNotEmpty&&resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
+      if (Runtime.lastConnectDevice.isNotEmpty &&
+          resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
         await Future.delayed(
           const Duration(seconds: 2),

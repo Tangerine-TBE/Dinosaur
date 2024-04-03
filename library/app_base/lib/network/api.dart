@@ -9,5 +9,7 @@ class Api {
 
   //
  static const sendAuthCode = '/api/v1/meng/user/mobile/sendAuthCode';
-
+ //
+static const sendRecord = '/api/v1/meng/mode';
+static const getModel = '/api/v1/meng/mode/list';
 }

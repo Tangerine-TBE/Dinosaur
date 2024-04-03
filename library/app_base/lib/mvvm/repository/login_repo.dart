@@ -23,6 +23,6 @@ class LoginRepo extends BaseRepo {
   Future<AResponse<LoginAuthResponse>> authCode(
       {required AuthCReqBean authCReqBean}) {
     return requestOnFuture(Api.sendAuthCode,
-        method: Method.post, params: authCReqBean.toJson());
+        method: Method.post, params: authCReqBean.toJson(),format: (data) =>LoginAuthResponse.fromJson(data) );
   }
 }

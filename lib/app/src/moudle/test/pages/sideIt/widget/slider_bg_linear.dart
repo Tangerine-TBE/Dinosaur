@@ -63,7 +63,6 @@ class CustomShape extends SliderTrackShape with BaseSliderTrackShape {
       case TextDirection.rtl:
         leftTrackPaint = inactivePaint;
     }
-    logE('x${thumbCenter.dx}---y${thumbCenter.dy}');
     final Rect trackRect = getPreferredRect(
       parentBox: parentBox,
       offset: offset,

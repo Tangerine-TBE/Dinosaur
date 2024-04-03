@@ -171,7 +171,6 @@ class _SmartRefreshListViewState<T> extends State<SmartLoadMoreListView<T>>
       controller: _refreshController,
       child: _dataList.isNotEmpty
           ? LayoutBuilder(builder: (context,constraints){
-            logE('高度${constraints.maxHeight}');
             return ListView.separated(
               padding: widget.padding,
               itemCount: _dataList.length,

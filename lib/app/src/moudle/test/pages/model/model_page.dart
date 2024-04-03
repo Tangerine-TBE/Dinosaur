@@ -191,226 +191,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
     );
   }
 
-  _buildContent01() {
-    return Scaffold(
-      backgroundColor: MyColors.pageBgColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        scrolledUnderElevation: 0,
-        backgroundColor: MyColors.pageBgColor,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 280.h,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(ResName.imgWdmsBg), fit: BoxFit.fill),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 33,
-                      child: Obx(
-                        () => Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 48.w, vertical: 90.h),
-                          child: RepaintBoundary(
-                            child: CustomPaint(
-                              size: Size(280.w, 70.h),
-                              painter: ChartsPainter(
-                                  process: controller.process.value.obx,
-                                  processMax: 1023),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 60.h,
-                      left: 26.w,
-                      child: Obx(() => GestureDetector(
-                            onTap: () {
-                              controller.changePage(0);
-                            },
-                            child: Container(
-                              width: 136.w,
-                              height: 50.h,
-                              decoration: controller.currentModelPage.value == 0
-                                  ? BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(
-                                          color: Colors.pink, width: 2.w),
-                                      borderRadius: BorderRadius.circular(25.w),
-                                    )
-                                  : BoxDecoration(
-                                      color: Colors.pink,
-                                      borderRadius: BorderRadius.circular(25.w),
-                                    ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '经典模式',
-                                style: controller.currentModelPage.value == 0
-                                    ? const TextStyle(
-                                        color: Colors.pink,
-                                      )
-                                    : const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                              ),
-                            ),
-                          )),
-                    ),
-                    Positioned(
-                      bottom: 60.h,
-                      right: 26.w,
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: () {
-                            controller.changePage(1);
-                          },
-                          child: Container(
-                            width: 136.w,
-                            height: 50.h,
-                            decoration: controller.currentModelPage.value == 1
-                                ? BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.pink, width: 2.w),
-                                    borderRadius: BorderRadius.circular(25.w),
-                                  )
-                                : BoxDecoration(
-                                    color: Colors.pink,
-                                    borderRadius: BorderRadius.circular(25.w),
-                                  ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '我的模式',
-                              style: controller.currentModelPage.value == 1
-                                  ? const TextStyle(
-                                      color: Colors.pink,
-                                    )
-                                  : const TextStyle(
-                                      color: Colors.white,
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: -1,
-                right: 0,
-                left: 0,
-                child: Container(
-                  height: 44.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(42.h),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: PageView(
-              // controller: controller.pageController,
-              children: [
-                _buildContentClassic(),
-                _buildContentMine(),
-              ],
-            ),
-          ),
-          Container(
-            height: 150.h,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(ResName.imgBgBfq), fit: BoxFit.fill),
-            ),
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.only(bottom: 26.h),
-            child: SizedBox(
-              width: double.infinity,
-              height: 75.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset(
-                    ResName.iconShake1,
-                    width: 16.w,
-                    height: 16.w,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller.onLastClick();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(20.w),
-                      child: Image.asset(
-                        ResName.iconLeft,
-                        width: 16.w,
-                        height: 16.w,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.onPlayClick();
-                    },
-                    child: Obx(
-                      () => controller.playModel.value
-                          ? Image.asset(
-                              ResName.iconZt,
-                              width: 75.w,
-                              height: 75.w,
-                            )
-                          : Image.asset(
-                              ResName.iconBf,
-                              width: 75.w,
-                              height: 75.w,
-                            ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller.onNextClick();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(20.w),
-                      child: Image.asset(
-                        ResName.iconRight,
-                        width: 16.w,
-                        height: 16.w,
-                      ),
-                    ),
-                  ),
-                  Image.asset(
-                    ResName.iconXhbf,
-                    width: 16.w,
-                    height: 16.w,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   _buildContentClassic01() {
     var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return Container(
@@ -470,121 +250,27 @@ class ModelPage extends BaseEmptyPage<ModelController>
   _buildContentMine01() {
     return GetBuilder<ModelController>(
       builder: (controller) {
-        return GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          mainAxisSpacing: 16.h,
-          crossAxisSpacing: 20.w,
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
-          childAspectRatio: 2,
-          children: List.generate(
-            controller.mRecordBean.dataList.length,
-            (index) => _buildCustomModelItem01(
-                controller.mRecordBean.dataList[index].recordName, index),
-          ),
-        );
+        return controller.modelList.isEmpty
+            ? const SizedBox(
+                child: NoDataWidget(
+                  title: '暂无记录',
+                ),
+              )
+            : GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                mainAxisSpacing: 16.h,
+                crossAxisSpacing: 20.w,
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
+                childAspectRatio: 2,
+                children: List.generate(
+                  controller.modelList.length,
+                  (index) => _buildCustomModelItem01(
+                      controller.modelList[index].name, index),
+                ),
+              );
       },
       id: controller.customPageId,
-    );
-  }
-
-  _buildContentClassic() {
-    var mainAxisAlignment = MainAxisAlignment.spaceBetween;
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
-      child: Obx(
-        () => Column(
-          children: [
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(0),
-                _buildTemplateModelItem(1),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(2),
-                _buildTemplateModelItem(3),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(4),
-                _buildTemplateModelItem(5),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(6),
-                _buildTemplateModelItem(7),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(8),
-                _buildTemplateModelItem(9),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(10),
-                _buildTemplateModelItem(11),
-              ],
-            ),
-            SizedBox(
-              height: 13.h,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _buildContentMine() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: controller.mRecordBean.dataList.length > 0
-              ? Obx(
-                  () => Column(
-                    children: List.generate(
-                      controller.mRecordBean.dataList.length,
-                      (index) => _buildCustomModelItem(
-                          controller.mRecordBean.dataList[index].recordName,
-                          index),
-                    ),
-                  ),
-                )
-              : Container(
-                  width: constraints.maxWidth,
-                  height: constraints.maxHeight,
-                  child: NoDataWidget(
-                    title: '暂无记录',
-                  ),
-                ),
-        );
-      },
     );
   }
 
@@ -628,44 +314,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _buildCustomModelItem(String name, int index) {
-    var isSelect = false;
-    if (controller.currentCustomModel.value == index) {
-      isSelect = true;
-    } else {
-      isSelect = false;
-    }
-    return GestureDetector(
-      onTap: () {
-        controller.onCustomModelClick(index);
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 10.h),
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        height: 60.w,
-        width: double.infinity,
-        child: Row(
-          children: [
-            Image.asset(
-              !isSelect ? ResName.iconBtMr : ResName.iconBtBf,
-              width: 60.w,
-              height: 60.w,
-            ),
-            SizedBox(
-              width: 20.w,
-            ),
-            Expanded(
-              child: Text(
-                name,
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
               ),
             ),
           ],

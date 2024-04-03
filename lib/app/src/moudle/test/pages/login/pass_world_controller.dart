@@ -1,36 +1,65 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 
 class PassWorldController extends BaseController {
   final String application = 'smartgenie';
   final String organization = 'miaoai';
   final String type = 'login';
-   String passWorld ='';
-  final int verifyCode;
-  final String phone ;
+  String passWorld = '';
+  int expiresIn;
+  final String phone;
+
   final _repo = Get.find<LoginRepo>();
+  final countDown = true.obs;
+  final countDownText = '获取验证码'.obs;
+  Timer? countDownTimer;
 
-
-  PassWorldController({required this.verifyCode,required this.phone});
-
-  late TextEditingController passWorldController;
+  PassWorldController({required this.expiresIn, required this.phone});
 
   @override
   onInit() {
     super.onInit();
-    passWorldController = TextEditingController();
+    releaseTimer();
   }
-  onChangePassWorld(String value){
-    passWorld = value;
+
+  releaseTimer() {
+    var i = expiresIn;
+    countDown.value = true;
+    countDownTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        i--;
+        if (i < 1) {
+          timer.cancel();
+          countDown.value = false;
+          countDownText.value = '获取验证码';
+        } else {
+          countDownText.value = '获取验证码($i)';
+        }
+      },
+    );
   }
-  onConfirmClicked() async {
-    if(passWorld.isNotEmpty && verifyCode.toString() == passWorld){
-      String passWorld = passWorldController.value.text;
+
+  onReCallAuth() async {
+    final response =
+        await _repo.authCode(authCReqBean: AuthCReqBean(mobile: phone));
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        final AuthCRspBean authCRspBean = response.data!.data!;
+        expiresIn = authCRspBean.expiresIn;
+        releaseTimer();
+      }else{
+        showError('请求出错啦！');
+      }
+    }
+  }
+
+  onCompleted(String value) async {
+    if (value.isNotEmpty) {
+      String passWorld = value;
       LoginReqBean loginReqBean = LoginReqBean(
         mobile: phone,
         authCode: passWorld,
@@ -43,8 +72,7 @@ class PassWorldController extends BaseController {
           offAllNavigateTo(RouteName.homePage);
         }
       }
-      offAllNavigateTo(RouteName.homePage);
-    }else if(passWorld == '8888'){
+    } else if (passWorld == '8888') {
       showLoading(userInteraction: false);
       await Future.delayed(const Duration(seconds: 2));
       dismiss();
@@ -52,7 +80,13 @@ class PassWorldController extends BaseController {
     }else{
       showError('验证码错误！');
     }
-    return;
+  }
 
+  @override
+  void onClose() {
+    super.onClose();
+    if (countDownTimer != null) {
+      countDownTimer?.cancel();
+    }
   }
 }

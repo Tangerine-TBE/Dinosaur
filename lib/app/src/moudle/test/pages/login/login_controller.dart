@@ -42,7 +42,7 @@ class LoginController extends BaseController {
         showError('验证信息请求失败!');
       }else{
         final AuthCRspBean authCRspBean = response.data!.data!;
-        Map<String ,dynamic > args= {'phone':phone,'code':authCRspBean.expiresIn};
+        Map<String ,dynamic > args= {'phone':phone,'expiresIn':authCRspBean.expiresIn};
         navigateTo(RouteName.passWorld, args: args);
       }
     }

@@ -4,6 +4,7 @@ import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
+import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
@@ -19,7 +20,6 @@ import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_page.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
@@ -33,20 +33,16 @@ import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_controller.d
 import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_page.dart';
-
+import 'package:app_base/config/user.dart';
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
-
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.homePage;
-
-  // String initialRoute = RouteName.modelPage;
-
+  String initialRoute =User.loginRspBean == null?
+      RouteName.login:  RouteName.homePage;
   @override
-  String? loginRoute;
-
+  String? loginRoute = RouteName.login;
   @override
   List<GetPage> getPages() => [
         GetPage(
@@ -106,7 +102,7 @@ class RouteConfig extends ARoute {
               Map<String, dynamic> maps = Get.arguments;
               Get.lazyPut(
                 () => PassWorldController(
-                    phone: maps['phone'], verifyCode: maps['code']),
+                    phone: maps['phone'], expiresIn: maps['expiresIn']),
               );
               Get.lazyPut(
                 () => LoginRepo(),
@@ -172,6 +168,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => SideItController());
+              Get.lazyPut(() => ModelRepo());
             },
           ),
         ),
@@ -192,6 +189,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => ModelController());
+              Get.lazyPut(() => ModelRepo());
             },
           ),
         ),

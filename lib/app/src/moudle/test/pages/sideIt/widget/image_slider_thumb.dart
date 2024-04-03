@@ -40,7 +40,6 @@ class ImageSliderThumb extends SliderComponentShape{
         canvas.translate(-center.dx, -center.dy); // Move the canvas back to its original position
 
         canvas.drawImageRect(image, sourceRect, destinationRect, paint);
-        logE('${ destinationRect.height/2}-----${ destinationRect.width/2/2}');
         canvas.restore();
   }
 

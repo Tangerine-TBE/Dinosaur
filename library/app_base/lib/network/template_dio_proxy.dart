@@ -2,8 +2,9 @@ import 'package:common/base/mvvm/repo/dio_proxy.dart';
 import 'package:dio/src/interceptor.dart';
 
 import '../config/build_config.dart';
+import 'interceptor/sign_interceptor.dart';
 
-class TemplateDioProxy extends DioProxy{
+class TemplateDioProxy extends DioProxy {
   static TemplateDioProxy? _instance;
 
   factory TemplateDioProxy.get() => _getInstance();
@@ -36,7 +37,6 @@ class TemplateDioProxy extends DioProxy{
 
   @override
   List<Interceptor> loadInterceptors() => [
-
-  ];
-
+        SignInterceptor(),
+      ];
 }

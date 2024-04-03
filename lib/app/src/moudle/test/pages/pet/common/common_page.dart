@@ -65,7 +65,6 @@ class CommonPage extends StatelessWidget {
   }
 
   _buildItem(int index, Recommon item, BuildContext context) {
-    logE('index : $index');
     return Container(
       width: double.infinity,
       color: Colors.white,

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:pinput/pinput.dart';
+import 'package:get/get.dart';
 
 class PassWorldPage extends BaseEmptyPage<PassWorldController> {
   const PassWorldPage({super.key});
@@ -23,8 +24,12 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
           fontSize: 20.sp,
           color: MyColors.textBlackColor,
           fontWeight: FontWeight.w600),
-      decoration:  BoxDecoration(
-        border: Border(bottom: BorderSide(color: MyColors.textGreyColor,),),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: MyColors.textGreyColor,
+          ),
+        ),
       ),
     );
     return SafeArea(
@@ -63,25 +68,41 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
               child: Pinput(
                 mainAxisAlignment: MainAxisAlignment.center,
                 length: 4,
-                defaultPinTheme: defaultPinTheme,
-                onChanged: (value){
-                  controller.onChangePassWorld(value);
+                onCompleted: (value) {
+                  controller.onCompleted(value);
                 },
+                defaultPinTheme: defaultPinTheme,
               ),
             ),
             SizedBox(
               height: 50.h,
             ),
-            MaterialButton(
-              onPressed: () {
-                controller.onConfirmClicked();
-              },
-              padding: EdgeInsets.only(top:14.h,bottom: 14.h,left: 50.h,right: 50.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.w),),
-              color: MyColors.bgLinearShapeColor1,
-              child: Text('确定',style: TextStyle(color:Colors.white),textAlign: TextAlign.center,),
-            )
-
+            Obx(
+              () => ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: controller.countDown.value
+                      ? MaterialStateProperty.all(MyColors.textGreyColor)
+                      : MaterialStateProperty.all(MyColors.bgLinearShapeColor1),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                  ),
+                ),
+                onPressed: controller.countDown.value?null:(){
+                  controller.onReCallAuth();
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 160.w,
+                  height: 50.h,
+                  child: Text(
+                    controller.countDownText.value,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

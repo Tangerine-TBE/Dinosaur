@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:math';
 import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/config/user.dart';
 import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
+import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -12,39 +14,40 @@ import 'package:get/get.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import '../sideIt/obxBean/double_bean.dart';
 
-class ModelController extends BaseBleController   {
+class ModelController extends BaseBleController {
   final customPageId = 1;
+
   // late PageController pageController; //主要用于监听页面变化的
   final currentModelPage = 0.obs; //主要用于与PageController联合作用，监听本次页面
   final Rx<DoubleBean> process = Rx(DoubleBean.create(obx: 0.0));
   final currentClassicModel = 13.obs; //当前在经典模式下选择的模式， 13 = 无
   final currentCustomModel = (-1).obs; //当前在自定义模式下选择的模式 0 = 默认第一个
   final playModel = false.obs; //主要用于改变播放键的形态
-  late RecordBean mRecordBean; //主要用于存储自定义模式的信息
   late BleMSg mBleMsg; //主要用于蓝牙指令的生成
   Timer? processLoopClassicTimer; //主要用于与process作用改变chartPainter的形态
   Timer? processLoopCustomTimer; //与上相同
   final BleManager bleManager = BleManager();
   late TabController tabController;
+  final _repo = Get.find<ModelRepo>();
+  List<ModeList> modelList = [];
+
   @override
   void onInit() {
     super.onInit();
-    // pageController = PageController();
-    // pageController.addListener(() {
-    //   if (pageController.page! <= 0.1) {
-    //     currentModelPage.value = 0;
-    //   } else if (pageController.page! >= 0.9) {
-    //     currentModelPage.value = 1;
-    //   }
-    // });
+    _fetchModel();
+  }
 
-    dynamic data = SaveKey.dataList.read;
-    if (data.runtimeType.toString() == 'Null') {
-      mRecordBean = RecordBean(dataList: []);
-    } else {
-      mRecordBean = RecordBean.fromJson(data);
+  _fetchModel() async {
+    final response = await _repo.getModel(
+      recordReq: ModelReq(
+          orderBy: 'createTime desc', userId: User.loginRspBean!.userId),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        modelList.addAll(response.data!.data!.modeList);
+        update([customPageId]);
+      }
     }
-    mBleMsg = BleMSg();
   }
 
   changePage(int index) {
@@ -124,7 +127,7 @@ class ModelController extends BaseBleController   {
         } else {
           if (bleManager.checkRuntimeBleEnable()) {
             // if (!playModel.value) {
-           await bleManager.wwriteChar
+            await bleManager.wwriteChar
                 ?.write(BleMSg().generateModelData(currentClassicModel.value));
             processLoopClassicTimer = Timer.periodic(
               const Duration(milliseconds: 200),
@@ -142,11 +145,10 @@ class ModelController extends BaseBleController   {
         showToast('请选择模式!');
       }
     } else {
-      if (currentCustomModel < mRecordBean.dataList.length &&
-          currentCustomModel >= 0) {
+      if (currentCustomModel < modelList.length && currentCustomModel >= 0) {
         if (playModel.value) {
           playModel.value = false;
-        await  bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+          await bleManager.wwriteChar?.write(mBleMsg.generateStopData());
         } else {
           if (bleManager.checkRuntimeBleEnable()) {
             bleManager.wwriteChar?.write(mBleMsg.generateStopData());
@@ -163,13 +165,16 @@ class ModelController extends BaseBleController   {
                 const Duration(milliseconds: 200),
                 (timer) {
                   if (i >=
-                      mRecordBean.dataList[currentCustomModel.value].recordList
+                      modelList[currentCustomModel.value]
+                          .actions
+                          .record
                           .length) {
                     i = 0;
                   }
                   process.value = DoubleBean.create(
-                      obx: mRecordBean
-                          .dataList[currentCustomModel.value].recordList[i]
+                      obx: modelList[currentCustomModel.value]
+                          .actions
+                          .record[i]
                           .toDouble());
                   i++;
                 },
@@ -180,13 +185,16 @@ class ModelController extends BaseBleController   {
                   const Duration(milliseconds: 200),
                   (timer) {
                     if (i >=
-                        mRecordBean.dataList[currentCustomModel.value]
-                            .recordList.length) {
+                        modelList[currentCustomModel.value]
+                            .actions
+                            .record
+                            .length) {
                       i = 0;
                     }
                     process.value = DoubleBean.create(
-                        obx: mRecordBean
-                            .dataList[currentCustomModel.value].recordList[i]
+                        obx: modelList[currentCustomModel.value]
+                            .actions
+                            .record[i]
                             .toDouble());
 
                     i++;
@@ -198,7 +206,6 @@ class ModelController extends BaseBleController   {
             showToast('请连接蓝牙设备!');
           }
         }
-
       } else {
         showToast('请选择模式!');
       }
@@ -213,7 +220,10 @@ class ModelController extends BaseBleController   {
       showToast('已经是最前的模式了');
       return;
     }
-    if (index >= mRecordBean.dataList.length) {
+    if (index >=    modelList[currentCustomModel.value]
+        .actions
+        .record
+        .length) {
       showToast('已经是最后的模式了');
       return;
     }
@@ -235,13 +245,16 @@ class ModelController extends BaseBleController   {
           const Duration(milliseconds: 200),
           (timer) {
             if (i >=
-                mRecordBean
-                    .dataList[currentCustomModel.value].recordList.length) {
+                modelList[currentCustomModel.value]
+                    .actions
+                    .record
+                    .length) {
               i = 0;
             }
             process.value = DoubleBean.create(
-                obx: mRecordBean
-                    .dataList[currentCustomModel.value].recordList[i]
+                obx:  modelList[currentCustomModel.value]
+                    .actions
+                    .record[i]
                     .toDouble());
 
             logE('当前数据为：${process.value.obx}');
@@ -254,13 +267,16 @@ class ModelController extends BaseBleController   {
             const Duration(milliseconds: 200),
             (timer) {
               if (i >=
-                  mRecordBean
-                      .dataList[currentCustomModel.value].recordList.length) {
+                  modelList[currentCustomModel.value]
+                      .actions
+                      .record
+                      .length) {
                 i = 0;
               }
               process.value = DoubleBean.create(
-                  obx: mRecordBean
-                      .dataList[currentCustomModel.value].recordList[i]
+                  obx:  modelList[currentCustomModel.value]
+                      .actions
+                      .record[i]
                       .toDouble());
               i++;
             },
@@ -289,11 +305,11 @@ class ModelController extends BaseBleController   {
     }
   }
 
-
   Future<void> sendCustomTemplate(int index) async {
-    for (var i in mRecordBean.dataList[index].recordList) {
+    for (var i in modelList[index]
+        .actions.record) {
       logE('正在写入：$i');
-     await bleManager.wwriteChar?.write(
+      await bleManager.wwriteChar?.write(
         mBleMsg.generateStrengthSilentData(
           streamFirstValue: i,
           streamSecondValue: i,
@@ -303,8 +319,8 @@ class ModelController extends BaseBleController   {
   }
 
   @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {
-  }
+  void onAdapterStateChanged(BluetoothAdapterState state) {}
+
   @override
   void onDeviceConnected(BluetoothDevice device) async {
     dismiss();
@@ -322,26 +338,24 @@ class ModelController extends BaseBleController   {
     }
   }
 
-
   @override
   void onDeviceDisconnect() async {
     await Future.delayed(const Duration(seconds: 2));
-    if(Runtime.lastConnectDevice.isNotEmpty){
+    if (Runtime.lastConnectDevice.isNotEmpty) {
       manager.startScan(timeout: 20);
     }
   }
 
-
   @override
-  void onDeviceUnKnownError() {
-  }
+  void onDeviceUnKnownError() {}
 
   @override
   void onScanResultChanged(List<ScanResult> result) async {
     logE('扫描有结果了');
     for (var element in result) {
       var resultDevice = element.device;
-      if (Runtime.lastConnectDevice.isNotEmpty&&resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
+      if (Runtime.lastConnectDevice.isNotEmpty &&
+          resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
         await Future.delayed(
           const Duration(seconds: 2),

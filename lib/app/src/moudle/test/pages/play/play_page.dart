@@ -1,6 +1,7 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/res/my_colors.dart';
+import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -319,11 +320,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.h),
-              child: Image.network(
-                bean.icon,
-                width: 64.h,
-                height: 64.h,
-              ),
+              child: loadImage(bean.icon, 64.h, 64.h),
             ),
             Expanded(
               child: Container(
