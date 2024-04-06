@@ -96,7 +96,7 @@ class SideItController extends BaseBleController {
                 description: '',
                 attribute: '',
                 type: 'Single',
-                actions: Data(record: recordList),
+                actions: Data(record: recordList).toJsonString(),
                 userId: User.loginRspBean!.userId,
                 tags: '标签1'),
           );

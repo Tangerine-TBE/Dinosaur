@@ -1,6 +1,8 @@
 /// YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
 library;
 
+import 'dart:convert';
+
 class RecordReq {
     RecordReq({
         required this.kcal,
@@ -18,7 +20,7 @@ class RecordReq {
     String description;
     String attribute;
     String type;
-    Data actions;
+    String actions;
     String userId;
     String tags;
 
@@ -28,7 +30,7 @@ class RecordReq {
         "description": description,
         "attribute": attribute,
         "type": type,
-        "actions": actions.toJson(),
+        "actions": actions,
         "userId": userId,
         "tags": tags,
     };
@@ -45,6 +47,7 @@ class Data {
     Map<dynamic, dynamic> toJson() => {
         "record": List<dynamic>.from(record.map((x) => x)),
     };
+    String toJsonString()=>json.encode(toJson());
 }
 
 class ModelReq{
@@ -75,10 +78,6 @@ class ModelRsp {
     factory ModelRsp.fromJson(Map<dynamic, dynamic> json) => ModelRsp(
         modeList: List<ModeList>.from(json["modeList"].map((x) => ModeList.fromJson(x))),
     );
-
-    Map<dynamic, dynamic> toJson() => {
-        "modeList": List<dynamic>.from(modeList.map((x) => x.toJson())),
-    };
 }
 
 class ModeList {
@@ -125,22 +124,6 @@ class ModeList {
         tenantId: json["tenantId"]??'',
         id: json["id"]??'',
         attribute: json["attribute"]??'',
-        actions: Data.fromJson(json["actions"]),
+        actions: Data.fromJson(jsonDecode(json["actions"]??'')),
     );
-
-    Map<dynamic, dynamic> toJson() => {
-        "creatorId": creatorId,
-        "description": description,
-        "type": type,
-        "userId": userId,
-        "tags": tags,
-        "kcal": kcal,
-        "createTime": createTime,
-        "appId": appId,
-        "name": name,
-        "tenantId": tenantId,
-        "id": id,
-        "attribute": attribute,
-        "actions": actions.toJson(),
-    };
 }
