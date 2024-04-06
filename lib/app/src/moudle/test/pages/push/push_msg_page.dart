@@ -64,15 +64,20 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
               SizedBox(
                 width: 40.w,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.picture_in_picture_alt),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  const Text('图片'),
-                ],
+              InkWell(
+                onTap: () {
+                  controller.onPicSelectClicked();
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.picture_in_picture_alt),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    const Text('图片'),
+                  ],
+                ),
               ),
               SizedBox(
                 width: 20.w,
@@ -95,64 +100,126 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
         children: [
           SizedBox(
             height: 40.h,
-            child: CustomScrollView(
-              scrollDirection: Axis.horizontal,
-              slivers: [
-                SliverToBoxAdapter(child:
-                InkWell(
-                  onTap: () {
-                    controller.buildBottomSheet(context);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(left: 30.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10.w),
-                    ),
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.purple,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.add),
+            child: Obx(
+              () => CustomScrollView(
+                scrollDirection: Axis.horizontal,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: InkWell(
+                      onTap: () {
+                        controller.buildBottomSheet(context);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 30.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(10.w),
                         ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        const Text('选择一个话题'),
-                      ],
+                        child: controller.selectedTag.value.isEmpty
+                            ? Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 6.h),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.purple,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(Icons.add),
+                                    ),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    const Text('选择一个话题'),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w, vertical: 6.h),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.black),
+                                      child: Icon(
+                                        Icons.tag,
+                                        color: Colors.white,
+                                        size: 14.w,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Text(controller.selectedTag.value),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        controller.selectedTag.value = '';
+                                      },
+                                      child: Icon(
+                                        Icons.cancel_outlined,
+                                        size: 22.w,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
                     ),
                   ),
-                ),
-                ),
-                GetBuilder<PushMsgController>(
-                  builder: (controller) {
-                    return SliverList.builder(
-                      itemBuilder: (context, index) {
-                        return _buildOptionItem(
-                            controller.tagList[index], index, context);
+                  SliverVisibility(
+                    visible: controller.selectedTag.value.isEmpty,
+                    sliver: GetBuilder<PushMsgController>(
+                      builder: (controller) {
+                        return SliverList.builder(
+                          itemBuilder: (context, index) {
+                            return _buildOptionItem(
+                                controller.tagList[index], index, context);
+                          },
+                          itemCount: controller.tagList.length,
+                        );
                       },
-                      itemCount: controller.tagList.length,
-                    );
-                  },
-                  id: controller.tagListId,
-                )
-              ],
+                      id: controller.tagListId,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: TextField(
-                maxLines: null,
-                cursorColor: MyColors.themeTextColor,
-                decoration: const InputDecoration(
-                    border: InputBorder.none, hintText: '这一刻的想法...'),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          maxLines: null,
+                          cursorColor: MyColors.themeTextColor,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none, hintText: '这一刻的想法...'),
+                        ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Obx(
+                          () => controller.imagePreView(
+                              controller.selectedImages, context, 250.w, 0),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -162,30 +229,35 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
   }
 
   _buildOptionItem(TopicList item, int index, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 10.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(10.w),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-      child: Row(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Colors.black),
-            child: Icon(
-              Icons.tag,
-              color: Colors.white,
-              size: 14.w,
+    return InkWell(
+      onTap: () {
+        controller.onBottomSheetItemClicked(item);
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 10.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(10.w),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+        child: Row(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.black),
+              child: Icon(
+                Icons.tag,
+                color: Colors.white,
+                size: 14.w,
+              ),
             ),
-          ),
-          SizedBox(
-            width: 10.w,
-          ),
-          Text(item.title),
-        ],
+            SizedBox(
+              width: 10.w,
+            ),
+            Text(item.title),
+          ],
+        ),
       ),
     );
   }

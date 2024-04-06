@@ -5,54 +5,40 @@ import 'package:app_base/util/image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ImagePreViewSingle extends StatefulWidget {
+class ImagePreView extends StatefulWidget {
   final String url;
   final double size;
-  ui.Image? image;
-
-  ImagePreViewSingle({super.key, required this.url, required this.size});
-
+  const ImagePreView({super.key, required this.url, required this.size});
   @override
-  State<ImagePreViewSingle> createState() {
+  State<ImagePreView> createState() {
     return _ImagePreViewSingleState();
   }
 }
 
-class _ImagePreViewSingleState extends State<ImagePreViewSingle>
+class _ImagePreViewSingleState extends State<ImagePreView>
     with AutomaticKeepAliveClientMixin {
+  ui.Image? image;
+
   @override
   void initState() {
     super.initState();
-    if (widget.image == null) {
-      if (widget.url.startsWith('http')) {
-        loadImageWithUrl(widget.url, context).then(
-          (value) {
-            setState(
-              () {
-                widget.image = value;
-              },
-            );
+
+    loadImageWithPath(widget.url, context).then(
+      (value) {
+        setState(
+          () {
+            image = value;
           },
         );
-      } else {
-        loadImageWithPath(widget.url, context).then(
-          (value) {
-            setState(
-              () {
-                widget.image = value;
-              },
-            );
-          },
-        );
-      }
-    }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.image != null) {
-      var imageWidth = widget.image!.width; //图片的实际宽度
-      var imageHeight = widget.image!.height; //图片的实际高度
+    if (image != null) {
+      var imageWidth = image!.width; //图片的实际宽度
+      var imageHeight = image!.height; //图片的实际高度
       ///比对一下图片的比例
       if (imageWidth ~/ imageHeight == 1) {
         ///正方形的图片 直接返回我们需要的实际大小的容器并包裹
@@ -60,7 +46,7 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
           width: widget.size,
           height: widget.size,
           child: RawImage(
-            image: widget.image,
+            image: image,
             fit: BoxFit.fill,
           ),
         );
@@ -69,7 +55,7 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         return SizedBox(
           width: widget.size,
           child: RawImage(
-            image: widget.image,
+            image: image,
             fit: BoxFit.fill,
           ),
         );
@@ -78,7 +64,7 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         return SizedBox(
           height: widget.size,
           child: RawImage(
-            image: widget.image,
+            image: image,
             fit: BoxFit.fill,
           ),
         );
@@ -86,7 +72,7 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         return SizedBox(
           height: widget.size,
           child: RawImage(
-            image: widget.image,
+            image: image,
             fit: BoxFit.fill,
           ),
         );
