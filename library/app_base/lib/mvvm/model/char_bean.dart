@@ -65,7 +65,7 @@ class SingleList {
 
   factory SingleList.mock() => SingleList(
       kcal: '17.6Kcal',
-      data: List.generate(30, (index) => Random().nextInt(101) + 500),
+      data: List.generate(30, (index) => Random().nextInt(1023)),
       timeAdvice: '时长感人',
       link: false,
       userName: '躲入棺材',

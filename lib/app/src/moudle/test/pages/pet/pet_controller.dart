@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:app_base/config/res_name.dart';
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_controller.dart';
-import 'package:app_base/util/image.dart';
+import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/image_preview_single.dart';
@@ -20,18 +19,19 @@ class PetController extends BaseController {
   late DynamicManager dynamicManager;
   late HandPickManager handPickManager;
   late RefreshManager refreshManager;
+  final _pushRepo = Get.find<PushRepo>();
 
   @override
   void onInit() {
-    commonManager = CommonManager(controller: this);
-    dynamicManager = DynamicManager(controller: this);
-    handPickManager = HandPickManager(controller: this);
-    refreshManager = RefreshManager(controller: this);
+    commonManager = CommonManager(controller: this, pushRepo: _pushRepo);
+    dynamicManager = DynamicManager(controller: this, pushRepo: _pushRepo);
+    handPickManager = HandPickManager(controller: this, pushRepo: _pushRepo);
+    refreshManager = RefreshManager(controller: this, pushRepo: _pushRepo);
     commonManager.init();
     super.onInit();
   }
 
-  naviToDetails(Recommon item) {
+  naviToDetails(PostsList item) {
     navigateTo(RouteName.details, args: item);
   }
 
@@ -51,7 +51,8 @@ class PetController extends BaseController {
     }
   }
 
-  imagePreView(List<String> images, BuildContext context, double size,int parentIndex) {
+  imagePreView(List<String> images, BuildContext context, double size,
+      int parentIndex) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -61,33 +62,36 @@ class PetController extends BaseController {
         return InkWell(
           onTap: () {
             final homeController = Get.find<HomeController>();
-            homeController.toImageView(images[0],tag);
+            homeController.toImageView(images[0], tag);
           },
           child: Hero(
             tag: tag,
-            child:ImagePreViewSingle(url: images[0],size: size,),
+            child: ImagePreViewSingle(
+              url: images[0],
+              size: size,
+            ),
           ),
         );
       } else {
         ///3x3摆放
-        var reSizeHeight= 0.0;
+        var reSizeHeight = 0.0;
         var reSizeWidth = 0.0;
         var crossAxisCount = images.length;
-        if(images.length <= 3){
+        if (images.length <= 3) {
           crossAxisCount = images.length;
-          reSizeHeight  = size /3;
-          reSizeWidth = size/3 * images.length;
-        }else if(images.length == 4){
-          crossAxisCount = images.length -2;
-          reSizeHeight = size /3 *(images.length-2);
-          reSizeWidth = size/3 * (images.length -2);
-        }else{
+          reSizeHeight = size / 3;
+          reSizeWidth = size / 3 * images.length;
+        } else if (images.length == 4) {
+          crossAxisCount = images.length - 2;
+          reSizeHeight = size / 3 * (images.length - 2);
+          reSizeWidth = size / 3 * (images.length - 2);
+        } else {
           crossAxisCount = 3;
-          reSizeWidth = size/3 * 3;
-          if(images.length <= 6){
-            reSizeHeight = size /3 * 2;
-          }else{
-            reSizeHeight = size /3 * 3;
+          reSizeWidth = size / 3 * 3;
+          if (images.length <= 6) {
+            reSizeHeight = size / 3 * 2;
+          } else {
+            reSizeHeight = size / 3 * 3;
           }
         }
         return SizedBox(
@@ -95,7 +99,7 @@ class PetController extends BaseController {
           height: reSizeHeight,
           child: GridView.builder(
             physics: NeverScrollableScrollPhysics(),
-            gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
               mainAxisSpacing: 2.w,
               crossAxisSpacing: 2.w,
@@ -105,14 +109,18 @@ class PetController extends BaseController {
               return InkWell(
                 onTap: () {
                   final homeController = Get.find<HomeController>();
-                  homeController.toImageView(images[index],tag);
+                  homeController.toImageView(images[index], tag);
                 },
                 child: Hero(
                   tag: tag,
-                  child: ImagePreViewSingle(url: images[index],size: size,),
+                  child: ImagePreViewSingle(
+                    url: images[index],
+                    size: size,
+                  ),
                 ),
               );
-            }),itemCount: images.length,
+            }),
+            itemCount: images.length,
           ),
         );
         // return FutureBuilder<ui.Image>(
@@ -127,10 +135,11 @@ class PetController extends BaseController {
 class CommonManager {
   bool isInit = false;
   final PetController controller;
+  final PushRepo pushRepo;
   final listId = 1;
-  final dataList = <Recommon>[];
+  final dataList = <PostsList>[];
 
-  CommonManager({required this.controller});
+  CommonManager({required this.controller, required this.pushRepo});
 
   init() {
     if (!isInit) {
@@ -144,13 +153,21 @@ class CommonManager {
   }
 
   getList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    dataList.addAll(RecommonRsp.mock().recommon);
-    controller.update([listId]);
-    controller.dismiss();
-  }
+    final response = await controller.apiLaunch(() =>
+        pushRepo.getPushMsg(
+          PushMsgReq(
+              topicId: 'Recomed',
+              pageIndex: 1,
+              pageSize: 10,
+              orderBy: 'createTime desc',
+              topicType: 'Dynamic'),
+        ),);
 
+    if (response?.data != null) {
+      dataList.addAll(response!.data!.postsList);
+      controller.update([listId]);
+    }
+  }
   List<BannerModel> get listBanners {
     return [
       BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
@@ -161,12 +178,16 @@ class CommonManager {
   }
 }
 
+
+
 class DynamicManager {
   bool isInit = false;
   final PetController controller;
   final listId = 2;
+  final PushRepo pushRepo;
+  final dataList = <PostsList>[];
 
-  DynamicManager({required this.controller});
+  DynamicManager({required this.controller, required this.pushRepo});
 
   init() {
     if (!isInit) {
@@ -175,11 +196,29 @@ class DynamicManager {
     }
   }
 
+  List<BannerModel> get listBanners {
+    return [
+      BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd1, id: "2", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd2, id: "3", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
+    ];
+  }
   getList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    controller.update([listId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(() =>
+        pushRepo.getPushMsg(
+          PushMsgReq(
+              topicId: 'Dynamic',
+              pageIndex: 1,
+              pageSize: 10,
+              orderBy: 'createTime desc',
+              topicType: 'Dynamic'),
+        ),);
+
+    if (response?.data != null) {
+      dataList.addAll(response!.data!.postsList);
+      controller.update([listId]);
+    }
   }
 }
 
@@ -187,8 +226,19 @@ class HandPickManager {
   bool isInit = false;
   final PetController controller;
   final listId = 3;
+  final PushRepo pushRepo;
+  final dataList = <PostsList>[];
 
-  HandPickManager({required this.controller});
+  HandPickManager({required this.controller, required this.pushRepo});
+
+  List<BannerModel> get listBanners {
+    return [
+      BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd1, id: "2", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd2, id: "3", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
+    ];
+  }
 
   init() {
     if (!isInit) {
@@ -196,12 +246,21 @@ class HandPickManager {
       isInit = true;
     }
   }
-
   getList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    controller.update([listId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(() =>
+        pushRepo.getPushMsg(
+          PushMsgReq(
+              topicId: 'Curated',
+              pageIndex: 1,
+              pageSize: 10,
+              orderBy: 'createTime desc',
+              topicType: 'Dynamic'),
+        ),);
+
+    if (response?.data != null) {
+      dataList.addAll(response!.data!.postsList);
+      controller.update([listId]);
+    }
   }
 }
 
@@ -209,8 +268,19 @@ class RefreshManager {
   bool isInit = false;
   final PetController controller;
   final listId = 4;
+  final PushRepo pushRepo;
+  final dataList = <PostsList>[];
 
-  RefreshManager({required this.controller});
+  RefreshManager({required this.controller, required this.pushRepo});
+
+  List<BannerModel> get listBanners {
+    return [
+      BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd1, id: "2", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd2, id: "3", boxFit: BoxFit.cover),
+      BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
+    ];
+  }
 
   init() {
     if (!isInit) {
@@ -218,11 +288,20 @@ class RefreshManager {
       isInit = true;
     }
   }
-
   getList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    controller.update([listId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(() =>
+        pushRepo.getPushMsg(
+          PushMsgReq(
+              topicId: 'Latest',
+              pageIndex: 1,
+              pageSize: 10,
+              orderBy: 'createTime desc',
+              topicType: 'Dynamic'),
+        ),);
+
+    if (response?.data != null) {
+      dataList.addAll(response!.data!.postsList);
+      controller.update([listId]);
+    }
   }
 }

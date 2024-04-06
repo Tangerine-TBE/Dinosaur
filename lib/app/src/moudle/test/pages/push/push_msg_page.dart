@@ -1,8 +1,10 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 
 class PushMsgPage extends BaseEmptyPage<PushMsgController> {
   const PushMsgPage({super.key});
@@ -36,11 +38,11 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                   height: 30.h,
                   color: MyColors.themeTextColor,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black),
+                    side: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(20.w),
                   ),
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     '发布',
                   ),
                 ),
@@ -56,26 +58,33 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          color:Colors.white,
-
+          color: Colors.white,
           child: Row(
             children: [
-              SizedBox(width: 40.w,),
+              SizedBox(
+                width: 40.w,
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.picture_in_picture_alt),
-                  SizedBox(height: 2.h,),
-                  Text('图片'),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  const Text('图片'),
                 ],
               ),
-              SizedBox(width: 20.w,),
+              SizedBox(
+                width: 20.w,
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.add_chart_outlined),
-                  SizedBox(height: 2.h,),
-                  Text('波形'),
+                  const Icon(Icons.add_chart_outlined),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  const Text('波形'),
                 ],
               ),
             ],
@@ -86,12 +95,54 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
         children: [
           SizedBox(
             height: 40.h,
-            child: ListView.builder(
+            child: CustomScrollView(
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return _buildOptionItem(index);
-              },
-              itemCount: 10,
+              slivers: [
+                SliverToBoxAdapter(child:
+                InkWell(
+                  onTap: () {
+                    controller.buildBottomSheet(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 30.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10.w),
+                    ),
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.purple,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.add),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        const Text('选择一个话题'),
+                      ],
+                    ),
+                  ),
+                ),
+                ),
+                GetBuilder<PushMsgController>(
+                  builder: (controller) {
+                    return SliverList.builder(
+                      itemBuilder: (context, index) {
+                        return _buildOptionItem(
+                            controller.tagList[index], index, context);
+                      },
+                      itemCount: controller.tagList.length,
+                    );
+                  },
+                  id: controller.tagListId,
+                )
+              ],
             ),
           ),
           Expanded(
@@ -100,7 +151,8 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
               child: TextField(
                 maxLines: null,
                 cursorColor: MyColors.themeTextColor,
-                decoration: const InputDecoration(border: InputBorder.none,hintText: '这一刻的想法...'),
+                decoration: const InputDecoration(
+                    border: InputBorder.none, hintText: '这一刻的想法...'),
               ),
             ),
           ),
@@ -109,57 +161,32 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
     );
   }
 
-  _buildOptionItem(int index) {
-    return index == 0
-        ? Container(
-            margin: EdgeInsets.only(left: 30.w),
-            decoration: BoxDecoration(
+  _buildOptionItem(TopicList item, int index, BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 10.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(10.w),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      child: Row(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle, color: Colors.black),
+            child: Icon(
+              Icons.tag,
               color: Colors.white,
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(10.w),
+              size: 14.w,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.purple,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.add),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Text('选择一个话题'),
-              ],
-            ),
-          )
-        : Container(
-            margin: EdgeInsets.only(left: 10.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(10.w),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.black),
-                  child: Icon(
-                    Icons.tag,
-                    color: Colors.white,
-                    size: 14.w,
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Text('我是帅哥'),
-              ],
-            ),
-          );
+          ),
+          SizedBox(
+            width: 10.w,
+          ),
+          Text(item.title),
+        ],
+      ),
+    );
   }
 }

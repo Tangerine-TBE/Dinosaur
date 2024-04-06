@@ -12,4 +12,7 @@ class Api {
  //
 static const sendRecord = '/api/v1/meng/mode';
 static const getModel = '/api/v1/meng/mode/list';
+
+static const getPushMsg = '/api/v1/meng/posts/list';
+static const pushMsg = '/api/v1/meng/posts';
 }

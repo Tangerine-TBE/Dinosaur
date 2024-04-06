@@ -1,12 +1,12 @@
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/friends_share_bean.dart';
+import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 
 class CommonPage extends StatelessWidget {
   final PetController controller;
@@ -49,13 +49,21 @@ class CommonPage extends StatelessWidget {
           ),
           GetBuilder<PetController>(
             builder: (controller) {
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildItem(
-                      index, controller.commonManager.dataList[index], context),
-                  childCount: controller.commonManager.dataList.length,
-                ),
-              );
+              return controller.commonManager.dataList.isNotEmpty
+                  ? SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => _buildItem(index,
+                            controller.commonManager.dataList[index], context),
+                        childCount: controller.commonManager.dataList.length,
+                      ),
+                    )
+                  : const SliverFillRemaining(
+                      child: SizedBox(
+                        child: NoDataWidget(
+                          title: '暂无记录',
+                        ),
+                      ),
+                    );
             },
             id: controller.commonManager.listId,
           )
@@ -64,7 +72,7 @@ class CommonPage extends StatelessWidget {
     );
   }
 
-  _buildItem(int index, Recommon item, BuildContext context) {
+  _buildItem(int index, PostsList item, BuildContext context) {
     return Container(
       width: double.infinity,
       color: Colors.white,
@@ -80,7 +88,7 @@ class CommonPage extends StatelessWidget {
                 width: 40.w,
                 height: 40.w,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(item.avatar),
+                  backgroundImage: NetworkImage(item.userAvator),
                 ),
               ),
               SizedBox(
@@ -126,7 +134,7 @@ class CommonPage extends StatelessWidget {
                             ),
                             TextSpan(text: ' '),
                             TextSpan(
-                              text: item.title,
+                              text: item.topicTitle,
                               style: TextStyle(
                                 fontSize: 10.sp,
                                 color: Color(0xffFF5E65),
@@ -160,7 +168,7 @@ class CommonPage extends StatelessWidget {
                 width: 4.w,
               ),
               Text(
-                item.viewNum,
+                item.viewsNum.toString(),
                 style: TextStyle(
                   color: Color(0xff8F9098),
                   fontSize: 10.sp,
@@ -179,7 +187,7 @@ class CommonPage extends StatelessWidget {
                       height: 22.w,
                     ),
                     Text(
-                      item.likeNUm,
+                      item.likesNum.toString(),
                       style: TextStyle(
                         color: Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
@@ -210,7 +218,7 @@ class CommonPage extends StatelessWidget {
                             color: Color(0xff8F9098),
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w500),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -222,7 +230,7 @@ class CommonPage extends StatelessWidget {
     );
   }
 
-  _buildContent(int index, Recommon item, BuildContext context) {
+  _buildContent(int index, PostsList item, BuildContext context) {
     // 区分内容
     return Row(
       children: [
@@ -239,14 +247,8 @@ class CommonPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            controller.imagePreView(
-              index < 9
-                  ? List.generate(index + 1, (index) => item.avatar)
-                  : <String>[item.avatar],
-              context,
-              250.w,
-              index
-            ),
+            controller.imagePreView(item.images.map((e) => e.imageUrl).toList(),
+                context, 250.w, index),
           ],
         ),
       ],

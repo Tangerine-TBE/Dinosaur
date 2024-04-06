@@ -1,9 +1,14 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
+import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:banner_carousel/banner_carousel.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import '../pet_controller.dart';
+
 
 class RefreshPage extends StatelessWidget {
   final PetController controller;
@@ -25,7 +30,7 @@ class RefreshPage extends StatelessWidget {
                   child: BannerCarousel.fullScreen(
                     animation: true,
                     height: 106.h,
-                    banners: controller.commonManager.listBanners,
+                    banners: controller.refreshManager.listBanners,
                     showIndicator: true,
                     indicatorBottom: false,
                     borderRadius: 10.w,
@@ -38,33 +43,43 @@ class RefreshPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 10.h,),
-
+                SizedBox(
+                  height: 10.h,
+                ),
               ],
             ),
           ),
           GetBuilder<PetController>(
             builder: (controller) {
-              return SliverList(
+              return controller.refreshManager.dataList.isNotEmpty
+                  ? SliverList(
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildItem(
-                      index, controller.commonManager.dataList[index]),
-                  childCount: controller.commonManager.dataList.length,
+                      (context, index) => _buildItem(index,
+                      controller.refreshManager.dataList[index], context),
+                  childCount: controller.refreshManager.dataList.length,
+                ),
+              )
+                  : SliverFillRemaining(
+                child: SizedBox(
+                  child: NoDataWidget(
+                    title: '暂无记录',
+                  ),
                 ),
               );
             },
             id: controller.commonManager.listId,
           )
+
         ],
       ),
     );
   }
 
-  _buildItem(int index, Recommon item) {
+  _buildItem(int index, PostsList item, BuildContext context) {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.only(top: 32.h,left: 18.w,right: 18.w),
+      padding: EdgeInsets.only(top: 32.h, left: 18.w, right: 18.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,7 +91,7 @@ class RefreshPage extends StatelessWidget {
                 width: 40.w,
                 height: 40.w,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(item.avatar),
+                  backgroundImage: NetworkImage(item.userAvator),
                 ),
               ),
               SizedBox(
@@ -122,7 +137,7 @@ class RefreshPage extends StatelessWidget {
                             ),
                             TextSpan(text: ' '),
                             TextSpan(
-                              text: item.title,
+                              text: item.topicTitle,
                               style: TextStyle(
                                 fontSize: 10.sp,
                                 color: Color(0xffFF5E65),
@@ -138,7 +153,7 @@ class RefreshPage extends StatelessWidget {
               ),
             ],
           ),
-          _buildContent(index, item),
+          _buildContent(index, item, context),
           SizedBox(
             height: 20.w,
           ),
@@ -156,7 +171,7 @@ class RefreshPage extends StatelessWidget {
                 width: 4.w,
               ),
               Text(
-                item.viewNum,
+                item.viewsNum.toString(),
                 style: TextStyle(
                   color: Color(0xff8F9098),
                   fontSize: 10.sp,
@@ -165,38 +180,50 @@ class RefreshPage extends StatelessWidget {
               SizedBox(
                 width: 122.w,
               ),
-              Image.asset(
-                ResName.lovely1,
-                width: 22.w,
-                height: 22.w,
-              ),
-              Text(
-                item.likeNUm,
-                style: TextStyle(
-                  color: Color(0xff8F9098),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 10.sp,
+              InkWell(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Image.asset(
+                      ResName.lovely1,
+                      width: 22.w,
+                      height: 22.w,
+                    ),
+                    Text(
+                      item.likesNum.toString(),
+                      style: TextStyle(
+                        color: Color(0xff8F9098),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10.sp,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(
-                      Icons.message,
-                      size: 22.w,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Text(
-                      '评论',
-                      style: TextStyle(
-                          color: Color(0xff8F9098),
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w500),
-                    )
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    controller.naviToDetails(item);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.message,
+                        size: 22.w,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        '评论',
+                        style: TextStyle(
+                            color: Color(0xff8F9098),
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -206,7 +233,7 @@ class RefreshPage extends StatelessWidget {
     );
   }
 
-  _buildContent(int index, Recommon item) {
+  _buildContent(int index, PostsList item, BuildContext context) {
     // 区分内容
     return Row(
       children: [
@@ -223,14 +250,11 @@ class RefreshPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(7.w),
-              child: Image.network(
-                item.avatar,
-                width: 202.w,
-                height: 202.w,
-                fit: BoxFit.cover,
-              ),
+            controller.imagePreView(
+                item.images.map((e) => e.imageUrl).toList(),
+                context,
+                250.w,
+                index
             ),
           ],
         ),

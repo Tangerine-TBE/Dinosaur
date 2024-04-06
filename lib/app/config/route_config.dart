@@ -5,6 +5,7 @@ import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
+import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
@@ -36,13 +37,15 @@ import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_page.dart';
 import 'package:app_base/config/user.dart';
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
+
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute =User.loginRspBean == null?
-      RouteName.login:  RouteName.homePage;
+  String initialRoute =
+      User.loginRspBean == null ? RouteName.login : RouteName.homePage;
   @override
   String? loginRoute = RouteName.login;
+
   @override
   List<GetPage> getPages() => [
         GetPage(
@@ -52,6 +55,9 @@ class RouteConfig extends ARoute {
             () {
               Get.lazyPut(
                 () => PushMsgController(),
+              );
+              Get.lazyPut(
+                () => PlayRepo(),
               );
             },
           ),
