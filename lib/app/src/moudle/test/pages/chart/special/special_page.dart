@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/char_bean.dart';
+import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,7 @@ class SpecialPage extends StatelessWidget {
     );
   }
 
-  _buildSpecialPageItem(int index, SpecialList item) {
+  _buildSpecialPageItem(int index, WaveList item) {
     return Column(
       children: [
         Row(
@@ -45,7 +47,8 @@ class SpecialPage extends StatelessWidget {
               width: 40.w,
               height: 40.w,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(item.userPic),
+                //Todo
+                backgroundImage: NetworkImage("https://via.placeholder.com/150/0000F1/808080?Text=Image1"),
               ),
             ),
             SizedBox(
@@ -58,7 +61,7 @@ class SpecialPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    item.userName,
+                    item.name,
                     style: TextStyle(
                         color: MyColors.textBlackColor,
                         fontSize: 14.sp,
@@ -71,7 +74,7 @@ class SpecialPage extends StatelessWidget {
                         size: 12,
                       ),
                       Text(
-                        item.userFar,
+                        item.viewsNum.toString(),
                         style: TextStyle(
                           color: MyColors.textGreyColor,
                           fontSize: 11.sp,
@@ -98,7 +101,7 @@ class SpecialPage extends StatelessWidget {
               controller.specialCharManager.onChartItemClick(index);
             },
             child: AwesomeChartView(
-              dataList: <List<int>>[item.data],
+              dataList: <List<int>>[SpecialWave.fromJson(jsonDecode(item.actions)).data],
               width: double.infinity,
               height: double.infinity/2,
               type: 1,
@@ -117,7 +120,8 @@ class SpecialPage extends StatelessWidget {
                 controller.specialCharManager.onChartLikeClicked(index);
               },
               child: Image.asset(
-                item.like ? ResName.heart1 : ResName.heart,
+                //Todo
+                false ? ResName.heart1 : ResName.heart,
                 width: 14.w,
                 height: 14.w,
               ),
@@ -126,10 +130,11 @@ class SpecialPage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.likeNum,
+              item.likesNum.toString(),
               style: TextStyle(
                 fontSize: 11.sp,
-                color: item.like
+                //Todo
+                color: false
                     ? const Color(0xffff5e65)
                     : MyColors.textBlackColor,
               ),
@@ -145,7 +150,7 @@ class SpecialPage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.timeAdvice,
+              item.tags,
               style: TextStyle(
                 fontSize: 11.sp,
                 color: MyColors.textBlackColor,
@@ -162,7 +167,7 @@ class SpecialPage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.kcal,
+              item.kcal.toString(),
               style: TextStyle(
                 fontSize: 11.sp,
                 color: MyColors.textBlackColor,
@@ -177,7 +182,8 @@ class SpecialPage extends StatelessWidget {
                       controller.specialCharManager.onChartLinkClicked(index);
                     },
                     child: Image.asset(
-                      item.link ? ResName.start1 : ResName.start2,
+                      //Todo
+                      false  ? ResName.start1 : ResName.start2,
                       width: 14.w,
                       height: 14.w,
                     ),

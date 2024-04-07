@@ -17,6 +17,7 @@ dependencies:
   loadmore_listview: ^1.0.7
   loading_animation_widget: ^1.2.1
 #  connectivity_plus: ^6.0.1
+  flutter_reorderable_grid_view: ^4.0.0
   connectivity_plus: ^5.0.2
   gradient_slider: ^1.0.2
   pinput: ^4.0.0

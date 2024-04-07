@@ -1,5 +1,6 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
+import 'package:app_base/mvvm/repository/chart_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
@@ -64,6 +65,7 @@ class HomeController extends BaseController {
         binding: BindingsBuilder(
               () {
             Get.lazyPut(() => ChartController());
+            Get.lazyPut(() => ChartRepo());
           },
         ),
       );

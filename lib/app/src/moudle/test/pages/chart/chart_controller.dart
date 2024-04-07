@@ -1,11 +1,13 @@
-
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/char_bean.dart';
+import 'package:app_base/mvvm/model/chart_bean.dart';
+import 'package:app_base/mvvm/repository/chart_repo.dart';
+import 'package:get/get.dart';
 
 class ChartController extends BaseController {
   late SingleCharManager singleCharManager;
   late DoubleCharManager doubleCharManager;
   late SpecialCharManager specialCharManager;
+  final chartRepo = Get.find<ChartRepo>();
 
   @override
   void onInit() {
@@ -31,7 +33,7 @@ class SingleCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 1;
-  final data = <SingleList>[];
+  final data = <WaveList>[];
 
   SingleCharManager({required this.controller});
 
@@ -43,29 +45,41 @@ class SingleCharManager {
   }
 
   getChartList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    data.addAll(CharSingleBean.mock().dataList);
-    controller.update([chartListId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(
+      () => controller.chartRepo.getCharts(
+        ChartReq(
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            type: 'Single'),
+      ),
+    );
+    if (response?.data?.waveList != null) {
+      data.addAll(response!.data!.waveList);
+      controller.update([chartListId]);
+    }
   }
+
   onChartItemClick(int index) {
     controller.update([chartListId]);
   }
-  onChartLikeClicked(int index){
-    data[index].like = !data[index].like;
-    controller.update([chartListId]);
+
+  onChartLikeClicked(int index) {
+    // data[index].like = !data[index].like;
+    // controller.update([chartListId]);
   }
-  onChartLinkClicked(int index){
-    data[index].link =   !data[index].link;
-    controller.update([chartListId]);
+
+  onChartLinkClicked(int index) {
+    // data[index].link = !data[index].link;
+    // controller.update([chartListId]);
   }
 }
+
 class DoubleCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 2;
-  final data = <DoubleList>[];
+  final data = <WaveList>[];
 
   DoubleCharManager({required this.controller});
 
@@ -75,32 +89,42 @@ class DoubleCharManager {
       isInit = true;
     }
   }
-
   getChartList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    data.addAll(CharDoubleBean.mock().dataList);
-    controller.update([chartListId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(
+          () => controller.chartRepo.getCharts(
+        ChartReq(
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            type: 'Double'),
+      ),
+    );
+    if (response?.data?.waveList != null) {
+      data.addAll(response!.data!.waveList);
+      controller.update([chartListId]);
+    }
   }
 
   onChartItemClick(int index) {
     controller.update([chartListId]);
   }
-  onChartLikeClicked(int index){
-    data[index].like = !data[index].like;
-    controller.update([chartListId]);
+
+  onChartLikeClicked(int index) {
+    // data[index].like = !data[index].like;
+    // controller.update([chartListId]);
   }
-  onChartLinkClicked(int index){
-    data[index].link =   !data[index].link;
-    controller.update([chartListId]);
+
+  onChartLinkClicked(int index) {
+    // data[index].link = !data[index].link;
+    // controller.update([chartListId]);
   }
 }
+
 class SpecialCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 2;
-  final data = <SpecialList>[];
+  final data = <WaveList>[];
 
   SpecialCharManager({required this.controller});
 
@@ -112,22 +136,32 @@ class SpecialCharManager {
   }
 
   getChartList() async {
-    controller.showLoading(userInteraction: false);
-    await Future.delayed(const Duration(seconds: 2));
-    data.addAll(CharSpecialBean.mock().dataList);
-    controller.update([chartListId]);
-    controller.dismiss();
+    final response = await controller.apiLaunch(
+          () => controller.chartRepo.getCharts(
+        ChartReq(
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            type: 'Suction'),
+      ),
+    );
+    if (response?.data?.waveList != null) {
+      data.addAll(response!.data!.waveList);
+      controller.update([chartListId]);
+    }
   }
 
   onChartItemClick(int index) {
     controller.update([chartListId]);
   }
-  onChartLikeClicked(int index){
-    data[index].like = !data[index].like;
-    controller.update([chartListId]);
+
+  onChartLikeClicked(int index) {
+    // data[index].like = !data[index].like;
+    // controller.update([chartListId]);
   }
-  onChartLinkClicked(int index){
-    data[index].link =   !data[index].link;
-    controller.update([chartListId]);
+
+  onChartLinkClicked(int index) {
+    // data[index].link = !data[index].link;
+    // controller.update([chartListId]);
   }
 }

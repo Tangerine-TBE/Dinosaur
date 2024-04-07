@@ -8,76 +8,104 @@ String testToJson(Test data) => json.encode(data.toJson());
 
 class Test {
     Test({
-        required this.waves,
-        required this.topicId,
-        required this.images,
-        required this.userId,
-        required this.content,
-        required this.topicTitle,
+        required this.waveList,
     });
 
-    List<Wave> waves;
-    String topicId;
-    List<Image> images;
-    String userId;
-    String content;
-    String topicTitle;
+    List<WaveList> waveList;
 
     factory Test.fromJson(Map<dynamic, dynamic> json) => Test(
-        waves: List<Wave>.from(json["waves"].map((x) => Wave.fromJson(x))),
-        topicId: json["topicId"],
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
-        userId: json["userId"],
-        content: json["content"],
-        topicTitle: json["topicTitle"],
+        waveList: List<WaveList>.from(json["waveList"].map((x) => WaveList.fromJson(x))),
     );
 
     Map<dynamic, dynamic> toJson() => {
-        "waves": List<dynamic>.from(waves.map((x) => x.toJson())),
-        "topicId": topicId,
-        "images": List<dynamic>.from(images.map((x) => x.toJson())),
-        "userId": userId,
-        "content": content,
-        "topicTitle": topicTitle,
+        "waveList": List<dynamic>.from(waveList.map((x) => x.toJson())),
     };
 }
 
-class Image {
-    Image({
-        required this.imageBase64,
-        required this.imageUrl,
-    });
-
-    String imageBase64;
-    String imageUrl;
-
-    factory Image.fromJson(Map<dynamic, dynamic> json) => Image(
-        imageBase64: json["imageBase64"],
-        imageUrl: json["imageUrl"],
-    );
-
-    Map<dynamic, dynamic> toJson() => {
-        "imageBase64": imageBase64,
-        "imageUrl": imageUrl,
-    };
-}
-
-class Wave {
-    Wave({
+class WaveList {
+    WaveList({
+        required this.likesNum,
+        required this.creatorId,
+        required this.modifierId,
+        required this.description,
+        required this.favorsNum,
+        required this.type,
+        required this.viewsNum,
+        required this.userId,
+        required this.tags,
+        required this.kcal,
+        required this.modifyTime,
+        required this.createTime,
+        required this.appId,
+        required this.name,
+        required this.tenantId,
         required this.id,
+        required this.attribute,
         required this.actions,
+        required this.commentsNum,
     });
 
+    int likesNum;
+    String creatorId;
+    String modifierId;
+    String description;
+    int favorsNum;
+    String type;
+    int viewsNum;
+    String userId;
+    String tags;
+    double kcal;
+    int modifyTime;
+    int createTime;
+    String appId;
+    String name;
+    String tenantId;
     String id;
+    String attribute;
     String actions;
+    int commentsNum;
 
-    factory Wave.fromJson(Map<dynamic, dynamic> json) => Wave(
+    factory WaveList.fromJson(Map<dynamic, dynamic> json) => WaveList(
+        likesNum: json["likesNum"],
+        creatorId: json["creatorId"],
+        modifierId: json["modifierId"],
+        description: json["description"],
+        favorsNum: json["favorsNum"],
+        type: json["type"],
+        viewsNum: json["viewsNum"],
+        userId: json["userId"],
+        tags: json["tags"],
+        kcal: json["kcal"]?.toDouble(),
+        modifyTime: json["modifyTime"],
+        createTime: json["createTime"],
+        appId: json["appId"],
+        name: json["name"],
+        tenantId: json["tenantId"],
         id: json["id"],
+        attribute: json["attribute"],
         actions: json["actions"],
+        commentsNum: json["commentsNum"],
     );
 
     Map<dynamic, dynamic> toJson() => {
+        "likesNum": likesNum,
+        "creatorId": creatorId,
+        "modifierId": modifierId,
+        "description": description,
+        "favorsNum": favorsNum,
+        "type": type,
+        "viewsNum": viewsNum,
+        "userId": userId,
+        "tags": tags,
+        "kcal": kcal,
+        "modifyTime": modifyTime,
+        "createTime": createTime,
+        "appId": appId,
+        "name": name,
+        "tenantId": tenantId,
         "id": id,
+        "attribute": attribute,
         "actions": actions,
+        "commentsNum": commentsNum,
     };
 }

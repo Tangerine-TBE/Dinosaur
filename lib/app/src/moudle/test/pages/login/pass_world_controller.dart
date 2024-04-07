@@ -1,3 +1,4 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
@@ -69,6 +70,7 @@ class PassWorldController extends BaseController {
         LoginRspBean? responseData = response.data?.data;
         if (responseData != null) {
           SaveKey.userInfo.save(responseData.toJson());
+          User.loginRspBean = responseData;
           offAllNavigateTo(RouteName.homePage);
         }
       }

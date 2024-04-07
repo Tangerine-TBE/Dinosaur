@@ -59,6 +59,9 @@ class RouteConfig extends ARoute {
               Get.lazyPut(
                 () => PlayRepo(),
               );
+              Get.lazyPut(
+                () => ModelRepo(),
+              );
             },
           ),
         ),

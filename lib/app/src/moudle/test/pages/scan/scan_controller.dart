@@ -1,4 +1,3 @@
-import 'package:app_base/exports.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
 import 'package:app_base/ble/ble_msg.dart';

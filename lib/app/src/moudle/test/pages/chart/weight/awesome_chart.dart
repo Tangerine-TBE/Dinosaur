@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-var gradientBoldLineDouble =  LinearGradient(
+var gradientBoldLineDouble = LinearGradient(
   colors: [
     const Color(0xff5EFFF8),
     const Color(0xff5E94FF).withOpacity(0.43),
@@ -171,15 +171,22 @@ class AwesomeChart extends CustomPainter {
     if (size.width < size.height) {
       throw "the view has width  < height";
     }
+    if (lineList.isEmpty || (lineList.length == 1 && lineList[0].isEmpty)) {
+      return;
+    }
     _changeCanvasAis(canvas, size);
     _drawPan(canvas, size);
     if (type == 0) {
       for (int i = 0; i < lineList.length; i++) {
-        _drawCurve(canvas, size, lineList[i],i);
+        if (lineList[i].isNotEmpty) {
+          _drawCurve(canvas, size, lineList[i], i);
+        }
       }
     } else {
       for (int i = 0; i < lineList.length; i++) {
-        _drawCircle(canvas, size, lineList[i]);
+        if (lineList[i].isNotEmpty) {
+          _drawCircle(canvas, size, lineList[i]);
+        }
       }
     }
   }
@@ -249,7 +256,7 @@ class AwesomeChart extends CustomPainter {
     }
   }
 
-  _drawCurve(Canvas canvas, Size size, List<int> list,int i ) {
+  _drawCurve(Canvas canvas, Size size, List<int> list, int i) {
     var dataList = <int>[];
     if (list.length > 20) {
       var chuckSize = list.length ~/ 20;
@@ -368,10 +375,10 @@ class AwesomeChart extends CustomPainter {
       shapePath.cubicTo(controlPoint1X, controlPoint1Y, currentX, currentY,
           controlPoint2X, controlPoint2Y);
     }
-    if(i == 0){
+    if (i == 0) {
       shakeBoldLinePaint.shader =
           gradientBoldLine.createShader(boldPath.getBounds());
-    }else{
+    } else {
       shakeBoldLinePaint.shader =
           gradientBoldLineDouble.createShader(boldPath.getBounds());
       shakeShapeLinePaint.color = const Color(0xff5E94FF).withOpacity(0.2);

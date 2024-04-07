@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
+import '../chart/weight/awesome_chart.dart';
+
 class PushMsgPage extends BaseEmptyPage<PushMsgController> {
   const PushMsgPage({super.key});
 
@@ -41,7 +43,9 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                     side: const BorderSide(color: Colors.black),
                     borderRadius: BorderRadius.circular(20.w),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.onPushClicked();
+                  },
                   child: const Text(
                     '发布',
                   ),
@@ -82,15 +86,20 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
               SizedBox(
                 width: 20.w,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.add_chart_outlined),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  const Text('波形'),
-                ],
+              InkWell(
+                onTap: () {
+                  controller.buildWaveBottomSheet(context);
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.add_chart_outlined),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    const Text('波形'),
+                  ],
+                ),
               ),
             ],
           ),
@@ -107,7 +116,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                   SliverToBoxAdapter(
                     child: InkWell(
                       onTap: () {
-                        controller.buildBottomSheet(context);
+                        controller.buildTagsBottomSheet(context);
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 30.w),
@@ -203,19 +212,80 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField(
-                          maxLines: null,
-                          cursorColor: MyColors.themeTextColor,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none, hintText: '这一刻的想法...'),
+                        SizedBox(
+                          height: 200.h,
+                          child: TextField(
+                            controller: controller.editingController,
+                            maxLines: null,
+                            cursorColor: MyColors.themeTextColor,
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '这一刻的想法...'),
+                          ),
                         ),
                         SizedBox(
                           height: 30.h,
                         ),
-                        Obx(
-                          () => controller.imagePreView(
-                              controller.selectedImages, context, 250.w, 0),
+                        GetBuilder<PushMsgController>(
+                          builder: (controller) {
+                            return controller.imagePreView(
+                                controller.selectedImagesObx,
+                                context,
+                                300.w,
+                                0);
+                          },
+                          id: controller.imagesListId,
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 80.h,
+                          child: Obx(() => Visibility(
+                                visible: controller.selectedWave.isNotEmpty,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 10.h,
+                                      bottom: 10.h,
+                                      right: 10.w,
+                                      left: 10.w,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.h),
+                                        decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black),
+                                          borderRadius:
+                                              BorderRadius.circular(12.w),
+                                        ),
+                                        child: AwesomeChartView(
+                                          dataList: <List<int>>[
+                                            controller.selectedWave
+                                          ],
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.onDeleteWave();
+                                        },
+                                        child: Icon(
+                                          Icons.cancel_outlined,
+                                          size: 24.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        )
                       ],
                     ),
                   )
@@ -231,7 +301,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
   _buildOptionItem(TopicList item, int index, BuildContext context) {
     return InkWell(
       onTap: () {
-        controller.onBottomSheetItemClicked(item);
+        controller.onBottomSheetTagItemClicked(item);
       },
       child: Container(
         margin: EdgeInsets.only(left: 10.w),

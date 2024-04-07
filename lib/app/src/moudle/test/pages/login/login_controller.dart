@@ -5,7 +5,6 @@ import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

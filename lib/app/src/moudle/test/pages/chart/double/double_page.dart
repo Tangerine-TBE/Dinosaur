@@ -1,5 +1,7 @@
+import 'dart:convert';
+
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/char_bean.dart';
+import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,7 @@ class DoublePage extends StatelessWidget {
     );
   }
 
-  _buildDoublePageItem(int index, DoubleList item) {
+  _buildDoublePageItem(int index, WaveList item) {
     return Column(
       children: [
         Row(
@@ -45,7 +47,8 @@ class DoublePage extends StatelessWidget {
               width: 40.w,
               height: 40.w,
               child: CircleAvatar(
-                backgroundImage: NetworkImage(item.userPic),
+                //Todo
+                backgroundImage: NetworkImage('https://via.placeholder.com/150/0000F1/808080?Text=Image1'),
               ),
             ),
             SizedBox(
@@ -58,7 +61,7 @@ class DoublePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    item.userName,
+                    item.name,
                     style: TextStyle(
                         color: MyColors.textBlackColor,
                         fontSize: 14.sp,
@@ -71,7 +74,7 @@ class DoublePage extends StatelessWidget {
                         size: 12,
                       ),
                       Text(
-                        item.userFar,
+                        item.viewsNum.toString(),
                         style: TextStyle(
                           color: MyColors.textGreyColor,
                           fontSize: 11.sp,
@@ -98,7 +101,7 @@ class DoublePage extends StatelessWidget {
               controller.doubleCharManager.onChartItemClick(index);
             },
             child: AwesomeChartView(
-              dataList: <List<int>>[item.data1,item.data2],
+              dataList: <List<int>>[DoubleWave.fromJson(jsonDecode(item.actions)).data1,DoubleWave.fromJson(jsonDecode(item.actions)).data2,],
               width: double.infinity,
               height: 138.h,
             ),
@@ -113,8 +116,9 @@ class DoublePage extends StatelessWidget {
               onTap: () {
                 controller.doubleCharManager.onChartLikeClicked(index);
               },
+              //Todo
               child: Image.asset(
-                item.like ? ResName.heart1 : ResName.heart,
+                false? ResName.heart1 : ResName.heart,
                 width: 14.w,
                 height: 14.w,
               ),
@@ -123,10 +127,11 @@ class DoublePage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.likeNum,
+              item.likesNum.toString(),
               style: TextStyle(
                 fontSize: 11.sp,
-                color: item.like
+                //Todo
+                color: false
                     ? const Color(0xffff5e65)
                     : MyColors.textBlackColor,
               ),
@@ -142,7 +147,7 @@ class DoublePage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.timeAdvice,
+              item.tags,
               style: TextStyle(
                 fontSize: 11.sp,
                 color: MyColors.textBlackColor,
@@ -159,7 +164,7 @@ class DoublePage extends StatelessWidget {
               width: 4.w,
             ),
             Text(
-              item.kcal,
+              item.kcal.toString(),
               style: TextStyle(
                 fontSize: 11.sp,
                 color: MyColors.textBlackColor,
@@ -173,8 +178,9 @@ class DoublePage extends StatelessWidget {
                     onTap: () {
                       controller.singleCharManager.onChartLinkClicked(index);
                     },
+                    //Todo
                     child: Image.asset(
-                      item.link ? ResName.start1 : ResName.start2,
+                      false ? ResName.start1 : ResName.start2,
                       width: 14.w,
                       height: 14.w,
                     ),
