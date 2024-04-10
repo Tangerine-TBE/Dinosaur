@@ -1,6 +1,7 @@
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
+import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
@@ -89,9 +90,12 @@ class RouteConfig extends ARoute {
           page: () => const DetailsPage(),
           binding: BindingsBuilder(
             () {
-              Recommon recommon = Get.arguments;
+              var map = Get.arguments;
 
-              Get.lazyPut(() => DetailsController(item: recommon));
+              PostsList postList = map['item'];
+              int index  = map['index'];
+
+              Get.lazyPut(() => DetailsController(item: postList,index:index));
             },
           ),
         ),

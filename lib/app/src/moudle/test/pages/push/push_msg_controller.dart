@@ -12,7 +12,6 @@ import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:app_base/util/image.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/weight/long_press_pre_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -80,7 +79,6 @@ class PushMsgController extends BaseController {
   }
 
   _fetchList() async {
-    showLoading();
     final response = await _playRepo.callTopCenter(
         topicCenterReq: TopicCenterReq(orderBy: "createTime desc"));
     if (response.isSuccess) {
@@ -100,7 +98,6 @@ class PushMsgController extends BaseController {
         update([waveListId]);
       }
     }
-    dismiss();
   }
 
   onPushClicked() async {

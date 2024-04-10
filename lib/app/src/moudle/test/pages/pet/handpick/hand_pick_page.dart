@@ -203,7 +203,7 @@ class HandPickPage extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    controller.naviToDetails(item);
+                    controller.naviToDetails(item,index);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,

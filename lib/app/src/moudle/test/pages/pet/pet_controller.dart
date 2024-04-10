@@ -31,8 +31,9 @@ class PetController extends BaseController {
     super.onInit();
   }
 
-  naviToDetails(PostsList item) {
-    navigateTo(RouteName.details, args: item);
+  naviToDetails(PostsList item,int index) {
+    var map = {'item':item,'index':index};
+    navigateTo(RouteName.details, args: map);
   }
 
   naviToImageView(String url) {

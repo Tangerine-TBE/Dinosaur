@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,12 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
           height: 38.h,
           child: Row(
             children: [
-              BackButton(),
+              const BackButton(),
               SizedBox(
                 width: 10.w,
               ),
               CircleAvatar(
-                backgroundImage: NetworkImage(controller.item.avatar),
+                backgroundImage: loadImageProvider(controller.item.userAvator),
               ),
               SizedBox(
                 width: 10.w,
@@ -74,10 +75,16 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                 Padding(
                     padding: EdgeInsets.only(left: 50.w),
                     child: Text(controller.item.content)),
-                Image.network(
-                  controller.item.avatar,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
+                SizedBox(height: 20.h,),
+                Padding(
+                  padding: EdgeInsets.only(left: 50.w),
+                  child:
+                  controller.imagePreView(
+                      controller.item.images.map((e) => e.imageUrl).toList(),
+                      context,
+                      250.w,
+                      controller.index,
+                      controller.item.images),
                 ),
                 SizedBox(
                   height: 20.h,
@@ -99,17 +106,41 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
             sliver: SliverList.list(
               children: [
                 _buildContentItem(),
-                SizedBox(height: 20.h,),
+                SizedBox(
+                  height: 20.h,
+                ),
                 _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),     _buildContentItem(),
-                SizedBox(height: 20.h,),
-
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
+                _buildContentItem(),
+                SizedBox(
+                  height: 20.h,
+                ),
               ],
             ),
           )
@@ -134,7 +165,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: NetworkImage(controller.item.avatar),
+                  backgroundImage:
+                      loadImageProvider(controller.item.userAvator),
                 ),
                 SizedBox(
                   width: 10.w,
