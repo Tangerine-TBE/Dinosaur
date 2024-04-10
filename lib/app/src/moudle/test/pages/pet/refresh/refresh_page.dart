@@ -87,7 +87,7 @@ class RefreshPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.only( left: 18.w, right: 18.w),
+      padding: EdgeInsets.only(left: 18.w, right: 18.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -112,18 +112,16 @@ class RefreshPage extends StatelessWidget {
                     SizedBox(
                       height: 4.h,
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            item.userName,
-                            style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.w500),
-                          ),
-                          Icon(Icons.more_horiz),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.userName,
+                          style: TextStyle(
+                              fontSize: 14.sp, fontWeight: FontWeight.w500),
+                        ),
+                        const Icon(Icons.more_horiz),
+                      ],
                     ),
                     Container(
                       padding:
@@ -139,16 +137,16 @@ class RefreshPage extends StatelessWidget {
                               text: '#',
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Color(0xffFF5E65),
+                                color: const Color(0xffFF5E65),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            TextSpan(text: ' '),
+                            const TextSpan(text: ' '),
                             TextSpan(
                               text: item.topicTitle,
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Color(0xffFF5E65),
+                                color: const Color(0xffFF5E65),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -171,7 +169,7 @@ class RefreshPage extends StatelessWidget {
               Icon(
                 Icons.remove_red_eye_outlined,
                 size: 22.w,
-                color: Color(
+                color: const Color(
                   0xff8F9098,
                 ),
               ),
@@ -181,7 +179,7 @@ class RefreshPage extends StatelessWidget {
               Text(
                 item.viewsNum.toString(),
                 style: TextStyle(
-                  color: Color(0xff8F9098),
+                  color: const Color(0xff8F9098),
                   fontSize: 10.sp,
                 ),
               ),
@@ -200,7 +198,7 @@ class RefreshPage extends StatelessWidget {
                     Text(
                       item.likesNum.toString(),
                       style: TextStyle(
-                        color: Color(0xff8F9098),
+                        color: const Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
                       ),
@@ -226,7 +224,7 @@ class RefreshPage extends StatelessWidget {
                       Text(
                         '评论',
                         style: TextStyle(
-                            color: Color(0xff8F9098),
+                            color: const Color(0xff8F9098),
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w500),
                       )
@@ -236,7 +234,10 @@ class RefreshPage extends StatelessWidget {
               ),
             ],
           ),
-          Divider(color: MyColors.textGreyColor.withOpacity(0.3),thickness: 0.3.h,),
+          Divider(
+            color: MyColors.textGreyColor.withOpacity(0.3),
+            thickness: 0.3.h,
+          ),
         ],
       ),
     );
@@ -260,7 +261,7 @@ class RefreshPage extends StatelessWidget {
               height: 10.h,
             ),
             controller.imagePreView(item.images.map((e) => e.imageUrl).toList(),
-                context, 250.w, index),
+                context, 250.w, index, item.images),
           ],
         ),
       ],

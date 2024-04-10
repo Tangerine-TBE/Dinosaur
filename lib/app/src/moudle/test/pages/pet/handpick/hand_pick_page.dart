@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-
 class HandPickPage extends StatelessWidget {
   final PetController controller;
 
@@ -26,7 +25,7 @@ class HandPickPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 18.w),
                   decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                      BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
                   child: BannerCarousel.fullScreen(
                     animation: true,
                     height: 106.h,
@@ -53,23 +52,24 @@ class HandPickPage extends StatelessWidget {
             builder: (controller) {
               return controller.handPickManager.dataList.isNotEmpty
                   ? SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildItem(index,
-                      controller.handPickManager.dataList[index], context),
-                  childCount: controller.handPickManager.dataList.length,
-                ),
-              )
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => _buildItem(
+                            index,
+                            controller.handPickManager.dataList[index],
+                            context),
+                        childCount: controller.handPickManager.dataList.length,
+                      ),
+                    )
                   : SliverFillRemaining(
-                child: SizedBox(
-                  child: NoDataWidget(
-                    title: '暂无记录',
-                  ),
-                ),
-              );
+                      child: SizedBox(
+                        child: NoDataWidget(
+                          title: '暂无记录',
+                        ),
+                      ),
+                    );
             },
             id: controller.commonManager.listId,
           )
-
         ],
       ),
     );
@@ -119,7 +119,7 @@ class HandPickPage extends StatelessWidget {
                     ),
                     Container(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
+                          EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
                       decoration: BoxDecoration(
                         color: const Color(0xffFF5E65).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12.w),
@@ -251,10 +251,11 @@ class HandPickPage extends StatelessWidget {
               height: 10.h,
             ),
             controller.imagePreView(
-                item.images.map((e) => e.imageUrl).toList(),
-                context,
-                250.w,
-                index
+              item.images.map((e) => e.imageUrl).toList(),
+              context,
+              250.w,
+              index,
+              item.images,
             ),
           ],
         ),

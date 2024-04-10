@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 class ImagePreViewSingle extends StatefulWidget {
   final String url;
   final double size;
+  final int imageWidth;
+  final int imageHeight;
   ui.Image? image;
 
-  ImagePreViewSingle({super.key, required this.url, required this.size});
+  ImagePreViewSingle({super.key, required this.url, required this.size,required this.imageWidth,required this.imageHeight});
 
   @override
   State<ImagePreViewSingle> createState() {
@@ -54,7 +56,6 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
   }
   @override
   void didUpdateWidget(covariant ImagePreViewSingle oldWidget) {
-    logE('didUpdateWidget');
     loadImage();
   }
   @override
@@ -101,7 +102,29 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         );
       }
     } else {
-      return Container();
+      ///比对一下图片的比例
+      if (widget.imageWidth / widget.imageHeight == 1) {
+        ///正方形的图片 直接返回我们需要的实际大小的容器并包裹
+        return SizedBox(
+          width: widget.size,
+          height: widget.size,
+
+        );
+      } else if (widget.imageWidth / widget.imageHeight < 1) {
+        /// 长方形图片，宽比高多类型，所以BoxFit。最好就是以宽优先
+        return SizedBox(
+          height: widget.size/3 *widget.imageHeight /widget.imageWidth,
+        );
+      } else if (widget.imageWidth / widget.imageHeight > 1) {
+        /// 长方形图片，高比宽多类型，所以BoxFit。最好就是以高优先
+        return SizedBox(
+          height: widget.size/3 *widget.imageWidth/widget.imageHeight,
+        );
+      } else {
+        return SizedBox(
+          height: widget.size,
+        );
+      }
     }
   }
 

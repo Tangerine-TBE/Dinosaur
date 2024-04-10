@@ -70,7 +70,7 @@ class PetController extends BaseController {
   }
 
   imagePreView(
-      List<String> images, BuildContext context, double size, int parentIndex) {
+      List<String> images, BuildContext context, double size, int parentIndex,List<ImageString> list) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -87,6 +87,8 @@ class PetController extends BaseController {
             child: ImagePreViewSingle(
               url: images[0],
               size: size,
+              imageHeight: list[0].height,
+              imageWidth: list[0].width,
             ),
           ),
         );
@@ -134,6 +136,8 @@ class PetController extends BaseController {
                   child: ImagePreViewSingle(
                     url: images[index],
                     size: size,
+                    imageWidth: list[index].width,
+                    imageHeight: list[index].height,
                   ),
                 ),
               );

@@ -94,8 +94,8 @@ class PostsList {
   String userName;
 
   factory PostsList.fromJson(Map<dynamic, dynamic> json) => PostsList(
-        waves: List<Wave>.from(jsonDecode(json["waves"] ?? '[]')
-            .map((x) => Wave.fromJson(x))),
+        waves: List<Wave>.from(
+            jsonDecode(json["waves"] ?? '[]').map((x) => Wave.fromJson(x))),
         images: List<ImageString>.from(jsonDecode(json["images"] ?? '[]')
             .map((x) => ImageString.fromJson(x))),
         likesNum: json["likesNum"] ?? 0,
@@ -144,19 +144,27 @@ class ImageString {
   ImageString({
     required this.imageBase64,
     required this.imageUrl,
+    required this.width,
+    required this.height,
   });
 
   String imageBase64;
   String imageUrl;
+  int width;
+  int height;
 
   factory ImageString.fromJson(Map<dynamic, dynamic> json) => ImageString(
-        imageBase64: json["imageBase64"],
-        imageUrl: json["imageUrl"],
+        imageBase64: json["imageBase64"]??'',
+        imageUrl: json["imageUrl"]??'',
+        width: json["width"]??0,
+        height: json["height"]??0,
       );
 
   Map<dynamic, dynamic> toJson() => {
         "imageBase64": imageBase64,
         "imageUrl": imageUrl,
+        "width": width,
+        "height": height,
       };
 }
 
@@ -216,7 +224,3 @@ class PushCreateReq {
         "topicTitle": topicTitle,
       };
 }
-
-
-
-

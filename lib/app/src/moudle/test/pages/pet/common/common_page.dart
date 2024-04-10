@@ -247,8 +247,13 @@ class CommonPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            controller.imagePreView(item.images.map((e) => e.imageUrl).toList(),
-                context, 250.w, index),
+            controller.imagePreView(
+              item.images.map((e) => e.imageUrl).toList(),
+              context,
+              250.w,
+              index,
+              item.images,
+            ),
           ],
         ),
       ],

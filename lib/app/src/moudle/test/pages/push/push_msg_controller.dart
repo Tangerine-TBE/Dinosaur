@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
@@ -10,6 +11,7 @@ import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
+import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/weight/long_press_pre_view.dart';
 import 'package:flutter/material.dart';
@@ -175,10 +177,13 @@ class PushMsgController extends BaseController {
     }
     final urlImages = <ImageString>[];
     for (var i in images) {
+       ui.Image image =  await loadImageWithUrl(i, Get.context!);
       urlImages.add(
         ImageString(
           imageBase64: '',
           imageUrl: i,
+          width: image.width,
+          height: image.height,
         ),
       );
     }
