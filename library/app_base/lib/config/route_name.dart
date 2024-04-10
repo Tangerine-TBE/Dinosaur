@@ -25,6 +25,13 @@ class RouteName {
   static const String details ='/details';
   static const String push ='/push';
   static const String imageView = '/imageView';
+  static const String postView = '/postView';
+  static const String collectView = '/collectView';
+  static const String likeView = '/likeView';
+  static const String review = '/review';
+  static const String cutePet = '/cutePet';
+  static const String faq = '/faq';
+  static const String periodRecord = '/periodRecord';
 
   //shake
   static const String mainPage = '/main';

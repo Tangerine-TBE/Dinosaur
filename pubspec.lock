@@ -12,10 +12,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "20071638cbe4e5964a427cfa0e86dce55d060bc7d82d56f3554095d7239a8765"
+      sha256: "22600aa1e926be775fa5fe7e6894e7fb3df9efda8891c73f70fb3262399a432d"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.4.2"
+    version: "3.4.10"
   args:
     dependency: transitive
     description:
@@ -85,7 +85,7 @@ packages:
     description:
       path: "."
       ref: "375x812"
-      resolved-ref: "1ecd88e381652e72c91e9e05e3375d4083404261"
+      resolved-ref: "4df7b593f32c29f10633e1290d265f73788b0e5a"
       url: "https://github.com/Tangerine-TBE/base.git"
     source: git
     version: "0.0.0"
@@ -125,10 +125,10 @@ packages:
     dependency: transitive
     description:
       name: crypto
-      sha256: cf75650c66c0316274e21d7c43d3dea246273af5955bd94e8184837cd577575c
+      sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -149,10 +149,10 @@ packages:
     dependency: transitive
     description:
       name: dio
-      sha256: bf173c8bc66b776e3c2892b6ac56ac1a5ad73d21dd06d337f9fe656f63612947
+      sha256: "0978e9a3e45305a80a7210dbeaf79d6ee8bee33f70c8e542dc654c952070217f"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0"
+    version: "5.4.2+1"
   equatable:
     dependency: transitive
     description:
@@ -270,6 +270,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.2"
+  flutter_oss_aliyun:
+    dependency: transitive
+    description:
+      name: flutter_oss_aliyun
+      sha256: d4e7423a29a3ff41aff6ab8278e0371716a3c3c1d086f937a9695a70ea8f8d39
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "6.4.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -652,10 +660,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "43ac87de6e10afabc85c445745a7b799e04de84cebaa4fd7bf55a5e1e9604d29"
+      sha256: "70fe966348fe08c34bf929582f1d8247d9d9408130723206472b4687227e4333"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.7.4"
+    version: "3.8.0"
   pull_to_refresh:
     dependency: transitive
     description:

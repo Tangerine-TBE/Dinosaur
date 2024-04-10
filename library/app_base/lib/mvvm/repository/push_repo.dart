@@ -1,5 +1,6 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/network/response/push_create_response.dart';
 import 'package:common/common/network/dio_client.dart';
 
 import '../../network/api.dart';
@@ -13,8 +14,12 @@ class PushRepo extends BaseRepo {
         format: (data) => PushResponse.fromJson(data));
   }
 
-  Future<AResponse<dynamic>> pushMsg(PushCreateReq pushCreateReq) {
-    return requestOnFuture(Api.pushMsg,
-        method: Method.post, params: pushCreateReq.toJson());
+  Future<AResponse<PushCreateResponse>> pushMsg(PushCreateReq pushCreateReq) {
+    return requestOnFuture(
+      Api.pushMsg,
+      method: Method.post,
+      params: pushCreateReq.toJson(),
+      format: (data) => PushCreateResponse.fromJson(data),
+    );
   }
 }

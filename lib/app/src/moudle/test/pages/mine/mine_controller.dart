@@ -20,29 +20,23 @@ class MineController extends BaseController {
 
   onContentItemClicked(int index) {
     if (index == 0) {
-      //Todo
+      navigateTo(RouteName.cutePet);
     } else if (index == 1) {
-      //Todo
+      navigateTo(RouteName.faq);
     } else {
-      //Todo
+      navigateTo(RouteName.periodRecord);
     }
-    logE("onContentItemClicked $index");
-
   }
   onLineItemClicked(int index){
     if(index == 0){
-    //Todo
+      navigateTo(RouteName.postView);
     }else if(index == 1){
-    //Todo
+      navigateTo(RouteName.review);
     }else if(index == 2 ){
-    //Todo
-    }else if (index == 3){
-    //Todo
+      navigateTo(RouteName.likeView);
     }else {
-    //Todo
+      navigateTo(RouteName.collectView);
     }
-    logE("onLineItemClicked $index");
-
   }
 
 }

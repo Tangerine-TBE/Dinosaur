@@ -47,3 +47,15 @@ Widget loadImage(String url, double width, double height) {
     );
   }
 }
+
+ImageProvider loadImageProvider(String url) {
+  if (url.isEmpty) {
+    return const AssetImage(ResName.loaded_failure);
+  } else {
+    try {
+      return NetworkImage(url);
+    } catch (e) {
+      return const AssetImage(ResName.loaded_failure);
+    }
+  }
+}

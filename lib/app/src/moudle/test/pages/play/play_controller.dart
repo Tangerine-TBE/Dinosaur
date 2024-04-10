@@ -20,29 +20,20 @@ class PlaySelfContentManager {
   final dataListId = 1;
   bool refreshing = true;
 
-  _Create() async {
-    for (int i = 0; i < 10; i++) {
-      await _createTopCenter(
-          subtitle: '小标题$i',
-          imgUrl: 'https://via.placeholder.com/150/0000F$i/808080?Text=Image$i',
-          content: '这是内容$i',
-          title: '大标题$i');
-    }
-  }
 
   Future loaMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
-    final response = await _repo.callTopCenter(
-      topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
-    );
-    if (response.isSuccess) {
-      CenterResponse? centerResponse = response.data;
-      if (centerResponse != null && !centerResponse.isEmpty()) {
-        dataList.addAll(centerResponse.data!.topicList);
-      }
-    }
-    refreshing = false;
-    update([dataListId]);
+    // final response = await _repo.callTopCenter(
+    //   topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
+    // );
+    // if (response.isSuccess) {
+    //   CenterResponse? centerResponse = response.data;
+    //   if (centerResponse != null && !centerResponse.isEmpty()) {
+    //     dataList.addAll(centerResponse.data!.topicList);
+    //   }
+    // }
+    // refreshing = false;
+    // update([dataListId]);
   }
 
   _fetchTopCenterList() async {

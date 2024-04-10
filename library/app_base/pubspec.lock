@@ -46,7 +46,7 @@ packages:
     description:
       path: "."
       ref: "375x812"
-      resolved-ref: "1ecd88e381652e72c91e9e05e3375d4083404261"
+      resolved-ref: "4df7b593f32c29f10633e1290d265f73788b0e5a"
       url: "https://github.com/Tangerine-TBE/base.git"
     source: git
     version: "0.0.0"
@@ -62,18 +62,18 @@ packages:
     dependency: transitive
     description:
       name: crypto
-      sha256: cf75650c66c0316274e21d7c43d3dea246273af5955bd94e8184837cd577575c
+      sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.3"
   dio:
     dependency: transitive
     description:
       name: dio
-      sha256: bf173c8bc66b776e3c2892b6ac56ac1a5ad73d21dd06d337f9fe656f63612947
+      sha256: "0978e9a3e45305a80a7210dbeaf79d6ee8bee33f70c8e542dc654c952070217f"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0"
+    version: "5.4.2+1"
   event_bus:
     dependency: "direct main"
     description:
@@ -167,6 +167,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
+  flutter_oss_aliyun:
+    dependency: "direct main"
+    description:
+      name: flutter_oss_aliyun
+      sha256: d4e7423a29a3ff41aff6ab8278e0371716a3c3c1d086f937a9695a70ea8f8d39
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "6.4.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -187,10 +195,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_spinkit
-      sha256: b39c753e909d4796906c5696a14daf33639a76e017136c8d82bf3e620ce5bb8e
+      sha256: d2696eed13732831414595b98863260e33e8882fc069ee80ec35d4ac9ddb0472
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.1"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -261,10 +269,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "39f2bfe497e495450c81abcd44b62f56c2a36a37a175da7d137b4454977b51b1"
+      sha256: "42c098e7fb6334746be37cdc30369ade356ed4f14d48b7a0313f95a9159f4321"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.9+3"
+    version: "0.8.9+5"
   image_picker_for_web:
     dependency: transitive
     description:

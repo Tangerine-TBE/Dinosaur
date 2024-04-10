@@ -6,10 +6,9 @@ import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/image_preview_single.dart';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:get/get.dart';
 
 import '../home/home_controller.dart';
@@ -19,6 +18,7 @@ class PetController extends BaseController {
   late DynamicManager dynamicManager;
   late HandPickManager handPickManager;
   late RefreshManager refreshManager;
+  var currentIndex = 0;
   final _pushRepo = Get.find<PushRepo>();
 
   @override
@@ -46,13 +46,31 @@ class PetController extends BaseController {
       dynamicManager.init();
     } else if (index == 2) {
       handPickManager.init();
-    } else if (index == 3) {
+    } else {
       refreshManager.init();
+    }
+    currentIndex = index;
+  }
+
+  naviToPush() async {
+    PostsList postsList = await navigateForResult(RouteName.push);
+    if (currentIndex == 0) {
+      commonManager.dataList.insert(0, postsList);
+      update([commonManager.listId]);
+    } else if (currentIndex == 1) {
+      handPickManager.dataList.insert(0, postsList);
+      update([handPickManager.listId]);
+    } else if (currentIndex == 2) {
+      dynamicManager.dataList.insert(0, postsList);
+      update([dynamicManager.listId]);
+    } else {
+      refreshManager.dataList.insert(0, postsList);
+     update([refreshManager.listId]);
     }
   }
 
-  imagePreView(List<String> images, BuildContext context, double size,
-      int parentIndex) {
+  imagePreView(
+      List<String> images, BuildContext context, double size, int parentIndex) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -153,21 +171,23 @@ class CommonManager {
   }
 
   getList() async {
-    final response = await controller.apiLaunch(() =>
-        pushRepo.getPushMsg(
-          PushMsgReq(
-              topicId: 'Recomed',
-              pageIndex: 1,
-              pageSize: 10,
-              orderBy: 'createTime desc',
-              topicType: 'Dynamic'),
-        ),);
+    final response = await controller.apiLaunch(
+      () => pushRepo.getPushMsg(
+        PushMsgReq(
+            topicId: 'Recomed',
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            postsType: 'Recomed'),
+      ),
+    );
 
     if (response?.data != null) {
       dataList.addAll(response!.data!.postsList);
       controller.update([listId]);
     }
   }
+
   List<BannerModel> get listBanners {
     return [
       BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
@@ -177,8 +197,6 @@ class CommonManager {
     ];
   }
 }
-
-
 
 class DynamicManager {
   bool isInit = false;
@@ -204,16 +222,18 @@ class DynamicManager {
       BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
     ];
   }
+
   getList() async {
-    final response = await controller.apiLaunch(() =>
-        pushRepo.getPushMsg(
-          PushMsgReq(
-              topicId: 'Dynamic',
-              pageIndex: 1,
-              pageSize: 10,
-              orderBy: 'createTime desc',
-              topicType: 'Dynamic'),
-        ),);
+    final response = await controller.apiLaunch(
+      () => pushRepo.getPushMsg(
+        PushMsgReq(
+            topicId: 'Dynamic',
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            postsType: 'Dynamic'),
+      ),
+    );
 
     if (response?.data != null) {
       dataList.addAll(response!.data!.postsList);
@@ -246,16 +266,18 @@ class HandPickManager {
       isInit = true;
     }
   }
+
   getList() async {
-    final response = await controller.apiLaunch(() =>
-        pushRepo.getPushMsg(
-          PushMsgReq(
-              topicId: 'Curated',
-              pageIndex: 1,
-              pageSize: 10,
-              orderBy: 'createTime desc',
-              topicType: 'Dynamic'),
-        ),);
+    final response = await controller.apiLaunch(
+      () => pushRepo.getPushMsg(
+        PushMsgReq(
+            topicId: 'Curated',
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            postsType: 'Curated'),
+      ),
+    );
 
     if (response?.data != null) {
       dataList.addAll(response!.data!.postsList);
@@ -270,7 +292,7 @@ class RefreshManager {
   final listId = 4;
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
-
+  var pageIndex = 1;
   RefreshManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -281,24 +303,41 @@ class RefreshManager {
       BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
     ];
   }
-
+  Future loadMoreList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          topicId: 'Latest',
+          pageIndex: ++pageIndex,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Latest'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        dataList.addAll(response.data!.data!.postsList);
+        controller.update([listId]);
+      }
+    }
+  }
   init() {
     if (!isInit) {
       getList();
       isInit = true;
     }
   }
-  getList() async {
-    final response = await controller.apiLaunch(() =>
-        pushRepo.getPushMsg(
-          PushMsgReq(
-              topicId: 'Latest',
-              pageIndex: 1,
-              pageSize: 10,
-              orderBy: 'createTime desc',
-              topicType: 'Dynamic'),
-        ),);
 
+  getList() async {
+    final response = await controller.apiLaunch(
+      () => pushRepo.getPushMsg(
+        PushMsgReq(
+            topicId: 'Latest',
+            pageIndex: 1,
+            pageSize: 10,
+            orderBy: 'createTime desc',
+            postsType: 'Latest'),
+      ),
+    );
     if (response?.data != null) {
       dataList.addAll(response!.data!.postsList);
       controller.update([listId]);

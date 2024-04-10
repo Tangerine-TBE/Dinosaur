@@ -1,24 +1,30 @@
+import 'dart:io';
+
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/oss_auth_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
-import 'package:app_base/util/file_utils.dart';
+import 'package:app_base/mvvm/repository/upload_repo.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/weight/long_press_pre_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
+import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 import '../chart/weight/awesome_chart.dart';
+import 'package:uuid/uuid.dart';
 
 class PushMsgController extends BaseController {
   final _playRepo = Get.find<PlayRepo>();
   final _pushRepo = Get.find<PushRepo>();
   final _modelRepo = Get.find<ModelRepo>();
+  final _uploadRepo = Get.find<UpLoadRepo>();
   final tagList = <TopicList>[];
   final waveList = <ModeList>[];
   final tagListId = 1;
@@ -28,6 +34,7 @@ class PushMsgController extends BaseController {
   final selectedTag = ''.obs;
   var selectedImagesObx = <String>[];
   late TextEditingController editingController;
+
 
   @override
   onInit() {
@@ -39,7 +46,7 @@ class PushMsgController extends BaseController {
   imagePreView(
       List<String> images, BuildContext context, double size, int parentIndex) {
     if (images.isNotEmpty) {
-      var reSizeHeight;
+      double reSizeHeight;
 
       if (images.length <= 3) {
         reSizeHeight = size / 3;
@@ -65,9 +72,11 @@ class PushMsgController extends BaseController {
       return const SizedBox();
     }
   }
-  onDeleteWave(){
+
+  onDeleteWave() {
     selectedWave.value = <int>[];
   }
+
   _fetchList() async {
     showLoading();
     final response = await _playRepo.callTopCenter(
@@ -98,38 +107,82 @@ class PushMsgController extends BaseController {
       showError('不能发布空信息哦');
       return;
     }
+    showLoading(userInteraction: false);
+    var imageUrls = <String>[];
+    if (selectedImagesObx.isNotEmpty) {
+      final response = await _uploadRepo.getUploadAuth();
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          OssAuthBean ossAuthBean = response.data!.data!;
+          final auth = Auth(
+            accessKey: ossAuthBean.accessKeyId,
+            accessSecret: ossAuthBean.accessKeySecret,
+            secureToken: ossAuthBean.securityToken,
+            expire: ossAuthBean.expiration,
+          );
+          Client.init(
+              ossEndpoint: "oss-cn-hangzhou.aliyuncs.com",
+              bucketName: "cxw-user",
+              authGetter: () => auth);
+          for (var i in selectedImagesObx) {
+            final file = File(i);
+            final bytes = file.readAsBytesSync();
+            final udid = const Uuid().v4();
+            final targetPath = "src/pet/${udid.replaceAll("-", "")}.jpeg";
+            await Client().putObject(
+              bytes,
+              targetPath,
+              option: PutRequestOption(
+                onSendProgress: (count, total) {},
+                override: true,
+                aclModel: AclMode.inherited,
+                storageType: StorageType.ia,
+                headers: {"cache-control": "no-cache"},
+              ),
+            );
+            imageUrls.add("https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$targetPath");
+          }
+        }
+      }
+    }
+
     PushCreateReq pushCreateReq = PushCreateReq(
         waves: <Wave>[],
-        topicId: findTopicId(selectedTag.value ?? ''),
-        topicTitle: selectedTag.value ?? '',
-        images: await imagesToBase64(selectedImagesObx),
+        topicId: findTopicId(selectedTag.value.isNullOrEmpty?'':selectedTag.value),
+        topicTitle: selectedTag.value.isNullOrEmpty?'':selectedTag.value,
+        images: await imagesConverter(imageUrls),
         userId: User.loginRspBean!.userId,
         content: editingController.text.toString());
     final response = await _pushRepo.pushMsg(pushCreateReq);
     if (response.isSuccess) {
       EasyLoading.showSuccess('上传成功');
-      finish();
+      if(response.data?.data != null){
+        var data = response.data!.data!;
+        setResult(data);
+        finish();
+      }
     }
+    dismiss();
   }
 
   onPicSelectClicked() {
     _showImagePickerBottomSheet();
   }
 
-  imagesToBase64(List<String> images) async {
+  imagesConverter(List<String> images) async {
     if (images.isEmpty) {
       return <ImageString>[];
     }
-    final base64Images = <ImageString>[];
+    final urlImages = <ImageString>[];
     for (var i in images) {
-      base64Images.add(
+      urlImages.add(
         ImageString(
-          imageBase64: await file2Base64(i),
-          imageUrl: '',
+          imageBase64: '',
+          imageUrl: i,
         ),
       );
     }
-    return base64Images;
+    return urlImages;
   }
 
   findTopicId(String tag) {
@@ -138,6 +191,7 @@ class PushMsgController extends BaseController {
         return i.id;
       }
     }
+    return '';
   }
 
   _showImagePickerBottomSheet() {

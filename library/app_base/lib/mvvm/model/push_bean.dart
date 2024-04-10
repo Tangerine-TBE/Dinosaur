@@ -1,32 +1,33 @@
+import 'dart:convert';
+
 class PushMsgReq {
   PushMsgReq({
     required this.topicId,
     required this.pageIndex,
     required this.pageSize,
     required this.orderBy,
-    required this.topicType,
+    required this.postsType,
   });
 
   String topicId;
   int pageIndex;
   int pageSize;
   String orderBy;
-  String topicType;
+  String postsType;
 
   factory PushMsgReq.fromJson(Map<dynamic, dynamic> json) => PushMsgReq(
         topicId: json["topicId"],
         pageIndex: json["pageIndex"],
         pageSize: json["pageSize"],
         orderBy: json["orderBy"],
-        topicType: json["topicType"],
+        postsType: json["topicType"],
       );
 
   Map<String, dynamic> toJson() => {
-        "topicId": topicId,
         "pageIndex": pageIndex,
         "pageSize": pageSize,
         "orderBy": orderBy,
-        "topicType": topicType,
+        "postsType": postsType,
       };
 }
 
@@ -93,27 +94,28 @@ class PostsList {
   String userName;
 
   factory PostsList.fromJson(Map<dynamic, dynamic> json) => PostsList(
-        waves: List<Wave>.from(json["waves"].map((x) => Wave.fromJson(x))),
-        images: List<ImageString>.from(
-            json["images"].map((x) => ImageString.fromJson(x))),
-        likesNum: json["likesNum"],
-        creatorId: json["creatorId"],
-        modifierId: json["modifierId"],
-        favorsNum: json["favorsNum"],
-        viewsNum: json["viewsNum"],
-        userId: json["userId"],
-        content: json["content"],
-        topicTitle: json["topicTitle"],
-        topicId: json["topicId"],
-        participantNum: json["participantNum"],
-        modifyTime: json["modifyTime"],
-        createTime: json["createTime"],
-        id: json["id"],
-        isRecomed: json["isRecomed"],
-        commentsNum: json["commentsNum"],
-        isCurated: json["isCurated"],
-        userAvator: json["userAvator"],
-        userName: json["userName"],
+        waves: List<Wave>.from(jsonDecode(json["waves"] ?? '[]')
+            .map((x) => Wave.fromJson(x))),
+        images: List<ImageString>.from(jsonDecode(json["images"] ?? '[]')
+            .map((x) => ImageString.fromJson(x))),
+        likesNum: json["likesNum"] ?? 0,
+        creatorId: json["creatorId"] ?? '',
+        modifierId: json["modifierId"] ?? '',
+        favorsNum: json["favorsNum"] ?? 0,
+        viewsNum: json["viewsNum"] ?? 0,
+        userId: json["userId"] ?? '',
+        content: json["content"] ?? '',
+        topicTitle: json["topicTitle"] ?? '',
+        topicId: json["topicId"] ?? '',
+        participantNum: json["participantNum"] ?? 0,
+        modifyTime: json["modifyTime"] ?? 0,
+        createTime: json["createTime"] ?? 0,
+        id: json["id"] ?? '',
+        isRecomed: json["isRecomed"] ?? '',
+        commentsNum: json["commentsNum"] ?? 0,
+        isCurated: json["isCurated"] ?? '',
+        userAvator: json["userAvator"] ?? '',
+        userName: json["userName"] ?? '',
       );
 
   Map<dynamic, dynamic> toJson() => {
@@ -214,3 +216,7 @@ class PushCreateReq {
         "topicTitle": topicTitle,
       };
 }
+
+
+
+

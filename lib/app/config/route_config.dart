@@ -6,6 +6,7 @@ import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
+import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
@@ -15,6 +16,18 @@ import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/collect/mine_collect_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/collect/mine_collect_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review.page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
@@ -37,6 +50,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_page.dart';
 import 'package:app_base/config/user.dart';
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
+import '../src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
+import '../src/moudle/test/pages/mine/periodRecord/period_record_page.dart';
 
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
@@ -61,6 +76,9 @@ class RouteConfig extends ARoute {
               );
               Get.lazyPut(
                 () => ModelRepo(),
+              );
+              Get.lazyPut(
+                () => UpLoadRepo(),
               );
             },
           ),
@@ -210,61 +228,69 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => CustomModelController());
             },
           ),
-        )
-        //     GetPage(
-        //       name: RouteName.mainPage,
-        //       page: () => const MainPage(),
-        //       binding: BindingsBuilder(
-        //         () {
-        //           Get.lazyPut(
-        //             () => MainController(),
-        //           );
-        //         },
-        //       ),
-        //     ),
-        //     GetPage(
-        //       name: RouteName.scanPage,
-        //       page: () => const ScannerPage(),
-        //       binding: BindingsBuilder(
-        //         () {
-        //           Get.lazyPut(
-        //             () => ScannerController(),
-        //           );
-        //         },
-        //       ),
-        //     ),
-        //     GetPage(
-        //       name: RouteName.instructionsPage,
-        //       page: () => InstructionsPage(),
-        //       binding: BindingsBuilder(
-        //         () {
-        //           Get.lazyPut(
-        //             () => InstructionsController(),
-        //           );
-        //         },
-        //       ),
-        //     ),
-        //     GetPage(
-        //       name: RouteName.playPage,
-        //       page: () => PlayPage(),
-        //       binding: BindingsBuilder(
-        //         () {
-        //           Get.lazyPut(
-        //             () => InstructionsController(),
-        //           );
-        //         },
-        //       ),
-        //     ),
-        // GetPage(
-        //   name: RouteName.shakeItPage,
-        //   page: () => PlayPage(),
-        //   binding: BindingsBuilder(
-        //         () {
-        //       Get.lazyPut(
-        //             () => ShakeItPage(),
-        //       );
-        //     },
-        //   ),
-        // ),
+        ),
+        GetPage(
+          name: RouteName.collectView,
+          page: (() => const MineCollectPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => MineCollectController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.review,
+          page: (() => const MineReviewPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => MineReviewController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.postView,
+          page: (() => const MinePostPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => MinePostController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.likeView,
+          page: (() => const MineLikePage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => MineLikeController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.cutePet,
+          page: (() => const CutePetPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => CutePetController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.faq,
+          page: (() => const FaqPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => FaqController());
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.periodRecord,
+          page: (() => const PeriodRecordPage()),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(() => PeriodRecordController());
+            },
+          ),
+        ),
       ];
 }

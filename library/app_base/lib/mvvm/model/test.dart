@@ -8,104 +8,88 @@ String testToJson(Test data) => json.encode(data.toJson());
 
 class Test {
     Test({
-        required this.waveList,
+        required this.waves,
+        required this.topicId,
+        required this.images,
+        required this.id,
+        required this.isRecomed,
+        required this.userId,
+        required this.isCurated,
+        required this.content,
+        required this.topicTitle,
     });
 
-    List<WaveList> waveList;
+    List<Wave> waves;
+    String topicId;
+    List<Image> images;
+    String id;
+    bool isRecomed;
+    String userId;
+    bool isCurated;
+    String content;
+    String topicTitle;
 
     factory Test.fromJson(Map<dynamic, dynamic> json) => Test(
-        waveList: List<WaveList>.from(json["waveList"].map((x) => WaveList.fromJson(x))),
+        waves: List<Wave>.from(json["waves"].map((x) => Wave.fromJson(x))),
+        topicId: json["topicId"],
+        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        id: json["id"],
+        isRecomed: json["isRecomed"],
+        userId: json["userId"],
+        isCurated: json["isCurated"],
+        content: json["content"],
+        topicTitle: json["topicTitle"],
     );
 
     Map<dynamic, dynamic> toJson() => {
-        "waveList": List<dynamic>.from(waveList.map((x) => x.toJson())),
+        "waves": List<dynamic>.from(waves.map((x) => x.toJson())),
+        "topicId": topicId,
+        "images": List<dynamic>.from(images.map((x) => x.toJson())),
+        "id": id,
+        "isRecomed": isRecomed,
+        "userId": userId,
+        "isCurated": isCurated,
+        "content": content,
+        "topicTitle": topicTitle,
     };
 }
 
-class WaveList {
-    WaveList({
-        required this.likesNum,
-        required this.creatorId,
-        required this.modifierId,
-        required this.description,
-        required this.favorsNum,
-        required this.type,
-        required this.viewsNum,
-        required this.userId,
-        required this.tags,
-        required this.kcal,
-        required this.modifyTime,
-        required this.createTime,
-        required this.appId,
-        required this.name,
-        required this.tenantId,
-        required this.id,
-        required this.attribute,
-        required this.actions,
-        required this.commentsNum,
+class Image {
+    Image({
+        required this.imageBase64,
+        required this.imageUrl,
     });
 
-    int likesNum;
-    String creatorId;
-    String modifierId;
-    String description;
-    int favorsNum;
-    String type;
-    int viewsNum;
-    String userId;
-    String tags;
-    double kcal;
-    int modifyTime;
-    int createTime;
-    String appId;
-    String name;
-    String tenantId;
-    String id;
-    String attribute;
-    String actions;
-    int commentsNum;
+    String imageBase64;
+    String imageUrl;
 
-    factory WaveList.fromJson(Map<dynamic, dynamic> json) => WaveList(
-        likesNum: json["likesNum"],
-        creatorId: json["creatorId"],
-        modifierId: json["modifierId"],
-        description: json["description"],
-        favorsNum: json["favorsNum"],
-        type: json["type"],
-        viewsNum: json["viewsNum"],
-        userId: json["userId"],
-        tags: json["tags"],
-        kcal: json["kcal"]?.toDouble(),
-        modifyTime: json["modifyTime"],
-        createTime: json["createTime"],
-        appId: json["appId"],
-        name: json["name"],
-        tenantId: json["tenantId"],
-        id: json["id"],
-        attribute: json["attribute"],
-        actions: json["actions"],
-        commentsNum: json["commentsNum"],
+    factory Image.fromJson(Map<dynamic, dynamic> json) => Image(
+        imageBase64: json["imageBase64"],
+        imageUrl: json["imageUrl"],
     );
 
     Map<dynamic, dynamic> toJson() => {
-        "likesNum": likesNum,
-        "creatorId": creatorId,
-        "modifierId": modifierId,
-        "description": description,
-        "favorsNum": favorsNum,
-        "type": type,
-        "viewsNum": viewsNum,
-        "userId": userId,
-        "tags": tags,
-        "kcal": kcal,
-        "modifyTime": modifyTime,
-        "createTime": createTime,
-        "appId": appId,
-        "name": name,
-        "tenantId": tenantId,
+        "imageBase64": imageBase64,
+        "imageUrl": imageUrl,
+    };
+}
+
+class Wave {
+    Wave({
+        required this.id,
+        required this.actions,
+    });
+
+    String id;
+    String actions;
+
+    factory Wave.fromJson(Map<dynamic, dynamic> json) => Wave(
+        id: json["id"],
+        actions: json["actions"],
+    );
+
+    Map<dynamic, dynamic> toJson() => {
         "id": id,
-        "attribute": attribute,
         "actions": actions,
-        "commentsNum": commentsNum,
     };
 }

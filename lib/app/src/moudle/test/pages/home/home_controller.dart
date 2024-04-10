@@ -38,10 +38,10 @@ class HomeController extends BaseController {
   }
   toImageView(String url,String tag){
     Get.lazyPut(
-          () => ImageViewController(url: url,tag: tag,),tag: tag
+          () => ImageViewController(),tag: tag
     );
     final Route route =
-    MaterialPageRoute(builder: (context) =>  ImageViewPage(tagString: tag,));
+    MaterialPageRoute(builder: (context) =>  ImageViewPage(tagString: tag,urlString: url));
     Navigator.of(Get.context!).push(route);
   }
   Route? onGenerateRoute(RouteSettings settings) {
