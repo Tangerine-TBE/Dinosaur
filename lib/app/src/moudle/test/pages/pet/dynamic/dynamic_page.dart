@@ -179,7 +179,9 @@ class DynamicPage extends StatelessWidget {
                 width: 122.w,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+
+                },
                 child: Row(
                   children: [
                     Image.asset(
@@ -190,7 +192,7 @@ class DynamicPage extends StatelessWidget {
                     Text(
                       item.likesNum.toString(),
                       style: TextStyle(
-                        color: Color(0xff8F9098),
+                        color: const Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
                       ),

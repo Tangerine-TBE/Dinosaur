@@ -92,8 +92,11 @@ class DetailsController extends BaseController{
         //     future: loadImageWithUrl(images, context), builder: builder)
       }
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 
+  _fetchCommentList(){
+
+  }
 }

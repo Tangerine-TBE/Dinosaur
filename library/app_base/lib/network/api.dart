@@ -27,4 +27,8 @@ class Api {
   static const mineCollect = '/api/v1/meng/my/favorite/list';
   //文件上传(getToken)
   static const upLoadFile = '/api/v1/third/aliyun/getOssAuth';
+  //获取评论列表
+  static const getCommentList = '/api/v1/meng/comment/list';
+  //创建评论
+  static const createComment = '/api/v1/meng/comment';
 }
