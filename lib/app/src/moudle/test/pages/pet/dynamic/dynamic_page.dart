@@ -128,34 +128,37 @@ class DynamicPage extends StatelessWidget {
                             child: const Icon(Icons.more_horiz)),
                       ],
                     ),
-                    Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
-                      decoration: BoxDecoration(
-                        color: const Color(0xffFF5E65).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12.w),
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '#',
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                color: const Color(0xffFF5E65),
-                                fontWeight: FontWeight.w700,
+                    Visibility(
+                      visible: item.topicTitle.isNotEmpty,
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffFF5E65).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12.w),
+                        ),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '#',
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: const Color(0xffFF5E65),
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            const TextSpan(text: ' '),
-                            TextSpan(
-                              text: item.topicTitle,
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                color: const Color(0xffFF5E65),
-                                fontWeight: FontWeight.w400,
+                              const TextSpan(text: ' '),
+                              TextSpan(
+                                text: item.topicTitle,
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  color: const Color(0xffFF5E65),
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
