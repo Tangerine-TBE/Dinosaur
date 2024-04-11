@@ -33,75 +33,97 @@ class TopicCenterReq {
 
 class TopicList {
   TopicList({
-    required this.icon,
+    required this.likesNum,
     required this.creatorId,
     required this.modifierId,
+    required this.favorsNum,
     required this.deletedId,
     required this.title,
+    required this.viewsNum,
     required this.content,
+    required this.participantNum,
     required this.modifyTime,
     required this.isDeleted,
     required this.createTime,
     required this.subtitle,
+    required this.imageUrl,
     required this.appId,
     required this.tenantId,
-    required this.checksum,
     required this.id,
+    required this.iconUrl,
     required this.deletedTime,
+    required this.commentsNum,
   });
 
-  String icon;
+  int likesNum;
   String creatorId;
   String modifierId;
+  int favorsNum;
   String deletedId;
   String title;
+  int viewsNum;
   String content;
+  int participantNum;
   int modifyTime;
   String isDeleted;
   int createTime;
   String subtitle;
+  String imageUrl;
   String appId;
   String tenantId;
-  String checksum;
   String id;
+  String iconUrl;
   String deletedTime;
+  int commentsNum;
 
   factory TopicList.fromJson(Map<dynamic, dynamic> json) => TopicList(
-    icon: json["icon"]??'',
-    creatorId: json["creatorId"]??'',
+    likesNum: json["likesNum"]??0,
+    creatorId: json["creatorId"]??"",
     modifierId: json["modifierId"]??'',
+    favorsNum: json["favorsNum"]??0,
     deletedId: json["deletedId"]??'',
     title: json["title"]??'',
+    viewsNum: json["viewsNum"]??0,
     content: json["content"]??'',
+    participantNum: json["participantNum"]??0,
     modifyTime: json["modifyTime"]??0,
     isDeleted: json["isDeleted"]??'',
     createTime: json["createTime"]??0,
     subtitle: json["subtitle"]??'',
+    imageUrl: json["imageUrl"]??'',
     appId: json["appId"]??'',
     tenantId: json["tenantId"]??'',
-    checksum: json["checksum"]??'',
     id: json["id"]??'',
+    iconUrl: json["iconUrl"]??'',
     deletedTime: json["deletedTime"]??'',
+    commentsNum: json["commentsNum"]??0,
   );
 
   Map<dynamic, dynamic> toJson() => {
-    "icon": icon,
+    "likesNum": likesNum,
     "creatorId": creatorId,
     "modifierId": modifierId,
+    "favorsNum": favorsNum,
     "deletedId": deletedId,
     "title": title,
+    "viewsNum": viewsNum,
     "content": content,
+    "participantNum": participantNum,
     "modifyTime": modifyTime,
     "isDeleted": isDeleted,
     "createTime": createTime,
     "subtitle": subtitle,
+    "imageUrl": imageUrl,
     "appId": appId,
     "tenantId": tenantId,
-    "checksum": checksum,
     "id": id,
+    "iconUrl": iconUrl,
     "deletedTime": deletedTime,
+    "commentsNum": commentsNum,
   };
 }
+
+
 
 
 class TopiCenterCreateReq {

@@ -7,6 +7,7 @@ class PushMsgReq {
     required this.pageSize,
     required this.orderBy,
     required this.postsType,
+    required this.userId,
   });
 
   String topicId;
@@ -14,16 +15,20 @@ class PushMsgReq {
   int pageSize;
   String orderBy;
   String postsType;
+  String userId;
 
   factory PushMsgReq.fromJson(Map<dynamic, dynamic> json) => PushMsgReq(
         topicId: json["topicId"],
         pageIndex: json["pageIndex"],
         pageSize: json["pageSize"],
         orderBy: json["orderBy"],
+        userId:json["userId"],
         postsType: json["topicType"],
       );
 
   Map<String, dynamic> toJson() => {
+        "userId":userId,
+        "topicId": topicId,
         "pageIndex": pageIndex,
         "pageSize": pageSize,
         "orderBy": orderBy,
@@ -154,10 +159,10 @@ class ImageString {
   int height;
 
   factory ImageString.fromJson(Map<dynamic, dynamic> json) => ImageString(
-        imageBase64: json["imageBase64"]??'',
-        imageUrl: json["imageUrl"]??'',
-        width: json["width"]??0,
-        height: json["height"]??0,
+        imageBase64: json["imageBase64"] ?? '',
+        imageUrl: json["imageUrl"] ?? '',
+        width: json["width"] ?? 0,
+        height: json["height"] ?? 0,
       );
 
   Map<dynamic, dynamic> toJson() => {

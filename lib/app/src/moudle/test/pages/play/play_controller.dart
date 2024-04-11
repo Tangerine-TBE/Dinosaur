@@ -12,7 +12,6 @@ import 'package:app_base/mvvm/repository/play_repo.dart';
 
 class PlaySelfContentManager {
   final Function update;
-
   PlaySelfContentManager({required this.update});
 
   List<TopicList> dataList = [];
@@ -23,17 +22,6 @@ class PlaySelfContentManager {
 
   Future loaMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
-    // final response = await _repo.callTopCenter(
-    //   topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
-    // );
-    // if (response.isSuccess) {
-    //   CenterResponse? centerResponse = response.data;
-    //   if (centerResponse != null && !centerResponse.isEmpty()) {
-    //     dataList.addAll(centerResponse.data!.topicList);
-    //   }
-    // }
-    // refreshing = false;
-    // update([dataListId]);
   }
 
   _fetchTopCenterList() async {
@@ -48,6 +36,11 @@ class PlaySelfContentManager {
     }
     refreshing = false;
     update([dataListId]);
+  }
+  onCreateTopItemClicked(){
+
+
+
   }
 
   _createTopCenter(

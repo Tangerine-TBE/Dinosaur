@@ -12,7 +12,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 import 'package:get/get.dart';
-import 'package:loadmore_listview/loadmore_listview.dart';
+
+import '../../weight/loadmore_listview.dart';
 
 class PlayPage extends BaseEmptyPage<PlayController> {
   const PlayPage({super.key});
@@ -320,7 +321,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.h),
-              child: loadImage(bean.icon, 64.h, 64.h),
+              child: loadImage(bean.imageUrl, 64.h, 64.h),
             ),
             Expanded(
               child: Container(
@@ -442,7 +443,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
             ],
             begin: Alignment.center,
             end: Alignment.centerRight,
-            transform: GradientRotation(1.2),
+            transform: const GradientRotation(1.2),
           ),
         ),
         child: FittedBox(

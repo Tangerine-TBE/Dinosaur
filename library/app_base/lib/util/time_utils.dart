@@ -22,6 +22,6 @@ String timeStampToDayOrHourBefore(int milliSeconds) {
   }else if(differenceInMin>0){
     return '$differenceInMin分钟前';
   }else{
-    return '无';
+    return '刚刚';
   }
 }

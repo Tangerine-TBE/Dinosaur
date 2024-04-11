@@ -8,6 +8,7 @@ import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
+import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
@@ -93,8 +94,9 @@ class RouteConfig extends ARoute {
             () {
               var map = Get.arguments;
               PostsList postList = map['item'];
-              int index  = map['index'];
-              Get.lazyPut(() => DetailsController(item: postList,index:index));
+              int index = map['index'];
+              Get.lazyPut(
+                  () => DetailsController(item: postList, index: index));
               Get.lazyPut(() => DetailsRepo());
             },
           ),
@@ -150,6 +152,9 @@ class RouteConfig extends ARoute {
               TopicList topicList = Get.arguments;
               Get.lazyPut(
                 () => CenterDetailsController(topCenterList: topicList),
+              );
+              Get.lazyPut(
+                () => PushRepo(),
               );
             },
           ),

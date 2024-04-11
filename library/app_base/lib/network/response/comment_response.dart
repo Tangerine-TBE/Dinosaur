@@ -8,8 +8,8 @@ class CommentListResponse with DataHolder<CommentListRsp> {
   }
 }
 
-class CommentCreateResponse with DataHolder<CommentCreateRsp> {
+class CommentCreateResponse with DataHolder<CommentList> {
   CommentCreateResponse.fromJson(Map<dynamic, dynamic> map) {
-    convert(map, (data) => CommentCreateRsp.fromJson(data));
+    convert(map, (data) => CommentList.fromJson(data));
   }
 }

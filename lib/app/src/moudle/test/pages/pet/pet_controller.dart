@@ -1,5 +1,6 @@
 import 'package:app_base/config/res_name.dart';
 import 'package:app_base/config/route_name.dart';
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
@@ -168,6 +169,7 @@ class CommonManager {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
+        userId: User.loginRspBean!.userId,
           topicId: 'Dynamic',
           pageIndex: ++pageIndex,
           pageSize: 10,
@@ -240,6 +242,7 @@ class CommonManager {
     final response = await controller.apiLaunch(
       () => pushRepo.getPushMsg(
         PushMsgReq(
+            userId: User.loginRspBean!.userId,
             topicId: 'Recomed',
             pageIndex: 1,
             pageSize: 10,
@@ -294,7 +297,8 @@ class DynamicManager {
     final response = await controller.apiLaunch(
       () => pushRepo.getPushMsg(
         PushMsgReq(
-            topicId: 'Dynamic',
+            userId: User.loginRspBean!.userId,
+            topicId: '',
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',
@@ -311,7 +315,9 @@ class DynamicManager {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
-          topicId: 'Dynamic',
+          userId: User.loginRspBean!.userId,
+
+          topicId: '',
           pageIndex: ++pageIndex,
           pageSize: 10,
           orderBy: 'createTime desc',
@@ -400,7 +406,8 @@ class HandPickManager {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
-          topicId: 'Curated',
+          userId: User.loginRspBean!.userId,
+          topicId: '',
           pageIndex: ++pageIndex,
           pageSize: 10,
           orderBy: 'createTime desc',
@@ -462,7 +469,8 @@ class HandPickManager {
     final response = await controller.apiLaunch(
       () => pushRepo.getPushMsg(
         PushMsgReq(
-            topicId: 'Curated',
+            userId: User.loginRspBean!.userId,
+            topicId: '',
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',
@@ -498,7 +506,8 @@ class RefreshManager {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
-          topicId: 'Latest',
+          userId: User.loginRspBean!.userId,
+          topicId: '',
           pageIndex: ++pageIndex,
           pageSize: 10,
           orderBy: 'createTime desc',
@@ -565,7 +574,8 @@ class RefreshManager {
     final response = await controller.apiLaunch(
       () => pushRepo.getPushMsg(
         PushMsgReq(
-            topicId: 'Latest',
+            userId: User.loginRspBean!.userId,
+            topicId: '',
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',

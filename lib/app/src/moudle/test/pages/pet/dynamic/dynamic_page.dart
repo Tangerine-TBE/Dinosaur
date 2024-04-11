@@ -9,7 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:loadmore_listview/loadmore_listview.dart';
+
+import '../../../weight/loadmore_listview.dart';
 
 class DynamicPage extends StatelessWidget {
   final PetController controller;

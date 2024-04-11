@@ -109,7 +109,6 @@ class DetailsController extends BaseController {
     } else {
       parentId = '0';
     }
-
     final response = await _repo.createComment(
       CommentCreateReq(
           postsId: item.id,
@@ -120,8 +119,13 @@ class DetailsController extends BaseController {
           parentId: parentId,
           content: editTextController.value.text),
     );
+    editTextController.clear();
     if (response.isSuccess) {
-      EasyLoading.showSuccess('评论成功！');
+      if(response.data?.data != null){
+        list.insert(0,response.data!.data!);
+        update([listId]);
+        EasyLoading.showSuccess('评论成功！');
+      }
     }
   }
 

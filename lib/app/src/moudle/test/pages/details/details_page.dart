@@ -1,7 +1,6 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/util/image.dart';
-import 'package:app_base/util/measure_utils.dart';
 import 'package:app_base/util/time_utils.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +20,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
       resizeToAvoidBottomInset: true,
       backgroundColor: MyColors.cardViewBgColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: MyColors.cardViewBgColor,
         automaticallyImplyLeading: false,
         title: SizedBox(

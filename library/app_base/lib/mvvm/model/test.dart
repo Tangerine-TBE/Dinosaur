@@ -8,44 +8,108 @@ String testToJson(Test data) => json.encode(data.toJson());
 
 class Test {
     Test({
-        required this.postsId,
-        required this.path,
-        required this.sortIndex,
-        required this.level,
-        required this.id,
-        required this.userId,
-        required this.parentId,
-        required this.content,
+        required this.topicList,
     });
 
-    String postsId;
-    String path;
-    int sortIndex;
-    int level;
-    String id;
-    String userId;
-    String parentId;
-    String content;
+    List<TopicList> topicList;
 
     factory Test.fromJson(Map<dynamic, dynamic> json) => Test(
-        postsId: json["postsId"],
-        path: json["path"],
-        sortIndex: json["sortIndex"],
-        level: json["level"],
-        id: json["id"],
-        userId: json["userId"],
-        parentId: json["parentId"],
-        content: json["content"],
+        topicList: List<TopicList>.from(json["topicList"].map((x) => TopicList.fromJson(x))),
     );
 
     Map<dynamic, dynamic> toJson() => {
-        "postsId": postsId,
-        "path": path,
-        "sortIndex": sortIndex,
-        "level": level,
-        "id": id,
-        "userId": userId,
-        "parentId": parentId,
+        "topicList": List<dynamic>.from(topicList.map((x) => x.toJson())),
+    };
+}
+
+class TopicList {
+    TopicList({
+        required this.likesNum,
+        required this.creatorId,
+        required this.modifierId,
+        required this.favorsNum,
+        required this.deletedId,
+        required this.title,
+        required this.viewsNum,
+        required this.content,
+        required this.participantNum,
+        required this.modifyTime,
+        required this.isDeleted,
+        required this.createTime,
+        required this.subtitle,
+        required this.imageUrl,
+        required this.appId,
+        required this.tenantId,
+        required this.id,
+        required this.iconUrl,
+        required this.deletedTime,
+        required this.commentsNum,
+    });
+
+    int likesNum;
+    String creatorId;
+    String modifierId;
+    int favorsNum;
+    String deletedId;
+    String title;
+    int viewsNum;
+    String content;
+    int participantNum;
+    int modifyTime;
+    String isDeleted;
+    int createTime;
+    String subtitle;
+    String imageUrl;
+    String appId;
+    String tenantId;
+    String id;
+    String iconUrl;
+    String deletedTime;
+    int commentsNum;
+
+    factory TopicList.fromJson(Map<dynamic, dynamic> json) => TopicList(
+        likesNum: json["likesNum"],
+        creatorId: json["creatorId"],
+        modifierId: json["modifierId"],
+        favorsNum: json["favorsNum"],
+        deletedId: json["deletedId"],
+        title: json["title"],
+        viewsNum: json["viewsNum"],
+        content: json["content"],
+        participantNum: json["participantNum"],
+        modifyTime: json["modifyTime"],
+        isDeleted: json["isDeleted"],
+        createTime: json["createTime"],
+        subtitle: json["subtitle"],
+        imageUrl: json["imageUrl"],
+        appId: json["appId"],
+        tenantId: json["tenantId"],
+        id: json["id"],
+        iconUrl: json["iconUrl"],
+        deletedTime: json["deletedTime"],
+        commentsNum: json["commentsNum"],
+    );
+
+    Map<dynamic, dynamic> toJson() => {
+        "likesNum": likesNum,
+        "creatorId": creatorId,
+        "modifierId": modifierId,
+        "favorsNum": favorsNum,
+        "deletedId": deletedId,
+        "title": title,
+        "viewsNum": viewsNum,
         "content": content,
+        "participantNum": participantNum,
+        "modifyTime": modifyTime,
+        "isDeleted": isDeleted,
+        "createTime": createTime,
+        "subtitle": subtitle,
+        "imageUrl": imageUrl,
+        "appId": appId,
+        "tenantId": tenantId,
+        "id": id,
+        "iconUrl": iconUrl,
+        "deletedTime": deletedTime,
+        "commentsNum": commentsNum,
     };
 }
