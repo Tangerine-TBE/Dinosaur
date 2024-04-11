@@ -4,6 +4,7 @@ import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
+import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
@@ -91,11 +92,10 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               var map = Get.arguments;
-
               PostsList postList = map['item'];
               int index  = map['index'];
-
               Get.lazyPut(() => DetailsController(item: postList,index:index));
+              Get.lazyPut(() => DetailsRepo());
             },
           ),
         ),

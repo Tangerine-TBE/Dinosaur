@@ -161,9 +161,70 @@ class CommonManager {
   final PushRepo pushRepo;
   final listId = 1;
   final dataList = <PostsList>[];
+  var pageIndex = 1;
 
   CommonManager({required this.controller, required this.pushRepo});
+  Future loadMoreList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          topicId: 'Dynamic',
+          pageIndex: ++pageIndex,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Dynamic'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        dataList.addAll(response.data!.data!.postsList);
+        controller.update([listId]);
+      }
+    }
+  }
+  showBottomSheet(){
+    Get.bottomSheet(
+      Container(
+        height: 120.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.w),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.w),
+          ),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: const Text(
+                  '举报',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Divider(
+                color: MyColors.textGreyColor.withOpacity(0.3),
+                thickness: 5,
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
+  }
   init() {
     if (!isInit) {
       getList();
@@ -209,6 +270,7 @@ class DynamicManager {
   final listId = 2;
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
+  var pageIndex = 1;
 
   DynamicManager({required this.controller, required this.pushRepo});
 
@@ -245,6 +307,68 @@ class DynamicManager {
       controller.update([listId]);
     }
   }
+  Future loadMoreList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          topicId: 'Dynamic',
+          pageIndex: ++pageIndex,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Dynamic'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        dataList.addAll(response.data!.data!.postsList);
+        controller.update([listId]);
+      }
+    }
+  }
+  showBottomSheet(){
+    Get.bottomSheet(
+      Container(
+        height: 120.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.w),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.w),
+          ),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: const Text(
+                  '举报',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Divider(
+                color: MyColors.textGreyColor.withOpacity(0.3),
+                thickness: 5,
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+  }
+
 }
 
 class HandPickManager {
@@ -253,6 +377,7 @@ class HandPickManager {
   final listId = 3;
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
+  var pageIndex = 1;
 
   HandPickManager({required this.controller, required this.pushRepo});
 
@@ -270,6 +395,67 @@ class HandPickManager {
       getList();
       isInit = true;
     }
+  }
+  Future loadMoreList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          topicId: 'Curated',
+          pageIndex: ++pageIndex,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Curated'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        dataList.addAll(response.data!.data!.postsList);
+        controller.update([listId]);
+      }
+    }
+  }
+  showBottomSheet(){
+    Get.bottomSheet(
+      Container(
+        height: 120.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.w),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.w),
+          ),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: const Text(
+                  '举报',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Divider(
+                color: MyColors.textGreyColor.withOpacity(0.3),
+                thickness: 5,
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
   }
 
   getList() async {
@@ -331,7 +517,50 @@ class RefreshManager {
       isInit = true;
     }
   }
+  showBottomSheet(){
+     Get.bottomSheet(
+      Container(
+        height: 120.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.w),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.w),
+          ),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: const Text(
+                  '举报',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Divider(
+                color: MyColors.textGreyColor.withOpacity(0.3),
+                thickness: 5,
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
+  }
   getList() async {
     final response = await controller.apiLaunch(
       () => pushRepo.getPushMsg(

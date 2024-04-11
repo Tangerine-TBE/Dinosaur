@@ -1,19 +1,140 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../home/home_controller.dart';
 import '../pet/weight/image_preview_single.dart';
 
-
-class DetailsController extends BaseController{
+class DetailsController extends BaseController {
   final PostsList item;
   final int index;
-  DetailsController({required this.item,required this.index});
+  final isLike = false.obs; //对于帖子来说
+  final isCollect = false.obs; //对于帖子来说
+  final _repo = Get.find<DetailsRepo>();
+  final list = <CommentList>[];
+  final listId = 1;
+  CommentList? selectedCommentItem;
+  final editTextController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  final showSend = false.obs;
 
-  imagePreView(
-      List<String> images, BuildContext context, double size, int parentIndex,List<ImageString> list) {
+  DetailsController({required this.item, required this.index}) {}
+
+  @override
+  onInit() {
+    super.onInit();
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        //键盘焦点
+        showSend.value = true;
+      } else {
+        //没有键盘焦点
+        showSend.value = false;
+        selectedCommentItem = null;
+      }
+    });
+    _fetchCommentList();
+  }
+
+  onItemComment(CommentList commentList) {
+    if (focusNode.hasFocus) {
+      focusNode.unfocus();
+    } else {
+      FocusScope.of(Get.context!).requestFocus(focusNode);
+    }
+    selectedCommentItem = commentList;
+  }
+
+  onItemLike() {
+    logE('like');
+  }
+
+  onItemMoreClick(CommentList item) {
+    Get.bottomSheet(
+      Container(
+        height: 120.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.w),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.w),
+          ),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  Get.back();
+                },
+                child: const Text(
+                  '举报',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              Divider(
+                color: MyColors.textGreyColor.withOpacity(0.3),
+                thickness: 5,
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text(
+                  '取消',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+
+  }
+
+  onInputSubmit() async {
+    focusNode.unfocus();
+    var parentId = '';
+    //当我评论评论的时候 parentId =
+    if (selectedCommentItem != null) {
+      parentId = selectedCommentItem!.postsId;
+    } else {
+      parentId = '0';
+    }
+
+    final response = await _repo.createComment(
+      CommentCreateReq(
+          postsId: item.id,
+          path: '/',
+          sortIndex: 1,
+          level: 1,
+          userId: User.loginRspBean!.userId,
+          parentId: parentId,
+          content: editTextController.value.text),
+    );
+    if (response.isSuccess) {
+      EasyLoading.showSuccess('评论成功！');
+    }
+  }
+
+  onInputCollect() {
+    //对于主题帖子来说
+  }
+
+  onInputLike() {
+    //对于主题帖子来说
+  }
+
+  imagePreView(List<String> images, BuildContext context, double size,
+      int parentIndex, List<ImageString> list) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -96,7 +217,19 @@ class DetailsController extends BaseController{
     }
   }
 
-  _fetchCommentList(){
-
+  _fetchCommentList() async {
+    CommentListReq commentListReq = CommentListReq(
+        postsId: item.id,
+        pageIndex: 1,
+        pageSize: 10,
+        orderBy: 'createTime desc');
+    final response = await _repo.getCommentList(commentListReq);
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        List<CommentList> commentList = response.data!.data!.commentList;
+        list.addAll(commentList);
+        update([listId]);
+      }
+    }
   }
 }

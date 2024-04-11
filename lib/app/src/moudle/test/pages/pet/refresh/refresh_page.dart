@@ -120,7 +120,11 @@ class RefreshPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.sp, fontWeight: FontWeight.w500),
                         ),
-                        const Icon(Icons.more_horiz),
+                        InkWell(
+                            onTap: (){
+                              controller.refreshManager.showBottomSheet();
+                            },
+                            child: const Icon(Icons.more_horiz)),
                       ],
                     ),
                     Container(

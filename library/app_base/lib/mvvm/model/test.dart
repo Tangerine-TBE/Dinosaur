@@ -8,84 +8,44 @@ String testToJson(Test data) => json.encode(data.toJson());
 
 class Test {
     Test({
-        required this.commentList,
-    });
-
-    List<CommentList> commentList;
-
-    factory Test.fromJson(Map<dynamic, dynamic> json) => Test(
-        commentList: List<CommentList>.from(json["commentList"].map((x) => CommentList.fromJson(x))),
-    );
-
-    Map<dynamic, dynamic> toJson() => {
-        "commentList": List<dynamic>.from(commentList.map((x) => x.toJson())),
-    };
-}
-
-class CommentList {
-    CommentList({
         required this.postsId,
-        required this.likesNum,
+        required this.path,
         required this.sortIndex,
         required this.level,
-        required this.creatorId,
-        required this.modifierId,
+        required this.id,
         required this.userId,
         required this.parentId,
         required this.content,
-        required this.path,
-        required this.modifyTime,
-        required this.createTime,
-        required this.id,
-        required this.commentsNum,
     });
 
     String postsId;
-    String likesNum;
+    String path;
     int sortIndex;
     int level;
-    String creatorId;
-    String modifierId;
+    String id;
     String userId;
     String parentId;
     String content;
-    String path;
-    int modifyTime;
-    int createTime;
-    String id;
-    String commentsNum;
 
-    factory CommentList.fromJson(Map<dynamic, dynamic> json) => CommentList(
+    factory Test.fromJson(Map<dynamic, dynamic> json) => Test(
         postsId: json["postsId"],
-        likesNum: json["likesNum"],
+        path: json["path"],
         sortIndex: json["sortIndex"],
         level: json["level"],
-        creatorId: json["creatorId"],
-        modifierId: json["modifierId"],
+        id: json["id"],
         userId: json["userId"],
         parentId: json["parentId"],
         content: json["content"],
-        path: json["path"],
-        modifyTime: json["modifyTime"],
-        createTime: json["createTime"],
-        id: json["id"],
-        commentsNum: json["commentsNum"],
     );
 
     Map<dynamic, dynamic> toJson() => {
         "postsId": postsId,
-        "likesNum": likesNum,
+        "path": path,
         "sortIndex": sortIndex,
         "level": level,
-        "creatorId": creatorId,
-        "modifierId": modifierId,
+        "id": id,
         "userId": userId,
         "parentId": parentId,
         "content": content,
-        "path": path,
-        "modifyTime": modifyTime,
-        "createTime": createTime,
-        "id": id,
-        "commentsNum": commentsNum,
     };
 }

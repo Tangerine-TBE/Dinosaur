@@ -1,6 +1,7 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:loadmore_listview/loadmore_listview.dart';
 
 class HandPickPage extends StatelessWidget {
   final PetController controller;
@@ -17,7 +19,15 @@ class HandPickPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: CustomScrollView(
+      child: LoadMoreListView.customScrollView(
+        onLoadMore: controller.handPickManager.loadMoreList,
+        loadMoreWidget: Container(
+          margin: EdgeInsets.all(20.w),
+          alignment: Alignment.center,
+          child: const CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+          ),
+        ),
         slivers: [
           SliverToBoxAdapter(
             child: Column(
@@ -25,7 +35,7 @@ class HandPickPage extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 18.w),
                   decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
                   child: BannerCarousel.fullScreen(
                     animation: true,
                     height: 106.h,
@@ -52,24 +62,22 @@ class HandPickPage extends StatelessWidget {
             builder: (controller) {
               return controller.handPickManager.dataList.isNotEmpty
                   ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => _buildItem(
-                            index,
-                            controller.handPickManager.dataList[index],
-                            context),
-                        childCount: controller.handPickManager.dataList.length,
-                      ),
-                    )
-                  : SliverFillRemaining(
-                      child: SizedBox(
-                        child: NoDataWidget(
-                          title: '暂无记录',
-                        ),
-                      ),
-                    );
+                delegate: SliverChildBuilderDelegate(
+                      (context, index) => _buildItem(index,
+                      controller.handPickManager.dataList[index], context),
+                  childCount: controller.handPickManager.dataList.length,
+                ),
+              )
+                  : const SliverFillRemaining(
+                child: SizedBox(
+                  child: NoDataWidget(
+                    title: '暂无记录',
+                  ),
+                ),
+              );
             },
-            id: controller.commonManager.listId,
-          )
+            id: controller.handPickManager.listId,
+          ),
         ],
       ),
     );
@@ -79,7 +87,7 @@ class HandPickPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.white,
-      padding: EdgeInsets.only(top: 32.h, left: 18.w, right: 18.w),
+      padding: EdgeInsets.only(left: 18.w, right: 18.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -91,7 +99,7 @@ class HandPickPage extends StatelessWidget {
                 width: 40.w,
                 height: 40.w,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(item.userAvator),
+                  backgroundImage: loadImageProvider(item.userAvator),
                 ),
               ),
               SizedBox(
@@ -104,22 +112,24 @@ class HandPickPage extends StatelessWidget {
                     SizedBox(
                       height: 4.h,
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            item.userName,
-                            style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.w500),
-                          ),
-                          Icon(Icons.more_horiz),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.userName,
+                          style: TextStyle(
+                              fontSize: 14.sp, fontWeight: FontWeight.w500),
+                        ),
+                        InkWell(
+                            onTap: (){
+                              controller.handPickManager.showBottomSheet();
+                            },
+                            child: const Icon(Icons.more_horiz)),
+                      ],
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
+                      EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
                       decoration: BoxDecoration(
                         color: const Color(0xffFF5E65).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12.w),
@@ -131,16 +141,16 @@ class HandPickPage extends StatelessWidget {
                               text: '#',
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Color(0xffFF5E65),
+                                color: const Color(0xffFF5E65),
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            TextSpan(text: ' '),
+                            const TextSpan(text: ' '),
                             TextSpan(
                               text: item.topicTitle,
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: Color(0xffFF5E65),
+                                color: const Color(0xffFF5E65),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -163,7 +173,7 @@ class HandPickPage extends StatelessWidget {
               Icon(
                 Icons.remove_red_eye_outlined,
                 size: 22.w,
-                color: Color(
+                color: const Color(
                   0xff8F9098,
                 ),
               ),
@@ -173,7 +183,7 @@ class HandPickPage extends StatelessWidget {
               Text(
                 item.viewsNum.toString(),
                 style: TextStyle(
-                  color: Color(0xff8F9098),
+                  color: const Color(0xff8F9098),
                   fontSize: 10.sp,
                 ),
               ),
@@ -192,7 +202,7 @@ class HandPickPage extends StatelessWidget {
                     Text(
                       item.likesNum.toString(),
                       style: TextStyle(
-                        color: Color(0xff8F9098),
+                        color: const Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
                         fontSize: 10.sp,
                       ),
@@ -218,7 +228,7 @@ class HandPickPage extends StatelessWidget {
                       Text(
                         '评论',
                         style: TextStyle(
-                            color: Color(0xff8F9098),
+                            color: const Color(0xff8F9098),
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w500),
                       )
@@ -227,6 +237,10 @@ class HandPickPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          Divider(
+            color: MyColors.textGreyColor.withOpacity(0.3),
+            thickness: 0.3.h,
           ),
         ],
       ),
@@ -250,13 +264,8 @@ class HandPickPage extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            controller.imagePreView(
-              item.images.map((e) => e.imageUrl).toList(),
-              context,
-              250.w,
-              index,
-              item.images,
-            ),
+            controller.imagePreView(item.images.map((e) => e.imageUrl).toList(),
+                context, 250.w, index, item.images),
           ],
         ),
       ],
