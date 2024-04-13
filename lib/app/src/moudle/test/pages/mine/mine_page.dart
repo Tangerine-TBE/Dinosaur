@@ -51,20 +51,26 @@ class MinePage extends BaseEmptyPage<MineController> {
                       actions: [
                         Container(
                           margin: const EdgeInsets.only(right: 21),
-                          child: const Row(
+                          child:  Row(
                             children: [
-                              Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 20,
+                              InkWell(
+                                onTap: (){controller.onEditInfoClicked();},
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 19,
                               ),
-                              Icon(
-                                Icons.settings,
-                                color: Colors.white,
-                                size: 20,
+                              InkWell(
+                                onTap: (){controller.onSettingClicked();},
+                                child: const Icon(
+                                  Icons.settings,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ],
                           ),

@@ -32,6 +32,8 @@ class RouteName {
   static const String cutePet = '/cutePet';
   static const String faq = '/faq';
   static const String periodRecord = '/periodRecord';
+  static const String editInfo = '/edit';
+  static const String setting  = '/setting';
 
   //shake
   static const String mainPage = '/main';

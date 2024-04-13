@@ -1,9 +1,7 @@
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
-import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
@@ -13,8 +11,6 @@ import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
@@ -23,6 +19,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/collect/mine_collect_con
 import 'package:dinosaur/app/src/moudle/test/pages/mine/collect/mine_collect_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
@@ -31,6 +29,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_controlle
 import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review.page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
@@ -66,6 +66,28 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.editInfo,
+          page: () => const EditInfoPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => EditInfoController(),
+              );
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.setting,
+          page: () => const SettingPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => SettingController(),
+              );
+            },
+          ),
+        ),
         GetPage(
           name: RouteName.push,
           page: () => const PushMsgPage(),

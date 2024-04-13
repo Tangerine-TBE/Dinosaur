@@ -18,7 +18,7 @@ class App extends BaseMaterialApp<TemplateLauncherStrategy> {
         builder: (context, child) {
           // 安装loading
           child = GLoading.instance.init(context, child);
-          return child;
+          return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler:TextScaler.noScaling ), child: child);
         },
         theme: ThemeData(splashColor: Colors.transparent,highlightColor: Colors.transparent),
         translations: Messages(),

@@ -38,7 +38,12 @@ class MineController extends BaseController {
       navigateTo(RouteName.collectView);
     }
   }
-
+  onEditInfoClicked(){
+    navigateTo(RouteName.editInfo);
+  }
+  onSettingClicked(){
+    navigateTo(RouteName.setting);
+  }
 }
 
 class ItemBean {

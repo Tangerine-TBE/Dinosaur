@@ -62,6 +62,14 @@ Widget loadImage(String url, double width, double height) {
   }
 }
 
+Widget loadImageByPath(String path ,double width,double height){
+  return  Image.file(
+    File(path),
+    width: width,
+    height: height,
+  );
+}
+
 ImageProvider loadImageProvider(String url) {
   if (url.isEmpty) {
     return const AssetImage(ResName.loaded_failure);
