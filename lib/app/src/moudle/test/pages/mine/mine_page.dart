@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/util/image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,14 +17,6 @@ class MinePage extends BaseEmptyPage<MineController> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.pageBgColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: MyColors.pageBgColor,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: Colors.white),
-      ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
         top: false,
@@ -38,6 +31,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                 right: 0,
                 bottom: 405,
                 child: Container(
+                  width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
                       MyColors.bgLinearShapeColor1,
@@ -47,6 +41,151 @@ class MinePage extends BaseEmptyPage<MineController> {
                       fit: BoxFit.fill,
                       image: AssetImage(
                         ResName.mineBg,
+                      ),
+                    ),
+                  ),
+                  child: Scaffold(
+                    appBar: AppBar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.transparent,
+                      actions: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 21),
+                          child: const Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                width: 19,
+                              ),
+                              Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    backgroundColor: Colors.transparent,
+                    body: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 14),
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: loadImageProvider(''),
+                                  radius: 28,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '王晓明',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      'ID: 9527',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            const Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '6546',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '粉丝',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 45,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '46',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '关注',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 45,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '654',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '获赞',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -63,8 +202,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                     child: Column(
                       children: [
                         Row(
@@ -73,8 +211,8 @@ class MinePage extends BaseEmptyPage<MineController> {
                               .buildTitleItem()
                               .asMap()
                               .entries
-                              .map<Widget>(
-                                  (e) => _buildTitleBar(e.value.name, e.value.assetName,e.key))
+                              .map<Widget>((e) => _buildTitleBar(
+                                  e.value.name, e.value.assetName, e.key))
                               .toList(),
                         ),
                         SizedBox(height: 24),
@@ -82,10 +220,9 @@ class MinePage extends BaseEmptyPage<MineController> {
                           child: ListView.separated(
                             itemBuilder: (context, index) {
                               return _buildContentItem(
-                                controller.buildLineItem()[index].name,
-                                controller.buildLineItem()[index].assetName,
-                                index
-                              );
+                                  controller.buildLineItem()[index].name,
+                                  controller.buildLineItem()[index].assetName,
+                                  index);
                             },
                             separatorBuilder: (context, index) {
                               return const SizedBox();
@@ -107,11 +244,11 @@ class MinePage extends BaseEmptyPage<MineController> {
     );
   }
 
-  _buildContentItem(String name, String assetName,int index) {
+  _buildContentItem(String name, String assetName, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           controller.onContentItemClicked(index);
         },
         child: Row(
@@ -132,9 +269,11 @@ class MinePage extends BaseEmptyPage<MineController> {
     );
   }
 
-  _buildTitleBar(String name, String assetName,int index) {
+  _buildTitleBar(String name, String assetName, int index) {
     return InkWell(
-      onTap:(){controller.onLineItemClicked(index);} ,
+      onTap: () {
+        controller.onLineItemClicked(index);
+      },
       child: Column(
         children: [
           Image.asset(
