@@ -93,12 +93,15 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                            padding: EdgeInsets.only(left: 50,right: 20),
-                            child: Text(controller.item.content)),
-                        SizedBox(
+                        if(controller.item.content.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(left: 50, right: 20),
+                            child: Text(controller.item.content),
+                          ),
+                        if(controller.item.content.isNotEmpty)
+                          SizedBox(
                           height: 20,
-                        ),
+                          ),
                         Padding(
                           padding: EdgeInsets.only(left: 50),
                           child: controller.imagePreView(
@@ -113,29 +116,39 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                         SizedBox(
                           height: 20,
                         ),
-                        if (controller.item.waves.isNotEmpty && controller.item.waves[0].actions != '[]')
-                         Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 50),
-                                    child: Container(
-                                        decoration: BoxDecoration(borderRadius:BorderRadius.circular(10),gradient: LinearGradient(colors: [MyColors.themeTextColor.withOpacity(0.3),MyColors.themeTextColor.withOpacity(0.5),])),
-                                        padding: EdgeInsets.only(top: 10,right: 4,left: 4),
-                                      child: AwesomeChartView(
-                                        dataList: <List<int>>[
-                                          List<int>.from(jsonDecode(controller
-                                                  .item.waves[0].actions) ??
-                                              '[]')
-                                        ],
-                                        width: 250,
-                                        height: 30,
-                                      ),
-                                    ),
+                        if (controller.item.waves.isNotEmpty &&
+                            controller.item.waves[0].actions != '[]')
+                          Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 50),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(colors: [
+                                        MyColors.themeTextColor
+                                            .withOpacity(0.3),
+                                        MyColors.themeTextColor
+                                            .withOpacity(0.5),
+                                      ])),
+                                  padding: EdgeInsets.only(
+                                      top: 10, right: 4, left: 4),
+                                  child: AwesomeChartView(
+                                    dataList: <List<int>>[
+                                      List<int>.from(jsonDecode(controller
+                                              .item.waves[0].actions) ??
+                                          '[]')
+                                    ],
+                                    width: 250,
+                                    height: 30,
                                   ),
-                                  SizedBox(height: 10,),
-                                ],
+                                ),
                               ),
-
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
                         const Align(
                           alignment: Alignment.center,
                           child: Text('------  全部评论  ------'),
@@ -174,8 +187,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
             SafeArea(
               child: Container(
                 color: const Color(0xFFF4F4F4),
-                padding: EdgeInsets.only(
-                    left: 16, top: 10, bottom: 10, right: 16),
+                padding:
+                    EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 16),
                 child: Obx(
                   () => Column(
                     children: [
@@ -286,8 +299,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                 : MaterialButton(
                                     color: MyColors.themeTextColor,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
+                                        borderRadius: BorderRadius.circular(12),
                                         side: const BorderSide(
                                             color: MyColors.textBlackColor)),
                                     onPressed: () {
