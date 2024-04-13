@@ -60,7 +60,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                 Flexible(
                   flex: 2,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32.w),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
                     child: Row(
                       children: [
                         Flexible(
@@ -79,31 +79,31 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                       color: Colors.red,
                                       elevation: 6,
                                       child: Container(
-                                        padding: EdgeInsets.all(18.w),
+                                        padding: EdgeInsets.all(18),
                                         child: Image.asset(
                                           ResName.magic_star,
-                                          width: 28.w,
+                                          width: 28,
                                           color: Colors.white,
-                                          height: 28.w,
+                                          height: 28,
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 16.w,
+                                      width: 16,
                                     ),
                                     Text(
                                       '经典模式',
                                       style: TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 16.sp,
+                                        fontSize: 16,
                                       ),
                                     )
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 16.h,
+                                height: 16,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -116,31 +116,31 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                       color: Colors.red,
                                       elevation: 6,
                                       child: Container(
-                                        padding: EdgeInsets.all(18.w),
+                                        padding: EdgeInsets.all(18),
                                         child: Image.asset(
                                           ResName.flash,
                                           color: Colors.white,
-                                          width: 28.w,
-                                          height: 28.w,
+                                          width: 28,
+                                          height: 28,
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 16.w,
+                                      width: 16,
                                     ),
                                     Text(
                                       '一键暴走',
                                       style: TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 16.sp,
+                                        fontSize: 16,
                                       ),
                                     )
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 16.h,
+                                height: 16,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -153,31 +153,31 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                       color: Colors.red,
                                       elevation: 6,
                                       child: Container(
-                                        padding: EdgeInsets.all(18.w),
+                                        padding: EdgeInsets.all(18),
                                         child: Image.asset(
                                           ResName.cloud_plus,
                                           color: Colors.white,
-                                          width: 28.w,
-                                          height: 28.w,
+                                          width: 28,
+                                          height: 28,
                                         ),
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 16.w,
+                                      width: 16,
                                     ),
                                     Text(
                                       '创建模式',
                                       style: TextStyle(
                                         color: Colors.red,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 16.sp,
+                                        fontSize: 16,
                                       ),
                                     )
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 16.h,
+                                height: 16,
                               ),
                               GestureDetector(
                                 onTap: () {
@@ -193,17 +193,17 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                             : Colors.red,
                                         elevation: 6,
                                         child: Container(
-                                          padding: EdgeInsets.all(18.w),
+                                          padding: EdgeInsets.all(18),
                                           child: Image.asset(
                                             ResName.moon,
                                             color: Colors.white,
-                                            width: 28.w,
-                                            height: 28.w,
+                                            width: 28,
+                                            height: 28,
                                           ),
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 16.w,
+                                        width: 16,
                                       ),
                                       Text(
                                         '休息一会',
@@ -212,7 +212,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                               ? Colors.grey
                                               : Colors.red,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 16.sp,
+                                          fontSize: 16,
                                         ),
                                       )
                                     ],
@@ -231,7 +231,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                               quarterTurns: -1,
                               child: SizedBox(
                                 height: double.infinity,
-                                width: 300.h,
+                                width: 300,
                                 child: FutureBuilder(
                                   future: controller.loadImage(<String>[ResName.button,ResName.sideItBarBg]),
                                   builder: (BuildContext context,
@@ -252,7 +252,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                           trackShape: snapshot.data==null?null:snapshot.data[1] == null
                                               ?null:CustomShape(image: snapshot.data[1])
                                           ,
-                                          trackHeight: 70.w,
+                                          trackHeight: 70,
                                           minThumbSeparation: 0,
                                           rangeTrackShape:
                                               const RoundedRectRangeSliderTrackShape(),
@@ -264,7 +264,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                                   enabledThumbRadius: 20)
                                               : ImageSliderThumb(
                                                   image: snapshot.data[0],
-                                                  size: Size(106.w, 106.w)),
+                                                  size: Size(106, 106)),
                                           overlayColor: Colors.red.withAlpha(32),
                                           overlayShape:
                                               const RoundSliderOverlayShape(
@@ -309,7 +309,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                           child: Obx(
                                 () => RepaintBoundary(
                               child: CustomPaint(
-                                size: Size(280.w, 70.h),
+                                size: Size(280, 70),
                                 painter: ChartsPainter(
                                     process: controller.process.value.obx,
                                     processMax: 1023),
@@ -331,7 +331,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                   time.toString(),
                                   style: TextStyle(
                                       color: MyColors.textBlackColor,
-                                      fontSize: 30.sp,
+                                      fontSize: 30,
                                       fontWeight: FontWeight.bold),
                                 );
                               },
@@ -340,7 +340,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                   '请滑动滑条',
                                   style: TextStyle(
                                       color: MyColors.textBlackColor,
-                                      fontSize: 30.sp,
+                                      fontSize: 30,
 
                                       fontWeight: FontWeight.bold),
                                 );

@@ -33,18 +33,18 @@ class ScanPage extends BaseEmptyPage<ScanController> {
               isScrollable: true,
               unselectedLabelStyle: TextStyle(
                   color: MyColors.scanIndicatorTextNormalColor,
-                  fontSize: 16.sp),
+                  fontSize: 16),
               labelStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.scanIndicatorTextSelectedColor,
-                  fontSize: 18.sp),
-              indicatorPadding: EdgeInsets.only(left: 22.w, right: 22.w),
+                  fontSize: 18),
+              indicatorPadding: EdgeInsets.only(left: 22, right: 22),
               indicator: UnderlineTabIndicator(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(2.w),
+                    Radius.circular(2),
                   ),
                   borderSide: BorderSide(
-                      width: 4.h, color: MyColors.scanIndicatorColor)),
+                      width: 4, color: MyColors.scanIndicatorColor)),
               indicatorSize: TabBarIndicatorSize.label,
               splashFactory: NoSplash.splashFactory,
               dividerHeight: 0,
@@ -71,7 +71,7 @@ class ScanPage extends BaseEmptyPage<ScanController> {
 
   _buildUseIntroduction() {
     return SingleChildScrollView(
-      child: Container(padding:EdgeInsets.only(left: 20.w,right: 20.w,bottom: 20.h
+      child: Container(padding:EdgeInsets.only(left: 20,right: 20,bottom: 20
       ),child: Text('''●连接产品准备工作
 确保蓝牙与位置信息(定位)已打开，否则无法使用
 ●开始连接
@@ -115,7 +115,7 @@ A：请确保电量充足，然后重新连接设备。
             children: [
               HeartbeatAnimation(),
               SizedBox(
-                height: 61.h,
+                height: 61,
               ),
               DotAnimation(),
             ],
@@ -131,7 +131,7 @@ A：请确保电量充足，然后重新连接设备。
                   '发现设备:',
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 20,
                 ),
                 Expanded(
                   child: GetBuilder<ScanController>(
@@ -144,7 +144,7 @@ A：请确保电量充足，然后重新连接设备。
                           },
                           separatorBuilder: (BuildContext context, int index) {
                             return SizedBox(
-                              height: 20.h,
+                              height: 20,
                             );
                           },
                           itemCount: controller.devices.length);
@@ -164,11 +164,11 @@ A：请确保电量充足，然后重新连接设备。
   _buildContent() {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 26.w),
+        padding: EdgeInsets.symmetric(horizontal: 26),
         child: Column(
           children: [
             SizedBox(
-              height: 30.h,
+              height: 30,
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -177,12 +177,12 @@ A：请确保电量充足，然后重新连接设备。
                 Flexible(
                   flex: 1,
                   child: Container(
-                    height: 90.h,
+                    height: 90,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: MyColors.cardViewBgColor,
                       borderRadius: BorderRadius.all(
-                        Radius.circular(11.w),
+                        Radius.circular(11),
                       ),
                     ),
                     child: Column(
@@ -191,7 +191,7 @@ A：请确保电量充足，然后重新连接设备。
                           alignment: Alignment.topRight,
                           child: Obx(
                             () => Container(
-                              margin: EdgeInsets.only(top: 10.h, right: 10.h),
+                              margin: EdgeInsets.only(top: 10, right: 10),
                               width: 10,
                               height: 10,
                               decoration: BoxDecoration(
@@ -209,10 +209,10 @@ A：请确保电量充足，然后重新连接设备。
                           style: TextStyle(
                               color: MyColors.textBlackColor,
                               fontWeight: FontWeight.w500,
-                              fontSize: 16.sp),
+                              fontSize: 16),
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 10,
                         ),
                         Obx(
                           () => Text(
@@ -220,7 +220,7 @@ A：请确保电量充足，然后重新连接设备。
                             style: TextStyle(
                               color: MyColors.textGreyColor,
                               fontWeight: FontWeight.w400,
-                              fontSize: 12.sp,
+                              fontSize: 12,
                             ),
                           ),
                         ),
@@ -229,17 +229,17 @@ A：请确保电量充足，然后重新连接设备。
                   ),
                 ),
                 SizedBox(
-                  width: 19.w,
+                  width: 19,
                 ),
                 Flexible(
                   flex: 1,
                   child: Container(
-                    height: 90.h,
+                    height: 90,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: MyColors.cardViewBgColor,
                       borderRadius: BorderRadius.all(
-                        Radius.circular(11.w),
+                        Radius.circular(11),
                       ),
                     ),
                     child: Column(
@@ -247,7 +247,7 @@ A：请确保电量充足，然后重新连接设备。
                         Align(
                           alignment: Alignment.topRight,
                           child: Container(
-                            margin: EdgeInsets.only(top: 10.h, right: 10.h),
+                            margin: EdgeInsets.only(top: 10, right: 10),
                             width: 10,
                             height: 10,
                             decoration: const BoxDecoration(
@@ -261,17 +261,17 @@ A：请确保电量充足，然后重新连接设备。
                           style: TextStyle(
                               color: MyColors.textBlackColor,
                               fontWeight: FontWeight.w500,
-                              fontSize: 16.sp),
+                              fontSize: 16),
                         ),
                         SizedBox(
-                          height: 10.h,
+                          height: 10,
                         ),
                         Text(
                           '无法连接点击这里',
                           style: TextStyle(
                             color: MyColors.textGreyColor,
                             fontWeight: FontWeight.w400,
-                            fontSize: 12.sp,
+                            fontSize: 12,
                           ),
                         ),
                       ],
@@ -282,15 +282,15 @@ A：请确保电量充足，然后重新连接设备。
             ),
             Image.asset(
               ResName.gifAixin,
-              width: 300.w,
-              height: 300.w,
+              width: 300,
+              height: 300,
             ),
             Text(
               '设备搜索中...',
               style: TextStyle(color: Colors.pink),
             ),
             SizedBox(
-              height: 40.h,
+              height: 40,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -321,7 +321,7 @@ A：请确保电量充足，然后重新连接设备。
                     },
                     separatorBuilder: (context, index) {
                       return SizedBox(
-                        height: 20.h,
+                        height: 20,
                       );
                     },
                     itemCount: controller.devices.length,
@@ -342,7 +342,7 @@ A：请确保电量充足，然后重新连接设备。
       children: [
         Text(
           name,
-          style: TextStyle(color: MyColors.textBlackColor, fontSize: 20.sp),
+          style: TextStyle(color: MyColors.textBlackColor, fontSize: 20),
         ),
         TextButton(
           onPressed: () {
@@ -359,7 +359,7 @@ A：请确保电量充足，然后重新连接设备。
 
   _buildDeviceItem01(String name, int index) {
     return SizedBox(
-      height: 72.h,
+      height: 72,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -367,16 +367,16 @@ A：请确保电量充足，然后重新连接设备。
             decoration: BoxDecoration(
               color: MyColors.scanItemDeviceBgColor01,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.w),
-                bottomLeft: Radius.circular(12.w),
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
               ),
             ),
             height: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 18.w),
+            padding: EdgeInsets.symmetric(vertical: 24, horizontal: 18),
             child: Image.asset(
               ResName.iconDevice01,
-              width: 43.w,
-              height: 24.h,
+              width: 43,
+              height: 24,
             ),
           ),
           Expanded(
@@ -384,11 +384,11 @@ A：请确保电量充足，然后重新连接设备。
               decoration: BoxDecoration(
                 color: MyColors.scanItemDeviceBgColor02,
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w),
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   Expanded(
@@ -399,12 +399,12 @@ A：请确保电量充足，然后重新连接设备。
                         Text(
                           name,
                           style: TextStyle(
-                              fontSize: 14.sp, color: MyColors.textBlackColor),
+                              fontSize: 14, color: MyColors.textBlackColor),
                         ),
                         Text(
                           '第二代',
                           style: TextStyle(
-                              fontSize: 12.sp, color: MyColors.textGreyColor),
+                              fontSize: 12, color: MyColors.textGreyColor),
                         ),
                       ],
                     ),
@@ -415,16 +415,16 @@ A：请确保电量充足，然后重新连接设备。
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 12.h),
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.w),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.fromBorderSide(
-                              BorderSide(color: Colors.red, width: 1.w))),
+                              BorderSide(color: Colors.red, width: 1))),
                       child: Text(
                         '连接',
                         style: TextStyle(
                           color: Colors.red,
-                          fontSize: 12.sp,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -483,7 +483,7 @@ class _DotAnimationState extends State<DotAnimation>
           style: TextStyle(
             color: MyColors.textBlackColor,
             fontWeight: FontWeight.w400,
-            fontSize: 12.sp,
+            fontSize: 12,
           ),
         );
       },
@@ -544,7 +544,7 @@ class _HeartbeatAnimationState extends State<HeartbeatAnimation>
       builder: (context, child) {
         return Transform.scale(
           scale: _animation.value,
-          child: Image.asset(ResName.iconScan, width: 80.w, height: 80.w),
+          child: Image.asset(ResName.iconScan, width: 80, height: 80),
         );
       },
     );

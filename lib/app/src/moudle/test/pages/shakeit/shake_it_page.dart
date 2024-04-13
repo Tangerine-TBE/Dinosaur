@@ -24,7 +24,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 16,
             color: MyColors.textBlackColor,
             fontWeight: FontWeight.w500,
           ),
@@ -36,9 +36,9 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
           Container(
             decoration: BoxDecoration(
                 color: MyColors.shakeCardBgColor,
-                borderRadius: BorderRadius.circular(11.w)),
-            margin: EdgeInsets.only(right: 26.w, left: 26.w, top: 26.w),
-            height: 144.h,
+                borderRadius: BorderRadius.circular(11)),
+            margin: EdgeInsets.only(right: 26, left: 26, top: 26),
+            height: 144,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +51,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                   ),
                 ),
                 SizedBox(
-                  height: 24.h,
+                  height: 24,
                 ),
                 FittedBox(
                   alignment: Alignment.centerLeft,
@@ -64,8 +64,8 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                 8,
                                 (index) => Image.asset(
                                       ResName.iconFill1,
-                                      width: 35.w,
-                                      height: 27.h,
+                                      width: 35,
+                                      height: 27,
                                     )),
                           ),
                           Obx(
@@ -85,8 +85,8 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                         8,
                                         (index) => Image.asset(
                                           ResName.iconFill,
-                                          width: 35.w,
-                                          height: 27.h,
+                                          width: 35,
+                                          height: 27,
                                         ),
                                       ),
                                     ),
@@ -104,12 +104,12 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
             ),
           ),
           SizedBox(
-            height: 43.h,
+            height: 43,
           ),
           Image.asset(
             ResName.imgYao,
-            width: 253.w,
-            height: 253.w,
+            width: 253,
+            height: 253,
           )
         ],
       ),
@@ -124,7 +124,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
             color: MyColors.textBlackColor,
           ),
@@ -152,7 +152,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                   ),
                 ),
                 SizedBox(
-                  height: 24.h,
+                  height: 24,
                 ),
                 FittedBox(
                   alignment: Alignment.centerLeft,
@@ -165,8 +165,8 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                 8,
                                     (index) => Image.asset(
                                   ResName.iconFill1,
-                                  width: 35.w,
-                                  height: 27.h,
+                                  width: 35,
+                                  height: 27,
                                 )),
                           ),
                           Obx(
@@ -186,8 +186,8 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                                         8,
                                             (index) => Image.asset(
                                           ResName.iconFill,
-                                          width: 35.w,
-                                          height: 27.h,
+                                          width: 35,
+                                          height: 27,
                                         ),
                                       ),
                                     ),
@@ -258,8 +258,8 @@ class _PicShakeAnimationState extends State<PicShakeAnimation> with SingleTicker
           child: Transform.translate(
             offset: Offset(_shakeAnimation.value, 0),
             child: Image.asset(ResName.imgShake,
-              width: 299.w,
-              height: 299.w,),
+              width: 299,
+              height: 299,),
           ),
         );
       },

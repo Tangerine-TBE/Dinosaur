@@ -84,14 +84,14 @@ class TipsDialogWidget extends StatelessWidget {
       ),
       children: [
         Container(
-          height: 475.h,
-          width: 277.w,
+          height: 475,
+          width: 277,
           child: Stack(
             children: [
               Positioned(
-                left: 13.w,
-                right: 13.w,
-                top: 40.h,
+                left: 13,
+                right: 13,
+                top: 40,
                 child: Container(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
@@ -103,16 +103,16 @@ class TipsDialogWidget extends StatelessWidget {
                       end: Alignment.bottomCenter,
                     ),
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.w),
-                      topRight: Radius.circular(12.w),
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
                     ),
                   ),
-                  width: 251.w,
-                  height: 77.h,
+                  width: 251,
+                  height: 77,
                 ),
               ),
               Positioned(
-                top: 80.h,
+                top: 80,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -159,11 +159,11 @@ class BaseDialogWidget extends StatelessWidget {
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(20.r),
+              Radius.circular(20),
             ),
           ),
           child: Column(
@@ -171,14 +171,14 @@ class BaseDialogWidget extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       color: Colors.pink,
                     ) ??
                     titleStyle,
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               info ?? const SizedBox(),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               Row(
                 children: [
                   leftButton != null
@@ -186,7 +186,7 @@ class BaseDialogWidget extends StatelessWidget {
                           child: leftButton ?? const SizedBox(),
                         )
                       : const SizedBox(),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 8),
                   rightButton != null
                       ? Expanded(
                           child: rightButton ?? const SizedBox(),

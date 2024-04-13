@@ -17,11 +17,11 @@ class NoDataWidget extends StatelessWidget {
           Icons.file_copy_sharp,
           size: 100,
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 20),
         Text(
           title,
           style: TextStyle(
-            fontSize: 18.sp,
+            fontSize: 18,
           ),
         )
       ],

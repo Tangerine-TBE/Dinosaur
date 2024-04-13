@@ -40,26 +40,26 @@ class ModelPage extends BaseEmptyPage<ModelController>
               dividerHeight: 0,
               tabAlignment: TabAlignment.center,
               isScrollable: true,
-              indicatorPadding: EdgeInsets.only(left: 22.w, right: 22.w),
+              indicatorPadding: EdgeInsets.only(left: 22, right: 22),
               indicator: UnderlineTabIndicator(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(2.w),
+                  Radius.circular(2),
                 ),
                 borderSide: BorderSide(
-                  width: 4.h,
+                  width: 4,
                   color: Color(0xffFF5E65),
                 ),
               ),
               padding: EdgeInsets.zero,
               unselectedLabelStyle:
-                  TextStyle(color: Colors.white, fontSize: 18.sp),
+                  TextStyle(color: Colors.white, fontSize: 18),
               splashFactory: NoSplash.splashFactory,
               overlayColor:
                   const MaterialStatePropertyAll<Color>(Colors.transparent),
               labelStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.scanIndicatorTextSelectedColor,
-                  fontSize: 18.sp),
+                  fontSize: 18),
               tabs: [
                 Tab(
                   text: '经典模式',
@@ -119,10 +119,10 @@ class ModelPage extends BaseEmptyPage<ModelController>
       children: [
         Obx(
           () => Container(
-            padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 2.h),
+            padding: EdgeInsets.symmetric(horizontal: 48, vertical: 2),
             child: RepaintBoundary(
               child: CustomPaint(
-                size: Size(280.w, 60.h),
+                size: Size(280, 60),
                 painter: ChartsPainter(
                     process: controller.process.value.obx, processMax: 1023),
               ),
@@ -134,7 +134,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
             alignment: Alignment.center,
             child: SizedBox(
               width: double.infinity,
-              height: 75.w,
+              height: 75,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -143,11 +143,11 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onLastClick();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(20.w),
+                      padding: EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerBack,
-                        width: 36.w,
-                        height: 36.w,
+                        width: 36,
+                        height: 36,
                       ),
                     ),
                   ),
@@ -159,13 +159,13 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       () => controller.playModel.value
                           ? Image.asset(
                               ResName.buttonL,
-                              width: 64.w,
-                              height: 64.w,
+                              width: 64,
+                              height: 64,
                             )
                           : Image.asset(
                               ResName.buttonR,
-                              width: 64.w,
-                              height: 64.w,
+                              width: 64,
+                              height: 64,
                             ),
                     ),
                   ),
@@ -174,11 +174,11 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onNextClick();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(20.w),
+                      padding: EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerSkip,
-                        width: 36.w,
-                        height: 36.w,
+                        width: 36,
+                        height: 36,
                       ),
                     ),
                   ),
@@ -194,7 +194,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
   _buildContentClassic01() {
     var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Obx(
         () => Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,9 +259,9 @@ class ModelPage extends BaseEmptyPage<ModelController>
             : GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
-                mainAxisSpacing: 16.h,
-                crossAxisSpacing: 20.w,
-                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 24.h),
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 20,
+                padding: EdgeInsets.only(left: 20, right: 20, top: 24),
                 childAspectRatio: 2,
                 children: List.generate(
                   controller.modelList.length,
@@ -286,10 +286,10 @@ class ModelPage extends BaseEmptyPage<ModelController>
         controller.onCustomModelClick(index);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: !isSelect ? Color(0xffFFD5D7) : Color(0xffFF5E65),
-          borderRadius: BorderRadius.circular(10.w),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -297,18 +297,18 @@ class ModelPage extends BaseEmptyPage<ModelController>
           children: [
             Image.asset(
               ResName.path25,
-              width: 69.w,
-              height: 42.h,
+              width: 69,
+              height: 42,
               color: isSelect ? Colors.white : Color(0xffFF5E65),
             ),
             SizedBox(
-              width: 11.w,
+              width: 11,
             ),
             Expanded(
               child: Text(
                 name,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   color: isSelect ? Colors.white : Color(0xffFF5E65),
                 ),
                 maxLines: 1,
@@ -421,8 +421,8 @@ class ModelPage extends BaseEmptyPage<ModelController>
         controller.onClassicItemClick(index);
       },
       child: Container(
-        width: 144.w,
-        height: 83.h,
+        width: 144,
+        height: 83,
         decoration: BoxDecoration(
           image: DecorationImage(image: normal),
         ),

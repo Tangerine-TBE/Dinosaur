@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:get/get.dart';
 
 class ImageViewPage extends BaseEmptyPage<ImageViewController> {
   final String tagString;
@@ -22,45 +21,105 @@ class ImageViewPage extends BaseEmptyPage<ImageViewController> {
 
   @override
   Widget buildContent(BuildContext context) {
+    return ImageView(
+      controller: controller,
+      tagString: tagString,
+      urlString: urlString,
+    );
+  }
+}
+
+class ImageView extends StatefulWidget {
+  final ImageViewController controller;
+  final String tagString;
+  final String urlString;
+
+  const ImageView(
+      {super.key,
+      required this.controller,
+      required this.tagString,
+      required this.urlString});
+
+  @override
+  State<ImageView> createState() => _ImageViewState();
+}
+
+class _ImageViewState extends State<ImageView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this, // 请根据您的具体情况替换为正确的TickerProvider
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        finish();
+        widget.controller.finish();
       },
       onDoubleTapDown: (details) {
-        controller.position.value = details.localPosition;
+        widget.controller.position.value = details.localPosition;
       },
       onDoubleTap: () {
-        double scale =
-            controller.transformationController.value.getMaxScaleOnAxis();
-        double targetScale = scale < 2.0 ? 2.0 : 1.0; // 根据当前缩放比例确定目标缩放比例
+        double scale = widget.controller.transformationController.value.getMaxScaleOnAxis();
+        double targetScale = scale < 2.0 ? 2.0 : 1.0;
 
-        // 计算放大的中心点
-        Offset localPosition = controller.position.value;
+        Offset localPosition = widget.controller.position.value;
         Offset position = Offset(
-          localPosition.dx / controller.transformationController.value[0],
-          localPosition.dy / controller.transformationController.value[5],
+          localPosition.dx / widget.controller.transformationController.value[0],
+          localPosition.dy / widget.controller.transformationController.value[5],
         );
-        Matrix4 newMatrix = Matrix4.identity()
+
+        Matrix4 beginMatrix = widget.controller.transformationController.value;
+        Matrix4 endMatrix = Matrix4.identity()
           ..translate(position.dx, position.dy)
           ..scale(targetScale)
           ..translate(-position.dx, -position.dy);
-        controller.transformationController.value = newMatrix;
+
+        animationController.stop(); // 停止之前的动画
+        animationController.reset(); // 重置动画
+
+        Animation<Matrix4> animation = Matrix4Tween(
+          begin: beginMatrix,
+          end: endMatrix,
+        ).animate(CurvedAnimation(
+          parent: animationController,
+          curve: Curves.easeInOut,
+        ));
+
+        animation.addListener(() {
+          widget.controller.transformationController.value = animation.value;
+        });
+
+        animationController.forward();
       },
       child: InteractiveViewer(
         maxScale: 4.0,
-        transformationController: controller.transformationController,
+        transformationController: widget.controller.transformationController,
         child: SizedBox(
           child: Center(
             child: Hero(
-              tag: tagString,
-              child: urlString.startsWith('http')
+              tag: widget.tagString,
+              child: widget.urlString.startsWith('http')
                   ? Image.network(
-                      urlString,
+                      widget.urlString,
                       fit: BoxFit.contain,
                       width: double.infinity,
                     )
                   : Image.file(
-                      File(urlString),
+                      File(widget.urlString),
                       fit: BoxFit.contain,
                       width: double.infinity,
                     ),

@@ -14,7 +14,7 @@ class MsgPage extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -23,9 +23,9 @@ class MsgPage extends StatelessWidget {
                   messageController.msgPageManager.onFvkClicked();
                 },
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.w)),
+                    borderRadius: BorderRadius.circular(12)),
                 color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
                 child: const Text('搭讪'),
               ),
@@ -35,8 +35,8 @@ class MsgPage extends StatelessWidget {
                 },
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.w)),
-                padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
+                    borderRadius: BorderRadius.circular(12)),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
                 child: const Text('评论'),
               ),
@@ -44,17 +44,17 @@ class MsgPage extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 20.h,
+          height: 20,
         ),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-              padding: EdgeInsets.only(left: 15.w),
+              padding: EdgeInsets.only(left: 15),
               child: Text(
                 '聊天',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                 ),
               )),
         ),
@@ -81,10 +81,10 @@ class MsgPage extends StatelessWidget {
                                   style: TextStyle(
                                       color: MyColors.textBlackColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 20.sp),
+                                      fontSize: 20),
                                 ),
                                 SizedBox(
-                                  height: 6.h,
+                                  height: 6,
                                 ),
                                 const Text(
                                   '互相关注后即可畅快聊天，快去社区看看和有趣的人打个\r\n招呼吧～',

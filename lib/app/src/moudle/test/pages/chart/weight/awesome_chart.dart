@@ -135,7 +135,7 @@ class AwesomeChart extends CustomPainter {
     yLinePaint
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.w;
+      ..strokeWidth = 1;
     shakeBoldLinePaint
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
@@ -150,7 +150,7 @@ class AwesomeChart extends CustomPainter {
     shakeBoldCirclePaint
       ..isAntiAlias = true
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.w;
+      ..strokeWidth = 4;
     shakeShapeCirclePaint
       ..isAntiAlias = true
       ..color = const Color(0xffFF5E65).withOpacity(0.15)
@@ -400,7 +400,7 @@ class AwesomeChart extends CustomPainter {
       canvas.scale(1, -1);
       TextSpan span = TextSpan(
           text: _calculateTime(chuckTime + chuckTime * i),
-          style: TextStyle(color: Colors.black, fontSize: 12.sp));
+          style: TextStyle(color: Colors.black, fontSize: 12));
       TextPainter textPainter = TextPainter(
         text: span,
         textAlign: TextAlign.left,

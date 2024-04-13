@@ -32,8 +32,8 @@ class PetController extends BaseController {
     super.onInit();
   }
 
-  naviToDetails(PostsList item,int index) {
-    var map = {'item':item,'index':index};
+  naviToDetails(PostsList item, int index) {
+    var map = {'item': item, 'index': index};
     navigateTo(RouteName.details, args: map);
   }
 
@@ -45,9 +45,9 @@ class PetController extends BaseController {
     if (index == 0) {
       commonManager.init();
     } else if (index == 1) {
-      dynamicManager.init();
-    } else if (index == 2) {
       handPickManager.init();
+    } else if (index == 2) {
+      dynamicManager.init();
     } else {
       refreshManager.init();
     }
@@ -67,12 +67,12 @@ class PetController extends BaseController {
       update([dynamicManager.listId]);
     } else {
       refreshManager.dataList.insert(0, postsList);
-     update([refreshManager.listId]);
+      update([refreshManager.listId]);
     }
   }
 
-  imagePreView(
-      List<String> images, BuildContext context, double size, int parentIndex,List<ImageString> list) {
+  imagePreView(List<String> images, BuildContext context, double size,
+      int parentIndex, List<ImageString> list) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -120,11 +120,11 @@ class PetController extends BaseController {
           width: reSizeWidth,
           height: reSizeHeight,
           child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 2.w,
-              crossAxisSpacing: 2.w,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
             ),
             itemBuilder: ((context, index) {
               var tag = '$parentIndex${index.toString()}';
@@ -165,36 +165,42 @@ class CommonManager {
   var pageIndex = 1;
 
   CommonManager({required this.controller, required this.pushRepo});
+
   Future loadMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
-        userId: User.loginRspBean!.userId,
-          topicId: 'Dynamic',
-          pageIndex: ++pageIndex,
+          userId: User.loginRspBean!.userId,
+          topicId: '',
+          pageIndex: pageIndex+1,
           pageSize: 10,
           orderBy: 'createTime desc',
-          postsType: 'Dynamic'),
+          postsType: 'Recomed'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        dataList.addAll(response.data!.data!.postsList);
-        controller.update([listId]);
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          pageIndex = pageIndex+1;
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
       }
     }
   }
-  showBottomSheet(){
+
+  showBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -225,8 +231,8 @@ class CommonManager {
         ),
       ),
     );
-
   }
+
   init() {
     if (!isInit) {
       getList();
@@ -239,21 +245,23 @@ class CommonManager {
   }
 
   getList() async {
-    final response = await controller.apiLaunch(
-      () => pushRepo.getPushMsg(
-        PushMsgReq(
-            userId: User.loginRspBean!.userId,
-            topicId: 'Recomed',
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            postsType: 'Recomed'),
-      ),
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          userId: User.loginRspBean!.userId,
+          topicId: 'Recomed',
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Recomed'),
     );
-
-    if (response?.data != null) {
-      dataList.addAll(response!.data!.postsList);
-      controller.update([listId]);
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
+      }
     }
   }
 
@@ -294,8 +302,7 @@ class DynamicManager {
   }
 
   getList() async {
-    final response = await controller.apiLaunch(
-      () => pushRepo.getPushMsg(
+    final response = await  pushRepo.getPushMsg(
         PushMsgReq(
             userId: User.loginRspBean!.userId,
             topicId: '',
@@ -303,45 +310,53 @@ class DynamicManager {
             pageSize: 10,
             orderBy: 'createTime desc',
             postsType: 'Dynamic'),
-      ),
-    );
-
-    if (response?.data != null) {
-      dataList.addAll(response!.data!.postsList);
-      controller.update([listId]);
+      );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
+      }
     }
   }
+
   Future loadMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
-
           topicId: '',
-          pageIndex: ++pageIndex,
+          pageIndex: pageIndex+1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Dynamic'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        dataList.addAll(response.data!.data!.postsList);
-        controller.update([listId]);
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          pageIndex =  pageIndex+1;
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
       }
     }
   }
-  showBottomSheet(){
+
+  showBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -372,9 +387,7 @@ class DynamicManager {
         ),
       ),
     );
-
   }
-
 }
 
 class HandPickManager {
@@ -402,36 +415,42 @@ class HandPickManager {
       isInit = true;
     }
   }
+
   Future loadMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: ++pageIndex,
+          pageIndex: pageIndex+1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Curated'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        dataList.addAll(response.data!.data!.postsList);
-        controller.update([listId]);
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          pageIndex =  pageIndex+1;
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
       }
     }
   }
-  showBottomSheet(){
+
+  showBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -462,25 +481,26 @@ class HandPickManager {
         ),
       ),
     );
-
   }
 
   getList() async {
-    final response = await controller.apiLaunch(
-      () => pushRepo.getPushMsg(
-        PushMsgReq(
-            userId: User.loginRspBean!.userId,
-            topicId: '',
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            postsType: 'Curated'),
-      ),
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          userId: User.loginRspBean!.userId,
+          topicId: '',
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Curated'),
     );
-
-    if (response?.data != null) {
-      dataList.addAll(response!.data!.postsList);
-      controller.update([listId]);
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
+      }
     }
   }
 }
@@ -492,6 +512,7 @@ class RefreshManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+
   RefreshManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -502,42 +523,49 @@ class RefreshManager {
       BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
     ];
   }
+
   Future loadMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: ++pageIndex,
+          pageIndex: pageIndex+1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Latest'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        dataList.addAll(response.data!.data!.postsList);
-        controller.update([listId]);
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          pageIndex = pageIndex+1;
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
       }
     }
   }
+
   init() {
     if (!isInit) {
       getList();
       isInit = true;
     }
   }
-  showBottomSheet(){
-     Get.bottomSheet(
+
+  showBottomSheet() {
+    Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -568,11 +596,10 @@ class RefreshManager {
         ),
       ),
     );
-
   }
+
   getList() async {
-    final response = await controller.apiLaunch(
-      () => pushRepo.getPushMsg(
+    final response = await pushRepo.getPushMsg(
         PushMsgReq(
             userId: User.loginRspBean!.userId,
             topicId: '',
@@ -580,11 +607,15 @@ class RefreshManager {
             pageSize: 10,
             orderBy: 'createTime desc',
             postsType: 'Latest'),
-      ),
-    );
-    if (response?.data != null) {
-      dataList.addAll(response!.data!.postsList);
-      controller.update([listId]);
+      );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
+      }
     }
   }
 }

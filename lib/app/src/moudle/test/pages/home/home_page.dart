@@ -21,14 +21,14 @@ class HomePage extends BaseEmptyPage<HomeController> {
       bottomNavigationBar: Container(
         decoration:  BoxDecoration(
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(12.h),
-            topLeft: Radius.circular(12.h),
+            topRight: Radius.circular(12),
+            topLeft: Radius.circular(12),
           ),
           boxShadow:    [
             BoxShadow(
               color: Colors.grey,
               offset: const Offset(2, 2),
-              blurRadius: 4.h,
+              blurRadius: 4,
               spreadRadius: 0,
             ),
           ],
@@ -49,13 +49,13 @@ class HomePage extends BaseEmptyPage<HomeController> {
   Widget _getButtonNavigationBar() {
     return ClipRRect(
       borderRadius:  BorderRadius.only(
-        topRight: Radius.circular(12.h),
-        topLeft: Radius.circular(12.h),
+        topRight: Radius.circular(12),
+        topLeft: Radius.circular(12),
       ),
       child: BottomNavigationBar(
         backgroundColor: MyColors.homePageNaviBgColor,
-        unselectedLabelStyle: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.w500),
-        selectedLabelStyle: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.w500),
+        unselectedLabelStyle: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),
+        selectedLabelStyle: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),
         unselectedItemColor: MyColors.homePageNaviItemNormalColor,
         selectedItemColor: MyColors.homePageNaviItemSelectColor,
         type: BottomNavigationBarType.fixed,
@@ -117,14 +117,14 @@ class HomePage extends BaseEmptyPage<HomeController> {
       activeIcon: Image.asset(
         highlightIcon,
         color: MyColors.iconSelectedColor,
-        width: 22.w,
-        height: 22.w,
+        width: 22,
+        height: 22,
       ),
       icon: Image.asset(
         icon,
         color: Colors.grey,
-        width: 22.w,
-        height: 22.w,
+        width: 22,
+        height: 22,
       ),
       label: title,
     );

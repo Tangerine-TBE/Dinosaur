@@ -17,7 +17,7 @@ class MainPage extends BaseEmptyPage<MainController> {
   Widget buildContent(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 26.w),
+        padding: EdgeInsets.symmetric(horizontal: 26),
         child: Column(
           children: [
             _buildMainTitleBar(),
@@ -48,26 +48,26 @@ class MainPage extends BaseEmptyPage<MainController> {
               Text(
                 'HI，XHT',
                 style: TextStyle(
-                    color: ShakeColors.mainTitleColor, fontSize: 30.sp),
+                    color: ShakeColors.mainTitleColor, fontSize: 30),
               ),
               SizedBox(
-                height: 6.h,
+                height: 6,
               ),
               Text(
                 '链接设备，马上玩',
                 style: TextStyle(
                     color: ShakeColors.mainTitleColor1,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18.sp),
+                    fontSize: 18),
               ),
               SizedBox(
-                height: 10.h,
+                height: 10,
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                 decoration: BoxDecoration(
                     color: ShakeColors.mainTitleColor,
-                    borderRadius: BorderRadius.all(Radius.circular(17.h))),
+                    borderRadius: BorderRadius.all(Radius.circular(17))),
                 child: FittedBox(
                   child: Row(
                     children: [
@@ -76,19 +76,19 @@ class MainPage extends BaseEmptyPage<MainController> {
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(
-                        width: 4.w,
+                        width: 4,
                       ),
                       Image.asset(
                         ResName.iconLianjie,
-                        width: 14.h,
-                        height: 14.h,
+                        width: 14,
+                        height: 14,
                       ),
                     ],
                   ),
                 ),
               ),
               SizedBox(
-                height: 16.h,
+                height: 16,
               )
             ],
           ),
@@ -102,8 +102,8 @@ class MainPage extends BaseEmptyPage<MainController> {
                   left: 0,
                   child: Image.asset(
                     ResName.imgBanner,
-                    height: 188.h,
-                    width: 184.w,
+                    height: 188,
+                    width: 184,
                     fit: BoxFit.contain,
                   ),
                 )
@@ -129,7 +129,7 @@ class MainPage extends BaseEmptyPage<MainController> {
         child: Stack(
           children: [
             Positioned(
-              left: 27.w,
+              left: 27,
               top: 0,
               bottom: 0,
               child: Column(
@@ -141,11 +141,11 @@ class MainPage extends BaseEmptyPage<MainController> {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
-                        fontSize: 18.sp),
+                        fontSize: 18),
                   ),
                   Text(
                     'Start playing',
-                    style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ],
               ),
@@ -183,7 +183,7 @@ class MainPage extends BaseEmptyPage<MainController> {
 
   Widget _buildSideItCell() {
     return Container(
-      height: 174.w,
+      height: 174,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ResName.imgSideIt),
@@ -204,11 +204,11 @@ class MainPage extends BaseEmptyPage<MainController> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18.sp),
+                      fontSize: 18),
                 ),
                 Text(
                   'Side it',
-                  style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ],
             ),
@@ -220,7 +220,7 @@ class MainPage extends BaseEmptyPage<MainController> {
 
   Widget _buildShakeItCell() {
     return Container(
-      height: 200.h,
+      height: 200,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ResName.imgShakeIt),
@@ -241,11 +241,11 @@ class MainPage extends BaseEmptyPage<MainController> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18.sp),
+                      fontSize: 18),
                 ),
                 Text(
                   'Shake it',
-                  style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ],
             ),
@@ -257,7 +257,7 @@ class MainPage extends BaseEmptyPage<MainController> {
 
   Widget _buildInstructions() {
     return Container(
-      height: 200.h,
+      height: 200,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ResName.imgInstructions),
@@ -278,11 +278,11 @@ class MainPage extends BaseEmptyPage<MainController> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18.sp),
+                      fontSize: 18),
                 ),
                 Text(
                   'Instructions',
-                  style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ],
             ),
@@ -294,7 +294,7 @@ class MainPage extends BaseEmptyPage<MainController> {
 
   Widget _buildShare() {
     return Container(
-      height: 174.w,
+      height: 174,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ResName.imgShare),
@@ -315,11 +315,11 @@ class MainPage extends BaseEmptyPage<MainController> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18.sp),
+                      fontSize: 18),
                 ),
                 Text(
                   'Share',
-                  style: TextStyle(color: Colors.black, fontSize: 18.sp),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ],
             ),

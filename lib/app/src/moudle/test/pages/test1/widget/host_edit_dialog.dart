@@ -44,7 +44,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
                   minLines: 1,
                   textInputAction: TextInputAction.send,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 18,
                     textBaseline: TextBaseline.alphabetic,
                   ),
                   onChanged: (value) => {widget.host = value},
@@ -82,7 +82,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
             ],
           ),
           SizedBox(
-            height: 20.h,
+            height: 20,
           ),
 
           Row(
@@ -94,7 +94,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
                 minLines: 1,
                 textInputAction: TextInputAction.send,
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 18,
                   textBaseline: TextBaseline.alphabetic,
                 ),
                 onChanged: (value) => {widget.port = value},
@@ -134,7 +134,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
             ],
           ),
           SizedBox(
-            height: 20.h,
+            height: 20,
           ),
           Row(
             children: [
@@ -146,7 +146,7 @@ class _HostEditDialogState extends State<HostEditDialog> {
                   minLines: 1,
                   textInputAction: TextInputAction.send,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 18,
                     textBaseline: TextBaseline.alphabetic,
                   ),
                   onChanged: (value) => {widget.target = value},

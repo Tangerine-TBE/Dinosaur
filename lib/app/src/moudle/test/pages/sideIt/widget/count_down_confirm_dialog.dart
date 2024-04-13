@@ -11,26 +11,26 @@ class CountDownConfirmDialog extends StatelessWidget {
     return  SimpleDialog(
       contentPadding: EdgeInsets.zero,
       shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: Colors.white,
       alignment: Alignment.center,
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          padding: EdgeInsets.only(top: 20.w),
+          padding: EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(20.r),
+              Radius.circular(20),
             ),
           ),
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 10.w),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text('请录制十秒内的操作'),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(

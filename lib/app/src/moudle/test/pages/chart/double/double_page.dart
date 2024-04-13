@@ -17,7 +17,7 @@ class DoublePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: GetBuilder<ChartController>(
         builder: (controller) {
           return ListView.separated(
@@ -27,7 +27,7 @@ class DoublePage extends StatelessWidget {
             },
             separatorBuilder: (context, index) {
               return SizedBox(
-                height: 12.h,
+                height: 12,
               );
             },
             itemCount: controller.doubleCharManager.data.length,
@@ -44,18 +44,18 @@ class DoublePage extends StatelessWidget {
         Row(
           children: [
             SizedBox(
-              width: 40.w,
-              height: 40.w,
+              width: 40,
+              height: 40,
               child: CircleAvatar(
                 //Todo
                 backgroundImage: NetworkImage('https://via.placeholder.com/150/0000F1/808080?Text=Image1'),
               ),
             ),
             SizedBox(
-              width: 7.w,
+              width: 7,
             ),
             SizedBox(
-              height: 40.w,
+              height: 40,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class DoublePage extends StatelessWidget {
                     item.name,
                     style: TextStyle(
                         color: MyColors.textBlackColor,
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                   Row(
@@ -77,7 +77,7 @@ class DoublePage extends StatelessWidget {
                         item.viewsNum.toString(),
                         style: TextStyle(
                           color: MyColors.textGreyColor,
-                          fontSize: 11.sp,
+                          fontSize: 11,
                         ),
                       ),
                     ],
@@ -88,13 +88,13 @@ class DoublePage extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 16.h,
+          height: 16,
         ),
         Container(
-          height: 138.h,
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+          height: 138,
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12),
               color: const Color(0xffff5e65).withAlpha(60)),
           child: GestureDetector(
             onTap: () {
@@ -103,12 +103,12 @@ class DoublePage extends StatelessWidget {
             child: AwesomeChartView(
               dataList: <List<int>>[DoubleWave.fromJson(jsonDecode(item.actions)).data1,DoubleWave.fromJson(jsonDecode(item.actions)).data2,],
               width: double.infinity,
-              height: 138.h,
+              height: 138,
             ),
           ),
         ),
         SizedBox(
-          height: 16.h,
+          height: 16,
         ),
         Row(
           children: [
@@ -119,17 +119,17 @@ class DoublePage extends StatelessWidget {
               //Todo
               child: Image.asset(
                 false? ResName.heart1 : ResName.heart,
-                width: 14.w,
-                height: 14.w,
+                width: 14,
+                height: 14,
               ),
             ),
             SizedBox(
-              width: 4.w,
+              width: 4,
             ),
             Text(
               item.likesNum.toString(),
               style: TextStyle(
-                fontSize: 11.sp,
+                fontSize: 11,
                 //Todo
                 color: false
                     ? const Color(0xffff5e65)
@@ -137,36 +137,36 @@ class DoublePage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 16.w,
+              width: 16,
             ),
             Icon(
               Icons.timer_sharp,
-              size: 14.w,
+              size: 14,
             ),
             SizedBox(
-              width: 4.w,
+              width: 4,
             ),
             Text(
               item.tags,
               style: TextStyle(
-                fontSize: 11.sp,
+                fontSize: 11,
                 color: MyColors.textBlackColor,
               ),
             ),
             SizedBox(
-              width: 21.w,
+              width: 21,
             ),
             Icon(
               Icons.local_fire_department_outlined,
-              size: 14.w,
+              size: 14,
             ),
             SizedBox(
-              width: 4.w,
+              width: 4,
             ),
             Text(
               item.kcal.toString(),
               style: TextStyle(
-                fontSize: 11.sp,
+                fontSize: 11,
                 color: MyColors.textBlackColor,
               ),
             ),
@@ -181,14 +181,14 @@ class DoublePage extends StatelessWidget {
                     //Todo
                     child: Image.asset(
                       false ? ResName.start1 : ResName.start2,
-                      width: 14.w,
-                      height: 14.w,
+                      width: 14,
+                      height: 14,
                     ),
                   ),
                   Text(
                     '收藏',
                     style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 11,
                       color: MyColors.textBlackColor,
                     ),
                   ),
@@ -198,14 +198,14 @@ class DoublePage extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 24.h,
+          height: 24,
         ),
         Divider(
           color: Colors.grey,
-          height: 0.5.h,
+          height: 0.5,
         ),
         SizedBox(
-          height: 20.h,
+          height: 20,
         ),
       ],
     );

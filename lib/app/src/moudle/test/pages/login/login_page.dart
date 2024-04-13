@@ -16,7 +16,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
   @override
   Widget buildContent(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      padding: EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
           const SizedBox(
@@ -27,22 +27,22 @@ class LoginPage extends BaseEmptyPage<LoginController> {
               '开启小萌宠v${controller.name.value}',
               style: TextStyle(
                   color: MyColors.themeTextColor,
-                  fontSize: 18.sp,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500),
             ),
           ),
           SizedBox(
-            height: 10.h,
+            height: 10,
           ),
           Text(
             '跨越山海，随时陪伴，专属于你的亲密朋友!',
             style: TextStyle(
                 color: MyColors.themeTextColor,
-                fontSize: 14.sp,
+                fontSize: 14,
                 fontWeight: FontWeight.w500),
           ),
           SizedBox(
-            height: 60.h,
+            height: 60,
           ),
           TextField(
             controller: controller.phoneController,
@@ -58,11 +58,11 @@ class LoginPage extends BaseEmptyPage<LoginController> {
             cursorColor: MyColors.themeTextColor,
             decoration: InputDecoration(
               hintText: '请输入手机号码',
-              contentPadding: EdgeInsets.only(top: 10.h),
-              constraints: BoxConstraints(maxHeight: 50.h, minHeight: 50.h),
+              contentPadding: EdgeInsets.only(top: 10),
+              constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
               prefixIcon: Container(
-                width: 70.w,
-                height: 50.h,
+                width: 70,
+                height: 50,
                 alignment: Alignment.center,
                 child: Text(
                   '手机号码',
@@ -83,12 +83,12 @@ class LoginPage extends BaseEmptyPage<LoginController> {
               ),
             ),
             style: TextStyle(
-              fontSize: 18.sp,
+              fontSize: 18,
               textBaseline: TextBaseline.alphabetic,
             ),
           ),
           SizedBox(
-            height: 20.h,
+            height: 20,
           ),
           PrivacyCheckboxWidget(
             onChanged: (checked) {
@@ -104,16 +104,16 @@ class LoginPage extends BaseEmptyPage<LoginController> {
             controller: controller,
           ),
           SizedBox(
-            height: 20.h,
+            height: 20,
           ),
           MaterialButton(
             onPressed: () {
               controller.onConfirmClicked();
             },
             padding: EdgeInsets.only(
-                top: 14.h, bottom: 14.h, left: 50.h, right: 50.h),
+                top: 14, bottom: 14, left: 50, right: 50),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: BorderRadius.circular(12),
             ),
             color: MyColors.bgLinearShapeColor1,
             child: Text(

@@ -38,7 +38,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           Scaffold(
             backgroundColor: MyColors.pageBgColor,
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(64.h),
+              preferredSize: Size.fromHeight(64),
               child: AppBar(
                 backgroundColor: MyColors.pageBgColor,
                 automaticallyImplyLeading: false,
@@ -52,18 +52,18 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                       isScrollable: true,
                       unselectedLabelStyle: TextStyle(
                           color: MyColors.indicatorNormalTextColor,
-                          fontSize: 16.sp),
+                          fontSize: 16),
                       labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: MyColors.indicatorSelectedTextColor,
-                          fontSize: 18.sp),
+                          fontSize: 18),
                       indicatorColor: MyColors.indicatorColor,
-                      indicatorPadding: EdgeInsets.only(bottom: 10.h),
+                      indicatorPadding: EdgeInsets.only(bottom: 10),
                       indicator: CurvedIndicator(),
                       indicatorSize: TabBarIndicatorSize.label,
                       splashFactory: NoSplash.splashFactory,
                       dividerHeight: 0,
-                      labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
+                      labelPadding: EdgeInsets.symmetric(horizontal: 6),
                       overlayColor: const MaterialStatePropertyAll<Color>(
                           Colors.transparent),
                       tabs: const [
@@ -100,7 +100,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
     return LoadMoreListView.customScrollView(
       onLoadMore: controller.playSelfContentManager.loaMoreList,
       loadMoreWidget: Container(
-        margin: EdgeInsets.all(20.w),
+        margin: EdgeInsets.all(20),
         alignment: Alignment.center,
         child: const CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
@@ -109,40 +109,40 @@ class PlayPage extends BaseEmptyPage<PlayController> {
       slivers: [
         SliverToBoxAdapter(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.w),
+            margin: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 282.h,
+                  height: 282,
                   width: double.infinity,
                   child: Stack(
                     children: [
                       Positioned(
                         left: 0,
                         right: 0,
-                        top: 26.h,
+                        top: 26,
                         child: GestureDetector(
                           onTap: () {
                             onScanCall.call();
                           },
                           child: Image.asset(
                             ResName.iconImg,
-                            width: 150.w,
-                            height: 176.h,
+                            width: 150,
+                            height: 176,
                           ),
                         ),
                       ),
                       Positioned(
-                        left: 49.w,
-                        top: 50.h,
+                        left: 49,
+                        top: 50,
                         child: Obx(
                           () => Text(
                             controller.manager.mDevice.value == null
                                 ? '点我\r\n连接设备哦'
                                 : '\r\n${controller.manager.mDevice.value!.platformName}\r\n已链接',
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: 12,
                               color: MyColors.textBlackColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -154,15 +154,15 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                         right: 0,
                         bottom: 0,
                         child: Container(
-                          height: 100.h,
+                          height: 100,
                           decoration: BoxDecoration(
                               color: MyColors.cardViewBgColor,
-                              borderRadius: BorderRadius.circular(8.w),
+                              borderRadius: BorderRadius.circular(8),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey,
                                   offset: const Offset(2, 2),
-                                  blurRadius: 4.h,
+                                  blurRadius: 4,
                                   spreadRadius: 0,
                                 )
                               ]),
@@ -180,13 +180,13 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                                   children: [
                                     Image.asset(
                                       ResName.iconSide,
-                                      width: 46.h,
-                                      height: 46.h,
+                                      width: 46,
+                                      height: 46,
                                     ),
                                     Text(
                                       '划一划',
                                       style: TextStyle(
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                         color: MyColors.textBlackColor,
                                       ),
@@ -204,13 +204,13 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                                   children: [
                                     Image.asset(
                                       ResName.iconShake,
-                                      width: 46.h,
-                                      height: 46.h,
+                                      width: 46,
+                                      height: 46,
                                     ),
                                     Text(
                                       '摇一摇',
                                       style: TextStyle(
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                         color: MyColors.textBlackColor,
                                       ),
@@ -228,13 +228,13 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                                   children: [
                                     Image.asset(
                                       ResName.iconModel,
-                                      width: 46.h,
-                                      height: 46.h,
+                                      width: 46,
+                                      height: 46,
                                     ),
                                     Text(
                                       '模式',
                                       style: TextStyle(
-                                        fontSize: 14.sp,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                         color: MyColors.textBlackColor,
                                       ),
@@ -250,7 +250,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 20,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -259,7 +259,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                     style: TextStyle(
                         color: MyColors.textBlackColor,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16.sp),
+                        fontSize: 16),
                   ),
                 ),
               ],
@@ -267,7 +267,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           ),
         ),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           sliver: GetBuilder<PlayController>(
             builder: (controller) {
               return controller.playSelfContentManager.dataList.isNotEmpty
@@ -277,7 +277,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                           child: Center(
                             child: LoadingAnimationWidget.newtonCradle(
                               color: MyColors.homePageNaviItemSelectColor,
-                              size: 100.w,
+                              size: 100,
                             ),
                           ),
                         )
@@ -312,7 +312,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   _centerItem(TopicList bean, Function onPress) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      height: 70.h,
+      height: 70,
       child: InkWell(
         onTap: (){
           onPress.call();
@@ -320,26 +320,26 @@ class PlayPage extends BaseEmptyPage<PlayController> {
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10.h),
-              child: loadImage(bean.imageUrl, 64.h, 64.h),
+              borderRadius: BorderRadius.circular(10),
+              child: loadImage(bean.imageUrl, 64, 64),
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: 12.w),
+                margin: EdgeInsets.only(left: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       bean.title,
                       style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 14,
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       bean.subtitle,
                       style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 14,
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     ),
@@ -352,7 +352,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                             child: Text(
                               bean.subtitle,
                               style: TextStyle(
-                                  fontSize: 11.sp, color: MyColors.textGreyColor),
+                                  fontSize: 11, color: MyColors.textGreyColor),
                             ),
                           ),
                           Positioned(
@@ -361,7 +361,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                             child: Text(
                               bean.deletedTime,
                               style: TextStyle(
-                                  fontSize: 11.sp, color: MyColors.textGreyColor),
+                                  fontSize: 11, color: MyColors.textGreyColor),
                             ),
                           )
                         ],
@@ -382,8 +382,8 @@ class PlayPage extends BaseEmptyPage<PlayController> {
       children: [
         Image.asset(
           ResName.group38,
-          width: 223.w,
-          height: 223.w,
+          width: 223,
+          height: 223,
         ),
         Text(
           '点击\r\n分享遥控',
@@ -391,20 +391,20 @@ class PlayPage extends BaseEmptyPage<PlayController> {
           style: TextStyle(
             color: MyColors.textBlackColor,
             fontWeight: FontWeight.w500,
-            fontSize: 18.sp,
+            fontSize: 18,
           ),
         ),
         SizedBox(
-          height: 42.h,
+          height: 42,
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: GetBuilder<PlayController>(
               builder: (controller) {
                 return Wrap(
-                  runSpacing: 16.h,
-                  spacing: 24.w,
+                  runSpacing: 16,
+                  spacing: 24,
                   children: controller.remoteControlContentManager.shareData
                       .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
                       .toList(),
@@ -416,7 +416,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
         Text(
           '互动需双方同时链接，离开此界面自动将断开',
           style: TextStyle(
-            fontSize: 11.sp,
+            fontSize: 11,
             color: MyColors.textGreyColor,
             fontWeight: FontWeight.w500,
           ),
@@ -429,12 +429,12 @@ class PlayPage extends BaseEmptyPage<PlayController> {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14.w),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 9.h),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14.w),
+          borderRadius: BorderRadius.circular(14),
           gradient: LinearGradient(
             colors: [
               const Color(0xffff5e65),
@@ -451,17 +451,17 @@ class PlayPage extends BaseEmptyPage<PlayController> {
             children: [
               Image.asset(
                 assetPath,
-                width: 22.w,
-                height: 22.w,
+                width: 22,
+                height: 22,
               ),
               SizedBox(
-                width: 6.w,
+                width: 6,
               ),
               Text(
                 text,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),

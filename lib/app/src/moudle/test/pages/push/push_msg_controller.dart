@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -20,6 +21,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 import '../chart/weight/awesome_chart.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class PushMsgController extends BaseController {
   final _playRepo = Get.find<PlayRepo>();
@@ -35,7 +37,6 @@ class PushMsgController extends BaseController {
   final selectedTag = ''.obs;
   var selectedImagesObx = <String>[];
   late TextEditingController editingController;
-
 
   @override
   onInit() {
@@ -124,8 +125,7 @@ class PushMsgController extends BaseController {
               bucketName: "cxw-user",
               authGetter: () => auth);
           for (var i in selectedImagesObx) {
-            final file = File(i);
-            final bytes = file.readAsBytesSync();
+            final bytes = await compressFile(File(i));
             final udid = const Uuid().v4();
             final targetPath = "src/pet/${udid.replaceAll("-", "")}.jpeg";
             await Client().putObject(
@@ -139,29 +139,37 @@ class PushMsgController extends BaseController {
                 headers: {"cache-control": "no-cache"},
               ),
             );
-            imageUrls.add("https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$targetPath");
+            imageUrls.add(
+                "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$targetPath");
           }
         }
       }
     }
 
     PushCreateReq pushCreateReq = PushCreateReq(
-        waves: <Wave>[],
-        topicId: findTopicId(selectedTag.value.isNullOrEmpty?'':selectedTag.value),
-        topicTitle: selectedTag.value.isNullOrEmpty?'':selectedTag.value,
+        waves: <Wave>[waveConverter(selectedWave)],
+        topicId: findTopicId(
+            selectedTag.value.isNullOrEmpty ? '' : selectedTag.value),
+        topicTitle: selectedTag.value.isNullOrEmpty ? '' : selectedTag.value,
         images: await imagesConverter(imageUrls),
         userId: User.loginRspBean!.userId,
         content: editingController.text.toString());
     final response = await _pushRepo.pushMsg(pushCreateReq);
     if (response.isSuccess) {
       EasyLoading.showSuccess('上传成功');
-      if(response.data?.data != null){
+      if (response.data?.data != null) {
         var data = response.data!.data!;
         setResult(data);
         finish();
       }
     }
     dismiss();
+  }
+
+  waveConverter(List<int> selectedWave) {
+    String jsonWave = jsonEncode(selectedWave);
+    Wave wave = Wave(id: '', actions: jsonWave);
+    return wave;
   }
 
   onPicSelectClicked() {
@@ -174,7 +182,7 @@ class PushMsgController extends BaseController {
     }
     final urlImages = <ImageString>[];
     for (var i in images) {
-       ui.Image image =  await loadImageWithUrl(i, Get.context!);
+      ui.Image image = await loadImageWithUrl(i, Get.context!);
       urlImages.add(
         ImageString(
           imageBase64: '',
@@ -199,15 +207,15 @@ class PushMsgController extends BaseController {
   _showImagePickerBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 200.h,
+        height: 200,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -264,7 +272,7 @@ class PushMsgController extends BaseController {
 
   buildTagSheetItem(TopicList item, int index) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           Container(
@@ -273,16 +281,16 @@ class PushMsgController extends BaseController {
             child: Icon(
               Icons.tag,
               color: Colors.white,
-              size: 16.w,
+              size: 16,
             ),
           ),
           SizedBox(
-            width: 20.w,
+            width: 20,
           ),
           Text(
             item.title,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14,
               color: MyColors.textBlackColor,
             ),
           ),
@@ -298,8 +306,8 @@ class PushMsgController extends BaseController {
         Row(
           children: [
             SizedBox(
-              width: 40.w,
-              height: 40.w,
+              width: 40,
+              height: 40,
               child: CircleAvatar(
                 //Todo
                 backgroundImage: NetworkImage(
@@ -311,10 +319,10 @@ class PushMsgController extends BaseController {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 4.h,
+                    height: 4,
                   ),
                   Container(
-                    height: 40.w,
+                    height: 40,
                     child: Column(
                       children: [
                         Row(
@@ -323,7 +331,7 @@ class PushMsgController extends BaseController {
                             Text(
                               '我的',
                               style: TextStyle(
-                                  fontSize: 14.sp, fontWeight: FontWeight.w500),
+                                  fontSize: 14, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -332,28 +340,28 @@ class PushMsgController extends BaseController {
                           children: [
                             FaIcon(
                               FontAwesomeIcons.peopleRobbery,
-                              size: 12.w,
+                              size: 12,
                             ),
                             SizedBox(
-                              width: 4.w,
+                              width: 4,
                             ),
                             Text(
                               '1',
-                              style: TextStyle(fontSize: 10.sp),
+                              style: TextStyle(fontSize: 10),
                             ),
                             SizedBox(
-                              width: 20.w,
+                              width: 20,
                             ),
                             FaIcon(
                               FontAwesomeIcons.heart,
-                              size: 12.w,
+                              size: 12,
                             ),
                             SizedBox(
-                              width: 4.w,
+                              width: 4,
                             ),
                             Text(
                               '0',
-                              style: TextStyle(fontSize: 10.sp),
+                              style: TextStyle(fontSize: 10),
                             ),
                           ],
                         ),
@@ -361,7 +369,7 @@ class PushMsgController extends BaseController {
                     ),
                   ),
                   SizedBox(
-                    height: 4.h,
+                    height: 4,
                   ),
                 ],
               ),
@@ -369,22 +377,22 @@ class PushMsgController extends BaseController {
           ],
         ),
         SizedBox(
-          width: 10.w,
+          width: 10,
         ),
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
               AwesomeChartView(
                 dataList: <List<int>>[item.actions.record],
                 width: double.infinity,
-                height: 138.h,
+                height: 138,
               ),
               Container(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
+                padding: EdgeInsets.symmetric(vertical: 8),
                 decoration: const BoxDecoration(
                   border: Border(top: BorderSide(color: Colors.black)),
                 ),
@@ -392,20 +400,20 @@ class PushMsgController extends BaseController {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 20.w,
+                      width: 20,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.black,
                         ),
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         "${item.kcal}kcal",
                         style: TextStyle(
-                            fontSize: 12.sp, fontWeight: FontWeight.w600),
+                            fontSize: 12, fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],
@@ -433,7 +441,7 @@ class PushMsgController extends BaseController {
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) => Container(
           padding: EdgeInsets.only(
-            top: 20.w,
+            top: 20,
           ),
           width: double.infinity,
           height: double.infinity,
@@ -449,7 +457,7 @@ class PushMsgController extends BaseController {
                     '选择插入的波形',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: MyColors.textBlackColor,
                     ),
@@ -458,7 +466,7 @@ class PushMsgController extends BaseController {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   child: GetBuilder<PushMsgController>(
                     builder: (controller) {
                       return ListView.separated(
@@ -497,7 +505,7 @@ class PushMsgController extends BaseController {
         backgroundColor: Colors.transparent,
         builder: (BuildContext context) => Container(
           padding: EdgeInsets.only(
-            top: 20.w,
+            top: 20,
           ),
           width: double.infinity,
           height: double.infinity,
@@ -513,7 +521,7 @@ class PushMsgController extends BaseController {
                     '选择一个话题',
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: MyColors.textBlackColor,
                     ),
@@ -523,7 +531,7 @@ class PushMsgController extends BaseController {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    left: 20.w,
+                    left: 20,
                   ),
                   child: ListView.separated(
                       itemBuilder: (context, index) {
@@ -537,7 +545,7 @@ class PushMsgController extends BaseController {
                       },
                       separatorBuilder: (context, index) {
                         return Container(
-                          padding: EdgeInsets.only(left: 36.w),
+                          padding: EdgeInsets.only(left: 36),
                           child: Divider(
                             color: MyColors.textGreyColor.withOpacity(0.3),
                           ),

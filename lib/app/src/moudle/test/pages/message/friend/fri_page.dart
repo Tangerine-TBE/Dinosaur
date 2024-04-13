@@ -14,7 +14,7 @@ class FriPage extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w),
+          padding: EdgeInsets.symmetric(horizontal: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -24,9 +24,9 @@ class FriPage extends StatelessWidget {
                 },
                 child: Text('粉丝'),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.w)),
+                    borderRadius: BorderRadius.circular(12)),
                 color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
               ),
               MaterialButton(
@@ -35,27 +35,27 @@ class FriPage extends StatelessWidget {
                 },
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.w)),
+                    borderRadius: BorderRadius.circular(12)),
                 child: Text('已关注'),
-                padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 7.h),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                 splashColor: MyColors.pageBgColor.withAlpha(30),
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 20.h,
+          height: 20,
         ),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(left: 15.w),
+            padding: EdgeInsets.only(left: 15),
             child: Obx(
               () => Text(
                 '我的好友（${messageController.friendPageManager.dataSize.value}）',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -84,7 +84,7 @@ class FriPage extends StatelessWidget {
                                   style: TextStyle(
                                       color: MyColors.textBlackColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 20.sp),
+                                      fontSize: 20),
                                 ),
                               ],
                             ),

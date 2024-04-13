@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/util/image.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../chart/weight/awesome_chart.dart';
 
 class DetailsPage extends BaseEmptyPage<DetailsController> {
   const DetailsPage({super.key});
@@ -24,18 +28,18 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
         backgroundColor: MyColors.cardViewBgColor,
         automaticallyImplyLeading: false,
         title: SizedBox(
-          height: 38.h,
+          height: 38,
           child: Row(
             children: [
               const BackButton(),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               CircleAvatar(
                 backgroundImage: loadImageProvider(controller.item.userAvator),
               ),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +48,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   Text(
                     controller.item.userName,
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 12,
                       color: MyColors.textBlackColor,
                       fontWeight: FontWeight.w600,
                     ),
@@ -53,7 +57,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   Text(
                     timeStampToDateString(controller.item.createTime),
                     style: TextStyle(
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       color: MyColors.textGreyColor,
                     ),
                   ),
@@ -65,7 +69,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   child: Text(
                     '${controller.item.participantNum} 参与 | ${controller.item.viewsNum} 浏览',
                     style: TextStyle(
-                      fontSize: 10.sp,
+                      fontSize: 10,
                     ),
                   ),
                 ),
@@ -75,8 +79,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
         ),
       ),
       body: GestureDetector(
-        onTap: (){
-          if(controller.focusNode.hasFocus){
+        onTap: () {
+          if (controller.focusNode.hasFocus) {
             controller.focusNode.unfocus();
           }
         },
@@ -90,51 +94,80 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                            padding: EdgeInsets.only(left: 50.w),
+                            padding: EdgeInsets.only(left: 50,right: 20),
                             child: Text(controller.item.content)),
                         SizedBox(
-                          height: 20.h,
+                          height: 20,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 50.w),
+                          padding: EdgeInsets.only(left: 50),
                           child: controller.imagePreView(
                               controller.item.images
                                   .map((e) => e.imageUrl)
                                   .toList(),
                               context,
-                              250.w,
+                              250,
                               controller.index,
                               controller.item.images),
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 20,
                         ),
-                        Align(
+                        if (controller.item.waves.isNotEmpty && controller.item.waves[0].actions != '[]')
+                         Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 50),
+                                    child: Container(
+                                        decoration: BoxDecoration(borderRadius:BorderRadius.circular(10),gradient: LinearGradient(colors: [MyColors.themeTextColor.withOpacity(0.3),MyColors.themeTextColor.withOpacity(0.5),])),
+                                        padding: EdgeInsets.only(top: 10,right: 4,left: 4),
+                                      child: AwesomeChartView(
+                                        dataList: <List<int>>[
+                                          List<int>.from(jsonDecode(controller
+                                                  .item.waves[0].actions) ??
+                                              '[]')
+                                        ],
+                                        width: 250,
+                                        height: 30,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10,),
+                                ],
+                              ),
+
+                        const Align(
                           alignment: Alignment.center,
                           child: Text('------  全部评论  ------'),
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 20,
                         ),
                       ],
                     ),
                   ),
-                  GetBuilder<DetailsController>(builder: (controller) {
-                    return SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 20.w,
-                      ),
-                      sliver: SliverList.separated(
-                        itemBuilder: (context, index) {
-                          return _buildContentItem(index, controller.list[index]);
-                        },
-                        separatorBuilder: (context, index) {
-                          return SizedBox(height: 20.h,);
-                        },
-                        itemCount: controller.list.length,
-                      ),
-                    );
-                  },id: controller.listId,)
+                  GetBuilder<DetailsController>(
+                    builder: (controller) {
+                      return SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        sliver: SliverList.separated(
+                          itemBuilder: (context, index) {
+                            return _buildContentItem(
+                                index, controller.list[index]);
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              height: 20,
+                            );
+                          },
+                          itemCount: controller.list.length,
+                        ),
+                      );
+                    },
+                    id: controller.listId,
+                  )
                 ],
               ),
             ),
@@ -142,33 +175,34 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
               child: Container(
                 color: const Color(0xFFF4F4F4),
                 padding: EdgeInsets.only(
-                    left: 16.w, top: 10.h, bottom: 10.h, right: 16.w),
+                    left: 16, top: 10, bottom: 10, right: 16),
                 child: Obx(
                   () => Column(
                     children: [
                       Visibility(
-                        visible: controller.showSend.value && controller.selectedCommentItem != null,
+                        visible: controller.showSend.value &&
+                            controller.selectedCommentItem != null,
                         child: Row(
                           children: [
                             CircleAvatar(
                               backgroundImage: loadImageProvider(''),
-                              radius: 10.w,
+                              radius: 10,
                             ),
                             SizedBox(
-                              width: 10.w,
+                              width: 10,
                             ),
                             Text(controller.selectedCommentItem?.content ?? ''),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 4.h,
+                        height: 4,
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16.sp),
+                              style: TextStyle(fontSize: 16),
                               focusNode: controller.focusNode,
                               controller: controller.editTextController,
                               cursorColor: MyColors.textBlackColor,
@@ -180,7 +214,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                     left: 10, top: 10, bottom: 10, right: 10),
                                 enabledBorder: OutlineInputBorder(
                                   gapPadding: 0,
-                                  borderRadius: BorderRadius.circular(10.w),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
                                     color: Colors.black, //边线颜色为白色
                                     width: 1, //边线宽度为2
@@ -188,7 +222,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   gapPadding: 0,
-                                  borderRadius: BorderRadius.circular(10.w),
+                                  borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
                                     color: Colors.black, //边线颜色为白色
                                     width: 1, //边线宽度为2
@@ -200,49 +234,49 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                             ),
                           ),
                           SizedBox(
-                            width: 10.w,
+                            width: 10,
                           ),
                           SizedBox(
-                            width: 80.w,
+                            width: 80,
                             child: !controller.showSend.value
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           controller.onInputLike();
                                         },
                                         child: Column(
                                           children: [
                                             Icon(
                                               Icons.heart_broken_rounded,
-                                              size: 20.w,
+                                              size: 20,
                                             ),
                                             Text(
                                               '1',
                                               style: TextStyle(
                                                   color: MyColors.textGreyColor,
-                                                  fontSize: 12.sp),
+                                                  fontSize: 12),
                                             )
                                           ],
                                         ),
                                       ),
                                       InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           controller.onInputCollect();
                                         },
                                         child: Column(
                                           children: [
                                             Icon(
                                               Icons.hotel_class,
-                                              size: 20.w,
+                                              size: 20,
                                             ),
                                             Text(
                                               '1',
                                               style: TextStyle(
                                                   color: MyColors.textGreyColor,
-                                                  fontSize: 12.sp),
+                                                  fontSize: 12),
                                             )
                                           ],
                                         ),
@@ -252,7 +286,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                 : MaterialButton(
                                     color: MyColors.themeTextColor,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12.w),
+                                        borderRadius:
+                                            BorderRadius.circular(12),
                                         side: const BorderSide(
                                             color: MyColors.textBlackColor)),
                                     onPressed: () {
@@ -274,23 +309,26 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
     );
   }
 
-  _buildContentItem(int index, CommentList item,) {
+  _buildContentItem(
+    int index,
+    CommentList item,
+  ) {
     return GestureDetector(
       onTap: () {
         controller.onItemComment(item);
       },
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(14.w),
+        padding: EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10.w),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 40.h,
+              height: 40,
               child: Row(
                 children: [
                   CircleAvatar(
@@ -298,7 +336,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                         loadImageProvider(controller.item.userAvator),
                   ),
                   SizedBox(
-                    width: 10.w,
+                    width: 10,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,9 +349,9 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                         ),
                       ),
                       Text(
-                          timeStampToDayOrHourBefore(item.createTime),
+                        timeStampToDayOrHourBefore(item.createTime),
                         style: TextStyle(
-                            color: MyColors.textGreyColor, fontSize: 10.sp),
+                            color: MyColors.textGreyColor, fontSize: 10),
                       ),
                     ],
                   ),
@@ -321,12 +359,12 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                     child: Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           controller.onItemMoreClick(item);
                         },
                         child: Icon(
                           Icons.more_horiz,
-                          size: 20.w,
+                          size: 20,
                         ),
                       ),
                     ),
@@ -335,7 +373,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.symmetric(vertical: 14.h),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 child: Text(item.content)),
             Row(
               children: [
@@ -345,11 +383,11 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   },
                   child: Icon(
                     Icons.message,
-                    size: 14.w,
+                    size: 14,
                   ),
                 ),
                 SizedBox(
-                  width: 40.w,
+                  width: 40,
                 ),
                 InkWell(
                   onTap: () {
@@ -357,7 +395,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   },
                   child: FaIcon(
                     FontAwesomeIcons.heart,
-                    size: 14.w,
+                    size: 14,
                   ),
                 ),
               ],

@@ -6,9 +6,7 @@ import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../dialog/my_dialog_widget.dart';
 import '../home/home_controller.dart';
-import '../pet/pet_controller.dart';
 import '../pet/weight/image_preview_single.dart';
 
 class CenterDetailsController extends BaseController {
@@ -94,8 +92,8 @@ class CenterDetailsController extends BaseController {
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 2.w,
-              crossAxisSpacing: 2.w,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
             ),
             itemBuilder: ((context, index) {
               var tag = '$parentIndex${index.toString()}';
@@ -136,6 +134,7 @@ class RefreshManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+
   RefreshManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -146,42 +145,49 @@ class RefreshManager {
       BannerModel(imagePath: ResName.homeAdd3, id: "4", boxFit: BoxFit.cover),
     ];
   }
+
   Future loadMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
-          topicId: controller.topCenterList.id,
-          pageIndex: ++pageIndex,
+          topicId: '',
+          pageIndex: pageIndex+1,
           pageSize: 10,
           orderBy: 'createTime desc',
-          postsType: ''),
+          postsType: 'Latest'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        dataList.addAll(response.data!.data!.postsList);
-        controller.update([listId]);
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          pageIndex = pageIndex+1;
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
       }
     }
   }
+
   init() {
     if (!isInit) {
       getList();
       isInit = true;
     }
   }
-  showBottomSheet(){
+
+  showBottomSheet() {
     Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -212,25 +218,28 @@ class RefreshManager {
         ),
       ),
     );
-
   }
+
   getList() async {
-    final response = await controller.apiLaunch(
-          () => pushRepo.getPushMsg(
-        PushMsgReq(
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
           userId: User.loginRspBean!.userId,
-            topicId: controller.topCenterList.id,
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            postsType: ''),
-      ),
+          topicId: '',
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Latest'),
     );
-    if (response?.data != null) {
-      dataList.addAll(response!.data!.postsList);
-      controller.update([listId]);
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          dataList.addAll(list);
+          controller.update([listId]);
+        }
+      }
     }
   }
-
-
 }
+
+

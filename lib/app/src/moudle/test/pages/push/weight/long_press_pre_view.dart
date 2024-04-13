@@ -43,8 +43,8 @@ class _LongPressPreViewState extends State<LongPressPreView> {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            mainAxisSpacing: 2.w,
-            crossAxisSpacing: 2.w,
+            mainAxisSpacing: 2,
+            crossAxisSpacing: 2,
           ),
           children: children,
         );
@@ -60,7 +60,7 @@ class _LongPressPreViewState extends State<LongPressPreView> {
                 homeController.toImageView(widget.images[index], tag);
               },
               child: Padding(
-                padding: EdgeInsets.all(10.w),
+                padding: EdgeInsets.all(10),
                 child: ImagePreView(
                   url: widget.images[index],
                   size: widget.size,
@@ -79,7 +79,7 @@ class _LongPressPreViewState extends State<LongPressPreView> {
                 },
                 child: Icon(
                   Icons.cancel_outlined,
-                  size: 20.w,
+                  size: 20,
                   color: Colors.black,
                 ),
               ),

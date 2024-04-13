@@ -156,7 +156,7 @@ class _SmartRefreshListViewState<T> extends State<SmartRefreshListView<T>>
                 style: TextStyle(color: widget.fontColor));
           }
           return SizedBox(
-            height: 55.w,
+            height: 55,
             child: Container(
               alignment: Alignment.center,
               child: body,
@@ -174,7 +174,7 @@ class _SmartRefreshListViewState<T> extends State<SmartRefreshListView<T>>
               itemBuilder: (BuildContext context, int index) =>
                   widget.adapter.call(_dataList[index], index),
               separatorBuilder: (BuildContext context, int index) =>
-                  SizedBox(height: widget.runSpacing.w),
+                  SizedBox(height: widget.runSpacing.toDouble()),
             )
           : widget.emptyWidget ?? const Offstage(),
     );

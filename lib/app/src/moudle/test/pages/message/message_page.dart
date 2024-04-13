@@ -42,7 +42,7 @@ class MessagePage extends BaseEmptyPage<MessageController>
               actions: [
                 Container(
                   padding: EdgeInsets.only(
-                    right: 20.w,
+                    right: 20,
                   ),
                   child: InkWell(
                     onTap: () {
@@ -50,7 +50,7 @@ class MessagePage extends BaseEmptyPage<MessageController>
                     },
                     child: FaIcon(
                       FontAwesomeIcons.userPlus,
-                      size: 16.w,
+                      size: 16,
                     ),
                   ),
                 ),
@@ -62,18 +62,18 @@ class MessagePage extends BaseEmptyPage<MessageController>
                 isScrollable: true,
                 unselectedLabelStyle: TextStyle(
                     color: MyColors.indicatorNormalTextColor,
-                    fontSize: 16.sp),
+                    fontSize: 16),
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18.sp),
+                    fontSize: 18),
                 indicatorColor: MyColors.indicatorColor,
-                indicatorPadding: EdgeInsets.only(bottom: 10.h),
+                indicatorPadding: EdgeInsets.only(bottom: 10),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 splashFactory: NoSplash.splashFactory,
                 dividerHeight: 0,
-                labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
+                labelPadding: EdgeInsets.symmetric(horizontal: 6),
                 overlayColor:
                     const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [

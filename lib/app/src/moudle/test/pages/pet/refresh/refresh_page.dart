@@ -1,5 +1,6 @@
+import 'dart:convert';
+
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../weight/loadmore_listview.dart';
+import '../../chart/weight/awesome_chart.dart';
 
 class RefreshPage extends StatelessWidget {
   final PetController controller;
@@ -23,10 +25,10 @@ class RefreshPage extends StatelessWidget {
       child: LoadMoreListView.customScrollView(
         onLoadMore: controller.refreshManager.loadMoreList,
         loadMoreWidget: Container(
-          margin: EdgeInsets.all(20.w),
+          margin: const EdgeInsets.all(20),
           alignment: Alignment.center,
-          child: const CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
           ),
         ),
         slivers: [
@@ -34,27 +36,29 @@ class RefreshPage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 18.w),
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                  padding:
+                      const EdgeInsets.only(right: 18, left: 18, bottom: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: BannerCarousel.fullScreen(
                     animation: true,
-                    height: 106.h,
+                    height: 106,
                     banners: controller.refreshManager.listBanners,
                     showIndicator: true,
                     indicatorBottom: false,
-                    borderRadius: 10.w,
+                    borderRadius: 10,
                     disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
                     activeColor: const Color(0xffFFFFFF),
-                    customizedIndicators: IndicatorModel.animation(
-                      width: 5.w,
-                      height: 5.w,
-                      spaceBetween: 4.w,
+                    customizedIndicators: const IndicatorModel.animation(
+                      width: 5,
+                      height: 5,
+                      spaceBetween: 4,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10.h,
+                const SizedBox(
+                  height: 10,
                 ),
               ],
             ),
@@ -62,12 +66,12 @@ class RefreshPage extends StatelessWidget {
           GetBuilder<PetController>(
             builder: (controller) {
               return controller.refreshManager.dataList.isNotEmpty
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => _buildItem(index,
-                            controller.refreshManager.dataList[index], context),
-                        childCount: controller.refreshManager.dataList.length,
-                      ),
+                  ? SliverList.builder(
+                      itemBuilder: (context, index) {
+                        return _buildItem(index,
+                            controller.refreshManager.dataList[index], context);
+                      },
+                      itemCount: controller.refreshManager.dataList.length,
                     )
                   : const SliverFillRemaining(
                       child: SizedBox(
@@ -86,9 +90,11 @@ class RefreshPage extends StatelessWidget {
 
   _buildItem(int index, PostsList item, BuildContext context) {
     return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
       width: double.infinity,
-      color: Colors.white,
-      padding: EdgeInsets.only(left: 18.w, right: 18.w),
+      padding: const EdgeInsets.only(left: 18, right: 18,top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,21 +103,21 @@ class RefreshPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 40.w,
-                height: 40.w,
+                width: 40,
+                height: 40,
                 child: CircleAvatar(
-                  backgroundImage: loadImageProvider(item.userAvator),
+                  backgroundImage: loadImageProvider(item.userAvator),radius: 20,
                 ),
               ),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 4.h,
+                      height: 4,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,10 +125,10 @@ class RefreshPage extends StatelessWidget {
                         Text(
                           item.userName,
                           style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.w500),
+                              fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
-                            onTap: (){
+                            onTap: () {
                               controller.refreshManager.showBottomSheet();
                             },
                             child: const Icon(Icons.more_horiz)),
@@ -131,11 +137,11 @@ class RefreshPage extends StatelessWidget {
                     Visibility(
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 7.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12.w),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: RichText(
                           text: TextSpan(
@@ -143,7 +149,7 @@ class RefreshPage extends StatelessWidget {
                               TextSpan(
                                 text: '#',
                                 style: TextStyle(
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                   color: const Color(0xffFF5E65),
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -152,7 +158,7 @@ class RefreshPage extends StatelessWidget {
                               TextSpan(
                                 text: item.topicTitle,
                                 style: TextStyle(
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                   color: const Color(0xffFF5E65),
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -168,31 +174,28 @@ class RefreshPage extends StatelessWidget {
             ],
           ),
           _buildContent(index, item, context),
-          SizedBox(
-            height: 20.w,
-          ),
           Row(
             children: [
-              SizedBox(width: 50.w),
+              SizedBox(width: 50),
               Icon(
                 Icons.remove_red_eye_outlined,
-                size: 22.w,
+                size: 22,
                 color: const Color(
                   0xff8F9098,
                 ),
               ),
               SizedBox(
-                width: 4.w,
+                width: 4,
               ),
               Text(
                 item.viewsNum.toString(),
                 style: TextStyle(
                   color: const Color(0xff8F9098),
-                  fontSize: 10.sp,
+                  fontSize: 10,
                 ),
               ),
               SizedBox(
-                width: 122.w,
+                width: 122,
               ),
               InkWell(
                 onTap: () {},
@@ -200,15 +203,15 @@ class RefreshPage extends StatelessWidget {
                   children: [
                     Image.asset(
                       ResName.lovely1,
-                      width: 22.w,
-                      height: 22.w,
+                      width: 22,
+                      height: 22,
                     ),
                     Text(
                       item.likesNum.toString(),
                       style: TextStyle(
                         color: const Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                       ),
                     ),
                   ],
@@ -217,23 +220,23 @@ class RefreshPage extends StatelessWidget {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    controller.naviToDetails(item,index);
+                    controller.naviToDetails(item, index);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Icon(
                         Icons.message,
-                        size: 22.w,
+                        size: 22,
                       ),
                       SizedBox(
-                        width: 4.w,
+                        width: 4,
                       ),
                       Text(
                         '评论',
                         style: TextStyle(
                             color: const Color(0xff8F9098),
-                            fontSize: 11.sp,
+                            fontSize: 11,
                             fontWeight: FontWeight.w500),
                       )
                     ],
@@ -243,8 +246,9 @@ class RefreshPage extends StatelessWidget {
             ],
           ),
           Divider(
+            height: 1,
             color: MyColors.textGreyColor.withOpacity(0.3),
-            thickness: 0.3.h,
+            thickness: 0.3,
           ),
         ],
       ),
@@ -253,23 +257,105 @@ class RefreshPage extends StatelessWidget {
 
   _buildContent(int index, PostsList item, BuildContext context) {
     // 区分内容
+    bool showFullText = false;
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: item.content,
+        style: TextStyle(color: MyColors.textBlackColor, fontSize: 12),
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: 2,
+    );
+    textPainter.layout(maxWidth: 250);
+    if (textPainter.didExceedMaxLines) {
+      showFullText = true;
+    } else {
+      showFullText = false;
+    }
     return Row(
       children: [
         SizedBox(
-          width: 50.w,
+          width: 50,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (item.content.isNotEmpty)
+              SizedBox(
+                  width: 250,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (showFullText) {
+                        controller.naviToDetails(item, index);
+                      }
+                    },
+                    child: RichText(
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: item.content,
+                            style: TextStyle(
+                                color: MyColors.textBlackColor,
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            if (item.content.isNotEmpty && showFullText)
+              InkWell(
+                onTap: () {
+                  controller.naviToDetails(item, index);
+                },
+                child: Text(
+                  '全文',
+                  style: TextStyle(color: Colors.pink, fontSize: 12),
+                ),
+              ),
             SizedBox(
-              height: 10.h,
+              height: 10,
             ),
-            Text(item.content),
-            SizedBox(
-              height: 10.h,
-            ),
-            controller.imagePreView(item.images.map((e) => e.imageUrl).toList(),
-                context, 250.w, index, item.images),
+            if (item.images.isNotEmpty)
+              Column(
+                children: [
+                  controller.imagePreView(
+                      item.images.map((e) => e.imageUrl).toList(),
+                      context,
+                      250,
+                      index,
+                      item.images),
+                  SizedBox(
+                    height: 14,
+                  ),
+                ],
+              ),
+            if (item.waves.isNotEmpty && item.waves[0].actions != '[]')
+              Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: LinearGradient(colors: [
+                          MyColors.themeTextColor.withOpacity(0.3),
+                          MyColors.themeTextColor.withOpacity(0.5),
+                        ])),
+                    padding: EdgeInsets.only(top: 10, right: 4, left: 4),
+                    child: AwesomeChartView(
+                      dataList: <List<int>>[
+                        List<int>.from(
+                            jsonDecode(item.waves[0].actions) ?? '[]')
+                      ],
+                      width: 250,
+                      height: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                ],
+              )
           ],
         ),
       ],

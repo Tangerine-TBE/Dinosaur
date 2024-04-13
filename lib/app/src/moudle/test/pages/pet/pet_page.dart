@@ -49,17 +49,17 @@ class PetPage extends BaseEmptyPage<PetController>
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
                 unselectedLabelStyle: TextStyle(
-                    color: MyColors.indicatorNormalTextColor, fontSize: 16.sp),
+                    color: MyColors.indicatorNormalTextColor, fontSize: 16),
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18.sp),
+                    fontSize: 18),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorPadding: EdgeInsets.only(bottom: 10.h),
+                indicatorPadding: EdgeInsets.only(bottom: 10),
                 splashFactory: NoSplash.splashFactory,
                 dividerHeight: 0,
-                labelPadding: EdgeInsets.symmetric(horizontal: 6.w),
+                labelPadding: EdgeInsets.symmetric(horizontal: 6),
                 overlayColor:
                     const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
@@ -86,10 +86,10 @@ class PetPage extends BaseEmptyPage<PetController>
                 CommonPage(
                   controller: controller,
                 ),
-                DynamicPage(
+                HandPickPage(
                   controller: controller,
                 ),
-                HandPickPage(
+                DynamicPage(
                   controller: controller,
                 ),
                 RefreshPage(
@@ -100,8 +100,8 @@ class PetPage extends BaseEmptyPage<PetController>
           ),
         ),
         Positioned(
-            bottom: 12.w,
-            right: 10.w,
+            bottom: 12,
+            right: 10,
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               shape: const CircleBorder(),
@@ -111,8 +111,8 @@ class PetPage extends BaseEmptyPage<PetController>
               },
               child: Image.asset(
                 ResName.add70,
-                width: 54.w,
-                height: 54.w,
+                width: 54,
+                height: 54,
               ),
             ))
       ],

@@ -36,7 +36,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                 top: 0,
                 left: 0,
                 right: 0,
-                bottom: 405.h,
+                bottom: 405,
                 child: Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(colors: [
@@ -55,16 +55,16 @@ class MinePage extends BaseEmptyPage<MineController> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: 248.h,
+                top: 248,
                 bottom: 0,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(26.w),
+                    borderRadius: BorderRadius.circular(26),
                   ),
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                     child: Column(
                       children: [
                         Row(
@@ -77,7 +77,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                                   (e) => _buildTitleBar(e.value.name, e.value.assetName,e.key))
                               .toList(),
                         ),
-                        SizedBox(height: 24.h),
+                        SizedBox(height: 24),
                         Expanded(
                           child: ListView.separated(
                             itemBuilder: (context, index) {
@@ -109,7 +109,7 @@ class MinePage extends BaseEmptyPage<MineController> {
 
   _buildContentItem(String name, String assetName,int index) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.h),
+      padding: EdgeInsets.symmetric(vertical: 15),
       child: InkWell(
         onTap: (){
           controller.onContentItemClicked(index);
@@ -118,14 +118,14 @@ class MinePage extends BaseEmptyPage<MineController> {
           children: [
             Image.asset(
               assetName,
-              width: 24.w,
-              height: 24.w,
+              width: 24,
+              height: 24,
             ),
             SizedBox(
-              width: 8.w,
+              width: 8,
             ),
             Expanded(child: Text(name)),
-            Icon(Icons.arrow_right, size: 26.w),
+            Icon(Icons.arrow_right, size: 26),
           ],
         ),
       ),
@@ -139,11 +139,11 @@ class MinePage extends BaseEmptyPage<MineController> {
         children: [
           Image.asset(
             assetName,
-            width: 32.w,
-            height: 32.w,
+            width: 32,
+            height: 32,
           ),
           SizedBox(
-            height: 6.h,
+            height: 6,
           ),
           Text(
             name,

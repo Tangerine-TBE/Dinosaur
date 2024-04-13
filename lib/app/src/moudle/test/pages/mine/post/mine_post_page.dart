@@ -17,7 +17,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
         appBar: AppBar(
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
-          title:  Text('我的帖子',style: TextStyle(fontSize: 18.sp),),
+          title:  Text('我的帖子',style: TextStyle(fontSize: 18),),
         ),
         body: ListView.separated(
             itemBuilder: (context, index) {
@@ -31,7 +31,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
 
   _buildItem(int index) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 20.h),
+      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
       color: Colors.white,
       width: double.infinity,
       child: Column(
@@ -43,7 +43,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                 backgroundImage: loadImageProvider(''),
               ),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               Expanded(
                 child: Column(
@@ -57,46 +57,46 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
             ],
           ),
           SizedBox(
-            height: 10.h,
+            height: 10,
           ),
           Text(
               'xxxxxxxxxxxxxxxxx................................................................'),
           SizedBox(
-            height: 20.h,
+            height: 20,
           ),
           Row(
             children: [
               Icon(
                 Icons.message_outlined,
                 color: Colors.grey,
-                size: 16.w,
+                size: 16,
               ),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               Text(
                 '1',
                 style: TextStyle(
                   color: MyColors.textBlackColor,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                 ),
               ),
               SizedBox(
-                width: 40.w,
+                width: 40,
               ),
               Icon(
                 Icons.hotel_class,
                 color: Colors.grey,
-                size: 16.w,
+                size: 16,
               ),
               SizedBox(
-                width: 10.w,
+                width: 10,
               ),
               Text(
                 '3',
                 style: TextStyle(
                   color: MyColors.textBlackColor,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                 ),
               ),
               Expanded(
@@ -105,7 +105,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     color: MyColors.textBlackColor,
-                    fontSize: 10.sp,
+                    fontSize: 10,
                   ),
                 ),
               ),

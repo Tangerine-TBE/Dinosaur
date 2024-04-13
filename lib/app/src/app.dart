@@ -12,7 +12,7 @@ class App extends BaseMaterialApp<TemplateLauncherStrategy> {
   void buildConfig(TemplateLauncherStrategy launcherStrategy) {}
 
   @override
-  GetMaterialApp buildApp(BuildContext context, Widget? child) =>
+  GetMaterialApp buildApp(BuildContext context) =>
       GetMaterialApp(
         debugShowCheckedModeBanner: false,
         builder: (context, child) {

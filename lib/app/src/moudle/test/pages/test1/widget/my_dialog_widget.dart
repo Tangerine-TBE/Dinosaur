@@ -28,26 +28,26 @@ class BaseDialogWidget extends StatelessWidget {
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          padding:  EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
-          decoration:  BoxDecoration(
+          padding:  const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          decoration:  const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(20.r),
+              Radius.circular(20),
             ),
           ),
           child: Column(
             children: [
               Text(
                 title,
-                style:  TextStyle(
-                      fontSize: 18.sp,
+                style:  const TextStyle(
+                      fontSize: 18,
                       color: Colors.white,
                     ) ??
                     titleStyle,
               ),
-               SizedBox(height: 8.h),
+               const SizedBox(height: 8),
               info ?? const SizedBox(),
-               SizedBox(height: 8.h),
+               const SizedBox(height: 8),
               Row(
                 children: [
                   leftButton != null
@@ -55,7 +55,7 @@ class BaseDialogWidget extends StatelessWidget {
                           child: leftButton ?? const SizedBox(),
                         )
                       : const SizedBox(),
-                   SizedBox(width: 8.w),
+                   SizedBox(width: 8),
                   rightButton != null
                       ? Expanded(
                           child: rightButton ?? const SizedBox(),

@@ -14,26 +14,26 @@ class CreateCustomModelDialog extends StatelessWidget{
     return  SimpleDialog(
       contentPadding: EdgeInsets.zero,
       shape:
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       backgroundColor: Colors.white,
       alignment: Alignment.center,
       children: [
         Container(
           clipBehavior: Clip.hardEdge,
-          padding: EdgeInsets.only(top: 16.w,right: 20.w,left: 20.w),
+          padding: EdgeInsets.only(top: 16,right: 20,left: 20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(20.r),
+              Radius.circular(20),
             ),
           ),
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 10.w),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: Text('创建模式'),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               TextField(
                 enabled: true,
                 autofocus: false,
@@ -49,7 +49,7 @@ class CreateCustomModelDialog extends StatelessWidget{
                     fillColor: Colors.grey[200],
                     filled: true,
                     hintText: '模式名称',
-                    contentPadding: EdgeInsets.symmetric(vertical: 2.w),
+                    contentPadding: EdgeInsets.symmetric(vertical: 2),
                     alignLabelWithHint: true,
                     hintStyle:  TextStyle(
                       height: 2.0,

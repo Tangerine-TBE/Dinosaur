@@ -20,9 +20,9 @@ class SearchPage extends BaseEmptyPage<SearchFriController> {
           textInputAction: TextInputAction.done,
           cursorColor: MyColors.textBlackColor,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 10.h,left: 10.w),
+            contentPadding: EdgeInsets.only(top: 10,left: 10),
             hintText: '用户昵称或萌宠ID',
-            constraints: BoxConstraints(maxHeight: 40.h,minHeight: 40.h),
+            constraints: BoxConstraints(maxHeight: 40,minHeight: 40),
             hintStyle: TextStyle(
               color: MyColors.textGreyColor.withAlpha(180),
             ),
@@ -41,11 +41,11 @@ class SearchPage extends BaseEmptyPage<SearchFriController> {
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20.w),
+              borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(color: MyColors.textGreyColor.withAlpha(145))
             ),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.w),
+                borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: MyColors.textGreyColor.withAlpha(145))
             ),
           ),

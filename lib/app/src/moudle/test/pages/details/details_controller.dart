@@ -57,15 +57,15 @@ class DetailsController extends BaseController {
   onItemMoreClick(CommentList item) {
     Get.bottomSheet(
       Container(
-        height: 120.h,
+        height: 120,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.w),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12.w),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
             children: [
@@ -189,8 +189,8 @@ class DetailsController extends BaseController {
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 2.w,
-              crossAxisSpacing: 2.w,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
             ),
             itemBuilder: ((context, index) {
               var tag = '$parentIndex${0.toString()}details';

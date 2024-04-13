@@ -16,12 +16,12 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
   @override
   Widget buildContent(BuildContext context) {
     final defaultPinTheme = PinTheme(
-      width: 56.w,
-      height: 56.w,
-      margin: EdgeInsets.all(10.w),
-      padding: EdgeInsets.only(top: 20.h),
+      width: 56,
+      height: 56,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(top: 20),
       textStyle: TextStyle(
-          fontSize: 20.sp,
+          fontSize: 20,
           color: MyColors.textBlackColor,
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
@@ -34,7 +34,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
     );
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30.w),
+        padding: EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: [
             const SizedBox(
@@ -44,24 +44,24 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
               '开启小萌宠',
               style: TextStyle(
                 color: MyColors.themeTextColor,
-                fontSize: 18.sp,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(
-              height: 10.h,
+              height: 10,
             ),
             Text(
               '跨越山海，随时陪伴，专属于你的亲密朋友!',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: MyColors.themeTextColor,
-                fontSize: 14.sp,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(
-              height: 20.h,
+              height: 20,
             ),
             SizedBox(
               width: double.infinity,
@@ -75,7 +75,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
               ),
             ),
             SizedBox(
-              height: 50.h,
+              height: 50,
             ),
             Obx(
               () => ElevatedButton(
@@ -85,7 +85,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
                       : MaterialStateProperty.all(MyColors.bgLinearShapeColor1),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.w),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),
@@ -94,8 +94,8 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  width: 160.w,
-                  height: 50.h,
+                  width: 160,
+                  height: 50,
                   child: Text(
                     controller.countDownText.value,
                     style: const TextStyle(color: Colors.white),

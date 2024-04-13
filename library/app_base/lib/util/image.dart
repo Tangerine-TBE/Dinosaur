@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:app_base/exports.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 Future<ui.Image> loadImageWithUrl(String url, BuildContext context) async {
   Image image = Image.network(url);
@@ -15,6 +18,17 @@ Future<ui.Image> loadImageWithUrl(String url, BuildContext context) async {
   );
   return completer.future;
 }
+Future<Uint8List> compressFile(File file) async {
+  var result = await FlutterImageCompress.compressWithFile(
+    file.absolute.path,
+    minWidth: 2300,
+    minHeight: 1500,
+    quality: 70,
+
+  );
+  return result??Uint8List(0);
+}
+
 Future<ui.Image> loadImageWithPath(String path,BuildContext context) async{
   Image image = Image.file(File(path));
   Completer<ui.Image> completer = Completer<ui.Image>();

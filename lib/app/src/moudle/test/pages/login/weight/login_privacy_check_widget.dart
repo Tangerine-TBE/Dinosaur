@@ -29,8 +29,8 @@ class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 20.w,
-          height: 20.h,
+          width: 20,
+          height: 20,
           child: Checkbox(
             fillColor: MaterialStateProperty.all(MyColors.pageBgColor),
             side: BorderSide(color:MyColors.themeTextColor),
@@ -46,7 +46,7 @@ class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
             },
           ),
         ),
-        SizedBox(width: 10.w,),
+        SizedBox(width: 10,),
         Expanded(
           child: RichText(
             overflow: TextOverflow.clip,
