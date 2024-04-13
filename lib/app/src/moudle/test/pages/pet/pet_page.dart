@@ -4,6 +4,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/pet/dynamic/dynamic_page.dart
 import 'package:dinosaur/app/src/moudle/test/pages/pet/handpick/hand_pick_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/refresh/refresh_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/draggable_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
@@ -48,9 +49,9 @@ class PetPage extends BaseEmptyPage<PetController>
                 automaticIndicatorColorAdjustment: true,
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
-                unselectedLabelStyle: TextStyle(
+                unselectedLabelStyle: const TextStyle(
                     color: MyColors.indicatorNormalTextColor, fontSize: 16),
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
                     fontSize: 18),
@@ -77,6 +78,22 @@ class PetPage extends BaseEmptyPage<PetController>
                   )
                 ],
               ),
+              actions: [
+                  Container(
+                    width: 80,
+                    height: 30,
+                    margin: EdgeInsets.only(right: 20),
+                    child: MaterialButton(
+                      shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      color: MyColors.themeTextColor,
+                      onPressed: () {
+                        // controller.commonManager.showTipDialog();
+                        controller.naviToPush();
+                      },
+                      child: const Text('发布'),
+                    ),
+                  ),
+              ],
             ),
           ),
           body: SafeArea(
@@ -99,22 +116,6 @@ class PetPage extends BaseEmptyPage<PetController>
             ),
           ),
         ),
-        Positioned(
-            bottom: 12,
-            right: 10,
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              shape: const CircleBorder(),
-              onPressed: () {
-                // controller.commonManager.showTipDialog();
-                controller.naviToPush();
-              },
-              child: Image.asset(
-                ResName.add70,
-                width: 54,
-                height: 54,
-              ),
-            ))
       ],
     );
   }
