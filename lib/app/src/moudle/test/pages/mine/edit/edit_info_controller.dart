@@ -1,11 +1,17 @@
-import 'dart:math';
-
 import 'package:app_base/exports.dart';
+import 'package:app_base/util/image.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/weight/record_sound_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:logger/logger.dart';
+import 'package:uuid/uuid.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EditInfoController extends BaseController {
   final listData = <ItemBean>[];
@@ -16,10 +22,13 @@ class EditInfoController extends BaseController {
   final imageUrl4 = ''.obs;
   final imageUrl5 = ''.obs;
   final imageUrl6 = ''.obs;
-
+  late FlutterSoundRecorder record;
+  late FlutterSoundPlayer play;
   @override
   void onInit() {
     fetchItems();
+     record = FlutterSoundRecorder(logLevel: Level.debug);
+     play = FlutterSoundPlayer(logLevel: Level.debug);
     super.onInit();
   }
 
@@ -45,6 +54,8 @@ class EditInfoController extends BaseController {
   onItemClicked(int index) {
     if (index == 0) {
       showNickNameEditBottomSheet(listData[0]);
+    } else if (index == 1) {
+      showSignVoiceEditBottomSheet(listData[1]);
     }
   }
 
@@ -79,8 +90,8 @@ class EditInfoController extends BaseController {
     showImagePickerBottomSheet(imageUrl6);
   }
 
-  showImagePickerBottomSheet(RxString value) {
-    Get.bottomSheet(
+  showImagePickerBottomSheet(RxString value) async{
+     await Get.bottomSheet(
       Container(
         height: value.value.isNotEmpty ? 200 : 150,
         decoration: BoxDecoration(
@@ -194,13 +205,13 @@ class EditInfoController extends BaseController {
           ),
         ),
       ),
+
     );
   }
 
   showNickNameEditBottomSheet(ItemBean itemBean) {
     final textEditController = TextEditingController(text: itemBean.content);
     Get.bottomSheet(
-
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
@@ -242,6 +253,11 @@ class EditInfoController extends BaseController {
                       borderRadius: BorderRadius.circular(12),
                       side: const BorderSide(color: Colors.black)),
                   onPressed: () {
+                    ItemBean exchangedBean = ItemBean(
+                        title: itemBean.title,
+                        content: textEditController.text,
+                        hintText: itemBean.hintText);
+                    listData[0] = exchangedBean;
                     update([listId]);
                     finish();
                   },
@@ -271,9 +287,218 @@ class EditInfoController extends BaseController {
     );
   }
 
-  showSignVoiceEditBottomSheet(RxString value) {
+  showSignVoiceEditBottomSheet(ItemBean itemBean) async {
+   await Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 50,
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+
+                      finish();
+                    },
+                    child: const Icon(Icons.cancel),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Text(
+                      // itemBean.title,
+                      '设置语音签名',
+                      style: const TextStyle(
+                        color: MyColors.textBlackColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  // MaterialButton(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 12),
+                  //   color: MyColors.themeTextColor,
+                  //   minWidth: 20,
+                  //   height: 30,
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       side: const BorderSide(color: Colors.black)),
+                  //   onPressed: () {
+                  //     update([listId]);
+                  //     finish();
+                  //   },
+                  //   child: const Text('保存'),
+                  // ),
+                ],
+              ),
+            ),
+            Text('不知道说什么？点这里找灵感'),
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: loadImageProvider(''),
+                    ),
+                    const Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: Colors.greenAccent,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: loadImageProvider(''),
+                    ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: Colors.greenAccent,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: loadImageProvider(''),
+                    ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: Colors.greenAccent,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: loadImageProvider(''),
+                    ),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Icon(
+                        Icons.play_circle,
+                        color: Colors.greenAccent,
+                        size: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 34),
+              child: Divider(),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              '录制长于10秒的声音',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              '你的用心让TA听到',
+              style: TextStyle(
+                color: MyColors.textGreyColor,
+              ),
+            ),
+            Expanded(
+              child: RecordSoundView(
+                recordEndCallback: () {
+                  recordStop();
+                },
+                recordStartCallback: recordStart,
+                saveRecordClicked: () {},
+                dismissRecordClicked: () {},
+                startPlayed: () {
+                  startPlay();
+                },
+                stopPlayed: () {
+                  stopPlay();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+   if(Get.isBottomSheetOpen == false){
+      stopPlay();
+      recordStop();
+   }
+
+  }
 
 
+  String? recordUrl = '';
+
+  Future recordStart() async {
+    await record.openRecorder();
+    await record.startRecorder(toFile: Uuid().v4());
+  }
+
+   recordStop() async {
+    recordUrl = await record.stopRecorder();
+  }
+
+  saveRecord() {
+    //保存上传
+  }
+
+   startPlay() async {
+    await play.openPlayer();
+    await play.startPlayer(fromURI: recordUrl, codec: Codec.mp3);
+  }
+
+   stopPlay() async {
+    if(play.isOpen()){
+      await play.pausePlayer();
+    }
   }
 
   showSignTextEditBottomSheet(RxString value) {}

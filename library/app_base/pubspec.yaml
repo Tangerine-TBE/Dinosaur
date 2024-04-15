@@ -19,7 +19,7 @@ dependencies:
       url: https://github.com/Tangerine-TBE/base.git
       ref: 375x812
   flutter_oss_aliyun: ^6.4.1
-
+  permission_handler: ^11.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
