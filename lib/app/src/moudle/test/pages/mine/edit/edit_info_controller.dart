@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,12 @@ class EditInfoController extends BaseController {
     update([listId]);
   }
 
+  onItemClicked(int index) {
+    if (index == 0) {
+      showNickNameEditBottomSheet(listData[0]);
+    }
+  }
+
   onImage1Clicked() {
     showImagePickerBottomSheet(imageUrl1);
   }
@@ -74,7 +82,7 @@ class EditInfoController extends BaseController {
   showImagePickerBottomSheet(RxString value) {
     Get.bottomSheet(
       Container(
-        height: value.value.isNotEmpty?200:150,
+        height: value.value.isNotEmpty ? 200 : 150,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -174,7 +182,6 @@ class EditInfoController extends BaseController {
               ),
               MaterialButton(
                 minWidth: 50,
-
                 onPressed: () {
                   Get.back();
                 },
@@ -189,6 +196,91 @@ class EditInfoController extends BaseController {
       ),
     );
   }
+
+  showNickNameEditBottomSheet(ItemBean itemBean) {
+    final textEditController = TextEditingController(text: itemBean.content);
+    Get.bottomSheet(
+
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    finish();
+                  },
+                  child: const Icon(Icons.cancel),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Text(
+                    itemBean.title,
+                    style: const TextStyle(
+                      color: MyColors.textBlackColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                MaterialButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  color: MyColors.themeTextColor,
+                  minWidth: 20,
+                  height: 30,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Colors.black)),
+                  onPressed: () {
+                    update([listId]);
+                    finish();
+                  },
+                  child: const Text('保存'),
+                ),
+              ],
+            ),
+            TextField(
+              controller: textEditController,
+              cursorColor: MyColors.textBlackColor,
+              autofocus: true,
+              maxLength: 16,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: MyColors.themeTextColor,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  showSignVoiceEditBottomSheet(RxString value) {
+
+
+  }
+
+  showSignTextEditBottomSheet(RxString value) {}
+
+  showComeFromEditBottomSheet(RxString value) {}
+
+  showBirDayEditBottomSheet(RxString value) {}
 }
 
 class ItemBean {

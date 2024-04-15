@@ -393,39 +393,42 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
   }
 
   _buildItem(int index) {
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(right: 10),
-          height: 60,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 100,
-                child: Text(
-                  controller.listData[index].title,
-                  style: const TextStyle(
-                      color: MyColors.textGreyColor, fontSize: 14),
+    return InkWell(
+      onTap: ()=>controller.onItemClicked(index),
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(right: 10),
+            height: 60,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    controller.listData[index].title,
+                    style: const TextStyle(
+                        color: MyColors.textGreyColor, fontSize: 14),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Text(
-                  controller.listData[index].content,
+                Expanded(
+                  child: Text(
+                    controller.listData[index].content,
+                  ),
                 ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_right_sharp,
-                color: MyColors.textGreyColor,
-              ),
-            ],
+                const Icon(
+                  Icons.keyboard_arrow_right_sharp,
+                  color: MyColors.textGreyColor,
+                ),
+              ],
+            ),
           ),
-        ),
-        const Divider(
-          height: 1,
-        ),
-      ],
+          const Divider(
+            height: 1,
+          ),
+        ],
+      ),
     );
   }
 }

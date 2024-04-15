@@ -59,7 +59,7 @@ class RemoteControlContentManager {
   var shareData = <ShareDeviceBean>[];
   bool refreshing = true;
   final shareWorldsId = 2;
-  late StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<List<ConnectivityResult>> subscription;
 
   RemoteControlContentManager({required this.update}) {
     _init();
@@ -67,9 +67,8 @@ class RemoteControlContentManager {
 
   _init() {
     // 1.监听网络变化
-    subscription =
         subscription = Connectivity().onConnectivityChanged.listen((event) {
-      if (event == ConnectivityResult.none) {
+      if (event[0] == ConnectivityResult.none) {
         logE('网络不可用');
       } else {
         logE('网络可用');

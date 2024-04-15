@@ -9,21 +9,23 @@ dependencies:
     sdk: flutter
   app_base:
     path: ./library/app_base
+  image_cropper:
+    path: ./library/cropper
   cupertino_icons: ^1.0.6
   flutter_advanced_seekbar: ^0.0.2
   circular_countdown_timer: ^0.2.3
   share_plus: ^7.2.2
   uni_links: ^0.5.1
   loading_animation_widget: ^1.2.1
-#  connectivity_plus: ^6.0.1
+  connectivity_plus: ^6.0.1
   flutter_reorderable_grid_view: ^4.0.0
-  connectivity_plus: ^5.0.2
+#  connectivity_plus: ^5.0.2
   gradient_slider: ^1.0.2
   pinput: ^4.0.0
   image: ^4.1.7
+  flutter_sound: ^9.4.6
   sensors_plus: ^4.0.2
   banner_carousel: ^1.2.1
-  image_cropper: ^5.0.1
   font_awesome_flutter: ^10.7.0
 dev_dependencies:
   flutter_test:
