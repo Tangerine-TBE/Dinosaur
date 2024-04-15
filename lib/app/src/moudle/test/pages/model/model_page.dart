@@ -31,7 +31,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.pageBgColor,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         centerTitle: true,
         title: Stack(
           children: [
@@ -69,7 +69,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
                 )
               ],
             ),
-            const BackButton(),
           ],
         ),
       ),
