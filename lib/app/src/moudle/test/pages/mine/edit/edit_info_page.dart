@@ -148,7 +148,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   ),
                                                 ),
                                                 child: loadImageByPath(
-                                                  controller.imageUrl1.value,
+                                                  controller.imageUrl2.value,
                                                   double.infinity,
                                                   double.infinity,
                                                 ),
@@ -197,7 +197,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   ),
                                                 ),
                                                 child: loadImageByPath(
-                                                  controller.imageUrl1.value,
+                                                  controller.imageUrl3.value,
                                                   double.infinity,
                                                   double.infinity,
                                                 ),
@@ -257,7 +257,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                             ),
                                           ),
                                           child: loadImageByPath(
-                                            controller.imageUrl1.value,
+                                            controller.imageUrl4.value,
                                             double.infinity,
                                             double.infinity,
                                           ),
@@ -307,7 +307,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                               ),
                                             ),
                                             child: loadImageByPath(
-                                              controller.imageUrl1.value,
+                                              controller.imageUrl5.value,
                                               double.infinity,
                                               double.infinity,
                                             ),
@@ -358,7 +358,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                 ),
                                               ),
                                               child: loadImageByPath(
-                                                controller.imageUrl1.value,
+                                                controller.imageUrl6.value,
                                                 double.infinity,
                                                 double.infinity,
                                               ),

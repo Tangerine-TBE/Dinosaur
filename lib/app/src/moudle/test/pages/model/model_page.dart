@@ -40,8 +40,8 @@ class ModelPage extends BaseEmptyPage<ModelController>
               dividerHeight: 0,
               tabAlignment: TabAlignment.center,
               isScrollable: true,
-              indicatorPadding: EdgeInsets.only(left: 22, right: 22),
-              indicator: UnderlineTabIndicator(
+              indicatorPadding: const EdgeInsets.only(left: 22, right: 22),
+              indicator: const UnderlineTabIndicator(
                 borderRadius: BorderRadius.all(
                   Radius.circular(2),
                 ),
@@ -52,15 +52,15 @@ class ModelPage extends BaseEmptyPage<ModelController>
               ),
               padding: EdgeInsets.zero,
               unselectedLabelStyle:
-                  TextStyle(color: Colors.white, fontSize: 18),
+                  const TextStyle(color: Colors.white, fontSize: 18),
               splashFactory: NoSplash.splashFactory,
               overlayColor:
                   const MaterialStatePropertyAll<Color>(Colors.transparent),
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.scanIndicatorTextSelectedColor,
                   fontSize: 18),
-              tabs: [
+              tabs: const [
                 Tab(
                   text: '经典模式',
                 ),
@@ -118,10 +118,10 @@ class ModelPage extends BaseEmptyPage<ModelController>
       children: [
         Obx(
           () => Container(
-            padding: EdgeInsets.symmetric(horizontal: 48, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 2),
             child: RepaintBoundary(
               child: CustomPaint(
-                size: Size(280, 60),
+                size: const Size(280, 60),
                 painter: ChartsPainter(
                     process: controller.process.value.obx, processMax: 1023),
               ),
@@ -142,7 +142,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onLastClick();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerBack,
                         width: 36,
@@ -173,7 +173,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onNextClick();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerSkip,
                         width: 36,
@@ -285,9 +285,9 @@ class ModelPage extends BaseEmptyPage<ModelController>
         controller.onCustomModelClick(index);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: !isSelect ? Color(0xffFFD5D7) : Color(0xffFF5E65),
+          color: !isSelect ? const Color(0xffFFD5D7) : const Color(0xffFF5E65),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -298,7 +298,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
               ResName.path25,
               width: 69,
               height: 42,
-              color: isSelect ? Colors.white : Color(0xffFF5E65),
+              color: isSelect ? Colors.white : Color( 0xffFF5E65),
             ),
             SizedBox(
               width: 11,
