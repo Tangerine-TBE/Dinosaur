@@ -1,14 +1,14 @@
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
 import 'package:app_base/ble/ble_msg.dart';
+import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:app_base/ble/event/ble_event.dart';
 import 'package:app_base/constant/constants.dart';
-import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 
-class ScanController extends BaseBleController {
+class ScanController extends PlayDeviceBleController {
   final devicesListId = 1;
   List<ScanResult> devices = [];
   final devicesSize = 0.obs;
@@ -26,31 +26,8 @@ class ScanController extends BaseBleController {
       manager.startScan(timeout: 20);
     }
   }
-
   @override
-  onDeviceConnected(BluetoothDevice device) async {
-    dismiss();
-    if (device.isConnected == true) {
-      EasyLoading.showSuccess('连接成功');
-      List<BluetoothService> services = await device.discoverServices();
-      services.forEach((service) {
-        var characteristics = service.characteristics;
-        for (BluetoothCharacteristic c in characteristics) {
-          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
-            manager.setWriteChar(c);
-          }
-        }
-      });
-    }
-    Runtime.lastConnectDevice = manager.mDevice.value!.platformName;
-    Get.back();
-  }
-
-  @override
-  onDeviceUnKnownError() {}
-
-  @override
-  onDeviceDisconnect() async {
+  void onDeviceDisconnect() async {
     devices.clear();
     devicesSize.value = devices.length;
     update([devicesListId]);
@@ -58,9 +35,15 @@ class ScanController extends BaseBleController {
     dismiss();
     manager.startScan(timeout: 20);
   }
+  @override
+  void onDeviceConnected(BluetoothDevice device) {
+    super.onDeviceConnected(device);
+    EasyLoading.showSuccess('连接成功!');
+    Get.back();
+  }
 
   @override
-  onScanResultChanged(List<ScanResult> result) {
+  void onScanResultChanged(List<ScanResult> result) {
     for (var element in result) {
       var resultDevice = element.device;
       if (resultDevice.platformName.startsWith(Constants.bleSearchName)) {

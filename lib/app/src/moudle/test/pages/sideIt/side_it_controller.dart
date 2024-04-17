@@ -1,14 +1,14 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/config/user.dart';
-import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
+import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:app_base/exports.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/obxBean/double_bean.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/count_down_confirm_dialog.dart';
@@ -17,7 +17,9 @@ import 'package:dinosaur/app/src/moudle/test/pages/sideIt/widget/timer_controlle
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-class SideItController extends BaseBleController {
+import '../../device/run_time.dart';
+
+class SideItController extends PlayDeviceBleController {
   final slideItModel = 0.obs;
   final sliderValue = 0.obs;
   final Rx<DoubleBean> process = Rx(DoubleBean.create(obx: 0.0));
@@ -56,13 +58,13 @@ class SideItController extends BaseBleController {
       const Duration(milliseconds: 200),
       (timer) {
         if (sliderValue.value > 50) {
-           manager.wwriteChar?.write(
+          Runtime.deviceInfo.value?.writeChar.write(
             bleMsg.generateStrengthData(
                 streamFirstValue: sliderValue.value,
                 streamSecondValue: sliderValue.value),
           );
         } else {
-          manager.wwriteChar?.write(
+          Runtime.deviceInfo.value?.writeChar.write(
             bleMsg.generateStopData(),
           );
         }
@@ -75,7 +77,7 @@ class SideItController extends BaseBleController {
     recordTimer?.cancel();
     loopTimer?.cancel();
     listen = false;
-    manager.wwriteChar?.write(
+    Runtime.deviceInfo.value?.writeChar.write(
       bleMsg.generateStopData(),
     );
   }
@@ -151,7 +153,7 @@ class SideItController extends BaseBleController {
   }
 
   onClassicClick() async {
-    if (!manager.checkRuntimeBleEnable()) {
+    if (!Runtime.checkRuntimeBleEnable()) {
       _releaseTimer();
       await navigateForResult(RouteName.scanPage);
       _initTimer();
@@ -188,52 +190,5 @@ class SideItController extends BaseBleController {
       _releaseTimer();
     }
     play.value = !play.value;
-  }
-
-  @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {}
-
-  @override
-  void onDeviceConnected(BluetoothDevice device) async {
-    dismiss();
-    if (device.isConnected == true) {
-      showToast('达成连接');
-      List<BluetoothService> services = await device.discoverServices();
-      services.forEach((service) {
-        var characteristics = service.characteristics;
-        for (BluetoothCharacteristic c in characteristics) {
-          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
-            manager.setWriteChar(c);
-          }
-        }
-      });
-    }
-  }
-
-  @override
-  void onDeviceDisconnect() async {
-    await Future.delayed(const Duration(seconds: 2));
-    if (Runtime.lastConnectDevice.isNotEmpty) {
-      manager.startScan(timeout: 20);
-    }
-  }
-
-  @override
-  void onDeviceUnKnownError() {}
-
-  @override
-  void onScanResultChanged(List<ScanResult> result) async {
-    //对扫描结果进行一次判断
-    for (var element in result) {
-      var resultDevice = element.device;
-      if (Runtime.lastConnectDevice.isNotEmpty &&
-          resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
-        manager.stopScan();
-        await Future.delayed(
-          const Duration(seconds: 2),
-        );
-        manager.connect(resultDevice, 20);
-      }
-    }
   }
 }

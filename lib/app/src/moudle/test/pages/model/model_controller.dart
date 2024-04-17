@@ -3,18 +3,16 @@ import 'dart:math';
 import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/config/user.dart';
-import 'package:app_base/constant/run_time.dart';
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
+import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
+import '../../device/run_time.dart';
 import '../sideIt/obxBean/double_bean.dart';
 
-class ModelController extends BaseBleController {
+class ModelController extends PlayDeviceBleController {
   final customPageId = 1;
 
   // late PageController pageController; //主要用于监听页面变化的
@@ -76,10 +74,10 @@ class ModelController extends BaseBleController {
     processLoopClassicTimer?.cancel();
     currentClassicModel.value = index;
     if (currentClassicModel.value < 12) {
-      if (bleManager.checkRuntimeBleEnable()) {
+      if (Runtime.checkRuntimeBleEnable()) {
         // if (!playModel.value) {
-        bleManager.wwriteChar
-            ?.write(BleMSg().generateModelData(currentClassicModel.value));
+        Runtime.deviceInfo.value!.writeChar
+            .write(BleMSg().generateModelData(currentClassicModel.value));
         if (processLoopClassicTimer == null) {
           processLoopClassicTimer = Timer.periodic(
             const Duration(milliseconds: 200),
@@ -123,12 +121,12 @@ class ModelController extends BaseBleController {
     if (currentModelPage.value == 0) {
       if (currentClassicModel < 13) {
         if (playModel.value) {
-          bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+          Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateStopData());
         } else {
-          if (bleManager.checkRuntimeBleEnable()) {
+          if (Runtime.checkRuntimeBleEnable()) {
             // if (!playModel.value) {
-            await bleManager.wwriteChar
-                ?.write(BleMSg().generateModelData(currentClassicModel.value));
+            await   Runtime.deviceInfo.value!.writeChar
+                .write(BleMSg().generateModelData(currentClassicModel.value));
             processLoopClassicTimer = Timer.periodic(
               const Duration(milliseconds: 200),
               (timer) {
@@ -148,16 +146,16 @@ class ModelController extends BaseBleController {
       if (currentCustomModel < modelList.length && currentCustomModel >= 0) {
         if (playModel.value) {
           playModel.value = false;
-          await bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+          await   Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateStopData());
         } else {
-          if (bleManager.checkRuntimeBleEnable()) {
-            bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+          if (Runtime.checkRuntimeBleEnable()) {
+            Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateStopData());
             showLoading(userInteraction: false);
-            bleManager.wwriteChar?.write(mBleMsg.clearQueue());
+            Runtime.deviceInfo.value!.writeChar.write(mBleMsg.clearQueue());
             currentCustomModel.value = currentCustomModel.value;
             await sendCustomTemplate(currentCustomModel.value);
             playModel.value = true;
-            bleManager.wwriteChar?.write(mBleMsg.generateAutoPlay());
+            Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateAutoPlay());
             dismiss();
             int i = 0;
             if (processLoopCustomTimer == null) {
@@ -227,17 +225,17 @@ class ModelController extends BaseBleController {
       showToast('已经是最后的模式了');
       return;
     }
-    if (bleManager.checkRuntimeBleEnable()) {
+    if (Runtime.checkRuntimeBleEnable()) {
       // if (!playModel.value) {
-      bleManager.wwriteChar?.write(mBleMsg.generateStopData());
+      Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateStopData());
       playModel.value = false;
       showLoading(userInteraction: false);
       update([customPageId]);
       currentCustomModel.value = index;
-      bleManager.wwriteChar?.write(mBleMsg.clearQueue());
+      Runtime.deviceInfo.value!.writeChar.write(mBleMsg.clearQueue());
       await sendCustomTemplate(index);
       playModel.value = true;
-      bleManager.wwriteChar?.write(mBleMsg.generateAutoPlay());
+      Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateAutoPlay());
       dismiss();
       int i = 0;
       if (processLoopCustomTimer == null) {
@@ -309,59 +307,12 @@ class ModelController extends BaseBleController {
     for (var i in modelList[index]
         .actions.record) {
       logE('正在写入：$i');
-      await bleManager.wwriteChar?.write(
+      await  Runtime.deviceInfo.value!.writeChar.write(
         mBleMsg.generateStrengthSilentData(
           streamFirstValue: i,
           streamSecondValue: i,
         ),
       );
-    }
-  }
-
-  @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {}
-
-  @override
-  void onDeviceConnected(BluetoothDevice device) async {
-    dismiss();
-    if (device.isConnected == true) {
-      showToast('达成连接');
-      List<BluetoothService> services = await device.discoverServices();
-      services.forEach((service) {
-        var characteristics = service.characteristics;
-        for (BluetoothCharacteristic c in characteristics) {
-          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
-            manager.setWriteChar(c);
-          }
-        }
-      });
-    }
-  }
-
-  @override
-  void onDeviceDisconnect() async {
-    await Future.delayed(const Duration(seconds: 2));
-    if (Runtime.lastConnectDevice.isNotEmpty) {
-      manager.startScan(timeout: 20);
-    }
-  }
-
-  @override
-  void onDeviceUnKnownError() {}
-
-  @override
-  void onScanResultChanged(List<ScanResult> result) async {
-    logE('扫描有结果了');
-    for (var element in result) {
-      var resultDevice = element.device;
-      if (Runtime.lastConnectDevice.isNotEmpty &&
-          resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
-        manager.stopScan();
-        await Future.delayed(
-          const Duration(seconds: 2),
-        );
-        manager.connect(resultDevice, 20);
-      }
     }
   }
 }

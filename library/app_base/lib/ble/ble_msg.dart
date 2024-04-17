@@ -4,6 +4,7 @@ class BleMSg {
   static const String notifyUUID = '0000ff11-0000-1000-8000-00805f9b34fb';
   static const String writeUUID = '0000ff12-0000-1000-8000-00805f9b34fb';
   static const String readUUID = '0000ff12-0000-1000-8000-00805f9b34fb';
+  static const String deviceInfoUUID = '00002A50-0000-1000-8000-00805F9B34FB';
   final List<int> _mCustomHeader = [0x03, 0x12, 0xf3];
   final List<int> _mCustomSilentHeader = [0x03,0x12,0xf5];
   final List<int> _mCustomModelPlayHeader = [0x03,0x12,0xF1];

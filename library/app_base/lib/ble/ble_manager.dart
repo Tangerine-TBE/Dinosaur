@@ -4,8 +4,6 @@ import 'package:app_base/exports.dart';
 import 'package:common/common/network/status_code.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:event_bus/event_bus.dart';
-import 'package:get/get.dart';
-
 class BleManager {
   late StreamSubscription<BluetoothAdapterState> adapterStateStateSubscription;
 
@@ -18,33 +16,7 @@ class BleManager {
   //连接监听器
   static StreamSubscription<BluetoothConnectionState>?
       connectionStateSubscription;
-
-  //正在连接的设备
-  Rx<BluetoothDevice?>mDevice = Rx(null);
-
   EventBus? eventBus;
-
-  //正在连接设备的可写入通道
-  BluetoothCharacteristic? wwriteChar;
-
-  setWriteChar(BluetoothCharacteristic? writeChar) {
-    logE("writeChar$writeChar}");
-    wwriteChar = writeChar;
-  }
-
-  checkRuntimeBleEnable() {
-    if (mDevice.value == null) {
-      return false;
-    }
-    if (wwriteChar == null) {
-      return false;
-    }
-    if (mDevice.value!.isDisconnected) {
-      return false;
-    }
-    return true;
-  }
-
   factory BleManager() => _getInstance();
   static BleManager? _instance;
 
@@ -71,13 +43,6 @@ class BleManager {
     return FlutterBluePlus.isScanningNow;
   }
 
-  bool getDeviceStatus() {
-    if (mDevice.value != null) {
-      return mDevice.value?.isConnected == true;
-    } else {
-      return false;
-    }
-  }
 
   Timer? timer;
 
@@ -101,14 +66,7 @@ class BleManager {
       timeout: const Duration(seconds: timeOut),
     );
   }
-
-  void write(List<int> cmd) {
-    wwriteChar?.write(cmd);
-  }
-
-
   connect(BluetoothDevice device, int time) async {
-    mDevice.value = device;
     //为这个设备注册一个连接监听器
     bluetoothConnectionState = BluetoothConnectionState.connecting;
     connectionStateSubscription = device.connectionState.listen((state) {
@@ -116,12 +74,9 @@ class BleManager {
         if (bluetoothConnectionState != BluetoothConnectionState.connecting) {
           if (bluetoothConnectionState !=
               BluetoothConnectionState.disconnected) {
-            logE('断开连接');
             bluetoothConnectionState = state;
             connectionStateSubscription?.cancel();
             eventBus?.fire(DeviceDisconnectedEvent());
-            setWriteChar(null);
-            mDevice.value= null;
             showToast('蓝牙已断开');
           }
         } else {
@@ -137,28 +92,22 @@ class BleManager {
                     BluetoothConnectionState.disconnected;
                 connectionStateSubscription?.cancel();
                 eventBus?.fire(DeviceDisconnectedEvent());
-                setWriteChar(null);
-                mDevice.value= null;
               }
             }
           }
         }
       } else if (state == BluetoothConnectionState.connected) {
         if (bluetoothConnectionState != BluetoothConnectionState.connected) {
-          logE('连接中');
           bluetoothConnectionState = state;
-          eventBus?.fire(DeviceConnectedEvent(mDevice.value!));
+          eventBus?.fire(DeviceConnectedEvent(device));
         }
       } else {
         logE('未知的连接状态');
-        setWriteChar(null);
-        mDevice.value = null;
         bluetoothConnectionState = state;
         eventBus?.fire(DeviceUnknownErrorEvent(state));
       }
     });
     await device.connect(timeout: Duration(seconds: time));
-    bluetoothConnectionState = BluetoothConnectionState.connected;
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/network/response/center_response.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:app_base/mvvm/model/share_device_bean.dart';
 import 'package:get/get.dart';
@@ -93,7 +94,7 @@ class RemoteControlContentManager {
   }
 }
 
-class PlayController extends BaseBleController {
+class PlayController extends PlayDeviceBleController {
   late PlaySelfContentManager playSelfContentManager;
   late RemoteControlContentManager remoteControlContentManager;
 
@@ -131,19 +132,4 @@ class PlayController extends BaseBleController {
   onCenterDetailsIndexTap(TopicList bean) {
     navigateTo(RouteName.centerDetailsPage, args: bean);
   }
-
-  @override
-  void onAdapterStateChanged(BluetoothAdapterState state) {}
-
-  @override
-  void onDeviceConnected(BluetoothDevice device) {}
-
-  @override
-  void onDeviceDisconnect() {}
-
-  @override
-  void onDeviceUnKnownError() {}
-
-  @override
-  void onScanResultChanged(List<ScanResult> result) {}
 }

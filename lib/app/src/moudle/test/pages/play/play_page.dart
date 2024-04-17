@@ -4,6 +4,7 @@ import 'package:app_base/res/my_colors.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
+import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -138,9 +139,9 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                         top: 50,
                         child: Obx(
                           () => Text(
-                            controller.manager.mDevice.value == null
+                            Runtime.deviceInfo.value == null
                                 ? '点我\r\n连接设备哦'
-                                : '\r\n${controller.manager.mDevice.value!.platformName}\r\n已链接',
+                                : '\r\n${Runtime.deviceInfo.value!.bluetoothDevice.platformName}\r\n已链接',
                             style: TextStyle(
                               fontSize: 12,
                               color: MyColors.textBlackColor,
