@@ -22,8 +22,6 @@ class _DatePickerPageState extends State<DatePicker> {
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
   late DateTime _currentMonth;
-  DateTime? _lastSelectedDate;
-
   _DatePickerPageState();
 
   @override
@@ -31,8 +29,6 @@ class _DatePickerPageState extends State<DatePicker> {
     super.initState();
     _currentMonth = DateTime(
         widget.dateTime.year, widget.dateTime.month, widget.dateTime.day);
-
-    //记录最后一次选中的日期
   }
 
   void _onDateSelected(DateTime selectedDate) {
@@ -50,7 +46,7 @@ class _DatePickerPageState extends State<DatePicker> {
             //无法超过开始之后的15天
           }
         } else if (selectedDate.isBefore(_selectedEndDate!)) {
-          if (_selectedEndDate!.day - selectedDate.day  == 1) {
+          if (_selectedStartDate!.day < selectedDate.day ) {
             _selectedEndDate = selectedDate;
           }else if(DateUtils.isSameDay(selectedDate, _selectedStartDate)){
             _selectedEndDate = null;
@@ -59,6 +55,8 @@ class _DatePickerPageState extends State<DatePicker> {
         }
       },
     );
+    widget.onDateRangeSelected('${_selectedStartDate}+ ${_selectedEndDate}');
+
   }
 
   @override

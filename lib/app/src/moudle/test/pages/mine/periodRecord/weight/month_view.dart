@@ -26,18 +26,23 @@ class MonthView extends StatelessWidget {
     for (int i = 1; i <= daysInMonth; i++) {
       final day = DateTime(month.year, month.month, i);
       bool isSelected = false;
-      if(selectedStartDate != null){
-        isSelected = selectedStartDate!.day ==i;
+      bool isOvulation = false;
+      if (selectedStartDate != null) {
+        isOvulation = selectedStartDate!.day - 15 == i;
       }
-      if(selectedEndDate != null){
+      if (selectedStartDate != null) {
+        isSelected = selectedStartDate!.day == i;
+      }
+      if (selectedEndDate != null) {
         isSelected = (day.isAfter(
-            selectedStartDate!.subtract(const Duration(days: 1))) &&
-            day.isBefore(selectedEndDate!.add(const Duration(days: 1)))) ||
+                    selectedStartDate!.subtract(const Duration(days: 1))) &&
+                day.isBefore(selectedEndDate!.add(const Duration(days: 1)))) ||
             day == selectedStartDate ||
             day == selectedEndDate;
       }
 
       BoxDecoration decoration;
+      TextStyle textStyle;
       if (isSelected) {
         decoration = BoxDecoration(
           color: Theme.of(context).primaryColor,
@@ -46,18 +51,56 @@ class MonthView extends StatelessWidget {
       } else {
         decoration = const BoxDecoration();
       }
+      textStyle = TextStyle(
+        color: isSelected
+            ? (DateUtils.isSameDay(
+                    DateTime.now(), DateTime(month.year, month.month, i))
+                ? Colors.red
+                : Colors.white)
+            : (DateUtils.isSameDay(
+                    DateTime.now(), DateTime(month.year, month.month, i))
+                ? Colors.red
+                : Colors.black),
+        decoration: isSelected
+            ? (DateUtils.isSameDay(
+                    DateTime.now(), DateTime(month.year, month.month, i))
+                ? TextDecoration.underline
+                : TextDecoration.none)
+            : (DateUtils.isSameDay(
+                    DateTime.now(), DateTime(month.year, month.month, i))
+                ? TextDecoration.underline
+                : TextDecoration.none),
+        decorationStyle: TextDecorationStyle.solid,
+        decorationColor: Colors.black,
+      );
+
       dayTiles.add(
         GestureDetector(
           onTap: () => onDateSelected(day),
           child: Container(
             decoration: decoration,
-            child: Center(
-              child: Text(
-                '$i',
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black,
+            child: Stack(
+              children: [
+                Center(
+                  child: Text(
+                    '$i',
+                    style: textStyle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
+                if (isOvulation && !isSelected)
+                  const Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        '排卵日',
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
