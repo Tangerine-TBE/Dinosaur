@@ -379,49 +379,57 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   }
 
   _buildFra2Content() {
-    return Column(
-      children: [
-        Image.asset(
-          ResName.group38,
-          width: 223,
-          height: 223,
-        ),
-        Text(
-          '点击\r\n分享遥控',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: MyColors.textBlackColor,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-          ),
-        ),
-        SizedBox(
-          height: 42,
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GetBuilder<PlayController>(
-              builder: (controller) {
-                return Wrap(
-                  runSpacing: 16,
-                  spacing: 24,
-                  children: controller.remoteControlContentManager.shareData
-                      .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
-                      .toList(),
-                );
-              },
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child:
+        Column(
+          children: [
+            Image.asset(
+              ResName.group38,
+              width: 223,
+              height: 223,
             ),
-          ),
-        ),
-        Text(
-          '互动需双方同时链接，离开此界面自动将断开',
-          style: TextStyle(
-            fontSize: 11,
-            color: MyColors.textGreyColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+            Text(
+              '点击\r\n分享遥控',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: MyColors.textBlackColor,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(
+              height: 42,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: GetBuilder<PlayController>(
+                builder: (controller) {
+                  return Wrap(
+                    runSpacing: 16,
+                    spacing: 16,
+                    children: controller.remoteControlContentManager.shareData
+                        .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
+                        .toList(),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20,),
+            Text(
+              '互动需双方同时链接，离开此界面自动将断开',
+              style: TextStyle(
+                fontSize: 11,
+                color: MyColors.textGreyColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 20,),
+
+          ],
+        )
+
+          ,)
       ],
     );
   }
