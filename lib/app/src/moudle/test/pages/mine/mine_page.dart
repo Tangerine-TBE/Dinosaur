@@ -29,7 +29,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                 top: 0,
                 left: 0,
                 right: 0,
-                bottom: 405,
+                bottom: MediaQuery.of(context).size.width/3 * 2,
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
@@ -38,7 +38,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                       MyColors.bgLinearShapeColor2,
                     ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                     image: DecorationImage(
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       image: AssetImage(
                         ResName.mineBg,
                       ),
@@ -200,7 +200,7 @@ class MinePage extends BaseEmptyPage<MineController> {
               Positioned(
                 left: 0,
                 right: 0,
-                top: 248,
+                top:  MediaQuery.of(context).size.width/3 * 2,
                 bottom: 0,
                 child: Container(
                   decoration: BoxDecoration(

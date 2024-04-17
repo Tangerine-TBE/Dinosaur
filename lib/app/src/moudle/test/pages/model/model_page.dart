@@ -142,7 +142,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onLastClick();
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerBack,
                         width: 36,
@@ -173,7 +172,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
                       controller.onNextClick();
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(20),
                       child: Image.asset(
                         ResName.playerSkip,
                         width: 36,
@@ -191,57 +189,18 @@ class ModelPage extends BaseEmptyPage<ModelController>
   }
 
   _buildContentClassic01() {
-    var mainAxisAlignment = MainAxisAlignment.spaceBetween;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
-      child: Obx(
-        () => Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(0),
-                _buildTemplateModelItem(1),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(2),
-                _buildTemplateModelItem(3),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(4),
-                _buildTemplateModelItem(5),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(6),
-                _buildTemplateModelItem(7),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(8),
-                _buildTemplateModelItem(9),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: mainAxisAlignment,
-              children: [
-                _buildTemplateModelItem(10),
-                _buildTemplateModelItem(11),
-              ],
-            ),
-          ],
-        ),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            mainAxisExtent: 83),
+        itemBuilder: (context, index) {
+          return _buildTemplateModelItem(index);
+        },
+        itemCount: 12,
       ),
     );
   }
@@ -255,19 +214,22 @@ class ModelPage extends BaseEmptyPage<ModelController>
                   title: '暂无记录',
                 ),
               )
-            : GridView.count(
+            :
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                shrinkWrap: true,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 20,
-                padding: EdgeInsets.only(left: 20, right: 20, top: 24),
-                childAspectRatio: 2,
-                children: List.generate(
-                  controller.modelList.length,
-                  (index) => _buildCustomModelItem01(
-                      controller.modelList[index].name, index),
-                ),
-              );
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                mainAxisExtent: 83),
+            itemBuilder: (context, index) {
+              return _buildCustomModelItem01(
+                  controller.modelList[index].name, index);
+            },
+            itemCount: controller.modelList.length,
+          ),
+        );
       },
       id: controller.customPageId,
     );
@@ -298,7 +260,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
               ResName.path25,
               width: 69,
               height: 42,
-              color: isSelect ? Colors.white : Color( 0xffFF5E65),
+              color: isSelect ? Colors.white : Color(0xffFF5E65),
             ),
             SizedBox(
               width: 11,
@@ -421,7 +383,6 @@ class ModelPage extends BaseEmptyPage<ModelController>
       },
       child: Container(
         width: 144,
-        height: 83,
         decoration: BoxDecoration(
           image: DecorationImage(image: normal),
         ),

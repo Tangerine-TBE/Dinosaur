@@ -127,7 +127,7 @@ class EditInfoController extends BaseController {
           child: Column(
             children: [
               MaterialButton(
-                minWidth: 50,
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                   String? path = await AImagePicker.instance().pickCamera();
@@ -161,7 +161,7 @@ class EditInfoController extends BaseController {
                 color: Colors.pink,
               ),
               MaterialButton(
-                minWidth: 50,
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                   String? path = await AImagePicker.instance().pickGallery();
@@ -197,7 +197,7 @@ class EditInfoController extends BaseController {
                 ),
               if (value.value.isNotEmpty)
                 MaterialButton(
-                  minWidth: 50,
+                  minWidth: double.infinity,
                   onPressed: () {
                     value.value = '';
                     Get.back();
@@ -213,7 +213,7 @@ class EditInfoController extends BaseController {
                 thickness: 5,
               ),
               MaterialButton(
-                minWidth: 50,
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },

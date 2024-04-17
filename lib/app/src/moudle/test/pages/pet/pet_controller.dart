@@ -204,7 +204,8 @@ class CommonManager {
           ),
           child: Column(
             children: [
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                 },
@@ -217,7 +218,8 @@ class CommonManager {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },
@@ -344,7 +346,6 @@ class DynamicManager {
       }
     }
   }
-
   showBottomSheet() {
     Get.bottomSheet(
       Container(
@@ -360,7 +361,8 @@ class DynamicManager {
           ),
           child: Column(
             children: [
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                 },
@@ -373,7 +375,8 @@ class DynamicManager {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },
@@ -388,6 +391,7 @@ class DynamicManager {
       ),
     );
   }
+
 }
 
 class HandPickManager {
@@ -454,7 +458,8 @@ class HandPickManager {
           ),
           child: Column(
             children: [
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                 },
@@ -467,7 +472,8 @@ class HandPickManager {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },
@@ -482,6 +488,7 @@ class HandPickManager {
       ),
     );
   }
+
 
   getList() async {
     final response = await pushRepo.getPushMsg(
@@ -569,7 +576,8 @@ class RefreshManager {
           ),
           child: Column(
             children: [
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                 },
@@ -582,7 +590,8 @@ class RefreshManager {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },
@@ -597,6 +606,7 @@ class RefreshManager {
       ),
     );
   }
+
 
   getList() async {
     final response = await pushRepo.getPushMsg(

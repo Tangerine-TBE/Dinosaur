@@ -191,7 +191,8 @@ class RefreshManager {
           ),
           child: Column(
             children: [
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () async {
                   Get.back();
                 },
@@ -204,7 +205,8 @@ class RefreshManager {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              TextButton(
+              MaterialButton(
+                minWidth: double.infinity,
                 onPressed: () {
                   Get.back();
                 },
