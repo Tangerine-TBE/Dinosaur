@@ -5,13 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class EditInfoController extends BaseController {
   final listData = <ItemBean>[];
@@ -24,11 +24,12 @@ class EditInfoController extends BaseController {
   final imageUrl6 = ''.obs;
   late FlutterSoundRecorder record;
   late FlutterSoundPlayer play;
+
   @override
   void onInit() {
     fetchItems();
-     record = FlutterSoundRecorder(logLevel: Level.debug);
-     play = FlutterSoundPlayer(logLevel: Level.debug);
+    record = FlutterSoundRecorder(logLevel: Level.debug);
+    play = FlutterSoundPlayer(logLevel: Level.debug);
     super.onInit();
   }
 
@@ -51,11 +52,31 @@ class EditInfoController extends BaseController {
     update([listId]);
   }
 
-  onItemClicked(int index) {
+  onItemClicked(int index)  {
     if (index == 0) {
       showNickNameEditBottomSheet(listData[0]);
     } else if (index == 1) {
       showSignVoiceEditBottomSheet(listData[1]);
+    } else if (index == 2) {
+      showSignTextEditBottomSheet(listData[2]);
+    } else if (index == 3) {
+    } else if (index == 4)  {
+      DatePicker.showDatePicker(
+        Get.context!,
+        showTitleActions: true,
+        minTime: DateTime(1900, 1, 1),
+        maxTime: DateTime.now(),
+        onConfirm: (date) {
+          ItemBean exchangedBean = ItemBean(
+              title: listData[4].title,
+              content: '${date.year}-${date.month}-${date.day}',
+              hintText: listData[4].hintText);
+          listData[4]= exchangedBean;
+          update([listId]);
+        },
+        currentTime: DateTime.tryParse(listData[index].content),
+        locale: LocaleType.zh,
+      );
     }
   }
 
@@ -90,8 +111,8 @@ class EditInfoController extends BaseController {
     showImagePickerBottomSheet(imageUrl6);
   }
 
-  showImagePickerBottomSheet(RxString value) async{
-     await Get.bottomSheet(
+  showImagePickerBottomSheet(RxString value) async {
+    await Get.bottomSheet(
       Container(
         height: value.value.isNotEmpty ? 200 : 150,
         decoration: BoxDecoration(
@@ -205,7 +226,6 @@ class EditInfoController extends BaseController {
           ),
         ),
       ),
-
     );
   }
 
@@ -288,7 +308,7 @@ class EditInfoController extends BaseController {
   }
 
   showSignVoiceEditBottomSheet(ItemBean itemBean) async {
-   await Get.bottomSheet(
+    await Get.bottomSheet(
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
@@ -306,7 +326,6 @@ class EditInfoController extends BaseController {
                 children: [
                   InkWell(
                     onTap: () async {
-
                       finish();
                     },
                     child: const Icon(Icons.cancel),
@@ -467,13 +486,11 @@ class EditInfoController extends BaseController {
         ),
       ),
     );
-   if(Get.isBottomSheetOpen == false){
+    if (Get.isBottomSheetOpen == false) {
       stopPlay();
       recordStop();
-   }
-
+    }
   }
-
 
   String? recordUrl = '';
 
@@ -482,7 +499,7 @@ class EditInfoController extends BaseController {
     await record.startRecorder(toFile: Uuid().v4());
   }
 
-   recordStop() async {
+  recordStop() async {
     recordUrl = await record.stopRecorder();
   }
 
@@ -490,18 +507,94 @@ class EditInfoController extends BaseController {
     //保存上传
   }
 
-   startPlay() async {
+  startPlay() async {
     await play.openPlayer();
     await play.startPlayer(fromURI: recordUrl, codec: Codec.mp3);
   }
 
-   stopPlay() async {
-    if(play.isOpen()){
+  stopPlay() async {
+    if (play.isOpen()) {
       await play.pausePlayer();
     }
   }
 
-  showSignTextEditBottomSheet(RxString value) {}
+  showSignTextEditBottomSheet(ItemBean itemBean) {
+    final textEditController = TextEditingController(text: itemBean.content);
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    finish();
+                  },
+                  child: const Icon(Icons.cancel),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Text(
+                    itemBean.title,
+                    style: const TextStyle(
+                      color: MyColors.textBlackColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                MaterialButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  color: MyColors.themeTextColor,
+                  minWidth: 20,
+                  height: 30,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Colors.black)),
+                  onPressed: () {
+                    ItemBean exchangedBean = ItemBean(
+                        title: itemBean.title,
+                        content: textEditController.text,
+                        hintText: itemBean.hintText);
+                    listData[2] = exchangedBean;
+                    update([listId]);
+                    finish();
+                  },
+                  child: const Text('保存'),
+                ),
+              ],
+            ),
+            TextField(
+              controller: textEditController,
+              cursorColor: MyColors.textBlackColor,
+              autofocus: true,
+              maxLines: null,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: MyColors.themeTextColor,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   showComeFromEditBottomSheet(RxString value) {}
 

@@ -376,15 +376,18 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                   ],
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.only(left: 30),
-                sliver: SliverList.builder(
-                  itemBuilder: (context, index) {
-                    return _buildItem(index);
-                  },
-                  itemCount: controller.listData.length,
-                ),
-              )
+              GetBuilder<EditInfoController>(builder: (controller){
+                return
+                  SliverPadding(
+                    padding: const EdgeInsets.only(left: 30),
+                    sliver: SliverList.builder(
+                      itemBuilder: (context, index) {
+                        return _buildItem(index);
+                      },
+                      itemCount: controller.listData.length,
+                    ),
+                  );
+              },id: controller.listId,),
             ],
           ),
         )
@@ -414,7 +417,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                 ),
                 Expanded(
                   child: Text(
-                    controller.listData[index].content,
+                    controller.listData[index].content,overflow: TextOverflow.ellipsis,softWrap: true,
                   ),
                 ),
                 const Icon(

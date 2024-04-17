@@ -27,6 +27,7 @@ dependencies:
   sensors_plus: ^4.0.2
   banner_carousel: ^1.2.1
   font_awesome_flutter: ^10.7.0
+  flutter_datetime_picker_plus: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
