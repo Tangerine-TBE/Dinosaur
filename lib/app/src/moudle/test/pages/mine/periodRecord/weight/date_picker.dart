@@ -1,17 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../period_record_page.dart';
 import 'month_view.dart';
 
 class DatePicker extends StatefulWidget {
-  final ValueChanged onDateRangeSelected;
+  final Function(int, DateTime) onNextMonthEndDateChanged;
+  final ValueChanged onNextMonthEndDateDismiss;
+  final Function(DateTime, DateTime) onLastMothEndDateChanged;
   final DateTime dateTime;
   final double height;
+  final List<RangeItem> rangeItems;
 
   const DatePicker(
       {super.key,
-      required this.onDateRangeSelected,
+      required this.onNextMonthEndDateChanged,
+      required this.onNextMonthEndDateDismiss,
+      required this.onLastMothEndDateChanged,
       required this.dateTime,
+      required this.rangeItems,
       required this.height});
 
   @override
@@ -19,9 +26,8 @@ class DatePicker extends StatefulWidget {
 }
 
 class _DatePickerPageState extends State<DatePicker> {
-  DateTime? _selectedStartDate;
-  DateTime? _selectedEndDate;
   late DateTime _currentMonth;
+
   _DatePickerPageState();
 
   @override
@@ -31,32 +37,118 @@ class _DatePickerPageState extends State<DatePicker> {
         widget.dateTime.year, widget.dateTime.month, widget.dateTime.day);
   }
 
+  bool checkSelectedDateEnable(DateTime selectedDate, List<RangeItem> item) {
+    return false;
+  }
+
   void _onDateSelected(DateTime selectedDate) {
     setState(
       () {
-        if (_selectedStartDate == null) {
-          _selectedStartDate = selectedDate;
-          _selectedEndDate = selectedDate.add(const Duration(days: 5));
-          return;
-        }
-        if (selectedDate.isAfter(_selectedEndDate!)) {
-          if (selectedDate.day - _selectedEndDate!.day == 1) {
-            _selectedEndDate = selectedDate;
-          } else {
-            //无法超过开始之后的15天
+        if (widget.rangeItems.isNotEmpty) {
+          bool hashDeal = false;
+          for (var i in widget.rangeItems) {
+            if (i.isDateInRange(selectedDate)) {
+              //在任意一个区间范围内
+              if (i.selectedStartDate.day == selectedDate.day) {
+                widget.rangeItems.remove(i);
+                if (i.selectedEndDate.month > _currentMonth.month) {
+                  widget.onNextMonthEndDateDismiss(i.selectedEndDate.day);
+                }
+                hashDeal = true;
+                return;
+              } else {
+                hashDeal = true;
+                i.selectedEndDate = selectedDate;
+                if (i.selectedStartDate.month < _currentMonth.month) {
+                  widget.onLastMothEndDateChanged(i.selectedStartDate,i.selectedEndDate);
+                }
+              }
+            }
           }
-        } else if (selectedDate.isBefore(_selectedEndDate!)) {
-          if (_selectedStartDate!.day < selectedDate.day ) {
-            _selectedEndDate = selectedDate;
-          }else if(DateUtils.isSameDay(selectedDate, _selectedStartDate)){
-            _selectedEndDate = null;
-            _selectedStartDate = null;
+          if (!hashDeal) {
+            bool canInsertNewRange = true;
+            for (var i in widget.rangeItems) {
+              if (i.selectedEndDate.day + 1 == selectedDate.day) {
+                if (i.selectedStartDate.day + 14 < selectedDate.day) {
+                  canInsertNewRange = false;
+                }
+                for (var j in widget.rangeItems) {
+                  if (i != j) {
+                    if ((i.selectedStartDate.day - (selectedDate.day + 1))
+                                .abs() <
+                            3 ||
+                        (i.selectedStartDate.day - (selectedDate.day + 1))
+                                .abs() <
+                            8) {
+                      if (j.selectedEndDate.day > i.selectedEndDate.day) {
+                        canInsertNewRange = false;
+                      }
+                    }
+                  }
+                }
+                if (canInsertNewRange) {
+                  i.selectedEndDate = selectedDate;
+                  hashDeal = true;
+                  if (i.selectedStartDate.month < _currentMonth.month) {
+                    widget.onLastMothEndDateChanged(
+                        i.selectedStartDate, i.selectedEndDate);
+                  }
+                }
+                return;
+              }
+            }
+          }
+          if (!hashDeal) {
+            //这里涉及到是否新建问题
+            bool canInsertNewRange = false;
+            DateTime updateStartDate = selectedDate;
+            DateTime updateEndDate = selectedDate.add(const Duration(days: 4));
+            for (var i in widget.rangeItems) {
+              if (updateStartDate
+                          .subtract(
+                            const Duration(days: 3),
+                          )
+                          .day <=
+                      i.selectedEndDate.day &&
+                  updateStartDate.month == i.selectedEndDate.month) {
+                canInsertNewRange = false;
+                break;
+              } else {
+                canInsertNewRange = true;
+              }
+            }
+            if (canInsertNewRange) {
+              widget.rangeItems.add(
+                RangeItem(
+                    selectedStartDate: updateStartDate,
+                    selectedEndDate: updateEndDate),
+              );
+              hashDeal = true;
+              return;
+            }
+          }
+        } else {
+          //6.没有存在可用的区间范围，则新建一个以选择日期为开始，选择日期之后五天为结尾的区间范围，并添加为新的区间
+          final selectedEndDate = selectedDate.add(
+            const Duration(days: 4),
+          );
+          if (selectedEndDate.month > _currentMonth.month) {
+            int mothDay = DateUtils.getDaysInMonth(
+                _currentMonth.year, _currentMonth.month);
+            int nextMothSelectedDay =
+                selectedEndDate.day - (mothDay - selectedDate.day);
+            widget.onNextMonthEndDateChanged(nextMothSelectedDay, selectedDate);
+          } else {
+            widget.rangeItems.add(
+              RangeItem(
+                selectedStartDate: selectedDate,
+                selectedEndDate: selectedEndDate,
+              ),
+            );
           }
         }
       },
     );
-    widget.onDateRangeSelected('${_selectedStartDate}+ ${_selectedEndDate}');
-
   }
 
   @override
@@ -77,10 +169,9 @@ class _DatePickerPageState extends State<DatePicker> {
           ),
           Expanded(
             child: MonthView(
-              selectedEndDate: _selectedEndDate,
-              selectedStartDate: _selectedStartDate,
               month: _currentMonth,
               onDateSelected: _onDateSelected,
+              rangeItems: widget.rangeItems,
             ),
           ),
         ],

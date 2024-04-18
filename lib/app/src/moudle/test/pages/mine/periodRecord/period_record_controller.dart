@@ -1,9 +1,11 @@
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 class PeriodRecordController extends BaseController{
   final list = <DateTime>[];
   final listId = 1;
+  final  dateSelectedRange =''.obs;
   @override
   void onInit() async{
     super.onInit();

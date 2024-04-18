@@ -1,18 +1,20 @@
+import 'package:app_base/exports.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/period_record_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MonthView extends StatelessWidget {
   final DateTime month;
-  DateTime? selectedStartDate;
-  DateTime? selectedEndDate;
+   DateTime? calOvulationDate;
+  final List<RangeItem> rangeItems;
   final Function(DateTime) onDateSelected;
 
   MonthView({
     super.key,
+    this.calOvulationDate,
+    required this.rangeItems,
     required this.month,
     required this.onDateSelected,
-    this.selectedStartDate,
-    this.selectedEndDate,
   });
 
   List<Widget> _buildDayTiles(BuildContext context) {
@@ -27,20 +29,17 @@ class MonthView extends StatelessWidget {
       final day = DateTime(month.year, month.month, i);
       bool isSelected = false;
       bool isOvulation = false;
-      if (selectedStartDate != null) {
-        isOvulation = selectedStartDate!.day - 15 == i;
+      if(calOvulationDate != null){
+        isOvulation = calOvulationDate!.day == i;
       }
-      if (selectedStartDate != null) {
-        isSelected = selectedStartDate!.day == i;
+      if(rangeItems.isNotEmpty){
+        for(var j in rangeItems){
+         isSelected = j.isDateInRange(day);
+         if(isSelected){
+           break;
+         }
+        }
       }
-      if (selectedEndDate != null) {
-        isSelected = (day.isAfter(
-                    selectedStartDate!.subtract(const Duration(days: 1))) &&
-                day.isBefore(selectedEndDate!.add(const Duration(days: 1)))) ||
-            day == selectedStartDate ||
-            day == selectedEndDate;
-      }
-
       BoxDecoration decoration;
       TextStyle textStyle;
       if (isSelected) {

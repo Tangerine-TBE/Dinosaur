@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:pinput/pinput.dart';
 
 class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
   const PeriodRecordPage({super.key});
@@ -24,8 +25,11 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
               crossAxisCount: 7,
               children: List.generate(7, (index) => _buildItem(index)),
             ),
-            const Expanded(
+            Expanded(
               child: ScrollTargetView(
+                dateSelectValue: (String, int) {
+                  logE(String);
+                },
               ),
             ),
           ],
@@ -68,16 +72,18 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
 }
 
 class ScrollTargetView extends StatefulWidget {
-  const ScrollTargetView({super.key});
+  const ScrollTargetView({super.key, required this.dateSelectValue});
 
+  final Function(String, int) dateSelectValue;
 
   @override
   State<ScrollTargetView> createState() => _ScrollTargetViewState();
 }
 
 class _ScrollTargetViewState extends State<ScrollTargetView> {
-  final ScrollController _scrollController = ScrollController(initialScrollOffset: 12 * 322.0);
-  final list = <DateTime>[];
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 12 * 322.0);
+  final list = <MothItem>[];
 
   @override
   void initState() {
@@ -85,28 +91,142 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
     _fetchDateTime();
   }
 
+  void onSelectedDateChange(String value, int index) {
+    setState(() {
+      list[index].setRangItems(value);
+    });
+  }
 
   void _fetchDateTime() {
     var now = DateTime.now();
     for (int i = 12; i >= 1; i--) {
-      list.add(DateTime(now.year, now.month - i));
+      list.add(MothItem(currentDateTime: DateTime(now.year, now.month - i)));
     }
-    list.add(now);
+    list.add(MothItem(currentDateTime: now));
     for (int i = 1; i <= 12; i++) {
-      list.add(DateTime(now.year, now.month + i));
+      list.add(MothItem(currentDateTime: DateTime(now.year, now.month + i)));
     }
   }
+
+  void onNextMonthEndDateChanged(
+      int nextMonthChange, int index, DateTime dateTime) {
+    setState(() {
+      var item = list[index + 1];
+      var currentDateTime = item.currentDateTime;
+      if (item.rangItems.isEmpty) {
+        item.rangItems.add(
+          RangeItem(
+            selectedStartDate: DateTime(
+              currentDateTime.year,
+              list[index].currentDateTime.month,
+              DateUtils.getDaysInMonth(list[index].currentDateTime.year,
+                      list[index].currentDateTime.month) -
+                  4 +
+                  nextMonthChange,
+            ),
+            selectedEndDate: DateTime(
+                currentDateTime.year, currentDateTime.month, nextMonthChange),
+          ),
+        );
+        list[index].rangItems.add(
+              RangeItem(
+                selectedStartDate: dateTime,
+                selectedEndDate: dateTime.add(
+                  const Duration(days: 4),
+                ),
+              ),
+            );
+        list.insert(index + 1, item);
+      } else {
+        bool canAdd = true;
+        for (var i in item.rangItems) {
+          if (nextMonthChange + 3 >= i.selectedStartDate.day) {
+            canAdd = false;
+          }
+        }
+        if (canAdd) {
+          item.rangItems.add(
+            RangeItem(
+              selectedStartDate: DateTime(
+                currentDateTime.year,
+                list[index].currentDateTime.month,
+                DateUtils.getDaysInMonth(list[index].currentDateTime.year,
+                        list[index].currentDateTime.month) -
+                    5 -
+                    nextMonthChange,
+              ),
+              selectedEndDate: DateTime(
+                currentDateTime.year,
+                currentDateTime.month,
+                nextMonthChange,
+              ),
+            ),
+          );
+          list[index].rangItems.add(
+                RangeItem(
+                  selectedStartDate: dateTime,
+                  selectedEndDate: dateTime.add(
+                    const Duration(days: 4),
+                  ),
+                ),
+              );
+          list.insert(index + 1, item);
+        }
+      }
+    });
+  }
+
+  void onNextMonthEndDateDismiss(int nextMothDay, int index) {
+    setState(() {
+      var item = list[index + 1];
+      for (var i in item.rangItems) {
+        if (i.selectedEndDate.day == nextMothDay) {
+          item.rangItems.remove(i);
+          return;
+        }
+      }
+    });
+  }
+  void onLastMothEndDateChanged(DateTime startDateTime,DateTime endDateTime,int index){
+    setState(() {
+      var item = list[index - 1];
+      for(var i in item.rangItems){
+        if(i.selectedStartDate.day == startDateTime.day){
+          i.selectedEndDate = endDateTime;
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
         controller: _scrollController,
         itemBuilder: (context, index) {
           return DatePicker(
-              height: 322,
-              onDateRangeSelected: (value) {
-                logE(value);
-              },
-              dateTime: list[index]);
+            height: 322,
+            onNextMonthEndDateChanged: (
+              value,
+              dateTime,
+            ) {
+              onNextMonthEndDateChanged(
+                value,
+                index,
+                dateTime,
+              );
+            },
+            onNextMonthEndDateDismiss: (value) {
+              onNextMonthEndDateDismiss(
+                value,
+                index,
+              );
+            },
+            onLastMothEndDateChanged:(startDateTime,endDateTime){
+              onLastMothEndDateChanged(startDateTime,endDateTime, index);
+            },
+            dateTime: list[index].currentDateTime,
+            rangeItems: list[index].rangItems,
+          );
         },
         separatorBuilder: (context, index) {
           return const Divider(
@@ -114,5 +234,53 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
           );
         },
         itemCount: list.length);
+  }
+}
+
+class MothItem {
+  final DateTime currentDateTime;
+  final List<RangeItem> rangItems = <RangeItem>[];
+  DateTime? calOvulationDate;
+
+  MothItem({required this.currentDateTime});
+
+  setRangItems(String value) {
+    if (value.isNotEmpty) {
+      List<String> splitString = value.split('-');
+      final rangeItem = RangeItem(
+          selectedStartDate: DateTime.tryParse(splitString[0])!,
+          selectedEndDate: DateTime.tryParse(splitString[1])!);
+      rangItems.add(rangeItem);
+      if (rangItems.length > 1) {
+        //月经不调
+        rangItems[rangItems.length - 1]
+            .selectedEndDate
+            .add(const Duration(days: 10));
+      } else {
+        //月经正常
+        rangItems[rangItems.length - 1]
+            .selectedEndDate
+            .add(const Duration(days: 15));
+      }
+    }
+  }
+}
+
+class RangeItem {
+  DateTime selectedStartDate;
+  DateTime selectedEndDate;
+
+  RangeItem({required this.selectedStartDate, required this.selectedEndDate});
+
+  bool isDateInRange(DateTime date) {
+    final startNum = selectedStartDate.year * 10000 +
+        selectedStartDate.month * 100 +
+        selectedStartDate.day;
+    final endNum = selectedEndDate.year * 10000 +
+        selectedEndDate.month * 100 +
+        selectedEndDate.day;
+    final dateNum = date.year * 10000 + date.month * 100 + date.day;
+
+    return dateNum >= startNum && dateNum <= endNum;
   }
 }
