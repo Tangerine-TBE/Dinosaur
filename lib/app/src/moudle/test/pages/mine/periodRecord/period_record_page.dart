@@ -91,12 +91,6 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
     _fetchDateTime();
   }
 
-  void onSelectedDateChange(String value, int index) {
-    setState(() {
-      list[index].setRangItems(value);
-    });
-  }
-
   void _fetchDateTime() {
     var now = DateTime.now();
     for (int i = 12; i >= 1; i--) {
@@ -110,10 +104,31 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
 
   void onNextMonthEndDateChanged(
       DateTime endDateTime, int index, DateTime dateTime) {
-    setState(() {
-      var item = list[index + 1];
-      var currentDateTime = item.currentDateTime;
-      if (item.rangItems.isEmpty) {
+    var item = list[index + 1];
+    if (item.rangItems.isEmpty) {
+      item.rangItems.add(
+        RangeItem(
+          selectedStartDate: dateTime,
+          selectedEndDate: endDateTime,
+        ),
+      );
+      list[index].rangItems.add(
+            RangeItem(
+              selectedStartDate: dateTime,
+              selectedEndDate: dateTime.add(
+                const Duration(days: 4),
+              ),
+            ),
+          );
+      list[index+1] = item;
+    } else {
+      bool canAdd = true;
+      for (var i in item.rangItems) {
+        if (endDateTime.difference(i.selectedStartDate).inDays < 3) {
+          canAdd = false;
+        }
+      }
+      if (canAdd) {
         item.rangItems.add(
           RangeItem(
             selectedStartDate: dateTime,
@@ -129,51 +144,177 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
               ),
             );
         list.insert(index + 1, item);
-      } else {
-        bool canAdd = true;
-        for (var i in item.rangItems) {
-          if (endDateTime.difference(i.selectedStartDate) .inDays <  3) {
-            canAdd = false;
-          }
-        }
-        if (canAdd) {
-          item.rangItems.add(
-            RangeItem(
-              selectedStartDate: dateTime,
-              selectedEndDate: endDateTime,
-            ),
-          );
-          list[index].rangItems.add(
-                RangeItem(
-                  selectedStartDate: dateTime,
-                  selectedEndDate: dateTime.add(
-                    const Duration(days: 4),
-                  ),
-                ),
-              );
-          list.insert(index + 1, item);
-        }
       }
-    });
+    }
   }
 
   void onNextMonthEndDateDismiss(int nextMothDay, int index) {
-    setState(() {
-      var item = list[index + 1];
+    var item = list[index + 1];
+    for (var i in item.rangItems) {
+      if (i.selectedEndDate.day == nextMothDay) {
+        item.rangItems.remove(i);
+        return;
+      }
+    }
+  }
+
+  void onLastMothEndDateChanged(
+      DateTime startDateTime, DateTime endDateTime, int index) {
+    var item = list[index - 1];
+    for (var i in item.rangItems) {
+      if (i.selectedStartDate.day == startDateTime.day) {
+        i.selectedEndDate = endDateTime;
+      }
+    }
+  }
+
+  Future checkNextMothDate(
+      DateTime startDate, DateTime endDate, int index) async {
+    var item = list[index + 1];
+    if (item.rangItems.isEmpty) {
+      return true;
+    } else {
+      bool canAdd = true;
       for (var i in item.rangItems) {
-        if (i.selectedEndDate.day == nextMothDay) {
-          item.rangItems.remove(i);
-          return;
+        if (i.selectedStartDate.difference(endDate).inDays <= 3) {
+          canAdd = false;
         }
       }
-    });
+      return canAdd;
+    }
   }
-  void onLastMothEndDateChanged(DateTime startDateTime,DateTime endDateTime,int index){
+
+  Future checkLastMothDate(
+      DateTime startDate, DateTime endDate, int index) async {
+    var item = list[index - 1];
+    if (item.rangItems.isEmpty) {
+      return true;
+    } else {
+      bool canAdd = true;
+      for (var i in item.rangItems) {
+        if (startDate.difference(i.selectedEndDate).inDays <= 3) {
+          canAdd = false;
+        }
+      }
+      return canAdd;
+    }
+  }
+
+  onDateSelected(DateTime selectedDate, int index) {
     setState(() {
-      var item = list[index - 1];
-      for(var i in item.rangItems){
-        if(i.selectedStartDate.day == startDateTime.day){
-          i.selectedEndDate = endDateTime;
+      if (list[index].rangItems.isNotEmpty) {
+        bool hashDeal = false;
+        for (var i in list[index].rangItems) {
+          if (i.isDateInRange(selectedDate)) {
+            //在任意一个区间范围内
+            if (i.selectedStartDate.day == selectedDate.day) {
+              list[index].rangItems.remove(i);
+              if (i.selectedEndDate.month > list[index].currentDateTime.month) {
+                onNextMonthEndDateDismiss(i.selectedEndDate.day, index);
+              }
+              hashDeal = true;
+              return;
+            } else {
+              hashDeal = true;
+              i.selectedEndDate = selectedDate;
+              if (i.selectedStartDate.month <
+                  list[index].currentDateTime.month) {
+                onLastMothEndDateChanged(
+                    i.selectedStartDate, i.selectedEndDate, index);
+              }
+            }
+          }
+        }
+        if (!hashDeal) {
+          bool canInsertNewRange = true;
+          for (var i in list[index].rangItems) {
+            if (i.selectedEndDate.day + 1 == selectedDate.day) {
+              if (i.selectedStartDate.day + 14 < selectedDate.day) {
+                canInsertNewRange = false;
+              }
+              for (var j in list[index].rangItems) {
+                if (i != j) {
+                  if ((i.selectedStartDate.day - (selectedDate.day + 1)).abs() <
+                          3 ||
+                      (i.selectedStartDate.day - (selectedDate.day + 1)).abs() <
+                          8) {
+                    if (j.selectedEndDate.day > i.selectedEndDate.day) {
+                      canInsertNewRange = false;
+                    }
+                  }
+                }
+              }
+              if (canInsertNewRange) {
+                i.selectedEndDate = selectedDate;
+                hashDeal = true;
+                if (i.selectedStartDate.month <
+                    list[index].currentDateTime.month) {
+                  onLastMothEndDateChanged(
+                      i.selectedStartDate, i.selectedEndDate, index);
+                }
+              }
+              return;
+            }
+          }
+        }
+        if (!hashDeal) {
+          //这里涉及到是否新建问题
+          bool canInsertNewRange = false;
+          DateTime updateStartDate = selectedDate;
+          DateTime updateEndDate = selectedDate.add(const Duration(days: 4));
+          for (var i in list[index].rangItems) {
+            if (selectedDate.isAfter(i.selectedEndDate)) {
+              int offset1 =
+                  updateStartDate.difference(i.selectedEndDate).inDays;
+              if (offset1 <= 3) {
+                canInsertNewRange = false;
+                break;
+              }
+            }
+            if (selectedDate.isBefore(i.selectedStartDate)) {
+              int offset2 =
+                  i.selectedStartDate.difference(updateEndDate).inDays;
+              if (offset2 <= 3) {
+                canInsertNewRange = false;
+                break;
+              }
+            }
+            canInsertNewRange = true;
+          }
+          if (canInsertNewRange) {
+            list[index].rangItems.add(
+                  RangeItem(
+                      selectedStartDate: updateStartDate,
+                      selectedEndDate: updateEndDate),
+                );
+            hashDeal = true;
+            return;
+          }
+        }
+      } else {
+        //6.没有存在可用的区间范围，则新建一个以选择日期为开始，选择日期之后五天为结尾的区间范围，并添加为新的区间
+        final selectedEndDate = selectedDate.add(
+          const Duration(days: 4),
+        );
+        if (selectedEndDate.month > list[index].currentDateTime.month) {
+          onNextMonthEndDateChanged(
+              selectedDate.add(const Duration(days: 4)), index, selectedDate);
+        } else {
+          checkNextMothDate(selectedDate, selectedEndDate, index).then((value) {
+            if (value) {
+              checkLastMothDate(selectedDate, selectedEndDate, index)
+                  .then((value) {
+                if (value) {
+                  list[index].rangItems.add(
+                        RangeItem(
+                          selectedStartDate: selectedDate,
+                          selectedEndDate: selectedEndDate,
+                        ),
+                      );
+                }
+              });
+            }
+          });
         }
       }
     });
@@ -186,27 +327,11 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
         itemBuilder: (context, index) {
           return DatePicker(
             height: 322,
-            onNextMonthEndDateChanged: (
-              value,
-              dateTime,
-            ) {
-              onNextMonthEndDateChanged(
-                value,
-                index,
-                dateTime,
-              );
-            },
-            onNextMonthEndDateDismiss: (value) {
-              onNextMonthEndDateDismiss(
-                value,
-                index,
-              );
-            },
-            onLastMothEndDateChanged:(startDateTime,endDateTime){
-              onLastMothEndDateChanged(startDateTime,endDateTime, index);
-            },
             dateTime: list[index].currentDateTime,
             rangeItems: list[index].rangItems,
+            onDateSelected: (selectedDateTime) {
+              onDateSelected(selectedDateTime, index);
+            },
           );
         },
         separatorBuilder: (context, index) {

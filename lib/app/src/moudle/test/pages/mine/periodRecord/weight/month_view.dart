@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 
 class MonthView extends StatelessWidget {
   final DateTime month;
-   DateTime? calOvulationDate;
+  final  DateTime calOvulationDate;
   final List<RangeItem> rangeItems;
   final Function(DateTime) onDateSelected;
 
   MonthView({
     super.key,
-    this.calOvulationDate,
+   required this.calOvulationDate,
     required this.rangeItems,
     required this.month,
     required this.onDateSelected,
@@ -29,9 +29,7 @@ class MonthView extends StatelessWidget {
       final day = DateTime(month.year, month.month, i);
       bool isSelected = false;
       bool isOvulation = false;
-      if(calOvulationDate != null){
-        isOvulation = calOvulationDate!.day == i;
-      }
+        isOvulation = calOvulationDate.day == i;
       if(rangeItems.isNotEmpty){
         for(var j in rangeItems){
          isSelected = j.isDateInRange(day);
