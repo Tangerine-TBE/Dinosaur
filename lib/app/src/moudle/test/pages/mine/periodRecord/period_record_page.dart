@@ -1,14 +1,11 @@
-import 'dart:math';
-
 import 'package:app_base/exports.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/bean/month_item.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/weight/date_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
-import 'package:pinput/pinput.dart';
 
 class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
   const PeriodRecordPage({super.key});
@@ -81,9 +78,9 @@ class ScrollTargetView extends StatefulWidget {
 }
 
 class _ScrollTargetViewState extends State<ScrollTargetView> {
-  final ScrollController _scrollController =
-      ScrollController(initialScrollOffset: 12 * 322.0);
+  final ScrollController _scrollController = ScrollController();
   final list = <MothItem>[];
+  DateTime? calOvulationDate;
 
   @override
   void initState() {
@@ -93,9 +90,6 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
 
   void _fetchDateTime() {
     var now = DateTime.now();
-    for (int i = 12; i >= 1; i--) {
-      list.add(MothItem(currentDateTime: DateTime(now.year, now.month - i)));
-    }
     list.add(MothItem(currentDateTime: now));
     for (int i = 1; i <= 12; i++) {
       list.add(MothItem(currentDateTime: DateTime(now.year, now.month + i)));
@@ -120,7 +114,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
               ),
             ),
           );
-      list[index+1] = item;
+      list[index + 1] = item;
     } else {
       bool canAdd = true;
       for (var i in item.rangItems) {
@@ -152,7 +146,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
     var item = list[index + 1];
     for (var i in item.rangItems) {
       if (i.selectedEndDate.day == nextMothDay) {
-        item.rangItems.remove(i);
+        item.removeRangItem(i,list);
         return;
       }
     }
@@ -186,6 +180,9 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
 
   Future checkLastMothDate(
       DateTime startDate, DateTime endDate, int index) async {
+    if(index == 0){
+      return true;
+    }
     var item = list[index - 1];
     if (item.rangItems.isEmpty) {
       return true;
@@ -208,7 +205,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
           if (i.isDateInRange(selectedDate)) {
             //在任意一个区间范围内
             if (i.selectedStartDate.day == selectedDate.day) {
-              list[index].rangItems.remove(i);
+              list[index].removeRangItem(i,list);
               if (i.selectedEndDate.month > list[index].currentDateTime.month) {
                 onNextMonthEndDateDismiss(i.selectedEndDate.day, index);
               }
@@ -263,36 +260,42 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
           DateTime updateStartDate = selectedDate;
           DateTime updateEndDate = selectedDate.add(const Duration(days: 4));
           for (var i in list[index].rangItems) {
-            if (selectedDate.isAfter(i.selectedEndDate)) {
-              int offset1 =
-                  updateStartDate.difference(i.selectedEndDate).inDays;
-              if (offset1 <= 3) {
-                canInsertNewRange = false;
-                break;
-              }
+            if (selectedDate.isAfter(DateTime.now())) {
+              showToast('未来设置日期无效');
+              canInsertNewRange = false;
+              break;
             }
             if (selectedDate.isBefore(i.selectedStartDate)) {
               int offset2 =
                   i.selectedStartDate.difference(updateEndDate).inDays;
               if (offset2 <= 3) {
                 canInsertNewRange = false;
+                showToast('添加一段新经期？太频繁了吧！至少间隔3天');
                 break;
               }
             }
             canInsertNewRange = true;
           }
           if (canInsertNewRange) {
-            list[index].rangItems.add(
+            list[index].addRangItem(
                   RangeItem(
                       selectedStartDate: updateStartDate,
                       selectedEndDate: updateEndDate),
+              list,
+
                 );
             hashDeal = true;
+            //选择一个区间内最晚的日期
+
             return;
           }
         }
       } else {
         //6.没有存在可用的区间范围，则新建一个以选择日期为开始，选择日期之后五天为结尾的区间范围，并添加为新的区间
+        if (selectedDate.isAfter(DateTime.now())) {
+          showToast('未来日期设置无效');
+          return;
+        }
         final selectedEndDate = selectedDate.add(
           const Duration(days: 4),
         );
@@ -305,11 +308,13 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
               checkLastMothDate(selectedDate, selectedEndDate, index)
                   .then((value) {
                 if (value) {
-                  list[index].rangItems.add(
+                  list[index].addRangItem(
                         RangeItem(
                           selectedStartDate: selectedDate,
                           selectedEndDate: selectedEndDate,
+
                         ),
+                        list,
                       );
                 }
               });
@@ -327,8 +332,10 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
         itemBuilder: (context, index) {
           return DatePicker(
             height: 322,
+            menstrualDate: list[index].calOvulationDates,
             dateTime: list[index].currentDateTime,
             rangeItems: list[index].rangItems,
+              aboutTheCalOvulationDateRange:list[index].aboutTheCalOvulationDateRange,
             onDateSelected: (selectedDateTime) {
               onDateSelected(selectedDateTime, index);
             },
@@ -343,50 +350,4 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
   }
 }
 
-class MothItem {
-  final DateTime currentDateTime;
-  final List<RangeItem> rangItems = <RangeItem>[];
-  DateTime? calOvulationDate;
 
-  MothItem({required this.currentDateTime});
-
-  setRangItems(String value) {
-    if (value.isNotEmpty) {
-      List<String> splitString = value.split('-');
-      final rangeItem = RangeItem(
-          selectedStartDate: DateTime.tryParse(splitString[0])!,
-          selectedEndDate: DateTime.tryParse(splitString[1])!);
-      rangItems.add(rangeItem);
-      if (rangItems.length > 1) {
-        //月经不调
-        rangItems[rangItems.length - 1]
-            .selectedEndDate
-            .add(const Duration(days: 10));
-      } else {
-        //月经正常
-        rangItems[rangItems.length - 1]
-            .selectedEndDate
-            .add(const Duration(days: 15));
-      }
-    }
-  }
-}
-
-class RangeItem {
-  DateTime selectedStartDate;
-  DateTime selectedEndDate;
-
-  RangeItem({required this.selectedStartDate, required this.selectedEndDate});
-
-  bool isDateInRange(DateTime date) {
-    final startNum = selectedStartDate.year * 10000 +
-        selectedStartDate.month * 100 +
-        selectedStartDate.day;
-    final endNum = selectedEndDate.year * 10000 +
-        selectedEndDate.month * 100 +
-        selectedEndDate.day;
-    final dateNum = date.year * 10000 + date.month * 100 + date.day;
-
-    return dateNum >= startNum && dateNum <= endNum;
-  }
-}

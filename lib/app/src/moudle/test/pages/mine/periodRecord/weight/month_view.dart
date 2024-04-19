@@ -1,17 +1,20 @@
 import 'package:app_base/exports.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/period_record_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../bean/month_item.dart';
+
 class MonthView extends StatelessWidget {
   final DateTime month;
-  final  DateTime calOvulationDate;
+  final List<DateTime> calOvulationDate;
   final List<RangeItem> rangeItems;
+   final List<DateTimeRange> aboutTheCalOvulationDateRange;
   final Function(DateTime) onDateSelected;
 
-  MonthView({
+  const MonthView({
     super.key,
    required this.calOvulationDate,
+   required this.aboutTheCalOvulationDateRange,
     required this.rangeItems,
     required this.month,
     required this.onDateSelected,
@@ -26,16 +29,39 @@ class MonthView extends StatelessWidget {
       dayTiles.add(Container()); // empty days to align the first day
     }
     for (int i = 1; i <= daysInMonth; i++) {
+      if(i == 3){
+        logE('3');
+      }
       final day = DateTime(month.year, month.month, i);
       bool isSelected = false;
       bool isOvulation = false;
-        isOvulation = calOvulationDate.day == i;
-      if(rangeItems.isNotEmpty){
-        for(var j in rangeItems){
-         isSelected = j.isDateInRange(day);
-         if(isSelected){
-           break;
-         }
+      bool isNextRange = false;
+      if (calOvulationDate.isNotEmpty) {
+        for(var j in calOvulationDate){
+          if(j.month == firstDayOfMonth.month){
+            isOvulation = i == j.day;
+            if(isOvulation){
+              break;
+            }
+          }
+        }
+        //确定了这个月的排卵日，那么经期周期也随之确定了
+
+        if (aboutTheCalOvulationDateRange.isNotEmpty) {
+          var currentDate = DateTime(month.year,month.month,i);
+          for(var i in aboutTheCalOvulationDateRange){
+            if(currentDate.compareTo(i.start) >=0 &&  i.end.compareTo(currentDate) >=0) {
+              isNextRange = true;
+            }
+          }
+        }
+      }
+      if (rangeItems.isNotEmpty) {
+        for (var j in rangeItems) {
+          isSelected = j.isDateInRange(day);
+          if (isSelected) {
+            break;
+          }
         }
       }
       BoxDecoration decoration;
@@ -45,9 +71,17 @@ class MonthView extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           shape: BoxShape.circle,
         );
-      } else {
+      } else
+      if (isNextRange) {
+        decoration = const BoxDecoration(
+          color: Colors.grey,
+          shape: BoxShape.circle,
+        );
+      }
+        else {
         decoration = const BoxDecoration();
       }
+
       textStyle = TextStyle(
         color: isSelected
             ? (DateUtils.isSameDay(
@@ -92,8 +126,9 @@ class MonthView extends StatelessWidget {
                     right: 0,
                     child: Center(
                       child: Text(
-                        '排卵日',
-                        style: TextStyle(fontSize: 10),
+                        '排卵',
+                        style:
+                            TextStyle(fontSize: 10, color: Colors.pinkAccent),
                       ),
                     ),
                   ),

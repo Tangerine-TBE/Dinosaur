@@ -1,24 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../period_record_page.dart';
+import '../bean/month_item.dart';
 import 'month_view.dart';
 
 class DatePicker extends StatefulWidget {
   final Function(DateTime) onDateSelected;
   final DateTime dateTime;
   final double height;
+  final List<DateTime> menstrualDate;
+  final List<DateTimeRange> aboutTheCalOvulationDateRange ;
   final List<RangeItem> rangeItems;
 
-  const DatePicker(
+   const DatePicker(
       {super.key,
+        required this.menstrualDate,
+       required this.aboutTheCalOvulationDateRange ,
         required this.onDateSelected,
       required this.dateTime,
       required this.rangeItems,
       required this.height});
 
   @override
-  _DatePickerPageState createState() => _DatePickerPageState();
+  _DatePickerPageState createState() {
+    return _DatePickerPageState();
+  }
 }
 
 class _DatePickerPageState extends State<DatePicker> {
@@ -54,8 +60,9 @@ class _DatePickerPageState extends State<DatePicker> {
           ),
           Expanded(
             child: MonthView(
-              calOvulationDate: DateTime(_currentMonth.year,_currentMonth.month,(DateUtils.getDaysInMonth(_currentMonth.year, _currentMonth.month)/2).ceil()),
               month: _currentMonth,
+              aboutTheCalOvulationDateRange:widget.aboutTheCalOvulationDateRange,
+              calOvulationDate: widget.menstrualDate,
               onDateSelected: _onDateSelected,
               rangeItems: widget.rangeItems,
             ),
