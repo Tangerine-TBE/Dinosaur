@@ -5,7 +5,7 @@ import '../period_record_page.dart';
 import 'month_view.dart';
 
 class DatePicker extends StatefulWidget {
-  final Function(int, DateTime) onNextMonthEndDateChanged;
+  final Function(DateTime, DateTime) onNextMonthEndDateChanged;
   final ValueChanged onNextMonthEndDateDismiss;
   final Function(DateTime, DateTime) onLastMothEndDateChanged;
   final DateTime dateTime;
@@ -104,13 +104,7 @@ class _DatePickerPageState extends State<DatePicker> {
             DateTime updateStartDate = selectedDate;
             DateTime updateEndDate = selectedDate.add(const Duration(days: 4));
             for (var i in widget.rangeItems) {
-              if (updateStartDate
-                          .subtract(
-                            const Duration(days: 3),
-                          )
-                          .day <=
-                      i.selectedEndDate.day &&
-                  updateStartDate.month == i.selectedEndDate.month) {
+              if (updateStartDate.difference(i.selectedEndDate).inDays <=3) {
                 canInsertNewRange = false;
                 break;
               } else {
@@ -133,11 +127,7 @@ class _DatePickerPageState extends State<DatePicker> {
             const Duration(days: 4),
           );
           if (selectedEndDate.month > _currentMonth.month) {
-            int mothDay = DateUtils.getDaysInMonth(
-                _currentMonth.year, _currentMonth.month);
-            int nextMothSelectedDay =
-                selectedEndDate.day - (mothDay - selectedDate.day);
-            widget.onNextMonthEndDateChanged(nextMothSelectedDay, selectedDate);
+            widget.onNextMonthEndDateChanged(selectedDate.add(const Duration(days: 4)), selectedDate);
           } else {
             widget.rangeItems.add(
               RangeItem(

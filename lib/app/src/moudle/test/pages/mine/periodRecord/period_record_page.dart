@@ -109,23 +109,15 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
   }
 
   void onNextMonthEndDateChanged(
-      int nextMonthChange, int index, DateTime dateTime) {
+      DateTime endDateTime, int index, DateTime dateTime) {
     setState(() {
       var item = list[index + 1];
       var currentDateTime = item.currentDateTime;
       if (item.rangItems.isEmpty) {
         item.rangItems.add(
           RangeItem(
-            selectedStartDate: DateTime(
-              currentDateTime.year,
-              list[index].currentDateTime.month,
-              DateUtils.getDaysInMonth(list[index].currentDateTime.year,
-                      list[index].currentDateTime.month) -
-                  4 +
-                  nextMonthChange,
-            ),
-            selectedEndDate: DateTime(
-                currentDateTime.year, currentDateTime.month, nextMonthChange),
+            selectedStartDate: dateTime,
+            selectedEndDate: endDateTime,
           ),
         );
         list[index].rangItems.add(
@@ -140,26 +132,15 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
       } else {
         bool canAdd = true;
         for (var i in item.rangItems) {
-          if (nextMonthChange + 3 >= i.selectedStartDate.day) {
+          if (endDateTime.difference(i.selectedStartDate) .inDays <  3) {
             canAdd = false;
           }
         }
         if (canAdd) {
           item.rangItems.add(
             RangeItem(
-              selectedStartDate: DateTime(
-                currentDateTime.year,
-                list[index].currentDateTime.month,
-                DateUtils.getDaysInMonth(list[index].currentDateTime.year,
-                        list[index].currentDateTime.month) -
-                    5 -
-                    nextMonthChange,
-              ),
-              selectedEndDate: DateTime(
-                currentDateTime.year,
-                currentDateTime.month,
-                nextMonthChange,
-              ),
+              selectedStartDate: dateTime,
+              selectedEndDate: endDateTime,
             ),
           );
           list[index].rangItems.add(
