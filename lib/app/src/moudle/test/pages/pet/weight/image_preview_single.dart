@@ -77,9 +77,12 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
       return SizedBox(
         width: widget.size,
         height: widget.size,
-        child: RawImage(
-          image: widget.image,
-          fit: BoxFit.cover,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: RawImage(
+            image: widget.image,
+            fit: BoxFit.cover,
+          ),
         ),
       );
     }
@@ -95,9 +98,12 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         : SizedBox(
             width: widget.size,
             height: boxHeight,
-            child: RawImage(
-              image: widget.image,
-              fit: BoxFit.cover,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: RawImage(
+                image: widget.image,
+                fit: BoxFit.cover,
+              ),
             ),
           );
   }
@@ -113,9 +119,12 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
         : SizedBox(
       width: boxWidth,
       height: widget.size,
-      child: RawImage(
-        image: widget.image,
-        fit: BoxFit.cover,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: RawImage(
+          image: widget.image,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
