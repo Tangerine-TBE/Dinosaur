@@ -1,6 +1,4 @@
 import 'package:app_base/exports.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 class MineController extends BaseController {
   List<ItemBean> buildTitleItem() {
     var list = <ItemBean>[];

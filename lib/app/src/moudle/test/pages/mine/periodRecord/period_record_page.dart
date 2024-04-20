@@ -13,23 +13,34 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
   @override
   Widget buildContent(BuildContext context) {
     controller.list;
-    return SafeArea(
-      child: Center(
-        child: Column(
-          children: [
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 7,
-              children: List.generate(7, (index) => _buildItem(index)),
-            ),
-            Expanded(
-              child: ScrollTargetView(
-                dateSelectValue: (String, int) {
-                  logE(String);
-                },
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        title: Text(
+          '经期记录',
+          style: TextStyle(fontSize: 18),
+        ),
+        automaticallyImplyLeading: true,
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 7,
+                children: List.generate(7, (index) => _buildItem(index)),
               ),
-            ),
-          ],
+              Divider(height: 1),
+              Expanded(
+                child: ScrollTargetView(
+                  dateSelectValue: (String, int) {
+                    logE(String);
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -38,31 +49,34 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
   _buildItem(int index) {
     if (index == 0) {
       return Center(
-        child: Text('一'),
+        child: Text(
+          '一',
+          style: TextStyle(color: Colors.pinkAccent),
+        ),
       );
     } else if (index == 1) {
       return Center(
-        child: Text('二'),
+        child: Text('二', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 2) {
       return Center(
-        child: Text('三'),
+        child: Text('三', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 3) {
       return Center(
-        child: Text('四'),
+        child: Text('四', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 4) {
       return Center(
-        child: Text('五'),
+        child: Text('五', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 5) {
       return Center(
-        child: Text('六'),
+        child: Text('六', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 6) {
       return Center(
-        child: Text('日'),
+        child: Text('日', style: TextStyle(color: Colors.pinkAccent)),
       );
     }
   }
@@ -337,7 +351,6 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
         controller: _scrollController,
         itemBuilder: (context, index) {
           return DatePicker(
-            height: 322,
             menstrualDate: list[index].calOvulationDates,
             dateTime: list[index].currentDateTime,
             rangeItems: list[index].rangItems,

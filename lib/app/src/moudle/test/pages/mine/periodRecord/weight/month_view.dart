@@ -82,7 +82,7 @@ class MonthView extends StatelessWidget {
         decoration = const BoxDecoration();
       }
 
-      textStyle = TextStyle(
+      textStyle = TextStyle(fontSize: 12,
         color: isSelected
             ? (DateUtils.isSameDay(
                     DateTime.now(), DateTime(month.year, month.month, i))
