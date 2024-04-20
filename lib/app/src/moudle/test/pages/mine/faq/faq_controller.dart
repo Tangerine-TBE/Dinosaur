@@ -10,6 +10,9 @@ class FaqController extends BaseController{
 
 
   }
+  onFaqAsk(){
+    navigateTo(RouteName.faqAsk);
+  }
   
   _fetchItemBeans(){
     list.add(ItemBean(title: '蓝牙连接'));

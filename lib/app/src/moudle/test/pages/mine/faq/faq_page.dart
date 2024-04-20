@@ -44,21 +44,26 @@ class FaqPage extends BaseEmptyPage<FaqController> {
               ),
               child: Text('联系我们'),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: const Offset(2, 2),
-                    blurRadius: 4,
-                    spreadRadius: 0,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(12),
+            InkWell(
+              onTap: (){
+                controller.onFaqAsk();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: const Offset(2, 2),
+                      blurRadius: 4,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text('问题反馈'),
               ),
-              child: Text('问题反馈'),
             )
           ],
         ),

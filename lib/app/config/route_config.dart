@@ -21,6 +21,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_control
 import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/ask/faq_ask_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
@@ -323,5 +324,12 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
+        GetPage(
+          name: RouteName.faqAsk,
+          page: (() => const FaqAskPage()),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => FaqController());
+          })
+        )
       ];
 }

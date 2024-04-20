@@ -34,6 +34,7 @@ class RouteName {
   static const String periodRecord = '/periodRecord';
   static const String editInfo = '/edit';
   static const String setting  = '/setting';
+  static const String faqAsk = '/faqAsk';
 
   //shake
   static const String mainPage = '/main';
