@@ -1,5 +1,6 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/res/my_colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,7 +73,8 @@ class MyDialogWidget extends StatelessWidget {
 }
 
 class TipsDialogWidget extends StatelessWidget {
-  const TipsDialogWidget({super.key});
+  final Function onButtonClick;
+  const TipsDialogWidget({super.key,required this.onButtonClick});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,7 @@ class TipsDialogWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       children: [
-        Container(
+        SizedBox(
           height: 475,
           width: 277,
           child: Stack(
@@ -92,40 +94,124 @@ class TipsDialogWidget extends StatelessWidget {
                 left: 13,
                 right: 13,
                 top: 40,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xffFFFFFE),
-                        Color(0xffFF5E65),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      ResName.pet2,
+                      width: 251,
+                      height: 77,
+                      fit: BoxFit.contain,
                     ),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
-                    ),
-                  ),
-                  width: 251,
-                  height: 77,
+                    Positioned(
+                      top: 9,
+                      left: 16,
+                      child: Image.asset(
+                        ResName.pet1,
+                        width: 88,
+                        height: 20,
+                      ),
+                    )
+                  ],
                 ),
               ),
               Positioned(
-                top: 80,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [
-                      Color(0xffFAE5EA),
-                      Color(0xffFFFFFE),
-                    ],
-                  )),
+                top: 77,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      ResName.pet3,
+                      width: 277,
+                      height: 398,
+                    ),
+                    Positioned(
+                      top: 22,
+                      left: 22,
+                      child: Container(
+                        width: 109,
+                        height: 26,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 3),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(12),
+                          ),
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xffE96573),
+                              Color(0xffEC8A6D),
+                            ],
+                          ),
+                        ),
+                        child: const Text(
+                          '有爱且文明',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 52,
+                      left: 22,
+                      right: 22,
+                      child: Image.asset(
+                        ResName.pet5,
+                        width: 237,
+                        height: 41,
+                      ),
+                    ),
+                    Positioned(
+                      left: 65,
+                      right: 65,
+                      top: 100,
+                      child: Image.asset(
+                        ResName.pet4,
+                        width: 147,
+                        height: 140,
+                      ),
+                    ),
+                    const Positioned(
+                      left: 39,
+                      right: 39,
+                      top: 250,
+                      child: Text(
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: MyColors.textGreyColor,
+                            fontWeight: FontWeight.w400),
+                        maxLines: null,
+                        '对于发布反动/色情/暴力/骚扰等违规内容的用户， 社群管理员有权进行删帖、禁言、封号等处理， 违规情节严重者，将可能被举报至有关部门',
+                      ),
+                    ),
+                    Positioned(
+                      left: 41,
+                      right: 41,
+                      bottom:20 ,
+                      child: MaterialButton(
+                        onPressed: (){
+                          Get.back();
+                          onButtonClick.call();
+                        },
+                        height: 42,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(21,),),
+                        color: const Color(0xffFF5E65),
+                        child: const Text('遵守约定',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16),),
+                      ),
+                    )
+                  ],
                 ),
               ),
+              Positioned(
+                right: 7,
+                left: 161,
+                top: 24,
+                child: Image.asset(
+                  ResName.iconImg,
+                  width: 109,
+                  height: 135,
+                ),
+              )
             ],
           ),
         )

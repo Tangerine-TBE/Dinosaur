@@ -115,5 +115,10 @@ class ResName {
   static const String lovely2 = 'assets/images/lovely_2.png';
   static const String add70 = 'assets/images/add70.png';
   static const String loaded_failure = 'assets/images/loaded_failure.png';
+  static const String pet1 = 'assets/images/pet1.png';
+  static const String pet2= 'assets/images/158.png';
+  static const String pet3 = 'assets/images/159.png';
+  static const String pet4 = 'assets/images/160.png';
+  static const String pet5 = 'assets/images/161.png';
 
 }

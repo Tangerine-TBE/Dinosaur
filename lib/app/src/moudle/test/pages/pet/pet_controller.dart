@@ -31,6 +31,10 @@ class PetController extends BaseController {
     commonManager.init();
     super.onInit();
   }
+  @override
+  void onReady(){
+    showTipDialog();
+  }
 
   naviToDetails(PostsList item, int index) {
     var map = {'item': item, 'index': index};
@@ -72,7 +76,7 @@ class PetController extends BaseController {
   }
 
   imagePreView(List<String> images, BuildContext context, double size,
-      int parentIndex, List<ImageString> list,String type) {
+      int parentIndex, List<ImageString> list, String type) {
     ///每一张预期图片都是一个正方形
     if (images.isNotEmpty) {
       ///图片最多9张喔！
@@ -154,6 +158,13 @@ class PetController extends BaseController {
       return SizedBox();
     }
   }
+
+  showTipDialog() {
+    Get.dialog(TipsDialogWidget(onButtonClick: (){
+      logE('msg');
+    },),);
+  }
+
 }
 
 class CommonManager {
@@ -172,7 +183,7 @@ class CommonManager {
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex+1,
+          pageIndex: pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Recomed'),
@@ -181,7 +192,7 @@ class CommonManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex = pageIndex+1;
+          pageIndex = pageIndex + 1;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -242,9 +253,7 @@ class CommonManager {
     }
   }
 
-  showTipDialog() {
-    Get.dialog(TipsDialogWidget());
-  }
+
 
   getList() async {
     final response = await pushRepo.getPushMsg(
@@ -304,15 +313,15 @@ class DynamicManager {
   }
 
   getList() async {
-    final response = await  pushRepo.getPushMsg(
-        PushMsgReq(
-            userId: User.loginRspBean!.userId,
-            topicId: '',
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            postsType: 'Dynamic'),
-      );
+    final response = await pushRepo.getPushMsg(
+      PushMsgReq(
+          userId: User.loginRspBean!.userId,
+          topicId: '',
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Dynamic'),
+    );
     if (response.isSuccess) {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
@@ -330,7 +339,7 @@ class DynamicManager {
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex+1,
+          pageIndex: pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Dynamic'),
@@ -339,13 +348,14 @@ class DynamicManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex =  pageIndex+1;
+          pageIndex = pageIndex + 1;
           dataList.addAll(list);
           controller.update([listId]);
         }
       }
     }
   }
+
   showBottomSheet() {
     Get.bottomSheet(
       Container(
@@ -391,7 +401,6 @@ class DynamicManager {
       ),
     );
   }
-
 }
 
 class HandPickManager {
@@ -426,7 +435,7 @@ class HandPickManager {
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex+1,
+          pageIndex: pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Curated'),
@@ -435,7 +444,7 @@ class HandPickManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex =  pageIndex+1;
+          pageIndex = pageIndex + 1;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -488,7 +497,6 @@ class HandPickManager {
       ),
     );
   }
-
 
   getList() async {
     final response = await pushRepo.getPushMsg(
@@ -537,7 +545,7 @@ class RefreshManager {
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex+1,
+          pageIndex: pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Latest'),
@@ -546,7 +554,7 @@ class RefreshManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex = pageIndex+1;
+          pageIndex = pageIndex + 1;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -607,17 +615,16 @@ class RefreshManager {
     );
   }
 
-
   getList() async {
     final response = await pushRepo.getPushMsg(
-        PushMsgReq(
-            userId: User.loginRspBean!.userId,
-            topicId: '',
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            postsType: 'Latest'),
-      );
+      PushMsgReq(
+          userId: User.loginRspBean!.userId,
+          topicId: '',
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          postsType: 'Latest'),
+    );
     if (response.isSuccess) {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
