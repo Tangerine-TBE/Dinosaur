@@ -17,6 +17,10 @@ class MothItem {
         maxDate = i.selectedStartDate;
       }
     }
+    for(int i = 0 ; i < list.length ; i ++){
+      list[i].calOvulationDates.clear();
+      list[i].aboutTheCalOvulationDateRange.clear();
+    }
     calOvulationDates.add(maxDate.subtract(const Duration(days: 14)));
     for(int i = 0 ; i < list.length ; i ++){
       list[i].setCalOvulationDate(calOvulationDates,list,i);
@@ -28,6 +32,10 @@ class MothItem {
     if (rangItems.isEmpty) {
       calOvulationDates=[];
     } else {
+      for(int i = 0 ; i < list.length ; i ++){
+        list[i].calOvulationDates.clear();
+        list[i].aboutTheCalOvulationDateRange.clear();
+      }
       calOvulationDates.add(
           rangItems[0].selectedStartDate.subtract(
             const Duration(days: 14),
@@ -36,7 +44,6 @@ class MothItem {
     }
     for(int i = 0 ; i < list.length ; i ++){
       list[i].setCalOvulationDate(calOvulationDates,list,i);
-
     }
 
   }
@@ -52,8 +59,6 @@ class MothItem {
     if(currentDateTime.year == calOvulationDates[0].year && currentDateTime.month < calOvulationDates[0].month){
       return;
     }
-    aboutTheCalOvulationDateRange.clear();
-    this.calOvulationDates.clear();
     var mothDays =
         DateUtils.getDaysInMonth(currentDateTime.year, currentDateTime.month);
     for (int i = 1; i <= mothDays; i++) {
@@ -70,12 +75,12 @@ class MothItem {
         var specialDateRange = DateTimeRange(start: startDateTime, end: endDateTime);
         if(startDateTime.month == currentDate.month && endDateTime.month == currentDate.month){
           aboutTheCalOvulationDateRange.add(specialDateRange);
-        }else  if(startDateTime.month > currentDate.month){
+        }else  if(startDateTime.month != currentDate.month){
           if(index + 1 >= items.length){
             return;
           }
           items[index + 1].aboutTheCalOvulationDateRange.add(specialDateRange);
-        }else if(startDateTime.month == currentDate.month && endDateTime.month > currentDate.month){
+        }else if(startDateTime.month == currentDate.month && endDateTime.month != currentDate.month){
           if(index + 1 >= items.length){
             return;
           }

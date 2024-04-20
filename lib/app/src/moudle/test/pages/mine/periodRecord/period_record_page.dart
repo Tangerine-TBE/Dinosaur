@@ -146,7 +146,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
     var item = list[index + 1];
     for (var i in item.rangItems) {
       if (i.selectedEndDate.day == nextMothDay) {
-        item.removeRangItem(i,list);
+        item.removeRangItem(i, list);
         return;
       }
     }
@@ -180,7 +180,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
 
   Future checkLastMothDate(
       DateTime startDate, DateTime endDate, int index) async {
-    if(index == 0){
+    if (index == 0) {
       return true;
     }
     var item = list[index - 1];
@@ -205,7 +205,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
           if (i.isDateInRange(selectedDate)) {
             //在任意一个区间范围内
             if (i.selectedStartDate.day == selectedDate.day) {
-              list[index].removeRangItem(i,list);
+              list[index].removeRangItem(i, list);
               if (i.selectedEndDate.month > list[index].currentDateTime.month) {
                 onNextMonthEndDateDismiss(i.selectedEndDate.day, index);
               }
@@ -273,17 +273,24 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                 showToast('添加一段新经期？太频繁了吧！至少间隔3天');
                 break;
               }
+            } else if (selectedDate.isAfter(i.selectedEndDate)) {
+              int offset2 =
+                  updateStartDate.difference(i.selectedEndDate).inDays;
+              if (offset2 <= 3) {
+                canInsertNewRange = false;
+                showToast('添加一段新经期？太频繁了吧！至少间隔3天');
+                break;
+              }
             }
             canInsertNewRange = true;
           }
           if (canInsertNewRange) {
             list[index].addRangItem(
-                  RangeItem(
-                      selectedStartDate: updateStartDate,
-                      selectedEndDate: updateEndDate),
+              RangeItem(
+                  selectedStartDate: updateStartDate,
+                  selectedEndDate: updateEndDate),
               list,
-
-                );
+            );
             hashDeal = true;
             //选择一个区间内最晚的日期
 
@@ -309,13 +316,12 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                   .then((value) {
                 if (value) {
                   list[index].addRangItem(
-                        RangeItem(
-                          selectedStartDate: selectedDate,
-                          selectedEndDate: selectedEndDate,
-
-                        ),
-                        list,
-                      );
+                    RangeItem(
+                      selectedStartDate: selectedDate,
+                      selectedEndDate: selectedEndDate,
+                    ),
+                    list,
+                  );
                 }
               });
             }
@@ -335,7 +341,8 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
             menstrualDate: list[index].calOvulationDates,
             dateTime: list[index].currentDateTime,
             rangeItems: list[index].rangItems,
-              aboutTheCalOvulationDateRange:list[index].aboutTheCalOvulationDateRange,
+            aboutTheCalOvulationDateRange:
+                list[index].aboutTheCalOvulationDateRange,
             onDateSelected: (selectedDateTime) {
               onDateSelected(selectedDateTime, index);
             },
@@ -349,5 +356,3 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
         itemCount: list.length);
   }
 }
-
-
