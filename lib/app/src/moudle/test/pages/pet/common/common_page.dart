@@ -327,7 +327,7 @@ class CommonPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images),
+                      item.images,'common'),
                   SizedBox(
                     height: 14,
                   ),

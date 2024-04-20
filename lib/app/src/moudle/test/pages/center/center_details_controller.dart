@@ -47,7 +47,7 @@ class CenterDetailsController extends BaseController {
       ///图片最多9张喔！
       ///只有一张的情况 大小限制为202.w的正方形
       if (images.length == 1) {
-        var tag = '$parentIndex${0.toString()}';
+        var tag = 'centerDetails$parentIndex${0.toString()}';
         return InkWell(
           onTap: () {
             final homeController = Get.find<HomeController>();

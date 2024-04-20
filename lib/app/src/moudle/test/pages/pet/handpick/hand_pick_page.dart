@@ -327,7 +327,7 @@ class HandPickPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images),
+                      item.images,'handPicker'),
                   SizedBox(
                     height: 14,
                   ),

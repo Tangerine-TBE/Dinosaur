@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/friends_share_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
@@ -327,7 +326,7 @@ class DynamicPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images),
+                      item.images,'dynamic'),
                   SizedBox(
                     height: 14,
                   ),

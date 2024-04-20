@@ -31,4 +31,6 @@ class Api {
   static const getCommentList = '/api/v1/meng/comment/list';
   //创建评论
   static const createComment = '/api/v1/meng/comment';
+  //登出
+  static const logOut = '/api/v1/meng/user/logout';
 }

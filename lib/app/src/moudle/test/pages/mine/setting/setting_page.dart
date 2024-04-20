@@ -5,15 +5,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class SettingPage extends BaseEmptyPage<SettingController> {
   const SettingPage({super.key});
+  
+  
+  
 
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffeff1f3),
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           '设置',
           style: TextStyle(fontSize: 18),
@@ -106,7 +111,11 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('允许被搭讪'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                     Obx(() =>
+                         CupertinoSwitch(value: controller.allowToBother.value, onChanged: (value) {
+                           controller.allowToBother.value = value;
+                         })
+                     )
                     ],
                   ),
                 ),
@@ -121,7 +130,11 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('波形作品公开'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() =>
+                          CupertinoSwitch(value: controller.allowToPublic.value, onChanged: (value) {
+                            controller.allowToPublic.value = value;
+                          })
+                      )
                     ],
                   ),
                 ),
@@ -149,7 +162,9 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('萌宠物圈互动消息'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() =>    CupertinoSwitch(value: controller.petMessageNotify.value, onChanged: (value) {
+                        controller.petMessageNotify.value =value;
+                      }))
                     ],
                   ),
                 ),
@@ -164,7 +179,9 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('波形互动消息'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() => CupertinoSwitch(value: controller.chartMessageNotify.value, onChanged: (value) {
+                        controller.chartMessageNotify.value = value;
+                      }))
                     ],
                   ),
                 ),
@@ -179,7 +196,11 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('搭讪消息'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() =>
+                          CupertinoSwitch(value: controller.botherMessageNotify.value, onChanged: (value) {
+                            controller.botherMessageNotify.value = value;
+                          })
+                      )
                     ],
                   ),
                 ),
@@ -194,7 +215,11 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('被关注消息'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() =>
+                          CupertinoSwitch(value: controller.subscribeMessageNotify.value, onChanged: (value) {
+                            controller.subscribeMessageNotify.value = value;
+                          })
+                      )
                     ],
                   ),
                 ),
@@ -209,7 +234,9 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('私信消息'),
                       ),
-                      CupertinoSwitch(value: true, onChanged: (value) {})
+                      Obx(() => CupertinoSwitch(value: controller.chatPrivateMessageNotify.value, onChanged: (value) {
+                        controller.chatPrivateMessageNotify.value = value;
+                      }))
                     ],
                   ),
                 ),
@@ -262,21 +289,26 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                   height: 20,
                 ),
                 Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: const Offset(2, 2),
-                          blurRadius: 4,
-                          spreadRadius: 0,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    onTap: (){
+                      controller.onLogOutClicked();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: const Offset(2, 2),
+                            blurRadius: 4,
+                            spreadRadius: 0,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text('退出登录'),
                     ),
-                    child: Text('退出登录'),
                   ),
                 ),
                 SizedBox(

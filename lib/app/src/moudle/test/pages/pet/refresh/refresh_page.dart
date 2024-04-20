@@ -325,7 +325,7 @@ class RefreshPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images),
+                      item.images,'refresh'),
                   SizedBox(
                     height: 14,
                   ),
