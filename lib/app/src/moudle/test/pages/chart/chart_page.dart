@@ -49,18 +49,18 @@ class ChartPage extends BaseEmptyPage<ChartController>
                 automaticIndicatorColorAdjustment: true,
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
-                unselectedLabelStyle: TextStyle(
+                unselectedLabelStyle: const TextStyle(
                     color: MyColors.indicatorNormalTextColor, fontSize: 16),
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
                     fontSize: 18),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorPadding: EdgeInsets.only(bottom: 10),
+                indicatorPadding: const EdgeInsets.only(bottom: 10),
                 splashFactory: NoSplash.splashFactory,
                 dividerHeight: 0,
-                labelPadding: EdgeInsets.symmetric(horizontal: 6),
+                labelPadding: const EdgeInsets.symmetric(horizontal: 6),
                 overlayColor:
                     const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [

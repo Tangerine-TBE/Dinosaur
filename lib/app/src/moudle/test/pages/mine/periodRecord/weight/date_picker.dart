@@ -35,7 +35,7 @@ class _DatePickerPageState extends State<DatePicker> {
     super.initState();
     _currentMonth = DateTime(
         widget.dateTime.year, widget.dateTime.month, widget.dateTime.day);
-    i =calculateSundaysInMonth(_currentMonth) * 76;
+    i =calculateSundaysInMonth(_currentMonth) * 84;
   }
 
   _onDateSelected(DateTime selectedDate) {

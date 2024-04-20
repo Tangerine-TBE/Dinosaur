@@ -17,7 +17,7 @@ class SinglePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GetBuilder<ChartController>(
         builder: (controller) {
           return ListView.separated(
@@ -26,7 +26,7 @@ class SinglePage extends StatelessWidget {
                   index, controller.singleCharManager.data[index]);
             },
             separatorBuilder: (context, index) {
-              return SizedBox(
+              return const SizedBox(
                 height: 12,
               );
             },
@@ -43,15 +43,14 @@ class SinglePage extends StatelessWidget {
       children: [
         Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 40,
               height: 40,
               child: CircleAvatar(
-                //Todo
                 backgroundImage: NetworkImage('https://via.placeholder.com/150/0000F1/808080?Text=Image1'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 7,
             ),
             SizedBox(
@@ -62,20 +61,20 @@ class SinglePage extends StatelessWidget {
                 children: [
                   Text(
                     item.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: MyColors.textBlackColor,
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.face,
                         size: 12,
                       ),
                       Text(
                         item.viewsNum.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: MyColors.textGreyColor,
                           fontSize: 11,
                         ),
@@ -87,12 +86,12 @@ class SinglePage extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Container(
           height: 138,
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: const Color(0xffff5e65).withAlpha(60)),
@@ -107,7 +106,7 @@ class SinglePage extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Row(
@@ -123,20 +122,20 @@ class SinglePage extends StatelessWidget {
                 height: 14,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
             Text(
               item.likesNum.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 11,
                 //Todo
                 color: false
-                    ? const Color(0xffff5e65)
+                    ? Color(0xffff5e65)
                     : MyColors.textBlackColor,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Icon(

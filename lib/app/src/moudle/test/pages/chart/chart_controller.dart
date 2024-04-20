@@ -61,7 +61,8 @@ class SingleCharManager {
   }
 
   onChartItemClick(int index) {
-    controller.update([chartListId]);
+    controller.navigateTo(RouteName.waveDemo);
+    // controller.update([chartListId]);
   }
 
   onChartLikeClicked(int index) {

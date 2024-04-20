@@ -10,10 +10,12 @@ import '../../pet/weight/image_preview.dart';
 class LongPressPreView extends StatefulWidget {
   final List<String> images;
   final double size;
+  final int parentIndex;
   final Function(List<String> value) onOrderUpdateCallBack;
 
   const LongPressPreView(
       {super.key,
+        required this.parentIndex,
       required this.images,
       required this.size,
       required this.onOrderUpdateCallBack});
@@ -50,7 +52,7 @@ class _LongPressPreViewState extends State<LongPressPreView> {
         );
       },
       children: List.generate(widget.images.length, (index) {
-        var tag = '0${index.toString()}';
+        var tag = 'push${widget.parentIndex}0${index.toString()}';
         return Stack(
           key: Key(widget.images.elementAt(index)),
           children: [

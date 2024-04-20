@@ -96,7 +96,7 @@ class CenterDetailsController extends BaseController {
               crossAxisSpacing: 2,
             ),
             itemBuilder: ((context, index) {
-              var tag = '$parentIndex${index.toString()}';
+              var tag = 'centerDetails$parentIndex${index.toString()}';
               return InkWell(
                 onTap: () {
                   final homeController = Get.find<HomeController>();

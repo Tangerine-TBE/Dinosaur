@@ -38,6 +38,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/search/search_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/wave/wave_form_demo_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/wave/wave_form_demo_page.dart';
 import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_detial_page.dart';
@@ -67,6 +69,18 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.waveDemo,
+          page: () => const WaveFormDemoPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => WaveFormDemoController(),
+              );
+            },
+          ),
+        ),
+
         GetPage(
           name: RouteName.editInfo,
           page: () => const EditInfoPage(),
@@ -325,11 +339,10 @@ class RouteConfig extends ARoute {
           ),
         ),
         GetPage(
-          name: RouteName.faqAsk,
-          page: (() => const FaqAskPage()),
-          binding: BindingsBuilder(() {
-            Get.lazyPut(() => FaqController());
-          })
-        )
+            name: RouteName.faqAsk,
+            page: (() => const FaqAskPage()),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => FaqController());
+            }))
       ];
 }

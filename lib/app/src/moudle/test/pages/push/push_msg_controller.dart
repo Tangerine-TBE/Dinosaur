@@ -64,6 +64,7 @@ class PushMsgController extends BaseController {
         child: LongPressPreView(
           images: images,
           size: double.infinity,
+          parentIndex:parentIndex,
           onOrderUpdateCallBack: (value) {
             selectedImagesObx = value;
             update([imagesListId]);
