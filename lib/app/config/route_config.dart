@@ -4,6 +4,7 @@ import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
+import 'package:app_base/mvvm/repository/mine_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
@@ -281,6 +282,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => MineCollectController());
+              Get.lazyPut(() => MineRepo());
             },
           ),
         ),
@@ -308,6 +310,7 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(() => MineLikeController());
+              Get.lazyPut(() => MineRepo());
             },
           ),
         ),
