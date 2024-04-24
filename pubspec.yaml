@@ -21,6 +21,7 @@ dependencies:
   flutter_reorderable_grid_view: ^4.0.0
 #  connectivity_plus: ^5.0.2
   gradient_slider: ^1.0.2
+  vibration: ^1.8.4
   pinput: ^4.0.0
   image: ^4.1.7
   flutter_sound: ^9.4.6

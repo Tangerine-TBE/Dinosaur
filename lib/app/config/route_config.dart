@@ -75,8 +75,11 @@ class RouteConfig extends ARoute {
           page: () => const WaveFormDemoPage(),
           binding: BindingsBuilder(
             () {
+              var list = Get.arguments;
               Get.lazyPut(
-                () => WaveFormDemoController(),
+                () => WaveFormDemoController(
+                  list: list,
+                ),
               );
             },
           ),
