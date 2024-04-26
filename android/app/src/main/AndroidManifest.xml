@@ -16,7 +16,7 @@
     <application
         android:label="怪兽"
         android:name="cn.com.tangerine.base.App"
-        android:icon="@drawable/logo">
+        android:icon="@mipmap/logo">
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.WhitePageSplash"

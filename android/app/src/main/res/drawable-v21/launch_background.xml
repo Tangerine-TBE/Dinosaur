@@ -10,6 +10,6 @@
         <bitmap  android:src="@mipmap/icon_splash"/>
     </item>
     <item android:gravity="bottom|end" android:width="319dp" android:height="319dp">
-        <bitmap android:src ="@drawable/logo"/>
+        <bitmap android:src ="@mipmap/logo"/>
     </item>
 </layer-list>
