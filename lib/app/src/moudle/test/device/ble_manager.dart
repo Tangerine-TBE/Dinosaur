@@ -7,6 +7,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_controller.d
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../pages/home/home_controller.dart';
 
@@ -78,15 +79,11 @@ class BleManager {
 
   stopScan() {
     scanResultsSubscription.cancel();
-    timer = Timer(const Duration(seconds: 10), () {
-      FlutterBluePlus.stopScan();
-    });
+    FlutterBluePlus.stopScan();
+
   }
 
   startScan({required int timeout}) {
-    if (timer != null) {
-      timer?.cancel();
-    }
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
       (event) {
         logE('scanResult');
@@ -125,10 +122,9 @@ class BleManager {
         }
       });
     }catch(e){
+      EasyLoading.showError('蓝牙连接超时');
       getController().onDeviceDisconnect();
     }
-
-
   }
 }
 
