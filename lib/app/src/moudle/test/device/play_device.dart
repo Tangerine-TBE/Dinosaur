@@ -7,7 +7,9 @@ class DeviceInfo {
   String name;
   BluetoothDevice bluetoothDevice;
   BluetoothCharacteristic writeChar;
+  String  type ;
   DeviceInfo({
+    required this.type,
     required this.isCanAddHot,
     required this.isCanSubControl,
     required this.classModelCount,

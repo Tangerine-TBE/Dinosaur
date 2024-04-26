@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:app_base/ble/ble_manager.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';

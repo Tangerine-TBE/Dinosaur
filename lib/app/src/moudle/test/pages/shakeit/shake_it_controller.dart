@@ -1,14 +1,13 @@
 import 'dart:math';
 
-import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:get/get.dart';
 import 'dart:async';
+
+import '../../device/ble_msg.dart';
 
 class ShakeItController extends PlayDeviceBleController {
   final threshold = 0.0.obs;
@@ -46,9 +45,8 @@ class ShakeItController extends PlayDeviceBleController {
     looperTimer ??= Timer.periodic(const Duration(milliseconds: 600), (timer) async{
       var belValue = 1023 / vector * _processes[0];
       logE('$belValue}');
-      await  Runtime.deviceInfo.value?.writeChar.write(bleMsg.generateStrengthData(
-          streamFirstValue: belValue.toInt(),
-          streamSecondValue: belValue.toInt()));
+      await  Runtime.deviceInfo.value?.writeChar.write(bleMsg.generateScale2Cmd(strengthValue:
+           belValue));
     },);
   }
 

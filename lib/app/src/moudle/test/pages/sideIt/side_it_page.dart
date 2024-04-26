@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
   Widget buildContent(BuildContext context) {
     return _buildContent02();
   }
+
   _buildContent02() {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -233,7 +235,10 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                 height: double.infinity,
                                 width: 300,
                                 child: FutureBuilder(
-                                  future: controller.loadImage(<String>[ResName.button,ResName.sideItBarBg]),
+                                  future: controller.loadImage(<String>[
+                                    ResName.button,
+                                    ResName.sideItBarBg
+                                  ]),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<dynamic> snapshot) {
                                     return Listener(
@@ -249,30 +254,36 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                               MyColors.sliderActiveTrackColor,
                                           inactiveTrackColor:
                                               MyColors.sliderInactiveTrackColor,
-                                          trackShape: snapshot.data==null?null:snapshot.data[1] == null
-                                              ?null:CustomShape(image: snapshot.data[1])
-                                          ,
+                                          trackShape: snapshot.data == null
+                                              ? null
+                                              : snapshot.data[1] == null
+                                                  ? null
+                                                  : CustomShape(
+                                                      image: snapshot.data[1]),
                                           trackHeight: 70,
                                           minThumbSeparation: 0,
                                           rangeTrackShape:
                                               const RoundedRectRangeSliderTrackShape(),
-                                          thumbShape: snapshot.data==null? const RoundSliderThumbShape(
-                                              disabledThumbRadius: 20,
-                                              enabledThumbRadius: 20) :snapshot.data[0]== null
+                                          thumbShape: snapshot.data == null
                                               ? const RoundSliderThumbShape(
                                                   disabledThumbRadius: 20,
                                                   enabledThumbRadius: 20)
-                                              : ImageSliderThumb(
-                                                  image: snapshot.data[0],
-                                                  size: Size(106, 106)),
-                                          overlayColor: Colors.red.withAlpha(32),
+                                              : snapshot.data[0] == null
+                                                  ? const RoundSliderThumbShape(
+                                                      disabledThumbRadius: 20,
+                                                      enabledThumbRadius: 20)
+                                                  : ImageSliderThumb(
+                                                      image: snapshot.data[0],
+                                                      size: Size(106, 106)),
+                                          overlayColor:
+                                              Colors.red.withAlpha(32),
                                           overlayShape:
                                               const RoundSliderOverlayShape(
                                                   overlayRadius: 0.0),
                                         ),
                                         child: Obx(
                                           () => Slider(
-                                            value: controller.sliderValue.value
+                                            value: controller.sliderValueFirst.value
                                                 .toDouble(),
                                             min: 0,
                                             max: 1023,
@@ -280,8 +291,8 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                             activeColor:
                                                 MyColors.sliderActiveTrackColor,
                                             onChanged: (value) {
-                                              controller
-                                                  .onSliverProcessChanged(value);
+                                              controller.onSliverFirstProcessChanged(
+                                                  value);
                                             },
                                           ),
                                         ),
@@ -303,11 +314,30 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                     top: false,
                     child: Column(
                       children: [
-                        const SizedBox(height: 20,),
+                        Obx(() =>
+                            Visibility(
+                              visible: Runtime.deviceInfo.value?.isCanAddHot == true || Runtime.deviceInfo.value?.isCanSubControl == true,
+                              child: Slider(
+                                value: controller.sliderValueSecond.value
+                                    .toDouble(),
+                                min: 0,
+                                max: 1023,
+                                thumbColor: MyColors.themeTextColor,
+                                activeColor: MyColors.themeTextColor,
+                                onChanged: (value) {
+                                  controller.onSliverSecondProcessChanged(
+                                      value);
+                                },
+                              ),
+                            ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Align(
                           alignment: Alignment.topCenter,
                           child: Obx(
-                                () => RepaintBoundary(
+                            () => RepaintBoundary(
                               child: CustomPaint(
                                 size: Size(280, 70),
                                 painter: ChartsPainter(
@@ -318,7 +348,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                           ),
                         ),
                         Obx(
-                              () => Visibility(
+                          () => Visibility(
                             visible: controller.slideItModel.value == 1,
                             child: Countdown(
                               seconds: 10,
@@ -341,7 +371,6 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                                   style: TextStyle(
                                       color: MyColors.textBlackColor,
                                       fontSize: 30,
-
                                       fontWeight: FontWeight.bold),
                                 );
                               },

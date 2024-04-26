@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:app_base/ble/ble_manager.dart';
-import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
@@ -9,6 +7,8 @@ import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
+import '../../device/ble_manager.dart';
+import '../../device/ble_msg.dart';
 import '../../device/run_time.dart';
 import '../sideIt/obxBean/double_bean.dart';
 

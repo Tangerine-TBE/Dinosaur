@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +9,8 @@ import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/scan/scan_controller.dart';
 import 'package:app_base/res/my_colors.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 
-class ScanPage extends BaseEmptyPage<ScanController> {
+class ScanPage extends BaseEmptyPage<ScanController>  {
   const ScanPage({super.key});
 
   @override

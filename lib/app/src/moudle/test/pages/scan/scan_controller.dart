@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'package:app_base/ble/ble_msg.dart';
+import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:app_base/ble/event/ble_event.dart';
 import 'package:app_base/constant/constants.dart';
-import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+
+import '../../device/ble_msg.dart';
+import '../../device/play_device.dart';
+import '../../device/run_time.dart';
 
 class ScanController extends PlayDeviceBleController {
   final devicesListId = 1;
@@ -23,12 +25,15 @@ class ScanController extends PlayDeviceBleController {
       update([devicesListId]);
     } else {
       bluetoothState.value = '蓝牙状态: 已开启';
-      manager.startScan(timeout: 20);
+      if(!FlutterBluePlus.isScanningNow){
+        manager.startScan(timeout: 20);
+      }
     }
   }
   @override
   void onDeviceDisconnect() async {
     devices.clear();
+    Runtime.deviceInfo.value = null;
     devicesSize.value = devices.length;
     update([devicesListId]);
     await Future.delayed(const Duration(seconds: 2));
@@ -36,8 +41,53 @@ class ScanController extends PlayDeviceBleController {
     manager.startScan(timeout: 20);
   }
   @override
-  void onDeviceConnected(BluetoothDevice device) {
-    super.onDeviceConnected(device);
+  void onDeviceConnected(BluetoothDevice device) async{
+    if (device.isConnected) {
+      List<BluetoothService> services = await device.discoverServices();
+      String type = '';
+      BluetoothCharacteristic? writeChar;
+      for(var service in services) {
+        List<BluetoothCharacteristic> characteristics = service.characteristics;
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.characteristicUuid == Guid.fromString(BleMSg.writeUUID)) {
+            writeChar = c;
+          }
+          if (c.characteristicUuid == Guid.fromString(BleMSg.deviceInfoUUID)) {
+            List<int> deviceInfo = await c.read();
+            logE(deviceInfo.toString());
+            if (deviceInfo.isNotEmpty) {
+              type = checkDeviceType(deviceInfo[3]);
+            }
+          }
+        }
+        if (writeChar != null && type != '') {
+          bool isCanAddHot = (type == '018' ||
+              type == '030' ||
+              type == '029' ||
+              type == '071');
+          bool isCanSubControl = (type == '035' || type == '019');
+          int classicModelCount = type == '019'
+              ? 9
+              : type == '030'
+              ? 10
+              : isCanSubControl
+              ? 10
+              : 12;
+          DeviceInfo deviceInfo = DeviceInfo(
+              type: type,
+              isCanAddHot: isCanAddHot,
+              isCanSubControl: isCanSubControl,
+              classModelCount: classicModelCount,
+              bluetoothDevice: device,
+              name: device.platformName,
+              writeChar: writeChar);
+          Runtime.deviceInfo.value = deviceInfo;
+          Runtime.lastConnectDevice = device.remoteId.str;
+          showToast('达成连接');
+          break;
+        }
+      }
+    }
     EasyLoading.showSuccess('连接成功!');
     Get.back();
   }
@@ -60,9 +110,11 @@ class ScanController extends PlayDeviceBleController {
           }
         }
         if (shouldAdd) {
-          devices.add(element);
-          update([devicesListId]);
-          devicesSize.value = devices.length;
+          if(!element.device.isConnected){
+            devices.add(element);
+            update([devicesListId]);
+            devicesSize.value = devices.length;
+          }
         }
       }
     }
@@ -71,7 +123,7 @@ class ScanController extends PlayDeviceBleController {
   @override
   void onInit() {
     super.onInit();
-    eventBus.fire(AdapterStateChangedEvent(BluetoothAdapterState.on));
+    manager.startScan(timeout: 20);
   }
 
   @override
@@ -79,6 +131,7 @@ class ScanController extends PlayDeviceBleController {
     manager.stopScan();
     super.onClose();
   }
+
 
   onDeviceSelected(int index) async {
     var resultDevice = devices[index];

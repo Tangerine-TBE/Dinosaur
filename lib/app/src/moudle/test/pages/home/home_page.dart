@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 
 import 'home_controller.dart';
 
-
 class HomePage extends BaseEmptyPage<HomeController> {
   const HomePage({super.key});
 
@@ -19,12 +18,12 @@ class HomePage extends BaseEmptyPage<HomeController> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-        decoration:  BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(12),
             topLeft: Radius.circular(12),
           ),
-          boxShadow:    [
+          boxShadow: [
             BoxShadow(
               color: Colors.grey,
               offset: const Offset(2, 2),
@@ -48,14 +47,16 @@ class HomePage extends BaseEmptyPage<HomeController> {
 
   Widget _getButtonNavigationBar() {
     return ClipRRect(
-      borderRadius:  BorderRadius.only(
+      borderRadius: BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),
       child: BottomNavigationBar(
         backgroundColor: MyColors.homePageNaviBgColor,
-        unselectedLabelStyle: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),
-        selectedLabelStyle: TextStyle(fontSize: 12,fontWeight: FontWeight.w500),
+        unselectedLabelStyle:
+            TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        selectedLabelStyle:
+            TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         unselectedItemColor: MyColors.homePageNaviItemNormalColor,
         selectedItemColor: MyColors.homePageNaviItemSelectColor,
         type: BottomNavigationBarType.fixed,
@@ -88,7 +89,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
         ],
         currentIndex: controller.selectedTabIndex.value,
         onTap: (index) {
-          if(index == controller.selectedTabIndex.value){
+          if (index == controller.selectedTabIndex.value) {
             return;
           }
           controller.selectedTabIndex.value = index;
@@ -98,9 +99,9 @@ class HomePage extends BaseEmptyPage<HomeController> {
             Get.toNamed(RouteName.chartPage, id: 1);
           } else if (index == 2) {
             Get.toNamed(RouteName.petPage, id: 1);
-          } else if (index == 3){
+          } else if (index == 3) {
             Get.toNamed(RouteName.message, id: 1);
-          }else if(index == 4){
+          } else if (index == 4) {
             Get.toNamed(RouteName.minePage, id: 1);
           }
         },

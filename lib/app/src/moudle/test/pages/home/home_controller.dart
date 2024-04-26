@@ -3,6 +3,7 @@ import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/chart_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
+import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,21 +21,13 @@ import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import '../play/play_page.dart';
 
-class HomeController extends BaseController {
+class HomeController extends PlayDeviceBleController {
   final selectedTabIndex = 0.obs;
   final _loginRepo = Get.find<LoginRepo>();
 
   @override
   void onInit() async {
     super.onInit();
-    // await _loginRepo.login(
-    //   userReqBean: UserReqBean(
-    //       password: '100344',
-    //       application: '',
-    //       organization: '',
-    //       userName: 'tan',
-    //       type: ''),
-    // );
   }
   toImageView(String url,String tag){
     Get.lazyPut(

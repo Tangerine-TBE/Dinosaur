@@ -1,9 +1,10 @@
-import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/base_ble_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/device/play_device.dart';
 import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
+import 'base_ble_controller.dart';
+import 'ble_msg.dart';
 
 ///业务层面
 class PlayDeviceBleController extends BaseBleController {
@@ -27,12 +28,14 @@ class PlayDeviceBleController extends BaseBleController {
     for (var element in result) {
       var resultDevice = element.device;
       if (Runtime.lastConnectDevice.isNotEmpty &&
-          resultDevice.platformName.startsWith(Runtime.lastConnectDevice)) {
+          resultDevice.remoteId.str.startsWith(Runtime.lastConnectDevice)) {
         manager.stopScan();
         await Future.delayed(
           const Duration(seconds: 2),
         );
-        manager.connect(resultDevice, 20);
+        if(resultDevice.isDisconnected){
+          manager.connect(resultDevice, 20);
+        }
       }
     }
   }
@@ -71,6 +74,7 @@ class PlayDeviceBleController extends BaseBleController {
               ? 10
               : 12;
           DeviceInfo deviceInfo = DeviceInfo(
+              type: type,
               isCanAddHot: isCanAddHot,
               isCanSubControl: isCanSubControl,
               classModelCount: classicModelCount,
@@ -78,7 +82,8 @@ class PlayDeviceBleController extends BaseBleController {
               name: device.platformName,
               writeChar: writeChar);
           Runtime.deviceInfo.value = deviceInfo;
-          Runtime.lastConnectDevice = device.platformName;
+          Runtime.lastConnectDevice = device.remoteId.str;
+          logE(this.toString());
           showToast('达成连接');
           break;
         }

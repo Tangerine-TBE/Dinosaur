@@ -1,9 +1,15 @@
 import 'dart:async';
-import 'package:app_base/ble/event/ble_event.dart';
 import 'package:app_base/exports.dart';
 import 'package:common/common/network/status_code.dart';
+import 'package:dinosaur/app/src/moudle/test/device/base_ble_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/scan/scan_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:event_bus/event_bus.dart';
+import 'package:get/get.dart';
+
+import '../pages/home/home_controller.dart';
+
 class BleManager {
   late StreamSubscription<BluetoothAdapterState> adapterStateStateSubscription;
 
@@ -12,11 +18,10 @@ class BleManager {
   BluetoothConnectionState bluetoothConnectionState =
       BluetoothConnectionState.disconnected;
   BluetoothAdapterState bluetoothAdapterState = BluetoothAdapterState.off;
-
   //连接监听器
-  static StreamSubscription<BluetoothConnectionState>?
+  late StreamSubscription<BluetoothConnectionState>
       connectionStateSubscription;
-  EventBus? eventBus;
+
   factory BleManager() => _getInstance();
   static BleManager? _instance;
 
@@ -28,16 +33,41 @@ class BleManager {
   }
 
   BleManager._create() {
-    eventBus = EventBus();
     FlutterBluePlus.setLogLevel(LogLevel.none);
     adapterStateStateSubscription = FlutterBluePlus.adapterState.listen(
       (state) {
         bluetoothAdapterState = state;
-        eventBus?.fire(AdapterStateChangedEvent(state));
+        logE('state');
+        getController().onAdapterStateChanged(state);
       },
     );
 
   }
+
+  getController(){
+    BaseBleController controller;
+    switch(Get.routing.current){
+      case RouteName.scanPage:
+        controller=   Get.find<ScanController>();
+        break;
+      case RouteName.homePage:
+        controller=   Get.find<HomeController>();
+        break;
+      case RouteName.sidePage:
+        controller=   Get.find<SideItController>();
+
+        break;
+      case RouteName.shakePage:
+        controller=   Get.find<ShakeItController>();
+        break;
+      default:
+        controller=   Get.find<HomeController>();
+        break;
+    }
+    logE(controller.toString());
+    return controller;
+  }
+
 
   isScanning() {
     return FlutterBluePlus.isScanningNow;
@@ -58,56 +88,47 @@ class BleManager {
       timer?.cancel();
     }
     scanResultsSubscription = FlutterBluePlus.onScanResults.listen(
-          (event) {
-        eventBus?.fire(ScanResultChangedEvent(event));
+      (event) {
+        logE('scanResult');
+        getController().onScanResultChanged(event);
       },
     );
     FlutterBluePlus.startScan(
       timeout: const Duration(seconds: timeOut),
     );
   }
+
   connect(BluetoothDevice device, int time) async {
     //为这个设备注册一个连接监听器
-    bluetoothConnectionState = BluetoothConnectionState.connecting;
-    connectionStateSubscription = device.connectionState.listen((state) {
-      if (state == BluetoothConnectionState.disconnected) {
-        if (bluetoothConnectionState != BluetoothConnectionState.connecting) {
+    try{
+      await device.connect(timeout: Duration(seconds: time),autoConnect: false);
+      connectionStateSubscription = device.connectionState.listen((state) {
+        if (state == BluetoothConnectionState.disconnected) {
           if (bluetoothConnectionState !=
               BluetoothConnectionState.disconnected) {
             bluetoothConnectionState = state;
-            connectionStateSubscription?.cancel();
-            eventBus?.fire(DeviceDisconnectedEvent());
+            logE('disconnect');
+            getController().onDeviceDisconnect();
             showToast('蓝牙已断开');
           }
-        } else {
-          //状态混乱中，Android bug处理，扫描出来了但是连接失败
-          logE('状态发生混乱');
-          if (device.disconnectReason != null) {
-            var disconnectReason = device.disconnectReason;
-            int? code = disconnectReason?.code;
-            if (code != null) {
-              logE('混乱代码为：$code');
-              if (code == 62 || code == 23789258 || code == 19) {
-                bluetoothConnectionState =
-                    BluetoothConnectionState.disconnected;
-                connectionStateSubscription?.cancel();
-                eventBus?.fire(DeviceDisconnectedEvent());
-              }
-            }
+        } else if (state == BluetoothConnectionState.connected) {
+          if (bluetoothConnectionState != BluetoothConnectionState.connected) {
+            bluetoothConnectionState = state;
+            logE('connect');
+            getController().onDeviceConnected(device);
           }
-        }
-      } else if (state == BluetoothConnectionState.connected) {
-        if (bluetoothConnectionState != BluetoothConnectionState.connected) {
+        } else {
+          logE('未知的连接状态');
           bluetoothConnectionState = state;
-          eventBus?.fire(DeviceConnectedEvent(device));
+          logE('unknown');
+          getController().onDeviceUnKnownError();
         }
-      } else {
-        logE('未知的连接状态');
-        bluetoothConnectionState = state;
-        eventBus?.fire(DeviceUnknownErrorEvent(state));
-      }
-    });
-    await device.connect(timeout: Duration(seconds: time));
+      });
+    }catch(e){
+      getController().onDeviceDisconnect();
+    }
+
+
   }
 }
 

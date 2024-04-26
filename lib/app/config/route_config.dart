@@ -205,8 +205,12 @@ class RouteConfig extends ARoute {
           page: () => const LoginPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => LoginController());
-              Get.lazyPut(() => LoginRepo());
+              Get.lazyPut(
+                () => LoginController(),
+              );
+              Get.lazyPut(
+                () => LoginRepo(),
+              );
             },
           ),
         ),
@@ -216,7 +220,9 @@ class RouteConfig extends ARoute {
           page: () => const HomePage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => HomeController());
+              Get.lazyPut(
+                () => HomeController(),
+              );
               Get.lazyPut(() => LoginRepo());
             },
           ),
@@ -235,7 +241,9 @@ class RouteConfig extends ARoute {
           page: () => const ScanPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => ScanController());
+              Get.lazyPut(
+                () => ScanController(),
+              );
             },
           ),
         ),
@@ -244,7 +252,9 @@ class RouteConfig extends ARoute {
           page: () => const SideItPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => SideItController());
+              Get.lazyPut(
+                () => SideItController(),
+              );
               Get.lazyPut(() => ModelRepo());
             },
           ),
@@ -265,7 +275,9 @@ class RouteConfig extends ARoute {
           page: () => const ModelPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => ModelController());
+              Get.lazyPut(
+                () => ModelController(),
+              );
               Get.lazyPut(() => ModelRepo());
             },
           ),
@@ -275,7 +287,9 @@ class RouteConfig extends ARoute {
           page: () => const CustomModelPage(),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => CustomModelController());
+              Get.lazyPut(
+                () => CustomModelController(),
+              );
             },
           ),
         ),
@@ -284,7 +298,9 @@ class RouteConfig extends ARoute {
           page: (() => const MineCollectPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => MineCollectController());
+              Get.lazyPut(
+                () => MineCollectController(),
+              );
               Get.lazyPut(() => MineRepo());
             },
           ),
@@ -294,7 +310,10 @@ class RouteConfig extends ARoute {
           page: (() => const MineReviewPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => MineReviewController());
+              Get.lazyPut(() => MineRepo());
+              Get.lazyPut(
+                () => MineReviewController(),
+              );
             },
           ),
         ),
@@ -303,7 +322,10 @@ class RouteConfig extends ARoute {
           page: (() => const MinePostPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => MinePostController());
+              Get.lazyPut(() => MineRepo());
+              Get.lazyPut(
+                () => MinePostController(),
+              );
             },
           ),
         ),
@@ -312,7 +334,10 @@ class RouteConfig extends ARoute {
           page: (() => const MineLikePage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => MineLikeController());
+              Get.lazyPut(
+                tag: RouteName.likeView,
+                () => MineLikeController(),
+              );
               Get.lazyPut(() => MineRepo());
             },
           ),
@@ -322,7 +347,9 @@ class RouteConfig extends ARoute {
           page: (() => const CutePetPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => CutePetController());
+              Get.lazyPut(
+                () => CutePetController(),
+              );
             },
           ),
         ),
@@ -331,7 +358,9 @@ class RouteConfig extends ARoute {
           page: (() => const FaqPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => FaqController());
+              Get.lazyPut(
+                () => FaqController(),
+              );
             },
           ),
         ),
@@ -340,7 +369,9 @@ class RouteConfig extends ARoute {
           page: (() => const PeriodRecordPage()),
           binding: BindingsBuilder(
             () {
-              Get.lazyPut(() => PeriodRecordController());
+              Get.lazyPut(
+                () => PeriodRecordController(),
+              );
             },
           ),
         ),
@@ -348,7 +379,9 @@ class RouteConfig extends ARoute {
             name: RouteName.faqAsk,
             page: (() => const FaqAskPage()),
             binding: BindingsBuilder(() {
-              Get.lazyPut(() => FaqController());
+              Get.lazyPut(
+                () => FaqController(),
+              );
             }))
       ];
 }

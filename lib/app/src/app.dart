@@ -12,15 +12,19 @@ class App extends BaseMaterialApp<TemplateLauncherStrategy> {
   void buildConfig(TemplateLauncherStrategy launcherStrategy) {}
 
   @override
-  GetMaterialApp buildApp(BuildContext context) =>
-      GetMaterialApp(
+  GetMaterialApp buildApp(BuildContext context) => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
           // 安装loading
           child = GLoading.instance.init(context, child);
-          return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler:TextScaler.noScaling ), child: child);
+          return MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: TextScaler.noScaling),
+              child: child);
         },
-        theme: ThemeData(splashColor: Colors.transparent,highlightColor: Colors.transparent),
+        theme: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent),
         translations: Messages(),
         popGesture: true,
         getPages: route.getPages(),
