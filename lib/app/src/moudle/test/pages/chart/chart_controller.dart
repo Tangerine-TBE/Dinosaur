@@ -5,6 +5,7 @@ import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import 'package:app_base/mvvm/repository/chart_repo.dart';
 import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/wave/wave_form_demo_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -97,7 +98,7 @@ class SingleCharManager {
                 SizedBox(
                   height: 20,
                 ),
-                Text('没有玩具，可以减用手机震动预览波形'),
+                Text('没有玩具，可以用手机震动预览波形'),
                 SizedBox(
                   height: 20,
                 ),
@@ -116,7 +117,7 @@ class SingleCharManager {
                           Get.back();
                           await controller.navigateForResult(RouteName.scanPage);
                           if(Runtime.deviceInfo.value != null){
-                              controller.navigateTo(RouteName.waveDemo,args: Data.fromJson(json.decode(data[index].actions)).record);
+                              controller.navigateTo(RouteName.waveDemo,args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPreview]);
                           }
                         },
                         child: Text('去连接'),
@@ -145,7 +146,10 @@ class SingleCharManager {
           ),
         ),
       );
-    } else {}
+    } else {
+      controller.navigateTo(RouteName.waveDemo,args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPlay]);
+
+    }
 
     // controller.navigateTo(RouteName.waveDemo);
     // controller.update([chartListId]);
