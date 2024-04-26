@@ -1,6 +1,7 @@
 import 'package:common/base/app/base_material_app.dart';
 import 'package:common/common/widget/loading/g_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/launcher/strategy/template_launcher_strategy.dart';

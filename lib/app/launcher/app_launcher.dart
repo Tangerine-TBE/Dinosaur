@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:app_base/config/user.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../config/route_config.dart';
 import '../src/app.dart';
 
@@ -23,6 +24,7 @@ class AppLauncher {
     }
     BuildConfig.envName = launcherStrategy.envName;
     BuildConfig.host = launcherStrategy.host;
+
     runApp(App(launcherStrategy, RouteConfig()));
     logE(User.loginRspBean?.toJson().toString());
     if (Platform.isAndroid) {

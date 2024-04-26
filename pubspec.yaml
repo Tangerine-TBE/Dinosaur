@@ -24,6 +24,7 @@ dependencies:
   vibration: ^1.8.4
   pinput: ^4.0.0
   image: ^4.1.7
+  flutter_native_splash: ^2.4.0
   flutter_sound: ^9.4.6
   sensors_plus: ^4.0.2
   banner_carousel: ^1.2.1
