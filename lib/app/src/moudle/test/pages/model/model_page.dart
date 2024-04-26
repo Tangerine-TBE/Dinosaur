@@ -191,17 +191,20 @@ class ModelPage extends BaseEmptyPage<ModelController>
   _buildContentClassic01() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            mainAxisExtent: 83),
-        itemBuilder: (context, index) {
-          return _buildTemplateModelItem(index);
-        },
-        itemCount: 12,
-      ),
+      child: GetBuilder<ModelController>(builder: (controller){
+        return
+          GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                mainAxisExtent: 83),
+            itemBuilder: (context, index) {
+              return _buildTemplateModelItem(index);
+            },
+            itemCount: 12,
+          );
+      },id: controller.listData,),
     );
   }
 
