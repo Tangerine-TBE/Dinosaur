@@ -337,7 +337,6 @@ class RouteConfig extends ARoute {
           binding: BindingsBuilder(
             () {
               Get.lazyPut(
-                tag: RouteName.likeView,
                 () => MineLikeController(),
               );
               Get.lazyPut(() => MineRepo());
