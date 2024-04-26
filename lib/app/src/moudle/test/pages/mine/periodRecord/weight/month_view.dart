@@ -68,7 +68,7 @@ class MonthView extends StatelessWidget {
       TextStyle textStyle;
       if (isSelected) {
         decoration = BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: MyColors.themeTextColor,
           shape: BoxShape.circle,
         );
       } else
