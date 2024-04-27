@@ -22,71 +22,71 @@ class DynamicPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LoadMoreListView.customScrollView(
-        onLoadMore: controller.dynamicManager.loadMoreList,
-        loadMoreWidget: Container(
-          margin: const EdgeInsets.all(20),
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
-          ),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  padding:
-                  const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: BannerCarousel.fullScreen(
-                    animation: true,
-                    height: 106,
-                    banners: controller.dynamicManager.listBanners,
-                    showIndicator: true,
-                    indicatorBottom: false,
-                    borderRadius: 10,
-                    disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                    activeColor: const Color(0xffFFFFFF),
-                    customizedIndicators: const IndicatorModel.animation(
-                      width: 5,
-                      height: 5,
-                      spaceBetween: 4,
+    return SafeArea(child: Obx(() =>
+        LoadMoreListView.customScrollView(
+          onLoadMore:controller.dynamicManager.canLoadMore.value? controller.dynamicManager.loadMoreList:null,
+          loadMoreWidget:controller.dynamicManager.canLoadMore.value ?Container(
+            margin: const EdgeInsets.all(20),
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
+            ),
+          ):null,
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Container(
+                    padding:
+                    const EdgeInsets.only(right: 18, left: 18, bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: BannerCarousel.fullScreen(
+                      animation: true,
+                      height: 106,
+                      banners: controller.dynamicManager.listBanners,
+                      showIndicator: true,
+                      indicatorBottom: false,
+                      borderRadius: 10,
+                      disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                      activeColor: const Color(0xffFFFFFF),
+                      customizedIndicators: const IndicatorModel.animation(
+                        width: 5,
+                        height: 5,
+                        spaceBetween: 4,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-          GetBuilder<PetController>(
-            builder: (controller) {
-              return controller.dynamicManager.dataList.isNotEmpty
-                  ? SliverList.builder(
-                itemBuilder: (context, index) {
-                  return _buildItem(index,
-                      controller.dynamicManager.dataList[index], context);
-                },
-                itemCount: controller.dynamicManager.dataList.length,
-              )
-                  : const SliverFillRemaining(
-                child: SizedBox(
-                  child: NoDataWidget(
-                    title: '暂无记录',
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              );
-            },
-            id: controller.dynamicManager.listId,
-          ),
-        ],
-      ),
-    );
+                ],
+              ),
+            ),
+            GetBuilder<PetController>(
+              builder: (controller) {
+                return controller.dynamicManager.dataList.isNotEmpty
+                    ? SliverList.builder(
+                  itemBuilder: (context, index) {
+                    return _buildItem(index,
+                        controller.dynamicManager.dataList[index], context);
+                  },
+                  itemCount: controller.dynamicManager.dataList.length,
+                )
+                    : const SliverFillRemaining(
+                  child: SizedBox(
+                    child: NoDataWidget(
+                      title: '暂无记录',
+                    ),
+                  ),
+                );
+              },
+              id: controller.dynamicManager.listId,
+            ),
+          ],
+        )
+    ));
   }
 
   _buildItem(int index, PostsList item, BuildContext context) {

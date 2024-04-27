@@ -131,9 +131,7 @@ class SingleCharManager {
                         onPressed: ()  {
                           Get.back();
                            controller.navigateForResult(RouteName.waveDemo,
-                              args: Data.fromJson(
-                                      json.decode(data[index].actions))
-                                  .record);
+                              args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPreview]);
 
                         },
                         child: Text('预览'),

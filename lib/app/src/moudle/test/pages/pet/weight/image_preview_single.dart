@@ -1,10 +1,10 @@
-import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ImagePreViewSingle extends StatefulWidget {
   final String url;
@@ -74,7 +74,20 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
     } else if (imageWidth < imageHeight) {
       return buildImageViewWithWidth();
     } else {
-      return SizedBox(
+      return widget.image == null?
+      SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: Image.asset(
+            ResName.loaded_failure,
+            fit: BoxFit.contain,
+          ),
+        ),
+      )
+          :
+          SizedBox(
         width: widget.size,
         height: widget.size,
         child: ClipRRect(
@@ -89,11 +102,18 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
   }
 
   Widget buildImageViewWithHeight() {
-    var boxHeight = widget.size * widget.imageHeight/ widget.imageWidth ;
+    var boxHeight = widget.size * widget.imageHeight / widget.imageWidth;
     return widget.image == null
         ? SizedBox(
             width: widget.size,
             height: boxHeight,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.asset(
+                ResName.loaded_failure,
+                fit: BoxFit.contain,
+              ),
+            ),
           )
         : SizedBox(
             width: widget.size,
@@ -109,26 +129,32 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
   }
 
   Widget buildImageViewWithWidth() {
-    double boxWidth = widget.size*widget.imageWidth / widget.imageHeight ;
+    double boxWidth = widget.size * widget.imageWidth / widget.imageHeight;
 
     return widget.image == null
         ? SizedBox(
-      width: boxWidth,
-      height: widget.size,
-    )
-        : SizedBox(
-      width: boxWidth,
-      height: widget.size,
+            width: boxWidth,
+            height: widget.size,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
-        child: RawImage(
-          image: widget.image,
-          fit: BoxFit.cover,
+        child: Image.asset(
+          ResName.loaded_failure,
+          fit: BoxFit.contain,
         ),
       ),
-    );
+          )
+        : SizedBox(
+            width: boxWidth,
+            height: widget.size,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: RawImage(
+                image: widget.image,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
   }
-
 
   @override
   bool get wantKeepAlive => true;

@@ -52,7 +52,7 @@ class EditInfoController extends BaseController {
     update([listId]);
   }
 
-  onItemClicked(int index)  {
+  onItemClicked(int index) {
     if (index == 0) {
       showNickNameEditBottomSheet(listData[0]);
     } else if (index == 1) {
@@ -60,7 +60,7 @@ class EditInfoController extends BaseController {
     } else if (index == 2) {
       showSignTextEditBottomSheet(listData[2]);
     } else if (index == 3) {
-    } else if (index == 4)  {
+    } else if (index == 4) {
       DatePicker.showDatePicker(
         Get.context!,
         showTitleActions: true,
@@ -71,7 +71,7 @@ class EditInfoController extends BaseController {
               title: listData[4].title,
               content: '${date.year}-${date.month}-${date.day}',
               hintText: listData[4].hintText);
-          listData[4]= exchangedBean;
+          listData[4] = exchangedBean;
           update([listId]);
         },
         currentTime: DateTime.tryParse(listData[index].content),
@@ -114,10 +114,10 @@ class EditInfoController extends BaseController {
   showImagePickerBottomSheet(RxString value) async {
     await Get.bottomSheet(
       Container(
-        height: value.value.isNotEmpty ? 200 : 150,
+        height: value.value.isNotEmpty ? 200 : 180,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
         ),
         child: Container(
           decoration: BoxDecoration(
@@ -212,16 +212,19 @@ class EditInfoController extends BaseController {
                 color: MyColors.textGreyColor.withOpacity(0.3),
                 thickness: 5,
               ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+              SafeArea(
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
+
             ],
           ),
         ),
@@ -310,7 +313,8 @@ class EditInfoController extends BaseController {
   showSignVoiceEditBottomSheet(ItemBean itemBean) async {
     await Get.bottomSheet(
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding:
+            const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -321,7 +325,6 @@ class EditInfoController extends BaseController {
         child: Column(
           children: [
             SizedBox(
-              height: 50,
               child: Row(
                 children: [
                   InkWell(
@@ -344,26 +347,12 @@ class EditInfoController extends BaseController {
                       ),
                     ),
                   ),
-                  // MaterialButton(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  //   color: MyColors.themeTextColor,
-                  //   minWidth: 20,
-                  //   height: 30,
-                  //   shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //       side: const BorderSide(color: Colors.black)),
-                  //   onPressed: () {
-                  //     update([listId]);
-                  //     finish();
-                  //   },
-                  //   child: const Text('保存'),
-                  // ),
                 ],
               ),
             ),
             Text('不知道说什么？点这里找灵感'),
-            SizedBox(
-              height: 4,
+            const SizedBox(
+              height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -447,8 +436,29 @@ class EditInfoController extends BaseController {
               padding: EdgeInsets.symmetric(horizontal: 34),
               child: Divider(),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                margin: EdgeInsets.only(right: 34),
+                constraints: BoxConstraints.loose(Size(200, 60)),
+                decoration: BoxDecoration(
+                  color: MyColors.themeTextColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.surround_sound),
+                    Expanded(
+                      child: Text('sousd'),
+                    ),
+                    Icon(Icons.cancel_outlined),
+                  ],
+                ),
+              ),
+            ),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             Text(
               '录制长于10秒的声音',
@@ -467,19 +477,24 @@ class EditInfoController extends BaseController {
               ),
             ),
             Expanded(
-              child: RecordSoundView(
-                recordEndCallback: () {
-                  recordStop();
-                },
-                recordStartCallback: recordStart,
-                saveRecordClicked: () {},
-                dismissRecordClicked: () {},
-                startPlayed: () {
-                  startPlay();
-                },
-                stopPlayed: () {
-                  stopPlay();
-                },
+              child: SafeArea(
+                top: false,
+                child: RecordSoundView(
+                  recordEndCallback: () {
+                    recordStop();
+                  },
+                  recordStartCallback: recordStart,
+                  saveRecordClicked: () {
+                    logE('save');
+                  },
+                  dismissRecordClicked: () {},
+                  startPlayed: () {
+                    startPlay();
+                  },
+                  stopPlayed: () {
+                    stopPlay();
+                  },
+                ),
               ),
             ),
           ],

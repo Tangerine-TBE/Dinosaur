@@ -41,6 +41,7 @@ class ChartPage extends BaseEmptyPage<ChartController>
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: AppBar(
+              centerTitle: false,
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
               elevation: 0.0,

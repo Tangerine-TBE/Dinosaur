@@ -36,6 +36,7 @@ class MessagePage extends BaseEmptyPage<MessageController>
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: AppBar(
+              centerTitle: false,
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
               elevation: 0.0,

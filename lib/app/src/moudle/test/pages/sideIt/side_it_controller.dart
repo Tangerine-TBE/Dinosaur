@@ -52,7 +52,7 @@ class SideItController extends PlayDeviceBleController {
   }
 
   _initTimer() {
-
+    Runtime.deviceInfo.value?.writeChar.write(bleMsg.unQueue());
     loopTimer = Timer.periodic(
       const Duration(milliseconds: 200),
       (timer) {

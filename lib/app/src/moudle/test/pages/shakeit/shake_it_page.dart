@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -46,7 +47,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 const Text(
                   '试着用手晃动手机,体验不同的震感快乐',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: MyColors.textBlackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -147,7 +148,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 const Text(
                   '试着用手晃动手机,体验不同的震感快乐',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: MyColors.textBlackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

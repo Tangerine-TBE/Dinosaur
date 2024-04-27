@@ -43,6 +43,7 @@ class PetPage extends BaseEmptyPage<PetController>
             child: AppBar(
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
+              centerTitle: false,
               elevation: 0.0,
               title: TabBar(
                 controller: tabController,

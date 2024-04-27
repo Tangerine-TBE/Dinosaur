@@ -22,68 +22,70 @@ class RefreshPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: LoadMoreListView.customScrollView(
-        onLoadMore: controller.refreshManager.loadMoreList,
-        loadMoreWidget: Container(
-          margin: const EdgeInsets.all(20),
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
-          ),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  padding:
+      child: Obx(() =>
+          LoadMoreListView.customScrollView(
+            onLoadMore:controller.refreshManager.canLoadMore.value? controller.refreshManager.loadMoreList:null,
+            loadMoreWidget:controller.refreshManager.canLoadMore.value ?Container(
+              margin: const EdgeInsets.all(20),
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
+              ),
+            ):null,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      padding:
                       const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: BannerCarousel.fullScreen(
-                    animation: true,
-                    height: 106,
-                    banners: controller.refreshManager.listBanners,
-                    showIndicator: true,
-                    indicatorBottom: false,
-                    borderRadius: 10,
-                    disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                    activeColor: const Color(0xffFFFFFF),
-                    customizedIndicators: const IndicatorModel.animation(
-                      width: 5,
-                      height: 5,
-                      spaceBetween: 4,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-          GetBuilder<PetController>(
-            builder: (controller) {
-              return controller.refreshManager.dataList.isNotEmpty
-                  ? SliverList.builder(
-                      itemBuilder: (context, index) {
-                        return _buildItem(index,
-                            controller.refreshManager.dataList[index], context);
-                      },
-                      itemCount: controller.refreshManager.dataList.length,
-                    )
-                  : const SliverFillRemaining(
-                      child: SizedBox(
-                        child: NoDataWidget(
-                          title: '暂无记录',
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BannerCarousel.fullScreen(
+                        animation: true,
+                        height: 106,
+                        banners: controller.refreshManager.listBanners,
+                        showIndicator: true,
+                        indicatorBottom: false,
+                        borderRadius: 10,
+                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                        activeColor: const Color(0xffFFFFFF),
+                        customizedIndicators: const IndicatorModel.animation(
+                          width: 5,
+                          height: 5,
+                          spaceBetween: 4,
                         ),
                       ),
-                    );
-            },
-            id: controller.refreshManager.listId,
-          ),
-        ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              GetBuilder<PetController>(
+                builder: (controller) {
+                  return controller.refreshManager.dataList.isNotEmpty
+                      ? SliverList.builder(
+                    itemBuilder: (context, index) {
+                      return _buildItem(index,
+                          controller.refreshManager.dataList[index], context);
+                    },
+                    itemCount: controller.refreshManager.dataList.length,
+                  )
+                      : const SliverFillRemaining(
+                    child: SizedBox(
+                      child: NoDataWidget(
+                        title: '暂无记录',
+                      ),
+                    ),
+                  );
+                },
+                id: controller.refreshManager.listId,
+              ),
+            ],
+          )
       ),
     );
   }

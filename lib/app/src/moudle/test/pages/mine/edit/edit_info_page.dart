@@ -60,7 +60,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                             ? Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.textGreyColor
-                                                .withOpacity(0.7),
+                                                ,
                                             border: const Border(
                                               right: BorderSide(
                                                 color: Colors.white,
@@ -82,7 +82,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                             : Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.textGreyColor
-                                                .withOpacity(0.7),
+                                                ,
                                             border: const Border(
                                               right: BorderSide(
                                                 color: Colors.white,
@@ -113,7 +113,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   ? Container(
                                                 decoration: BoxDecoration(
                                                   color: MyColors.textGreyColor
-                                                      .withOpacity(0.7),
+                                                      ,
                                                   border: const Border(
                                                     right: BorderSide(
                                                       color: Colors.white,
@@ -135,7 +135,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   : Container(
                                                 decoration: BoxDecoration(
                                                   color: MyColors.textGreyColor
-                                                      .withOpacity(0.7),
+                                                      ,
                                                   border: const Border(
                                                     right: BorderSide(
                                                       color: Colors.white,
@@ -162,7 +162,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   ? Container(
                                                 decoration: BoxDecoration(
                                                   color: MyColors.textGreyColor
-                                                      .withOpacity(0.7),
+                                                      ,
                                                   border: const Border(
                                                     right: BorderSide(
                                                       color: Colors.white,
@@ -184,7 +184,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                   : Container(
                                                 decoration: BoxDecoration(
                                                   color: MyColors.textGreyColor
-                                                      .withOpacity(0.7),
+                                                      ,
                                                   border: const Border(
                                                     right: BorderSide(
                                                       color: Colors.white,
@@ -222,7 +222,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                             ? Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.textGreyColor
-                                                .withOpacity(0.7),
+                                                ,
                                             border: const Border(
                                               right: BorderSide(
                                                 color: Colors.white,
@@ -244,7 +244,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                             : Container(
                                           decoration: BoxDecoration(
                                             color: MyColors.textGreyColor
-                                                .withOpacity(0.7),
+                                                ,
                                             border: const Border(
                                               right: BorderSide(
                                                 color: Colors.white,
@@ -272,7 +272,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                               ? Container(
                                             decoration: BoxDecoration(
                                               color: MyColors.textGreyColor
-                                                  .withOpacity(0.7),
+                                                  ,
                                               border: const Border(
                                                 right: BorderSide(
                                                   color: Colors.white,
@@ -294,7 +294,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                               : Container(
                                             decoration: BoxDecoration(
                                               color: MyColors.textGreyColor
-                                                  .withOpacity(0.7),
+                                                  ,
                                               border: const Border(
                                                 right: BorderSide(
                                                   color: Colors.white,
@@ -323,7 +323,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                 ? Container(
                                               decoration: BoxDecoration(
                                                 color: MyColors.textGreyColor
-                                                    .withOpacity(0.7),
+                                                    ,
                                                 border: const Border(
                                                   right: BorderSide(
                                                     color: Colors.white,
@@ -345,7 +345,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                 : Container(
                                               decoration: BoxDecoration(
                                                 color: MyColors.textGreyColor
-                                                    .withOpacity(0.7),
+                                                    ,
                                                 border: const Border(
                                                   right: BorderSide(
                                                     color: Colors.white,

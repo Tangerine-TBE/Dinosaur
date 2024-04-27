@@ -13,6 +13,7 @@ class FaqPage extends BaseEmptyPage<FaqController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           '常见问题',
           style: TextStyle(fontSize: 18),

@@ -24,68 +24,74 @@ class CommonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: LoadMoreListView.customScrollView(
-        onLoadMore: controller.commonManager.loadMoreList,
-        loadMoreWidget: Container(
-          margin: const EdgeInsets.all(20),
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
-          ),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  padding:
-                  const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: BannerCarousel.fullScreen(
-                    animation: true,
-                    height: 106,
-                    banners: controller.commonManager.listBanners,
-                    showIndicator: true,
-                    indicatorBottom: false,
-                    borderRadius: 10,
-                    disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                    activeColor: const Color(0xffFFFFFF),
-                    customizedIndicators: const IndicatorModel.animation(
-                      width: 5,
-                      height: 5,
-                      spaceBetween: 4,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-          ),
-          GetBuilder<PetController>(
-            builder: (controller) {
-              return controller.commonManager.dataList.isNotEmpty
-                  ? SliverList.builder(
-                itemBuilder: (context, index) {
-                  return _buildItem(index,
-                      controller.commonManager.dataList[index], context);
-                },
-                itemCount: controller.commonManager.dataList.length,
-              )
-                  : const SliverFillRemaining(
-                child: SizedBox(
-                  child: NoDataWidget(
-                    title: '暂无记录',
-                  ),
-                ),
-              );
+      child: Obx(() =>
+          LoadMoreListView.customScrollView(
+            onRefresh: ()async{
+             await Future.delayed(Duration(seconds: 2));
             },
-            id: controller.commonManager.listId,
-          ),
-        ],
+            onLoadMore:controller.commonManager.canLoadMore.value? controller.commonManager.loadMoreList:null,
+            loadMoreWidget:controller.commonManager.canLoadMore.value ?Container(
+              margin: const EdgeInsets.all(20),
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
+              ),
+            ):null,
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      padding:
+                      const EdgeInsets.only(right: 18, left: 18, bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BannerCarousel.fullScreen(
+                        animation: true,
+                        height: 106,
+                        banners: controller.commonManager.listBanners,
+                        showIndicator: true,
+                        indicatorBottom: false,
+                        borderRadius: 10,
+                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                        activeColor: const Color(0xffFFFFFF),
+                        customizedIndicators: const IndicatorModel.animation(
+                          width: 5,
+                          height: 5,
+                          spaceBetween: 4,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              GetBuilder<PetController>(
+                builder: (controller) {
+                  return controller.commonManager.dataList.isNotEmpty
+                      ? SliverList.builder(
+                    itemBuilder: (context, index) {
+                      return _buildItem(index,
+                          controller.commonManager.dataList[index], context);
+                    },
+                    itemCount: controller.commonManager.dataList.length,
+                  )
+                      : const SliverFillRemaining(
+                    child: SizedBox(
+                      child: NoDataWidget(
+                        title: '暂无记录',
+                      ),
+                    ),
+                  );
+                },
+                id: controller.commonManager.listId,
+              ),
+            ],
+          )
+
       ),
     );
   }

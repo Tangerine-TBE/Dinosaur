@@ -9,7 +9,9 @@ import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/image_preview_single.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../home/home_controller.dart';
@@ -31,8 +33,9 @@ class PetController extends BaseController {
     commonManager.init();
     super.onInit();
   }
+
   @override
-  void onReady(){
+  void onReady() {
     showTipDialog();
   }
 
@@ -160,11 +163,14 @@ class PetController extends BaseController {
   }
 
   showTipDialog() {
-    Get.dialog(TipsDialogWidget(onButtonClick: (){
-      logE('msg');
-    },),);
+    Get.dialog(
+      TipsDialogWidget(
+        onButtonClick: () {
+          logE('msg');
+        },
+      ),
+    );
   }
-
 }
 
 class CommonManager {
@@ -174,6 +180,7 @@ class CommonManager {
   final listId = 1;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final canLoadMore = false.obs;
 
   CommonManager({required this.controller, required this.pushRepo});
 
@@ -202,44 +209,52 @@ class CommonManager {
 
   showBottomSheet() {
     Get.bottomSheet(
-      Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      SafeArea(
         child: Container(
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                },
-                child: const Text(
-                  '举报',
-                  style: TextStyle(color: Colors.black),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '举报',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              Divider(
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+                Divider(
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
                 ),
-              ),
-            ],
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -252,8 +267,6 @@ class CommonManager {
       isInit = true;
     }
   }
-
-
 
   getList() async {
     final response = await pushRepo.getPushMsg(
@@ -269,6 +282,7 @@ class CommonManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          canLoadMore.value = true;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -293,6 +307,7 @@ class DynamicManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final canLoadMore = false.obs;
 
   DynamicManager({required this.controller, required this.pushRepo});
 
@@ -326,6 +341,7 @@ class DynamicManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          canLoadMore.value = true;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -358,44 +374,49 @@ class DynamicManager {
 
   showBottomSheet() {
     Get.bottomSheet(
-      Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      SafeArea(
         child: Container(
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                },
-                child: const Text(
-                  '举报',
-                  style: TextStyle(color: Colors.black),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '举报',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              Divider(
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+                Divider(
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
                 ),
-              ),
-            ],
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -410,6 +431,7 @@ class HandPickManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final canLoadMore = false.obs;
 
   HandPickManager({required this.controller, required this.pushRepo});
 
@@ -454,44 +476,49 @@ class HandPickManager {
 
   showBottomSheet() {
     Get.bottomSheet(
-      Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      SafeArea(
         child: Container(
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                },
-                child: const Text(
-                  '举报',
-                  style: TextStyle(color: Colors.black),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '举报',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              Divider(
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+                Divider(
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
                 ),
-              ),
-            ],
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -512,6 +539,7 @@ class HandPickManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          canLoadMore.value = true;
           dataList.addAll(list);
           controller.update([listId]);
         }
@@ -527,6 +555,7 @@ class RefreshManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final canLoadMore = false.obs;
 
   RefreshManager({required this.controller, required this.pushRepo});
 
@@ -571,44 +600,49 @@ class RefreshManager {
 
   showBottomSheet() {
     Get.bottomSheet(
-      Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      SafeArea(
         child: Container(
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                },
-                child: const Text(
-                  '举报',
-                  style: TextStyle(color: Colors.black),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '举报',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              Divider(
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+                Divider(
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
                 ),
-              ),
-            ],
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -629,6 +663,7 @@ class RefreshManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          canLoadMore.value = true;
           dataList.addAll(list);
           controller.update([listId]);
         }

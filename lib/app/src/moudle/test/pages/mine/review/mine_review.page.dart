@@ -14,7 +14,14 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的评论'),
+        centerTitle: false,
+        title: Text(
+          '我的评论',
+          style: TextStyle(
+            fontSize: 18,
+            color: MyColors.textBlackColor,
+          ),
+        ),
       ),
       body: DefaultTabController(
         length: 2,
@@ -91,19 +98,17 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
 
   _buildItem(int index) {
     return Container(
-
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-          boxShadow:    [
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+          boxShadow: [
             BoxShadow(
               color: Colors.grey,
               offset: const Offset(2, 2),
               blurRadius: 4,
               spreadRadius: 0,
             ),
-          ]
-      ),
+          ]),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       width: double.infinity,
       child: Column(
