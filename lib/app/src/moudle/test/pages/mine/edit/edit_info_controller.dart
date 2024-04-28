@@ -168,7 +168,10 @@ class EditInfoController extends BaseController {
                   if ((path?.length ?? 0) > 0) {
                     CroppedFile? croppedFile = await ImageCropper().cropImage(
                       sourcePath: path!,
-                      aspectRatioPresets: [CropAspectRatioPreset.square],
+                      compressQuality: 100,
+                      maxHeight: 700,
+                      maxWidth: 700,
+                      aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
                       uiSettings: [
                         AndroidUiSettings(
                           toolbarTitle: '裁剪',
@@ -177,7 +180,10 @@ class EditInfoController extends BaseController {
                           initAspectRatio: CropAspectRatioPreset.square,
                           lockAspectRatio: true,
                         ),
-                        IOSUiSettings(title: '裁剪')
+                        IOSUiSettings(title: '裁剪',
+                          aspectRatioLockEnabled: true,
+                          resetAspectRatioEnabled: false,
+                        )
                       ],
                     );
                     if (croppedFile != null) {
