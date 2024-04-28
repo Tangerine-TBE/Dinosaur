@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'home_controller.dart';
 
 class HomePage extends BaseEmptyPage<HomeController> {
+  @override
+  bool get canPopBack => false;
   const HomePage({super.key});
 
   @override

@@ -18,6 +18,8 @@ import '../../weight/loadmore_listview.dart';
 
 class PlayPage extends BaseEmptyPage<PlayController> {
   const PlayPage({super.key});
+  @override
+  bool get canPopBack => false;
 
   @override
   Color get background => MyColors.pageBgColor;

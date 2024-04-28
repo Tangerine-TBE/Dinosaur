@@ -14,7 +14,8 @@ import '../play/weight/curved_indicator.dart';
 class MessagePage extends BaseEmptyPage<MessageController>
     implements SingleTickerProviderStateMixin {
   const MessagePage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Widget buildContent(BuildContext context) {
     TabController tabController = TabController(length: 3, vsync: this);

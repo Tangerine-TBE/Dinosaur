@@ -16,7 +16,8 @@ import '../play/weight/curved_indicator.dart';
 class ChartPage extends BaseEmptyPage<ChartController>
     implements SingleTickerProviderStateMixin {
   const ChartPage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Color get background => MyColors.pageBgColor;
 

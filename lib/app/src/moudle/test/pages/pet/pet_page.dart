@@ -16,7 +16,8 @@ import '../play/weight/curved_indicator.dart';
 class PetPage extends BaseEmptyPage<PetController>
     implements SingleTickerProviderStateMixin {
   const PetPage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Color get background => MyColors.pageBgColor;
 

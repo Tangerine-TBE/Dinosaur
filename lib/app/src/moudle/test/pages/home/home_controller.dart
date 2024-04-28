@@ -29,14 +29,14 @@ class HomeController extends PlayDeviceBleController {
   void onInit() async {
     super.onInit();
   }
-  toImageView(String url,String tag){
-    Get.lazyPut(
-          () => ImageViewController(),tag: tag
-    );
-    final Route route =
-    MaterialPageRoute(builder: (context) =>  ImageViewPage(tagString: tag,urlString: url));
+
+  toImageView(String url, String tag) {
+    Get.lazyPut(() => ImageViewController(), tag: tag);
+    final Route route = MaterialPageRoute(
+        builder: (context) => ImageViewPage(tagString: tag, urlString: url));
     Navigator.of(Get.context!).push(route);
   }
+
   Route? onGenerateRoute(RouteSettings settings) {
     if (settings.name == RouteName.playPage) {
       return GetPageRoute(
@@ -44,11 +44,12 @@ class HomeController extends PlayDeviceBleController {
         page: () => const PlayPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-              () {
+          () {
             Get.lazyPut(() => PlayController());
             Get.lazyPut(() => PlayRepo());
           },
         ),
+        popGesture: false,
       );
     } else if (settings.name == RouteName.chartPage) {
       return GetPageRoute(
@@ -56,11 +57,12 @@ class HomeController extends PlayDeviceBleController {
         page: () => const ChartPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-              () {
+          () {
             Get.lazyPut(() => ChartController());
             Get.lazyPut(() => ChartRepo());
           },
         ),
+        popGesture: false,
       );
     } else if (settings.name == RouteName.minePage) {
       return GetPageRoute(
@@ -68,10 +70,11 @@ class HomeController extends PlayDeviceBleController {
         page: () => const MinePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-              () {
+          () {
             Get.lazyPut(() => MineController());
           },
         ),
+        popGesture: false,
       );
     } else if (settings.name == RouteName.petPage) {
       return GetPageRoute(
@@ -79,11 +82,12 @@ class HomeController extends PlayDeviceBleController {
         page: () => const PetPage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-              () {
+          () {
             Get.lazyPut(() => PetController());
             Get.lazyPut(() => PushRepo());
           },
         ),
+        popGesture: false,
       );
     } else if (settings.name == RouteName.message) {
       return GetPageRoute(
@@ -91,11 +95,12 @@ class HomeController extends PlayDeviceBleController {
         page: () => const MessagePage(),
         transition: Transition.noTransition,
         binding: BindingsBuilder(
-              () {
+          () {
             Get.lazyPut(() => MessageController());
             Get.lazyPut(() => PushRepo());
           },
         ),
+        popGesture: false,
       );
     }
     return null;

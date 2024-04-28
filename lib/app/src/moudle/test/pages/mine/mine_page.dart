@@ -9,7 +9,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/mine_controller.dart';
 
 class MinePage extends BaseEmptyPage<MineController> {
   const MinePage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Color get background => MyColors.pageBgColor;
 
