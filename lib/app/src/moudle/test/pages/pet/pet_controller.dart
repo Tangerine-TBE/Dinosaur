@@ -5,6 +5,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
@@ -30,12 +31,12 @@ class PetController extends BaseController {
     dynamicManager = DynamicManager(controller: this, pushRepo: _pushRepo);
     handPickManager = HandPickManager(controller: this, pushRepo: _pushRepo);
     refreshManager = RefreshManager(controller: this, pushRepo: _pushRepo);
-    commonManager.init();
     super.onInit();
   }
 
   @override
   void onReady() {
+    commonManager.init();
     showTipDialog();
   }
 
@@ -181,16 +182,17 @@ class CommonManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
+  final refreshController = RefreshController(initialRefresh: false);
 
   CommonManager({required this.controller, required this.pushRepo});
 
-  Future loadMoreList() async {
+  Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex + 1,
+          pageIndex: isRefresh ? 1 : pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Recomed'),
@@ -199,10 +201,35 @@ class CommonManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex = pageIndex + 1;
+          if (isRefresh) {
+            dataList.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
           dataList.addAll(list);
           controller.update([listId]);
         }
+      }
+    }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
       }
     }
   }
@@ -263,32 +290,12 @@ class CommonManager {
 
   init() {
     if (!isInit) {
-      getList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
 
-  getList() async {
-    final response = await pushRepo.getPushMsg(
-      PushMsgReq(
-          userId: User.loginRspBean!.userId,
-          topicId: 'Recomed',
-          pageIndex: 1,
-          pageSize: 10,
-          orderBy: 'createTime desc',
-          postsType: 'Recomed'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        var list = response.data!.data!.postsList;
-        if (list.isNotEmpty) {
-          canLoadMore.value = true;
-          dataList.addAll(list);
-          controller.update([listId]);
-        }
-      }
-    }
-  }
+
 
   List<BannerModel> get listBanners {
     return [
@@ -308,15 +315,11 @@ class DynamicManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
+  final refreshController = RefreshController(initialRefresh: false);
 
   DynamicManager({required this.controller, required this.pushRepo});
 
-  init() {
-    if (!isInit) {
-      getList();
-      isInit = true;
-    }
-  }
+
 
   List<BannerModel> get listBanners {
     return [
@@ -327,35 +330,13 @@ class DynamicManager {
     ];
   }
 
-  getList() async {
-    final response = await pushRepo.getPushMsg(
-      PushMsgReq(
-          userId: User.loginRspBean!.userId,
-          topicId: '',
-          pageIndex: 1,
-          pageSize: 10,
-          orderBy: 'createTime desc',
-          postsType: 'Dynamic'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        var list = response.data!.data!.postsList;
-        if (list.isNotEmpty) {
-          canLoadMore.value = true;
-          dataList.addAll(list);
-          controller.update([listId]);
-        }
-      }
-    }
-  }
-
-  Future loadMoreList() async {
+  Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex + 1,
+          pageIndex: isRefresh ? 1 : pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Dynamic'),
@@ -364,10 +345,35 @@ class DynamicManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex = pageIndex + 1;
+          if (isRefresh) {
+            dataList.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
           dataList.addAll(list);
           controller.update([listId]);
         }
+      }
+    }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
       }
     }
   }
@@ -387,7 +393,10 @@ class DynamicManager {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
             ),
             child: Column(
               children: [
@@ -422,6 +431,13 @@ class DynamicManager {
       ),
     );
   }
+
+  init() {
+    if (!isInit) {
+      refreshController.requestRefresh();
+      isInit = true;
+    }
+  }
 }
 
 class HandPickManager {
@@ -432,6 +448,7 @@ class HandPickManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
+  final refreshController = RefreshController(initialRefresh: false);
 
   HandPickManager({required this.controller, required this.pushRepo});
 
@@ -446,33 +463,59 @@ class HandPickManager {
 
   init() {
     if (!isInit) {
-      getList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
 
-  Future loadMoreList() async {
+  Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex + 1,
+          pageIndex: isRefresh ? 1 : pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
-          postsType: 'Curated'),
+          postsType: 'Recomed'),
     );
     if (response.isSuccess) {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
-          pageIndex = pageIndex + 1;
+          if (isRefresh) {
+            dataList.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
           dataList.addAll(list);
           controller.update([listId]);
         }
       }
     }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    }
   }
+
 
   showBottomSheet() {
     Get.bottomSheet(
@@ -525,27 +568,6 @@ class HandPickManager {
     );
   }
 
-  getList() async {
-    final response = await pushRepo.getPushMsg(
-      PushMsgReq(
-          userId: User.loginRspBean!.userId,
-          topicId: '',
-          pageIndex: 1,
-          pageSize: 10,
-          orderBy: 'createTime desc',
-          postsType: 'Curated'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        var list = response.data!.data!.postsList;
-        if (list.isNotEmpty) {
-          canLoadMore.value = true;
-          dataList.addAll(list);
-          controller.update([listId]);
-        }
-      }
-    }
-  }
 }
 
 class RefreshManager {
@@ -556,6 +578,7 @@ class RefreshManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
+  final refreshController = RefreshController(initialRefresh: false);
 
   RefreshManager({required this.controller, required this.pushRepo});
 
@@ -568,7 +591,7 @@ class RefreshManager {
     ];
   }
 
-  Future loadMoreList() async {
+  Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
@@ -583,17 +606,44 @@ class RefreshManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          if (isRefresh) {
+            dataList.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
           pageIndex = pageIndex + 1;
           dataList.addAll(list);
           controller.update([listId]);
         }
       }
     }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    }
+
   }
 
   init() {
     if (!isInit) {
-      getList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
@@ -649,25 +699,4 @@ class RefreshManager {
     );
   }
 
-  getList() async {
-    final response = await pushRepo.getPushMsg(
-      PushMsgReq(
-          userId: User.loginRspBean!.userId,
-          topicId: '',
-          pageIndex: 1,
-          pageSize: 10,
-          orderBy: 'createTime desc',
-          postsType: 'Latest'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        var list = response.data!.data!.postsList;
-        if (list.isNotEmpty) {
-          canLoadMore.value = true;
-          dataList.addAll(list);
-          controller.update([listId]);
-        }
-      }
-    }
-  }
 }

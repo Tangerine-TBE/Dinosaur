@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -20,79 +23,124 @@ class CommonPage extends StatelessWidget {
   const CommonPage({super.key, required this.controller});
 
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Obx(() =>
-          LoadMoreListView.customScrollView(
-            onRefresh: ()async{
-             await Future.delayed(Duration(seconds: 2));
+      child: Obx(() => SmartRefresher(
+            controller: controller.commonManager.refreshController,
+            onRefresh: () async {
+              controller.commonManager.loadMoreList(true);
             },
-            onLoadMore:controller.commonManager.canLoadMore.value? controller.commonManager.loadMoreList:null,
-            loadMoreWidget:controller.commonManager.canLoadMore.value ?Container(
-              margin: const EdgeInsets.all(20),
-              alignment: Alignment.center,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
+            onLoading: () async {
+              controller.commonManager.loadMoreList(false);
+            },
+            header: WaterDropHeader(
+              refresh:    SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: defaultTargetPlatform == TargetPlatform.iOS
+                    ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
+                    :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
               ),
-            ):null,
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(
-                      padding:
-                      const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: BannerCarousel.fullScreen(
-                        animation: true,
-                        height: 106,
-                        banners: controller.commonManager.listBanners,
-                        showIndicator: true,
-                        indicatorBottom: false,
-                        borderRadius: 10,
-                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                        activeColor: const Color(0xffFFFFFF),
-                        customizedIndicators: const IndicatorModel.animation(
-                          width: 5,
-                          height: 5,
-                          spaceBetween: 4,
+              complete: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(
+                    Icons.done,
+                    color: Colors.black,
+                  ),
+                  Container(
+                    width: 15.0,
+                  ),
+                  Text(
+                    '刷新完成',
+                    style: TextStyle(color: MyColors.textBlackColor),
+                  )
+                ],
+              ),
+              waterDropColor: MyColors.themeTextColor,
+            ),
+            enablePullDown: true,
+            enablePullUp: controller.commonManager.canLoadMore.value,
+            footer: CustomFooter(
+              builder: (context, mode) {
+                Widget body;
+                if (mode == LoadStatus.idle) {
+                  body = Text("上拉加载");
+                } else if (mode == LoadStatus.loading) {
+                  body = CupertinoActivityIndicator();
+                } else if (mode == LoadStatus.failed) {
+                  body = Text("加载失败！点击重试！");
+                } else if (mode == LoadStatus.canLoading) {
+                  body = Text("松手,加载更多!");
+                } else {
+                  body = Text("没有更多数据了!");
+                }
+                return Container(
+                  height: 55.0,
+                  child: Center(child: body),
+                );
+              },
+            ),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(
+                            right: 18, left: 18, bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: BannerCarousel.fullScreen(
+                          animation: true,
+                          height: 106,
+                          banners: controller.commonManager.listBanners,
+                          showIndicator: true,
+                          indicatorBottom: false,
+                          borderRadius: 10,
+                          disableColor:
+                              const Color(0xffFFFFFF).withOpacity(0.5),
+                          activeColor: const Color(0xffFFFFFF),
+                          customizedIndicators: const IndicatorModel.animation(
+                            width: 5,
+                            height: 5,
+                            spaceBetween: 4,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              ),
-              GetBuilder<PetController>(
-                builder: (controller) {
-                  return controller.commonManager.dataList.isNotEmpty
-                      ? SliverList.builder(
-                    itemBuilder: (context, index) {
-                      return _buildItem(index,
-                          controller.commonManager.dataList[index], context);
-                    },
-                    itemCount: controller.commonManager.dataList.length,
-                  )
-                      : const SliverFillRemaining(
-                    child: SizedBox(
-                      child: NoDataWidget(
-                        title: '暂无记录',
+                      const SizedBox(
+                        height: 10,
                       ),
-                    ),
-                  );
-                },
-                id: controller.commonManager.listId,
-              ),
-            ],
-          )
-
-      ),
+                    ],
+                  ),
+                ),
+                GetBuilder<PetController>(
+                  builder: (controller) {
+                    return controller.commonManager.dataList.isNotEmpty
+                        ? SliverList.builder(
+                            itemBuilder: (context, index) {
+                              return _buildItem(
+                                  index,
+                                  controller.commonManager.dataList[index],
+                                  context);
+                            },
+                            itemCount: controller.commonManager.dataList.length,
+                          )
+                        : const SliverFillRemaining(
+                            child: SizedBox(
+                              child: NoDataWidget(
+                                title: '暂无记录',
+                              ),
+                            ),
+                          );
+                  },
+                  id: controller.commonManager.listId,
+                ),
+              ],
+            ),
+          )),
     );
   }
 
@@ -102,7 +150,7 @@ class CommonPage extends StatelessWidget {
         color: Colors.white,
       ),
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 18, right: 18,top: 10),
+      padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -114,7 +162,8 @@ class CommonPage extends StatelessWidget {
                 width: 40,
                 height: 40,
                 child: CircleAvatar(
-                  backgroundImage: loadImageProvider(item.userAvator),radius: 20,
+                  backgroundImage: loadImageProvider(item.userAvator),
+                  radius: 20,
                 ),
               ),
               SizedBox(
@@ -145,8 +194,8 @@ class CommonPage extends StatelessWidget {
                     Visibility(
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 7, vertical: 4),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -305,8 +354,7 @@ class CommonPage extends StatelessWidget {
                           TextSpan(
                             text: item.content,
                             style: TextStyle(
-                                color: MyColors.textBlackColor,
-                                fontSize: 12),
+                                color: MyColors.textBlackColor, fontSize: 12),
                           ),
                         ],
                       ),
@@ -333,7 +381,8 @@ class CommonPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images,'common'),
+                      item.images,
+                      'common'),
                   SizedBox(
                     height: 14,
                   ),
