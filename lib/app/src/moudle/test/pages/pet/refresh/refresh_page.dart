@@ -23,6 +23,7 @@ class RefreshPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.refreshManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
       child: Obx(
         () => SmartRefresher(

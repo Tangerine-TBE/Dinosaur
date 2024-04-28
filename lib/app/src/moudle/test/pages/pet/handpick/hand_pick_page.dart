@@ -24,6 +24,7 @@ class HandPickPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.handPickManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
         child: Obx(() =>
             SmartRefresher(

@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import '../../../weight/loadmore_listview.dart';
 import '../../chart/weight/awesome_chart.dart';
 
 class CommonPage extends StatelessWidget {

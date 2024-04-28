@@ -318,8 +318,10 @@ class DynamicManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  final refreshController = RefreshController(initialRefresh: false);
-
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   DynamicManager({required this.controller, required this.pushRepo});
 
 
@@ -451,8 +453,10 @@ class HandPickManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  final refreshController = RefreshController(initialRefresh: false);
-
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   HandPickManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -581,8 +585,10 @@ class RefreshManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  final refreshController = RefreshController(initialRefresh: false);
-
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   RefreshManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {

@@ -24,6 +24,7 @@ class DynamicPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.dynamicManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
         child: Obx(() =>
         SmartRefresher(
