@@ -4,9 +4,12 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,93 +25,167 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
   Widget buildContent(BuildContext context) {
     return buildWidget(context);
   }
+
   Widget buildWidget(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-              MyColors.bgLinearShapeColor1,
-              MyColors.bgLinearShapeColor2,
-            ], begin: Alignment.topCenter, end: Alignment.center),
-          ),
-        ),
-        LoadMoreListView.customScrollView(
-          onLoadMore: controller.refreshManager.loadMoreList,
-          loadMoreWidget: Container(
-            margin: const EdgeInsets.all(20),
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+      child: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(colors: [
+                MyColors.bgLinearShapeColor1,
+                MyColors.bgLinearShapeColor2,
+              ], begin: Alignment.topCenter, end: Alignment.center),
             ),
           ),
-          slivers: [
-            SliverSafeArea(
-              bottom: false,
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(
-                          right: 18, left: 18, bottom: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: BannerCarousel.fullScreen(
-                        animation: true,
-                        height: 106,
-                        banners: controller.refreshManager.listBanners,
-                        showIndicator: true,
-                        indicatorBottom: false,
-                        borderRadius: 10,
-                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                        activeColor: const Color(0xffFFFFFF),
-                        customizedIndicators: const IndicatorModel.animation(
-                          width: 5,
-                          height: 5,
-                          spaceBetween: 4,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
+          Scaffold(
+            backgroundColor: MyColors.pageBgColor,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: AppBar(
+                scrolledUnderElevation: 0,
+                title: Text('话题详情',style: TextStyle(color: Colors.black,fontSize: 18),),
+                backgroundColor: MyColors.pageBgColor,
+                automaticallyImplyLeading: true,
+                centerTitle: false,
+                elevation: 0.0,
               ),
             ),
-            GetBuilder<CenterDetailsController>(
-              builder: (controller) {
-                return controller.refreshManager.dataList.isNotEmpty
-                    ?
-                SliverList.builder(
-                        itemBuilder: (context, index) {
-                          return _buildItem(
-                              index,
-                              controller.refreshManager.dataList[index],
-                              context);
-                        },
-                        itemCount: controller.refreshManager.dataList.length,
-                      )
-                    : const SliverFillRemaining(
-                        child: SizedBox(
-                          child: NoDataWidget(
-                            title: '暂无记录',
+            body: Obx(() =>
+                SmartRefresher(
+                  controller: controller.refreshManager.freshController,
+                  onRefresh: () async {
+                    controller.refreshManager.loadMoreList(true);
+                  },
+                  onLoading: () async {
+                    controller.refreshManager.loadMoreList(false);
+                  },
+                  header: WaterDropHeader(
+                    refresh: SafeArea(
+                      child: SizedBox(
+                        width: 25.0,
+                        height: 25.0,
+                        child: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoActivityIndicator(
+                          color: MyColors.themeTextColor,
+                        )
+                            : CircularProgressIndicator(
+                            strokeWidth: 2.0, color: MyColors.themeTextColor),
+                      ),
+                    ),
+                    complete: SafeArea(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.done,
+                            color: Colors.black,
+                          ),
+                          Container(
+                            width: 15.0,
+                          ),
+                          Text(
+                            '刷新完成',
+                            style: TextStyle(color: MyColors.textBlackColor),
+                          )
+                        ],
+                      ),
+                    ),
+                    waterDropColor: MyColors.themeTextColor,
+                  ),
+                  enablePullDown: true,
+                  enablePullUp: controller.refreshManager.canLoadMore.value,
+                  footer: CustomFooter(
+                    builder: (context, mode) {
+                      Widget body;
+                      if (mode == LoadStatus.idle) {
+                        body = Text("上拉加载");
+                      } else if (mode == LoadStatus.loading) {
+                        body = CupertinoActivityIndicator();
+                      } else if (mode == LoadStatus.failed) {
+                        body = Text("加载失败！点击重试！");
+                      } else if (mode == LoadStatus.canLoading) {
+                        body = Text("松手,加载更多!");
+                      } else {
+                        body = Text("没有更多数据了!");
+                      }
+                      return Container(
+                        height: 55.0,
+                        child: Center(child: body),
+                      );
+                    },
+                  ),
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverSafeArea(
+                        bottom: false,
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    right: 18, left: 18, bottom: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: BannerCarousel.fullScreen(
+                                  animation: true,
+                                  height: 106,
+                                  banners: controller.refreshManager.listBanners,
+                                  showIndicator: true,
+                                  indicatorBottom: false,
+                                  borderRadius: 10,
+                                  disableColor:
+                                  const Color(0xffFFFFFF).withOpacity(0.5),
+                                  activeColor: const Color(0xffFFFFFF),
+                                  customizedIndicators: const IndicatorModel.animation(
+                                    width: 5,
+                                    height: 5,
+                                    spaceBetween: 4,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
                           ),
                         ),
-                      );
-              },
-              id: controller.refreshManager.listId,
+                      ),
+                      GetBuilder<CenterDetailsController>(
+                        builder: (controller) {
+                          return controller.refreshManager.dataList.isNotEmpty
+                              ? SliverList.builder(
+                            itemBuilder: (context, index) {
+                              return _buildItem(
+                                  index,
+                                  controller.refreshManager.dataList[index],
+                                  context);
+                            },
+                            itemCount: controller.refreshManager.dataList.length,
+                          )
+                              : const SliverFillRemaining(
+                            child: SizedBox(
+                              child: NoDataWidget(
+                                title: '暂无记录',
+                              ),
+                            ),
+                          );
+                        },
+                        id: controller.refreshManager.listId,
+                      ),
+                    ],
+                  ),
+                ),
+
             ),
-            SliverSafeArea(
-              top: false,
-              sliver: SliverToBoxAdapter(
-                child: Container(),
-              ),
-            )
-          ],
-        ),
-      ],
+          )
+        ],
+      ),
     );
   }
 

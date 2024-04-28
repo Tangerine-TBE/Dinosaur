@@ -23,126 +23,127 @@ class RefreshPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-         return SafeArea(
-        child: Obx(() =>
-            SmartRefresher(
-              controller: controller.refreshManager.refreshController,
-              onRefresh: ()async{
-                controller.refreshManager.loadMoreList(true);
-              },
-              onLoading: () async{
-                controller.refreshManager.loadMoreList(false);
-              },
-              header: WaterDropHeader(
-                refresh:    SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: defaultTargetPlatform == TargetPlatform.iOS
-                      ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
-                      :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
-                ),
-                complete: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.done,
-                      color: Colors.black,
-                    ),
-                    Container(
-                      width: 15.0,
-                    ),
-                    Text(
-                      '刷新完成',
-                      style: TextStyle(color: MyColors.textBlackColor),
+    return SafeArea(
+      child: Obx(
+        () => SmartRefresher(
+          controller: controller.refreshManager.refreshController,
+          onRefresh: () async {
+            controller.refreshManager.loadMoreList(true);
+          },
+          onLoading: () async {
+            controller.refreshManager.loadMoreList(false);
+          },
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                      color: MyColors.themeTextColor,
                     )
+                  : CircularProgressIndicator(
+                      strokeWidth: 2.0, color: MyColors.themeTextColor),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
+                ),
+                Container(
+                  width: 15.0,
+                ),
+                Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
+              ],
+            ),
+            waterDropColor: MyColors.themeTextColor,
+          ),
+          enablePullDown: true,
+          enablePullUp: controller.refreshManager.canLoadMore.value,
+          footer: CustomFooter(
+            builder: (context, mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("上拉加载");
+              } else if (mode == LoadStatus.loading) {
+                body = CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("加载失败！点击重试！");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("松手,加载更多!");
+              } else {
+                body = Text("没有更多数据了!");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
+            },
+          ),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                          right: 18, left: 18, bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BannerCarousel.fullScreen(
+                        animation: true,
+                        height: 106,
+                        banners: controller.refreshManager.listBanners,
+                        showIndicator: true,
+                        indicatorBottom: false,
+                        borderRadius: 10,
+                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                        activeColor: const Color(0xffFFFFFF),
+                        customizedIndicators: const IndicatorModel.animation(
+                          width: 5,
+                          height: 5,
+                          spaceBetween: 4,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-                waterDropColor: MyColors.themeTextColor,
               ),
-              enablePullDown: true,
-              enablePullUp: controller.refreshManager.canLoadMore.value,
-              footer: CustomFooter(
-                builder: ( context, mode){
-                  Widget body ;
-                  if(mode==LoadStatus.idle){
-                    body =  Text("上拉加载");
-                  }
-                  else if(mode==LoadStatus.loading){
-                    body =  CupertinoActivityIndicator();
-                  }
-                  else if(mode == LoadStatus.failed){
-                    body = Text("加载失败！点击重试！");
-                  }
-                  else if(mode == LoadStatus.canLoading){
-                    body = Text("松手,加载更多!");
-                  }
-                  else{
-                    body = Text("没有更多数据了!");
-                  }
-                  return Container(
-                    height: 55.0,
-                    child: Center(child:body),
-                  );
-                },
-              ),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding:
-                          const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: BannerCarousel.fullScreen(
-                            animation: true,
-                            height: 106,
-                            banners: controller.refreshManager.listBanners,
-                            showIndicator: true,
-                            indicatorBottom: false,
-                            borderRadius: 10,
-                            disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                            activeColor: const Color(0xffFFFFFF),
-                            customizedIndicators: const IndicatorModel.animation(
-                              width: 5,
-                              height: 5,
-                              spaceBetween: 4,
+              GetBuilder<PetController>(
+                builder: (controller) {
+                  return controller.refreshManager.dataList.isNotEmpty
+                      ? SliverList.builder(
+                          itemBuilder: (context, index) {
+                            return _buildItem(
+                                index,
+                                controller.refreshManager.dataList[index],
+                                context);
+                          },
+                          itemCount: controller.refreshManager.dataList.length,
+                        )
+                      : const SliverFillRemaining(
+                          child: SizedBox(
+                            child: NoDataWidget(
+                              title: '暂无记录',
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                  GetBuilder<PetController>(
-                    builder: (controller) {
-                      return controller.refreshManager.dataList.isNotEmpty
-                          ? SliverList.builder(
-                        itemBuilder: (context, index) {
-                          return _buildItem(index,
-                              controller.refreshManager.dataList[index], context);
-                        },
-                        itemCount: controller.refreshManager.dataList.length,
-                      )
-                          : const SliverFillRemaining(
-                        child: SizedBox(
-                          child: NoDataWidget(
-                            title: '暂无记录',
-                          ),
-                        ),
-                      );
-                    },
-                    id: controller.refreshManager.listId,
-                  ),
-                ],
+                        );
+                },
+                id: controller.refreshManager.listId,
               ),
-            )
-        ));
-
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   _buildItem(int index, PostsList item, BuildContext context) {
@@ -151,7 +152,7 @@ class RefreshPage extends StatelessWidget {
         color: Colors.white,
       ),
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 18, right: 18,top: 10),
+      padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -163,7 +164,8 @@ class RefreshPage extends StatelessWidget {
                 width: 40,
                 height: 40,
                 child: CircleAvatar(
-                  backgroundImage: loadImageProvider(item.userAvator),radius: 20,
+                  backgroundImage: loadImageProvider(item.userAvator),
+                  radius: 20,
                 ),
               ),
               SizedBox(
@@ -194,8 +196,8 @@ class RefreshPage extends StatelessWidget {
                     Visibility(
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 7, vertical: 4),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -354,8 +356,7 @@ class RefreshPage extends StatelessWidget {
                           TextSpan(
                             text: item.content,
                             style: TextStyle(
-                                color: MyColors.textBlackColor,
-                                fontSize: 12),
+                                color: MyColors.textBlackColor, fontSize: 12),
                           ),
                         ],
                       ),
@@ -382,7 +383,8 @@ class RefreshPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images,'refresh'),
+                      item.images,
+                      'refresh'),
                   SizedBox(
                     height: 14,
                   ),

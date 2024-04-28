@@ -25,6 +25,7 @@ class CommonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.commonManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
       child: Obx(() => SmartRefresher(
             controller: controller.commonManager.refreshController,

@@ -6,6 +6,7 @@ import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/widget/listview/smart_load_more_listview.dart';
+import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
@@ -182,8 +183,10 @@ class CommonManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  final refreshController = RefreshController(initialRefresh: false);
-
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   CommonManager({required this.controller, required this.pushRepo});
 
   Future loadMoreList(bool isRefresh) async {
