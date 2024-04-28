@@ -2,6 +2,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/weight/record_sound_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -113,113 +114,115 @@ class EditInfoController extends BaseController {
 
   showImagePickerBottomSheet(RxString value) async {
     await Get.bottomSheet(
-      Container(
-        height: value.value.isNotEmpty ? 200 : 180,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
-        ),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      SafeArea(
         child: Container(
+          height: value.value.isNotEmpty ? 200 : 150,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                  String? path = await AImagePicker.instance().pickCamera();
-                  if ((path?.length ?? 0) > 0) {
-                    CroppedFile? croppedFile = await ImageCropper().cropImage(
-                      sourcePath: path!,
-                      aspectRatioPresets: [CropAspectRatioPreset.square],
-                      uiSettings: [
-                        AndroidUiSettings(
-                          toolbarTitle: '裁剪',
-                          toolbarColor: MyColors.themeTextColor,
-                          toolbarWidgetColor: Colors.white,
-                          initAspectRatio: CropAspectRatioPreset.square,
-                          lockAspectRatio: true,
-                        ),
-                        IOSUiSettings(title: '裁剪')
-                      ],
-                    );
-                    if (croppedFile != null) {
-                      value.value = croppedFile.path;
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                    String? path = await AImagePicker.instance().pickCamera();
+                    if ((path?.length ?? 0) > 0) {
+                      CroppedFile? croppedFile = await ImageCropper().cropImage(
+                        sourcePath: path!,
+                        aspectRatioPresets: [CropAspectRatioPreset.square],
+                        uiSettings: [
+                          AndroidUiSettings(
+                            toolbarTitle: '裁剪',
+                            toolbarColor: MyColors.themeTextColor,
+                            toolbarWidgetColor: Colors.white,
+                            initAspectRatio: CropAspectRatioPreset.square,
+                            lockAspectRatio: true,
+                          ),
+                          IOSUiSettings(title: '裁剪')
+                        ],
+                      );
+                      if (croppedFile != null) {
+                        value.value = croppedFile.path;
+                      }
                     }
-                  }
-                },
-                child: const Text(
-                  '相机',
-                  style: TextStyle(color: Colors.black),
+                  },
+                  child: const Text(
+                    '相机',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              const Divider(
-                height: 1,
-                color: Colors.pink,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                  String? path = await AImagePicker.instance().pickGallery();
-                  if ((path?.length ?? 0) > 0) {
-                    CroppedFile? croppedFile = await ImageCropper().cropImage(
-                      sourcePath: path!,
-                      compressQuality: 100,
-                      maxHeight: 700,
-                      maxWidth: 700,
-                      aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
-                      uiSettings: [
-                        AndroidUiSettings(
-                          toolbarTitle: '裁剪',
-                          toolbarColor: MyColors.themeTextColor,
-                          toolbarWidgetColor: Colors.white,
-                          initAspectRatio: CropAspectRatioPreset.square,
-                          lockAspectRatio: true,
-                        ),
-                        IOSUiSettings(title: '裁剪',
-                          aspectRatioLockEnabled: true,
-                          resetAspectRatioEnabled: false,
-                        )
-                      ],
-                    );
-                    if (croppedFile != null) {
-                      value.value = croppedFile.path;
-                    }
-                  }
-                },
-                child: const Text(
-                  '相册',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-              if (value.value.isNotEmpty)
                 const Divider(
                   height: 1,
                   color: Colors.pink,
                 ),
-              if (value.value.isNotEmpty)
                 MaterialButton(
                   minWidth: double.infinity,
-                  onPressed: () {
-                    value.value = '';
+                  onPressed: () async {
                     Get.back();
+                    String? path = await AImagePicker.instance().pickGallery();
+                    if ((path?.length ?? 0) > 0) {
+                      CroppedFile? croppedFile = await ImageCropper().cropImage(
+                        sourcePath: path!,
+                        compressQuality: 100,
+                        maxHeight: 700,
+                        maxWidth: 700,
+                        aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
+                        uiSettings: [
+                          AndroidUiSettings(
+                            toolbarTitle: '裁剪',
+                            toolbarColor: MyColors.themeTextColor,
+                            toolbarWidgetColor: Colors.white,
+                            initAspectRatio: CropAspectRatioPreset.square,
+                            lockAspectRatio: true,
+                          ),
+                          IOSUiSettings(title: '裁剪',
+                            aspectRatioLockEnabled: true,
+                            resetAspectRatioEnabled: false,
+                          )
+                        ],
+                      );
+                      if (croppedFile != null) {
+                        value.value = croppedFile.path;
+                      }
+                    }
                   },
                   child: const Text(
-                    '删除',
+                    '相册',
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-              Divider(
-                height: 1,
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              SafeArea(
-                child: MaterialButton(
+                if (value.value.isNotEmpty)
+                  const Divider(
+                    height: 1,
+                    color: Colors.pink,
+                  ),
+                if (value.value.isNotEmpty)
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    onPressed: () {
+                      value.value = '';
+                      Get.back();
+                    },
+                    child: const Text(
+                      '删除',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                Divider(
+                  height: 1,
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
+                ),
+                MaterialButton(
                   minWidth: double.infinity,
                   onPressed: () {
                     Get.back();
@@ -229,9 +232,8 @@ class EditInfoController extends BaseController {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-              ),
-
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -318,192 +320,196 @@ class EditInfoController extends BaseController {
 
   showSignVoiceEditBottomSheet(ItemBean itemBean) async {
     await Get.bottomSheet(
-      Container(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12),
-            topRight: Radius.circular(12),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      SafeArea(
+        child: Container(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      finish();
-                    },
-                    child: const Icon(Icons.cancel),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: Text(
-                      // itemBean.title,
-                      '设置语音签名',
-                      style: const TextStyle(
-                        color: MyColors.textBlackColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+          child: Column(
+            children: [
+              SizedBox(
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        finish();
+                      },
+                      child: const Icon(Icons.cancel),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: Text(
+                        // itemBean.title,
+                        '设置语音签名',
+                        style: const TextStyle(
+                          color: MyColors.textBlackColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              Text('不知道说什么？点这里找灵感'),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: loadImageProvider(''),
+                      ),
+                      const Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Icon(
+                          Icons.play_circle,
+                          color: Colors.greenAccent,
+                          size: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: loadImageProvider(''),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Icon(
+                          Icons.play_circle,
+                          color: Colors.greenAccent,
+                          size: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: loadImageProvider(''),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Icon(
+                          Icons.play_circle,
+                          color: Colors.greenAccent,
+                          size: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: loadImageProvider(''),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Icon(
+                          Icons.play_circle,
+                          color: Colors.greenAccent,
+                          size: 14,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
-            Text('不知道说什么？点这里找灵感'),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: loadImageProvider(''),
-                    ),
-                    const Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.play_circle,
-                        color: Colors.greenAccent,
-                        size: 14,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 34),
+                child: Divider(),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  margin: EdgeInsets.only(right: 34),
+                  constraints: BoxConstraints.loose(Size(200, 60)),
+                  decoration: BoxDecoration(
+                    color: MyColors.themeTextColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.surround_sound),
+                      Expanded(
+                        child: Text('sousd'),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: loadImageProvider(''),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.play_circle,
-                        color: Colors.greenAccent,
-                        size: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: loadImageProvider(''),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.play_circle,
-                        color: Colors.greenAccent,
-                        size: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Stack(
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: loadImageProvider(''),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.play_circle,
-                        color: Colors.greenAccent,
-                        size: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 34),
-              child: Divider(),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                margin: EdgeInsets.only(right: 34),
-                constraints: BoxConstraints.loose(Size(200, 60)),
-                decoration: BoxDecoration(
-                  color: MyColors.themeTextColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.surround_sound),
-                    Expanded(
-                      child: Text('sousd'),
-                    ),
-                    Icon(Icons.cancel_outlined),
-                  ],
+                      Icon(Icons.cancel_outlined),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              '录制长于10秒的声音',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
+              SizedBox(
+                height: 10,
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              '你的用心让TA听到',
-              style: TextStyle(
-                color: MyColors.textGreyColor,
-              ),
-            ),
-            Expanded(
-              child: SafeArea(
-                top: false,
-                child: RecordSoundView(
-                  recordEndCallback: () {
-                    recordStop();
-                  },
-                  recordStartCallback: recordStart,
-                  saveRecordClicked: () {
-                    logE('save');
-                  },
-                  dismissRecordClicked: () {},
-                  startPlayed: () {
-                    startPlay();
-                  },
-                  stopPlayed: () {
-                    stopPlay();
-                  },
+              Text(
+                '录制长于10秒的声音',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                '你的用心让TA听到',
+                style: TextStyle(
+                  color: MyColors.textGreyColor,
+                ),
+              ),
+              Expanded(
+                child: SafeArea(
+                  top: false,
+                  child: RecordSoundView(
+                    recordEndCallback: () {
+                      recordStop();
+                    },
+                    recordStartCallback: recordStart,
+                    saveRecordClicked: () {
+                      logE('save');
+                    },
+                    dismissRecordClicked: () {},
+                    startPlayed: () {
+                      startPlay();
+                    },
+                    stopPlayed: () {
+                      stopPlay();
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
