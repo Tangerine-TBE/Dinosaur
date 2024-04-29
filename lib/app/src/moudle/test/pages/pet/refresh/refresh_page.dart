@@ -63,8 +63,6 @@ class RefreshPage extends StatelessWidget {
             ),
             waterDropColor: MyColors.themeTextColor,
           ),
-          enablePullDown: true,
-          enablePullUp: controller.refreshManager.canLoadMore.value,
           footer: CustomFooter(
             builder: (context, mode) {
               Widget body;
@@ -85,6 +83,8 @@ class RefreshPage extends StatelessWidget {
               );
             },
           ),
+          enablePullDown: true,
+          enablePullUp: controller.refreshManager.canLoadMore.value,
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(

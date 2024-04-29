@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/network/response/center_response.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:app_base/mvvm/model/share_device_bean.dart';
 import 'package:get/get.dart';
@@ -10,19 +11,28 @@ import 'package:app_base/mvvm/repository/play_repo.dart';
 
 class PlaySelfContentManager {
   final Function update;
+  RefreshController refreshController = RefreshController(initialRefresh: false);
   PlaySelfContentManager({required this.update});
-
   List<TopicList> dataList = [];
   final _repo = Get.find<PlayRepo>();
   final dataListId = 1;
   bool refreshing = true;
-
+  bool isInit = false;
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
+  init(){
+    if(!isInit){
+     isInit = true;
+     refreshController.requestRefresh();
+    }
+  }
 
   Future loaMoreList() async {
     await Future.delayed(const Duration(seconds: 1));
   }
 
-  _fetchTopCenterList() async {
+  fetchTopCenterList() async {
     final response = await _repo.callTopCenter(
       topicCenterReq: TopicCenterReq(orderBy: 'createTime desc'),
     );
@@ -30,10 +40,14 @@ class PlaySelfContentManager {
       CenterResponse? centerResponse = response.data;
       if (centerResponse != null && !centerResponse.isEmpty()) {
         dataList = centerResponse.data!.topicList;
+        update([dataListId]);
+        refreshController.refreshCompleted();
+      }else{
+        refreshController.refreshToIdle();
       }
+    }else{
+      refreshController.refreshFailed();
     }
-    refreshing = false;
-    update([dataListId]);
   }
   onCreateTopItemClicked(){
 
@@ -101,7 +115,11 @@ class PlayController extends BaseController {
     playSelfContentManager = PlaySelfContentManager(update: update);
     remoteControlContentManager = RemoteControlContentManager(update: update);
     remoteControlContentManager._fetchShareWorld();
-    playSelfContentManager._fetchTopCenterList();
+  }
+  @override
+  void onReady() {
+    super.onReady();
+    playSelfContentManager.init();
   }
 
   @override
