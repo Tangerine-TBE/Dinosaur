@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
@@ -30,7 +31,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
             ),
             Text(
               '帖子',
-              style: TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
             ),
             Expanded(
               child: Align(
@@ -59,6 +60,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
       bottomNavigationBar: BottomAppBar(
         height: kToolbarHeight,
         padding: EdgeInsets.zero,
+        elevation: 0,
         child: Container(
           width: double.infinity,
           height: double.infinity,
