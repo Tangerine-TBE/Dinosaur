@@ -99,7 +99,7 @@ class LoginController extends BaseController {
                         finish();
                       },
                       height: 40,
-                      color: Colors.green,
+                      color: Colors.red,
                       child: const Text('取消'),
                     ),
                     MaterialButton(
@@ -111,7 +111,7 @@ class LoginController extends BaseController {
                         finish();
                       },
                       height: 40,
-                      color: Colors.red,
+                      color: Colors.green,
                       child: Text('确定'),
                     ),
                   ],
@@ -167,7 +167,7 @@ class LoginController extends BaseController {
                         finish();
                       },
                       height: 40,
-                      color: Colors.green,
+                      color: Colors.red,
                       child: const Text('取消'),
                     ),
                     MaterialButton(
@@ -179,7 +179,7 @@ class LoginController extends BaseController {
                         finish();
                       },
                       height: 40,
-                      color: Colors.red,
+                      color: Colors.green,
                       child: Text('确定'),
                     ),
                   ],

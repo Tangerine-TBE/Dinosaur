@@ -16,7 +16,7 @@
     <application
         android:label="小萌宠"
         android:name="cn.com.tangerine.base.App"
-        android:icon="@mipmap/logo">
+        android:icon="@drawable/logo_icon">
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.WhitePageSplash"
