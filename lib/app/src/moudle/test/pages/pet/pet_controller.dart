@@ -239,6 +239,8 @@ class CommonManager {
 
   showBottomSheet() {
     Get.bottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       SafeArea(
         child: Container(
           height: 120,
@@ -385,6 +387,8 @@ class DynamicManager {
 
   showBottomSheet() {
     Get.bottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       SafeArea(
         child: Container(
           height: 120,
@@ -526,6 +530,8 @@ class HandPickManager {
 
   showBottomSheet() {
     Get.bottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       SafeArea(
         child: Container(
           height: 120,
@@ -659,6 +665,8 @@ class RefreshManager {
 
   showBottomSheet() {
     Get.bottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       SafeArea(
         child: Container(
           height: 120,
