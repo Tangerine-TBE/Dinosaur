@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../strategy/uat_launcher_strategy.dart';
 
-Future<void> main() async {
-
+main()  {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterNativeSplash.remove();
   AppLauncher.launch(UatLauncherStrategy());
 }
