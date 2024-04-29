@@ -67,39 +67,39 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
           color: Colors.white,
           child: Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 40,
               ),
               InkWell(
                 onTap: () {
                   controller.onPicSelectClicked();
                 },
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.picture_in_picture_alt),
+                    Icon(Icons.picture_in_picture_alt),
                     SizedBox(
                       height: 2,
                     ),
-                    const Text('图片'),
+                    Text('图片'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               InkWell(
                 onTap: () {
                   controller.buildWaveBottomSheet(context);
                 },
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.add_chart_outlined),
+                    Icon(Icons.add_chart_outlined),
                     SizedBox(
                       height: 2,
                     ),
-                    const Text('波形'),
+                    Text('波形'),
                   ],
                 ),
               ),
@@ -121,7 +121,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                         controller.buildTagsBottomSheet(context);
                       },
                       child: Container(
-                        margin: EdgeInsets.only(left: 30),
+                        margin: const EdgeInsets.only(left: 30),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.black),
@@ -129,7 +129,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                         ),
                         child: controller.selectedTag.value.isEmpty
                             ? Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 child: Row(
                                   children: [
@@ -140,7 +140,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                       ),
                                       child: const Icon(Icons.add),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     const Text('选择一个话题'),
@@ -148,7 +148,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                 ),
                               )
                             : Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,24 +158,24 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                       decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.black),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.tag,
                                         color: Colors.white,
                                         size: 14,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     Text(controller.selectedTag.value),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     InkWell(
                                       onTap: () {
                                         controller.selectedTag.value = '';
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.cancel_outlined,
                                         size: 22,
                                       ),
@@ -207,7 +207,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -225,7 +225,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                 hintText: '这一刻的想法...'),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         GetBuilder<PushMsgController>(
@@ -238,7 +238,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                           },
                           id: controller.imagesListId,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         SizedBox(
@@ -278,7 +278,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                         onTap: () {
                                           controller.onDeleteWave();
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.cancel_outlined,
                                           size: 24,
                                         ),
@@ -306,25 +306,25 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
         controller.onBottomSheetTagItemClicked(item);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 10),
+        margin: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Row(
-          children: [
+          children: <Widget>[
             Container(
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.black),
-              child: Icon(
+              child: const Icon(
                 Icons.tag,
                 color: Colors.white,
                 size: 14,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(item.title),
