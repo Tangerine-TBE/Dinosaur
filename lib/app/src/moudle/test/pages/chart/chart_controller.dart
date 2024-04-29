@@ -4,6 +4,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
 import 'package:app_base/mvvm/repository/chart_repo.dart';
+import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/wave/wave_form_demo_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,8 +23,12 @@ class ChartController extends BaseController {
     singleCharManager = SingleCharManager(controller: this);
     doubleCharManager = DoubleCharManager(controller: this);
     specialCharManager = SpecialCharManager(controller: this);
-    singleCharManager.init();
     super.onInit();
+  }
+  @override
+  void onReady(){
+    super.onReady();
+    singleCharManager.init();
   }
 
   onPageChanged(int index) {
@@ -41,31 +46,39 @@ class SingleCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 1;
-  final data = <WaveList>[];
-
+  List<WaveList> data = <WaveList>[];
   SingleCharManager({required this.controller});
-
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   init() {
     if (!isInit) {
-      getChartList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
 
   getChartList() async {
-    final response = await controller.apiLaunch(
-      () => controller.chartRepo.getCharts(
+    final response = await controller.chartRepo.getCharts(
         ChartReq(
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',
             type: 'Single'),
-      ),
-    );
-    if (response?.data?.waveList != null) {
-      data.addAll(response!.data!.waveList);
-      controller.update([chartListId]);
+      );
+    if(response.isSuccess){
+      if(response.data?.data != null){
+        data = response.data!.data!.waveList;
+        controller.update([chartListId]);
+        refreshController.refreshCompleted();
+      }else{
+        refreshController.refreshToIdle();
+      }
+    }else{
+      refreshController.refreshFailed();
     }
+
   }
 
   onChartItemClick(int index) {
@@ -168,30 +181,39 @@ class DoubleCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 2;
-  final data = <WaveList>[];
-
+  List<WaveList> data = <WaveList>[];
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   DoubleCharManager({required this.controller});
 
   init() {
     if (!isInit) {
-      getChartList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
 
   getChartList() async {
-    final response = await controller.apiLaunch(
-      () => controller.chartRepo.getCharts(
+    final response = await
+      controller.chartRepo.getCharts(
         ChartReq(
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',
             type: 'Double'),
-      ),
-    );
-    if (response?.data?.waveList != null) {
-      data.addAll(response!.data!.waveList);
-      controller.update([chartListId]);
+      );
+    if(response.isSuccess){
+      if(response.data?.data != null){
+        data = response.data!.data!.waveList;
+        controller.update([chartListId]);
+        refreshController.refreshCompleted();
+      }else{
+        refreshController.refreshToIdle();
+      }
+    }else{
+      refreshController.refreshFailed();
     }
   }
 
@@ -214,30 +236,38 @@ class SpecialCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 2;
-  final data = <WaveList>[];
-
+  List<WaveList> data = <WaveList>[];
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+  setRefreshController(RefreshController refreshController){
+    this.refreshController = refreshController;
+  }
   SpecialCharManager({required this.controller});
 
   init() {
     if (!isInit) {
-      getChartList();
+      refreshController.requestRefresh();
       isInit = true;
     }
   }
 
   getChartList() async {
-    final response = await controller.apiLaunch(
-      () => controller.chartRepo.getCharts(
+    final response = await  controller.chartRepo.getCharts(
         ChartReq(
             pageIndex: 1,
             pageSize: 10,
             orderBy: 'createTime desc',
             type: 'Suction'),
-      ),
-    );
-    if (response?.data?.waveList != null) {
-      data.addAll(response!.data!.waveList);
-      controller.update([chartListId]);
+      );
+    if(response.isSuccess){
+      if(response.data?.data != null){
+        data = response.data!.data!.waveList;
+        controller.update([chartListId]);
+        refreshController.refreshCompleted();
+      }else{
+        refreshController.refreshToIdle();
+      }
+    }else{
+      refreshController.refreshFailed();
     }
   }
 
