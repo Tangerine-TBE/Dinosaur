@@ -303,6 +303,7 @@ class DynamicPage extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 10,),
           Divider(
             height: 1,
             color: MyColors.textGreyColor.withOpacity(0.3),
