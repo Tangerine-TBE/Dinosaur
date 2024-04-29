@@ -5,26 +5,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 
-class ImageViewPage extends BaseEmptyPage<ImageViewController> {
+class ImageViewPage extends GetView<ImageViewController> {
   final String tagString;
   final String urlString;
 
   const ImageViewPage(
       {super.key, required this.tagString, required this.urlString});
-
-  @override
-  Color get background => Colors.black;
-
   @override
   String? get tag => tagString;
 
   @override
-  Widget buildContent(BuildContext context) {
-    return ImageView(
-      controller: controller,
-      tagString: tagString,
-      urlString: urlString,
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: tagString,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: ImageView(
+          controller: controller,
+          tagString: tagString,
+          urlString: urlString,
+        ),
+      ),
     );
   }
 }
@@ -110,20 +113,17 @@ class _ImageViewState extends State<ImageView>
         transformationController: widget.controller.transformationController,
         child: SizedBox(
           child: Center(
-            child: Hero(
-              tag: widget.tagString,
-              child: widget.urlString.startsWith('http')
-                  ? Image.network(
-                      widget.urlString,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                    )
-                  : Image.file(
-                      File(widget.urlString),
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                    ),
-            ),
+            child: widget.urlString.startsWith('http')
+                ? Image.network(
+                    widget.urlString,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                  )
+                : Image.file(
+                    File(widget.urlString),
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                  ),
           ),
         ),
       ),

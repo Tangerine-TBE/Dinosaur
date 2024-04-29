@@ -32,8 +32,10 @@ class HomeController extends PlayDeviceBleController {
 
   toImageView(String url, String tag) {
     Get.lazyPut(() => ImageViewController(), tag: tag);
-    final Route route = MaterialPageRoute(
-        builder: (context) => ImageViewPage(tagString: tag, urlString: url));
+    final Route route = PageRouteBuilder(
+         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+           return ImageViewPage(tagString: tag, urlString: url);
+    });
     Navigator.of(Get.context!).push(route);
   }
 
