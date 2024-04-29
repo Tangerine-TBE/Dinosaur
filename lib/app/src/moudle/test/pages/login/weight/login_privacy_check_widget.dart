@@ -5,24 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PrivacyCheckboxWidget extends StatefulWidget {
-  const PrivacyCheckboxWidget({
+   PrivacyCheckboxWidget({
     required this.onChanged,
     required this.onTapPrivacy,
-    required this.controller,
+    this.checked = false,
     required this.onTapAgreement,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final Function(bool) onChanged;
   final Function() onTapPrivacy;
   final Function() onTapAgreement;
-  final BaseController controller;
+   bool checked;
 
   @override
   State<PrivacyCheckboxWidget> createState() => _PrivacyCheckboxWidgetState();
 }
 
 class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
- bool checked = false;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,22 +34,27 @@ class _PrivacyCheckboxWidgetState extends State<PrivacyCheckboxWidget> {
             fillColor: MaterialStateProperty.all(MyColors.pageBgColor),
             side: BorderSide(color:MyColors.themeTextColor),
             checkColor: MyColors.bgLinearShapeColor1,
-            value: checked,
+            value: widget.checked,
             onChanged: (value) {
               if (value != null) {
                 setState(() {
-                  checked = value;
+                  widget.checked = value;
                 });
                 widget.onChanged(value);
               }
             },
           ),
         ),
-        SizedBox(width: 10,),
+        const SizedBox(width: 10,),
         Expanded(
           child: RichText(
+
             overflow: TextOverflow.clip,
             text: _getTappableTextSpan('已阅读并同意', onTap: () {
+              setState(() {
+                widget.checked = !widget.checked;
+                widget.onChanged(widget.checked);
+              });
             }, children: [
               _getTappableTextSpan(
                 '《小萌宠用户协议》',
