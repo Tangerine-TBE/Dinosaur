@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/res/my_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,9 +26,9 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: SizeConfig.titleTextDefaultSize,
             color: MyColors.textBlackColor,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
@@ -125,7 +126,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 14,
+                    fontSize: SizeConfig.titleTextDefaultSize,
             fontWeight: FontWeight.w700,
             color: MyColors.textBlackColor,
           ),

@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/collect/mine_collect_controller.dart';
@@ -14,7 +15,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController>{
         appBar: AppBar(
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
-          title:  Text('我的收藏',style: TextStyle(fontSize: 18),),
+          title:  Text('我的收藏',style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),),
         ),
         body: ListView.separated(
             itemBuilder: (context, index) {

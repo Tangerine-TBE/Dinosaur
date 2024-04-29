@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/friend/fri_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/msg/msg_page.dart';
@@ -64,11 +65,11 @@ class MessagePage extends BaseEmptyPage<MessageController>
                 isScrollable: true,
                 unselectedLabelStyle: TextStyle(
                     color: MyColors.indicatorNormalTextColor,
-                    fontSize: 16),
+                    fontSize: SizeConfig.titleTextScaleSize),
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18),
+                    fontSize: SizeConfig.titleTextDefaultSize),
                 indicatorColor: MyColors.indicatorColor,
                 indicatorPadding: EdgeInsets.only(bottom: 10),
                 indicator: CurvedIndicator(),

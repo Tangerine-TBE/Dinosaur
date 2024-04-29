@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
@@ -31,7 +32,7 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
             title: TabBar(
               automaticIndicatorColorAdjustment: true,
               unselectedLabelStyle: TextStyle(
-                  color: MyColors.indicatorNormalTextColor, fontSize: 16),
+                  color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextDefaultSize),
               labelStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.indicatorSelectedTextColor,

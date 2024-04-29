@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/res/my_colors.dart';
@@ -55,11 +56,11 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                       isScrollable: true,
                       unselectedLabelStyle: TextStyle(
                           color: MyColors.indicatorNormalTextColor,
-                          fontSize: 16),
+                          fontSize: SizeConfig.titleTextScaleSize),
                       labelStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: MyColors.indicatorSelectedTextColor,
-                          fontSize: 18),
+                          fontSize: SizeConfig.titleTextDefaultSize),
                       indicatorColor: MyColors.indicatorColor,
                       indicatorPadding: EdgeInsets.only(bottom: 10),
                       indicator: CurvedIndicator(),

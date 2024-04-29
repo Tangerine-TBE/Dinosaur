@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
@@ -17,7 +18,8 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
         appBar: AppBar(
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
-          title:  Text('我的帖子',style: TextStyle(fontSize: 18),),
+          title:  Text('我的帖子',style: TextStyle(                fontSize: SizeConfig.titleTextDefaultSize,
+          ),),
         ),
         body: ListView.separated(
             itemBuilder: (context, index) {

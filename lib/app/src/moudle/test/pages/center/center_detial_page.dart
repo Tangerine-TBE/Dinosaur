@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
@@ -48,7 +49,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: AppBar(
                 scrolledUnderElevation: 0,
-                title: Text('话题详情',style: TextStyle(color: Colors.black,fontSize: 18),),
+                title: Text('话题详情',style: TextStyle(color: Colors.black,fontSize: SizeConfig.titleTextDefaultSize,fontWeight: FontWeight.w500),),
                 backgroundColor: MyColors.pageBgColor,
                 automaticallyImplyLeading: true,
                 centerTitle: false,

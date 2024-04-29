@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/common/common_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/dynamic/dynamic_page.dart';
@@ -52,11 +53,11 @@ class PetPage extends BaseEmptyPage<PetController>
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
                 unselectedLabelStyle: const TextStyle(
-                    color: MyColors.indicatorNormalTextColor, fontSize: 16),
+                    color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextScaleSize),
                 labelStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18),
+                    fontSize: SizeConfig.titleTextDefaultSize),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: EdgeInsets.only(bottom: 10),

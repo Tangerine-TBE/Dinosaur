@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/double/double_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/single/single_page.dart';
@@ -52,11 +53,11 @@ class ChartPage extends BaseEmptyPage<ChartController>
                 tabAlignment: TabAlignment.start,
                 isScrollable: true,
                 unselectedLabelStyle: const TextStyle(
-                    color: MyColors.indicatorNormalTextColor, fontSize: 16),
-                labelStyle: const TextStyle(
+                    color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextScaleSize),
+                labelStyle: const  TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18),
+                    fontSize: SizeConfig.titleTextDefaultSize),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: const EdgeInsets.only(bottom: 10),

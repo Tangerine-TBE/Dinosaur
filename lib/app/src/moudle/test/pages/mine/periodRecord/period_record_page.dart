@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/bean/month_item.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
@@ -18,7 +19,7 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
         scrolledUnderElevation: 0,
         title: Text(
           '经期记录',
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
         automaticallyImplyLeading: true,
       ),

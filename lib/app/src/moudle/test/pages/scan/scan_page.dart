@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,11 @@ class ScanPage extends BaseEmptyPage<ScanController>  {
               isScrollable: true,
               unselectedLabelStyle: TextStyle(
                   color: MyColors.scanIndicatorTextNormalColor,
-                  fontSize: 16),
+                  fontSize: SizeConfig.titleTextScaleSize),
               labelStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.scanIndicatorTextSelectedColor,
-                  fontSize: 18),
+                  fontSize: SizeConfig.titleTextDefaultSize),
               indicatorPadding: EdgeInsets.only(left: 22, right: 22),
               indicator: UnderlineTabIndicator(
                   borderRadius: BorderRadius.all(

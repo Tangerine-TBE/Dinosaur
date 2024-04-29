@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_controller.dart';
@@ -33,7 +34,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
             title: const Text(
               '个人资料',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: SizeConfig.titleTextDefaultSize,
                 fontWeight: FontWeight.w600,
               ),
             ),
