@@ -18,6 +18,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.
 import 'package:get/get.dart';
 
 import '../../weight/loadmore_listview.dart';
+import '../../weight/my_tabs.dart';
 
 class PlayPage extends BaseEmptyPage<PlayController> {
   const PlayPage({super.key});
@@ -53,12 +54,13 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                   preferredSize: const Size.fromHeight(kToolbarHeight),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: TabBar(
-                      tabAlignment: TabAlignment.start,
+                    child: ScaleTabBar(
                       isScrollable: true,
-                      unselectedLabelStyle: TextStyle(
+                      unselectedLabelStyle: const TextStyle(
                           color: MyColors.indicatorNormalTextColor,
                           fontSize: SizeConfig.titleTextScaleSize),
+                      unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                      labelColor:MyColors.indicatorSelectedTextColor ,
                       labelStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: MyColors.indicatorSelectedTextColor,
@@ -67,11 +69,8 @@ class PlayPage extends BaseEmptyPage<PlayController> {
                       indicatorPadding: const EdgeInsets.only(bottom: 10),
                       indicator: CurvedIndicator(),
                       indicatorSize: TabBarIndicatorSize.label,
-                      splashFactory: NoSplash.splashFactory,
-                      dividerHeight: 0,
                       labelPadding: const EdgeInsets.symmetric(horizontal: 6),
-                      overlayColor: const MaterialStatePropertyAll<Color>(
-                          Colors.transparent),
+
                       tabs: const [
                         Tab(
                           text: '自己玩',

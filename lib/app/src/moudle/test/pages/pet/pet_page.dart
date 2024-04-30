@@ -6,6 +6,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/pet/handpick/hand_pick_page.d
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/refresh/refresh_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/draggable_view.dart';
+import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
@@ -47,10 +48,10 @@ class PetPage extends BaseEmptyPage<PetController>
               automaticallyImplyLeading: false,
               centerTitle: false,
               elevation: 0.0,
-              title: TabBar(
+              title: ScaleTabBar(
                 controller: tabController,
-                automaticIndicatorColorAdjustment: true,
-                tabAlignment: TabAlignment.start,
+                unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                labelColor:MyColors.indicatorSelectedTextColor ,
                 isScrollable: true,
                 unselectedLabelStyle: const TextStyle(
                     color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextScaleSize),
@@ -61,11 +62,7 @@ class PetPage extends BaseEmptyPage<PetController>
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: EdgeInsets.only(bottom: 10),
-                splashFactory: NoSplash.splashFactory,
-                dividerHeight: 0,
                 labelPadding: EdgeInsets.symmetric(horizontal: 6),
-                overlayColor:
-                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '推荐',

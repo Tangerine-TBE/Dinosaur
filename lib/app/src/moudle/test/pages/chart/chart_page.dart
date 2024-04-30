@@ -5,6 +5,7 @@ import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/double/double_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/single/single_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/special/special_page.dart';
+import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
@@ -47,11 +48,11 @@ class ChartPage extends BaseEmptyPage<ChartController>
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
               elevation: 0.0,
-              title: TabBar(
+              title: ScaleTabBar(
                 controller: tabController,
-                automaticIndicatorColorAdjustment: true,
-                tabAlignment: TabAlignment.start,
                 isScrollable: true,
+                unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                labelColor:MyColors.indicatorSelectedTextColor ,
                 unselectedLabelStyle: const TextStyle(
                     color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextScaleSize),
                 labelStyle: const  TextStyle(
@@ -61,11 +62,7 @@ class ChartPage extends BaseEmptyPage<ChartController>
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: const EdgeInsets.only(bottom: 10),
-                splashFactory: NoSplash.splashFactory,
-                dividerHeight: 0,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 6),
-                overlayColor:
-                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '单震',

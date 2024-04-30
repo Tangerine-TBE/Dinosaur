@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/friend/fri_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/msg/msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/notify/notify_page.dart';
+import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
@@ -58,11 +59,11 @@ class MessagePage extends BaseEmptyPage<MessageController>
                   ),
                 ),
               ],
-              title: TabBar(
+              title: ScaleTabBar(
                 controller: tabController,
-                automaticIndicatorColorAdjustment: true,
-                tabAlignment: TabAlignment.start,
                 isScrollable: true,
+                unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                labelColor:MyColors.indicatorSelectedTextColor ,
                 unselectedLabelStyle: TextStyle(
                     color: MyColors.indicatorNormalTextColor,
                     fontSize: SizeConfig.titleTextScaleSize),
@@ -74,11 +75,7 @@ class MessagePage extends BaseEmptyPage<MessageController>
                 indicatorPadding: EdgeInsets.only(bottom: 10),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
-                splashFactory: NoSplash.splashFactory,
-                dividerHeight: 0,
                 labelPadding: EdgeInsets.symmetric(horizontal: 6),
-                overlayColor:
-                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '消息',
