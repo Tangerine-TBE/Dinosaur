@@ -51,6 +51,7 @@ class PetController extends BaseController {
   }
 
   onPageChanged(int index) {
+    currentIndex = index;
     if (index == 0) {
       commonManager.init();
     } else if (index == 1) {
@@ -60,7 +61,6 @@ class PetController extends BaseController {
     } else {
       refreshManager.init();
     }
-    currentIndex = index;
   }
 
   naviToPush() async {
@@ -180,6 +180,8 @@ class CommonManager {
   final PetController controller;
   final PushRepo pushRepo;
   final listId = 1;
+  final pageBucket = PageStorageBucket();
+
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
@@ -318,6 +320,7 @@ class DynamicManager {
   final listId = 2;
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
+  final pageBucket = PageStorageBucket();
   var pageIndex = 1;
   final canLoadMore = false.obs;
   RefreshController refreshController = RefreshController(initialRefresh: false);
@@ -455,6 +458,7 @@ class HandPickManager {
   final listId = 3;
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
+  final pageBucket = PageStorageBucket();
   var pageIndex = 1;
   final canLoadMore = false.obs;
   RefreshController refreshController = RefreshController(initialRefresh: false);
@@ -590,6 +594,7 @@ class RefreshManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final pageBucket = PageStorageBucket();
   final canLoadMore = false.obs;
   RefreshController refreshController = RefreshController(initialRefresh: false);
   setRefreshController(RefreshController refreshController){

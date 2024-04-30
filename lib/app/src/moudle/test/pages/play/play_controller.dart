@@ -6,6 +6,7 @@ import 'package:app_base/network/response/center_response.dart';
 import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:app_base/mvvm/model/share_device_bean.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 
@@ -13,18 +14,21 @@ class PlaySelfContentManager {
   final Function update;
   RefreshController refreshController = RefreshController(initialRefresh: false);
   PlaySelfContentManager({required this.update});
+
   List<TopicList> dataList = [];
   final _repo = Get.find<PlayRepo>();
   final dataListId = 1;
   bool refreshing = true;
+  double offset = 0;
   bool isInit = false;
+  final pageBucket = PageStorageBucket();
   setRefreshController(RefreshController refreshController){
     this.refreshController = refreshController;
   }
-  init(){
+  init() async {
     if(!isInit){
      isInit = true;
-     refreshController.requestRefresh();
+      refreshController.requestRefresh();
     }
   }
 
@@ -108,6 +112,7 @@ class RemoteControlContentManager {
 class PlayController extends BaseController {
   late PlaySelfContentManager playSelfContentManager;
   late RemoteControlContentManager remoteControlContentManager;
+  int index = 0;
 
   @override
   void onInit() async {

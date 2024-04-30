@@ -17,6 +17,9 @@ class ChartController extends BaseController {
   late DoubleCharManager doubleCharManager;
   late SpecialCharManager specialCharManager;
   final chartRepo = Get.find<ChartRepo>();
+  final pageBucket = PageStorageBucket();
+
+  int initialIndex = 0;
 
   @override
   void onInit() {
@@ -28,10 +31,11 @@ class ChartController extends BaseController {
   @override
   void onReady(){
     super.onReady();
-    singleCharManager.init();
+    onPageChanged(initialIndex);
   }
 
   onPageChanged(int index) {
+    initialIndex = index;
     if (index == 0) {
       singleCharManager.init();
     } else if (index == 1) {
@@ -48,6 +52,7 @@ class SingleCharManager {
   final chartListId = 1;
   List<WaveList> data = <WaveList>[];
   SingleCharManager({required this.controller});
+  final pageBucket = PageStorageBucket();
   RefreshController refreshController = RefreshController(initialRefresh: false);
   setRefreshController(RefreshController refreshController){
     this.refreshController = refreshController;
@@ -182,6 +187,7 @@ class DoubleCharManager {
   final ChartController controller;
   final chartListId = 2;
   List<WaveList> data = <WaveList>[];
+  final pageBucket = PageStorageBucket();
   RefreshController refreshController = RefreshController(initialRefresh: false);
   setRefreshController(RefreshController refreshController){
     this.refreshController = refreshController;
@@ -236,6 +242,7 @@ class SpecialCharManager {
   bool isInit = false;
   final ChartController controller;
   final chartListId = 2;
+  final pageBucket = PageStorageBucket();
   List<WaveList> data = <WaveList>[];
   RefreshController refreshController = RefreshController(initialRefresh: false);
   setRefreshController(RefreshController refreshController){

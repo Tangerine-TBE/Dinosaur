@@ -28,6 +28,11 @@ class CenterDetailsController extends BaseController {
   void onReady(){
     refreshManager.init();
   }
+  @override
+  void onClose(){
+    refreshManager.freshController.dispose();
+    super.onClose();
+  }
 
   naviToDetails(PostsList item,int index) {
     var map = {'item':item,'index':index};

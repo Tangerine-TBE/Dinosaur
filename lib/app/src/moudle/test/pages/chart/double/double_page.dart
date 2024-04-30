@@ -44,7 +44,7 @@ class DoublePage extends StatelessWidget {
               Container(
                 width: 15.0,
               ),
-              Text(
+              const Text(
                 '刷新完成',
                 style: TextStyle(color: MyColors.textBlackColor),
               )
@@ -54,24 +54,28 @@ class DoublePage extends StatelessWidget {
         ),
         onRefresh: controller.doubleCharManager.getChartList,
         controller: controller.doubleCharManager.refreshController,
-        child: CustomScrollView(
-          slivers: [GetBuilder<ChartController>(
-            builder: (controller) {
-              return SliverList.separated(
-                itemBuilder: (context, index) {
-                  return _buildDoublePageItem(
-                      index, controller.doubleCharManager.data[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(
-                    height: 12,
-                  );
-                },
-                itemCount: controller.doubleCharManager.data.length,
-              );
-            },
-            id: controller.doubleCharManager.chartListId,
-          )],
+        child: PageStorage(
+          bucket: controller.doubleCharManager.pageBucket,
+          child: CustomScrollView(
+            key: const PageStorageKey<String>('${RouteName.chartPage}Double'),
+            slivers: [GetBuilder<ChartController>(
+              builder: (controller) {
+                return SliverList.separated(
+                  itemBuilder: (context, index) {
+                    return _buildDoublePageItem(
+                        index, controller.doubleCharManager.data[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 12,
+                    );
+                  },
+                  itemCount: controller.doubleCharManager.data.length,
+                );
+              },
+              id: controller.doubleCharManager.chartListId,
+            )],
+          ),
         ),
       ),
     );

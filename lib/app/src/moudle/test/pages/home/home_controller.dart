@@ -24,6 +24,13 @@ import '../play/play_page.dart';
 class HomeController extends PlayDeviceBleController {
   final selectedTabIndex = 0.obs;
   final _loginRepo = Get.find<LoginRepo>();
+  final Map<String, Widget?> widgetList = {
+    RouteName.playPage: null,
+    RouteName.chartPage: null,
+    RouteName.minePage: null,
+    RouteName.petPage: null,
+    RouteName.message: null,
+  };
 
   @override
   void onInit() async {
@@ -43,7 +50,15 @@ class HomeController extends PlayDeviceBleController {
     if (settings.name == RouteName.playPage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const PlayPage(),
+        page: () {
+          if(  widgetList[RouteName.playPage] == null){
+            var page = const PlayPage();
+            widgetList[RouteName.playPage] = page;
+            return page;
+          }else{
+           return  widgetList[RouteName.playPage]!;
+          }
+        },
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
@@ -56,7 +71,15 @@ class HomeController extends PlayDeviceBleController {
     } else if (settings.name == RouteName.chartPage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const ChartPage(),
+        page: () {
+          if(  widgetList[RouteName.chartPage] == null){
+            var page = const ChartPage();
+            widgetList[RouteName.chartPage] = page;
+            return page;
+          }else{
+            return  widgetList[RouteName.chartPage]!;
+          }
+        },
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
@@ -69,7 +92,15 @@ class HomeController extends PlayDeviceBleController {
     } else if (settings.name == RouteName.minePage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const MinePage(),
+        page: () {
+          if(  widgetList[RouteName.minePage] == null){
+            var page = const MinePage();
+            widgetList[RouteName.minePage] = page;
+            return page;
+          }else{
+            return  widgetList[RouteName.minePage]!;
+          }
+        },
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
@@ -81,7 +112,15 @@ class HomeController extends PlayDeviceBleController {
     } else if (settings.name == RouteName.petPage) {
       return GetPageRoute(
         settings: settings,
-        page: () => const PetPage(),
+        page: () {
+          if(  widgetList[RouteName.petPage] == null){
+            var page = const PetPage();
+            widgetList[RouteName.petPage] = page;
+            return page;
+          }else{
+            return  widgetList[RouteName.petPage]!;
+          }
+        },
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {
@@ -94,7 +133,15 @@ class HomeController extends PlayDeviceBleController {
     } else if (settings.name == RouteName.message) {
       return GetPageRoute(
         settings: settings,
-        page: () => const MessagePage(),
+        page: () {
+          if(  widgetList[RouteName.message] == null){
+            var page = const MessagePage();
+            widgetList[RouteName.message] = page;
+            return page;
+          }else{
+            return  widgetList[RouteName.message]!;
+          }
+        },
         transition: Transition.noTransition,
         binding: BindingsBuilder(
           () {

@@ -18,59 +18,64 @@ class SpecialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.specialCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SmartRefresher(
-        enablePullDown: true,
-        header: WaterDropHeader(
-          refresh: SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: defaultTargetPlatform == TargetPlatform.iOS
-                ? CupertinoActivityIndicator(
-              color: MyColors.themeTextColor,
-            )
-                : CircularProgressIndicator(
-                strokeWidth: 2.0, color: MyColors.themeTextColor),
-          ),
-          complete: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(
-                Icons.done,
-                color: Colors.black,
-              ),
-              Container(
-                width: 15.0,
-              ),
-              Text(
-                '刷新完成',
-                style: TextStyle(color: MyColors.textBlackColor),
+      child: PageStorage(
+        bucket: controller.specialCharManager.pageBucket,
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                color: MyColors.themeTextColor,
               )
-            ],
+                  : CircularProgressIndicator(
+                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
+                ),
+                Container(
+                  width: 15.0,
+                ),
+                const Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
+              ],
+            ),
+            waterDropColor: MyColors.themeTextColor,
           ),
-          waterDropColor: MyColors.themeTextColor,
-        ),
-        onRefresh: controller.specialCharManager.getChartList,
-        controller: controller.specialCharManager.refreshController,
-        child: CustomScrollView(
-          slivers: [GetBuilder<ChartController>(
-            builder: (controller) {
-              return SliverList.separated(
-                itemBuilder: (context, index) {
-                  return _buildSpecialPageItem(
-                      index, controller.specialCharManager.data[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 12,
-                  );
-                },
-                itemCount: controller.specialCharManager.data.length,
-              );
-            },
-            id: controller.specialCharManager.chartListId,
-          ),]
+          onRefresh: controller.specialCharManager.getChartList,
+          controller: controller.specialCharManager.refreshController,
+          child: CustomScrollView(
+            key: const PageStorageKey<String>('${RouteName.chartPage}Special'),
+            slivers: [GetBuilder<ChartController>(
+              builder: (controller) {
+                return SliverList.separated(
+                  itemBuilder: (context, index) {
+                    return _buildSpecialPageItem(
+                        index, controller.specialCharManager.data[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(
+                      height: 12,
+                    );
+                  },
+                  itemCount: controller.specialCharManager.data.length,
+                );
+              },
+              id: controller.specialCharManager.chartListId,
+            ),]
+          ),
         ),
       ),
     );
