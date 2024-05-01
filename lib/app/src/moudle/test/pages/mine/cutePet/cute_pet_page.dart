@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/cutePet/cute_pet_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,7 @@ class CutePetPage extends BaseEmptyPage<CutePetController>{
     return Scaffold(
 
       appBar: AppBar(
-        title: Text('我的萌宠',style: TextStyle(fontSize: 18,),),
+        title: Text('我的萌宠',style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize,),),
 
       ),
     );

@@ -1,7 +1,9 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/friend/fri_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/msg/msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/notify/notify_page.dart';
+import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/scheduler/ticker.dart';
@@ -14,7 +16,8 @@ import '../play/weight/curved_indicator.dart';
 class MessagePage extends BaseEmptyPage<MessageController>
     implements SingleTickerProviderStateMixin {
   const MessagePage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Widget buildContent(BuildContext context) {
     TabController tabController = TabController(length: 3, vsync: this);
@@ -36,6 +39,7 @@ class MessagePage extends BaseEmptyPage<MessageController>
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: AppBar(
+              centerTitle: false,
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
               elevation: 0.0,
@@ -55,27 +59,23 @@ class MessagePage extends BaseEmptyPage<MessageController>
                   ),
                 ),
               ],
-              title: TabBar(
+              title: ScaleTabBar(
                 controller: tabController,
-                automaticIndicatorColorAdjustment: true,
-                tabAlignment: TabAlignment.start,
                 isScrollable: true,
+                unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                labelColor:MyColors.indicatorSelectedTextColor ,
                 unselectedLabelStyle: TextStyle(
                     color: MyColors.indicatorNormalTextColor,
-                    fontSize: 16),
+                    fontSize: SizeConfig.titleTextScaleSize),
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18),
+                    fontSize: SizeConfig.titleTextDefaultSize),
                 indicatorColor: MyColors.indicatorColor,
                 indicatorPadding: EdgeInsets.only(bottom: 10),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
-                splashFactory: NoSplash.splashFactory,
-                dividerHeight: 0,
                 labelPadding: EdgeInsets.symmetric(horizontal: 6),
-                overlayColor:
-                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '消息',

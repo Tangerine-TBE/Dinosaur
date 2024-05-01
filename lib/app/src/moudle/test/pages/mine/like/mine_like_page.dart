@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
@@ -15,7 +16,7 @@ class MineLikePage extends BaseEmptyPage<MineLikeController> {
         appBar: AppBar(
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
-          title:  Text('我的点赞',style: TextStyle(fontSize: 18),),
+          title:  Text('我的点赞',style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),),
         ),
         body: ListView.separated(
             itemBuilder: (context, index) {

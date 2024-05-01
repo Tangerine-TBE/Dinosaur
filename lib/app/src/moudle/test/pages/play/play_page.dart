@@ -1,11 +1,14 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/res/my_colors.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:common/base/mvvm/view/base_empty_page.dart';
 import 'package:dinosaur/app/src/moudle/test/device/run_time.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
@@ -15,298 +18,379 @@ import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.
 import 'package:get/get.dart';
 
 import '../../weight/loadmore_listview.dart';
+import '../../weight/my_tabs.dart';
 
-class PlayPage extends BaseEmptyPage<PlayController> {
+class PlayPage extends StatefulWidget {
   const PlayPage({super.key});
 
   @override
-  Color get background => MyColors.pageBgColor;
+  State<PlayPage> createState() => _PlayPageState();
+}
+
+class _PlayPageState extends State<PlayPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late PlayController controller;
+  late TabController tabController;
 
   @override
-  Widget buildContent(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-                MyColors.bgLinearShapeColor1,
-                MyColors.bgLinearShapeColor2,
-              ], begin: Alignment.topCenter, end: Alignment.center),
-            ),
+  void initState() {
+    controller = Get.find<PlayController>();
+    tabController =
+        TabController(length: 2, vsync: this, initialIndex: controller.index);
+    tabController.addListener(() {
+      controller.index = tabController.index;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    controller.playSelfContentManager.refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+              MyColors.bgLinearShapeColor1,
+              MyColors.bgLinearShapeColor2,
+            ], begin: Alignment.topCenter, end: Alignment.center),
           ),
-          Scaffold(
-            backgroundColor: MyColors.pageBgColor,
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(64),
-              child: AppBar(
-                backgroundColor: MyColors.pageBgColor,
-                automaticallyImplyLeading: false,
-                elevation: 0.0,
-                title: PreferredSize(
-                  preferredSize: const Size.fromHeight(kToolbarHeight),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TabBar(
-                      tabAlignment: TabAlignment.start,
-                      isScrollable: true,
-                      unselectedLabelStyle: TextStyle(
-                          color: MyColors.indicatorNormalTextColor,
-                          fontSize: 16),
-                      labelStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: MyColors.indicatorSelectedTextColor,
-                          fontSize: 18),
-                      indicatorColor: MyColors.indicatorColor,
-                      indicatorPadding: EdgeInsets.only(bottom: 10),
-                      indicator: CurvedIndicator(),
-                      indicatorSize: TabBarIndicatorSize.label,
-                      splashFactory: NoSplash.splashFactory,
-                      dividerHeight: 0,
-                      labelPadding: EdgeInsets.symmetric(horizontal: 6),
-                      overlayColor: const MaterialStatePropertyAll<Color>(
-                          Colors.transparent),
-                      tabs: const [
-                        Tab(
-                          text: '自己玩',
-                        ),
-                        Tab(
-                          text: '远程遥控',
-                        ),
-                      ],
-                    ),
+        ),
+        Scaffold(
+          backgroundColor: MyColors.pageBgColor,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(64),
+            child: AppBar(
+              backgroundColor: MyColors.pageBgColor,
+              automaticallyImplyLeading: false,
+              elevation: 0.0,
+              title: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ScaleTabBar(
+                    controller: tabController,
+                    isScrollable: true,
+                    unselectedLabelStyle: const TextStyle(
+                        color: MyColors.indicatorNormalTextColor,
+                        fontSize: SizeConfig.titleTextScaleSize),
+                    unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                    labelColor: MyColors.indicatorSelectedTextColor,
+                    labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.indicatorSelectedTextColor,
+                        fontSize: SizeConfig.titleTextDefaultSize),
+                    indicatorColor: MyColors.indicatorColor,
+                    indicatorPadding: const EdgeInsets.only(bottom: 10),
+                    indicator: CurvedIndicator(),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 6),
+                    tabs: const [
+                      Tab(
+                        text: '自己玩',
+                      ),
+                      Tab(
+                        text: '远程遥控',
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-            body: TabBarView(
-              children: [
-                _buildFra1Content(
-                    controller.onScanClicked,
-                    controller.onSideItClicked,
-                    controller.onShakeItClicked,
-                    controller.onModelClicked),
-                _buildFra2Content(),
-              ],
-            ),
           ),
-        ],
-      ),
+          body: TabBarView(
+            controller: tabController,
+            children: [
+              _buildFra1Content(
+                  controller.onScanClicked,
+                  controller.onSideItClicked,
+                  controller.onShakeItClicked,
+                  controller.onModelClicked),
+              _buildFra2Content(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   _buildFra1Content(Function onScanCall, Function onSideCall,
       Function onShakeCall, Function onModelCall) {
-    return LoadMoreListView.customScrollView(
-      onLoadMore: controller.playSelfContentManager.loaMoreList,
-      loadMoreWidget: Container(
-        margin: EdgeInsets.all(20),
-        alignment: Alignment.center,
-        child: const CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+    controller.playSelfContentManager
+        .setRefreshController(RefreshController(initialRefresh: false));
+    return PageStorage(
+      bucket: controller.playSelfContentManager.pageBucket,
+      child: SmartRefresher(
+        controller: controller.playSelfContentManager.refreshController,
+        onRefresh: controller.playSelfContentManager.fetchTopCenterList,
+        enablePullDown: true,
+        header: WaterDropHeader(
+          refresh: SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: defaultTargetPlatform == TargetPlatform.iOS
+                ? CupertinoActivityIndicator(
+                    color: MyColors.themeTextColor,
+                  )
+                : CircularProgressIndicator(
+                    strokeWidth: 2.0, color: MyColors.themeTextColor),
+          ),
+          complete: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.done,
+                color: Colors.black,
+              ),
+              Container(
+                width: 15.0,
+              ),
+              const Text(
+                '刷新完成',
+                style: TextStyle(color: MyColors.textBlackColor),
+              )
+            ],
+          ),
+          waterDropColor: MyColors.themeTextColor,
+        ),
+        footer: CustomFooter(
+          builder: (context, mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = Text("上拉加载");
+            } else if (mode == LoadStatus.loading) {
+              body = CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = Text("加载失败！点击重试！");
+            } else if (mode == LoadStatus.canLoading) {
+              body = Text("松手,加载更多!");
+            } else {
+              body = Text("没有更多数据了!");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ),
+        child: CustomScrollView(
+          key: const PageStorageKey<String>(RouteName.playPage),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 282,
+                      width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 26,
+                            child: GestureDetector(
+                              onTap: () {
+                                onScanCall.call();
+                              },
+                              child: Image.asset(
+                                ResName.iconImg,
+                                width: 150,
+                                height: 176,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 49,
+                            top: 50,
+                            child: Obx(
+                              () => Text(
+                                Runtime.deviceInfo.value == null
+                                    ? '点我\r\n连接设备哦'
+                                    : '\r\n${Runtime.deviceInfo.value!.bluetoothDevice.platformName}\r\n已链接',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: MyColors.textBlackColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: MyColors.cardViewBgColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(2, 2),
+                                      blurRadius: 4,
+                                      spreadRadius: 0,
+                                    )
+                                  ]),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.onSideItClicked();
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ResName.iconSide,
+                                          width: 46,
+                                          height: 46,
+                                        ),
+                                        const Text(
+                                          '划一划',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: MyColors.textBlackColor,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.onShakeItClicked();
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ResName.iconShake,
+                                          width: 46,
+                                          height: 46,
+                                        ),
+                                        Text(
+                                          '摇一摇',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: MyColors.textBlackColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.onModelClicked();
+                                    },
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          ResName.iconModel,
+                                          width: 46,
+                                          height: 46,
+                                        ),
+                                        Text(
+                                          '模式',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: MyColors.textBlackColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '话题中心',
+                        style: TextStyle(
+                            color: MyColors.textBlackColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              sliver: GetBuilder<PlayController>(
+                builder: (controller) {
+                  return controller.playSelfContentManager.dataList.isNotEmpty
+                      ? _buildSliverList()
+                      : controller.playSelfContentManager.refreshing
+                          ? SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Center(
+                                child: LoadingAnimationWidget.newtonCradle(
+                                  color: MyColors.homePageNaviItemSelectColor,
+                                  size: 100,
+                                ),
+                              ),
+                            )
+                          : const SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: NoDataWidget(),
+                            );
+                },
+                id: controller.playSelfContentManager.dataListId,
+              ),
+            )
+          ],
         ),
       ),
-      slivers: [
-        SliverToBoxAdapter(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 282,
-                  width: double.infinity,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 26,
-                        child: GestureDetector(
-                          onTap: () {
-                            onScanCall.call();
-                          },
-                          child: Image.asset(
-                            ResName.iconImg,
-                            width: 150,
-                            height: 176,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 49,
-                        top: 50,
-                        child: Obx(
-                          () => Text(
-                            Runtime.deviceInfo.value == null
-                                ? '点我\r\n连接设备哦'
-                                : '\r\n${Runtime.deviceInfo.value!.bluetoothDevice.platformName}\r\n已链接',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: MyColors.textBlackColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                              color: MyColors.cardViewBgColor,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: const Offset(2, 2),
-                                  blurRadius: 4,
-                                  spreadRadius: 0,
-                                )
-                              ]),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  controller.onSideItClicked();
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      ResName.iconSide,
-                                      width: 46,
-                                      height: 46,
-                                    ),
-                                    Text(
-                                      '划一划',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyColors.textBlackColor,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  controller.onShakeItClicked();
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      ResName.iconShake,
-                                      width: 46,
-                                      height: 46,
-                                    ),
-                                    Text(
-                                      '摇一摇',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyColors.textBlackColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  controller.onModelClicked();
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      ResName.iconModel,
-                                      width: 46,
-                                      height: 46,
-                                    ),
-                                    Text(
-                                      '模式',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        color: MyColors.textBlackColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '话题中心',
-                    style: TextStyle(
-                        color: MyColors.textBlackColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          sliver: GetBuilder<PlayController>(
-            builder: (controller) {
-              return controller.playSelfContentManager.dataList.isNotEmpty
-                  ? _buildSliverList()
-                  : controller.playSelfContentManager.refreshing
-                      ? SliverFillRemaining(
-                          child: Center(
-                            child: LoadingAnimationWidget.newtonCradle(
-                              color: MyColors.homePageNaviItemSelectColor,
-                              size: 100,
-                            ),
-                          ),
-                        )
-                      : const SliverFillRemaining(
-                          child: NoDataWidget(),
-                        );
-            },
-            id: controller.playSelfContentManager.dataListId,
-          ),
-        )
-      ],
     );
   }
 
   _buildSliverList() {
     return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        return _centerItem(
-          controller.playSelfContentManager.dataList[index],
-          () {
-            controller.onCenterDetailsIndexTap(
-              controller.playSelfContentManager.dataList[index],
-            );
-          },
-        );
-      }, childCount: controller.playSelfContentManager.dataList.length
-          // childCount: controller.dataList.length,
-          ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return _centerItem(
+            controller.playSelfContentManager.dataList[index],
+            () {
+              controller.onCenterDetailsIndexTap(
+                controller.playSelfContentManager.dataList[index],
+              );
+            },
+          );
+        },
+        childCount: controller.playSelfContentManager.dataList.length,
+        // childCount: controller.dataList.length,
+      ),
     );
   }
 
@@ -315,7 +399,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
       margin: const EdgeInsets.only(bottom: 10),
       height: 70,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           onPress.call();
         },
         child: Row(
@@ -381,55 +465,58 @@ class PlayPage extends BaseEmptyPage<PlayController> {
   _buildFra2Content() {
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(child:
-        Column(
-          children: [
-            Image.asset(
-              ResName.group38,
-              width: 223,
-              height: 223,
-            ),
-            Text(
-              '点击\r\n分享遥控',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: MyColors.textBlackColor,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              Image.asset(
+                ResName.group38,
+                width: 223,
+                height: 223,
               ),
-            ),
-            SizedBox(
-              height: 42,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: GetBuilder<PlayController>(
-                builder: (controller) {
-                  return Wrap(
-                    runSpacing: 16,
-                    spacing: 16,
-                    children: controller.remoteControlContentManager.shareData
-                        .map<Widget>((e) => _buildWrapChild(e.assetName, e.text))
-                        .toList(),
-                  );
-                },
+              Text(
+                '点击\r\n分享遥控',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: MyColors.textBlackColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            SizedBox(height: 20,),
-            Text(
-              '互动需双方同时链接，离开此界面自动将断开',
-              style: TextStyle(
-                fontSize: 11,
-                color: MyColors.textGreyColor,
-                fontWeight: FontWeight.w500,
+              SizedBox(
+                height: 42,
               ),
-            ),
-            SizedBox(height: 20,),
-
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: GetBuilder<PlayController>(
+                  builder: (controller) {
+                    return Wrap(
+                      runSpacing: 16,
+                      spacing: 16,
+                      children: controller.remoteControlContentManager.shareData
+                          .map<Widget>(
+                              (e) => _buildWrapChild(e.assetName, e.text))
+                          .toList(),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                '互动需双方同时链接，离开此界面自动将断开',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: MyColors.textGreyColor,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         )
-
-          ,)
       ],
     );
   }
@@ -480,4 +567,7 @@ class PlayPage extends BaseEmptyPage<PlayController> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

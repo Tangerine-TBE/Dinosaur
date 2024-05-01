@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,14 +53,14 @@ class ModelPage extends BaseEmptyPage<ModelController>
               ),
               padding: EdgeInsets.zero,
               unselectedLabelStyle:
-                  const TextStyle(color: Colors.white, fontSize: 18),
+                  const TextStyle(color: Colors.white, fontSize: SizeConfig.titleTextDefaultSize),
               splashFactory: NoSplash.splashFactory,
               overlayColor:
                   const MaterialStatePropertyAll<Color>(Colors.transparent),
               labelStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.scanIndicatorTextSelectedColor,
-                  fontSize: 18),
+                  fontSize: SizeConfig.titleTextDefaultSize),
               tabs: const [
                 Tab(
                   text: '经典模式',
@@ -191,17 +192,20 @@ class ModelPage extends BaseEmptyPage<ModelController>
   _buildContentClassic01() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            mainAxisExtent: 83),
-        itemBuilder: (context, index) {
-          return _buildTemplateModelItem(index);
-        },
-        itemCount: 12,
-      ),
+      child: GetBuilder<ModelController>(builder: (controller){
+        return
+          GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                mainAxisExtent: 83),
+            itemBuilder: (context, index) {
+              return _buildTemplateModelItem(index);
+            },
+            itemCount: 12,
+          );
+      },id: controller.listData,),
     );
   }
 

@@ -1,31 +1,47 @@
-import 'dart:math';
-
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/double/double_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/single/single_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/special/special_page.dart';
+import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:get/get.dart';
 import '../play/weight/curved_indicator.dart';
-
-class ChartPage extends BaseEmptyPage<ChartController>
-    implements SingleTickerProviderStateMixin {
+class ChartPage extends StatefulWidget {
   const ChartPage({super.key});
 
   @override
-  Color get background => MyColors.pageBgColor;
+  State<ChartPage> createState() => _ChartPageState();
+}
+
+class _ChartPageState extends State<ChartPage> with SingleTickerProviderStateMixin{
+  late ChartController controller;
+  late TabController tabController;
 
   @override
-  Widget buildContent(BuildContext context) {
-    TabController tabController = TabController(length: 3, vsync: this);
+  void initState() {
+    controller = Get.find<ChartController>();
+    tabController = TabController(length: 3, vsync: this,initialIndex: controller.initialIndex );
     tabController.addListener(() {
       controller.onPageChanged(tabController.index);
     });
+    super.initState();
+  }
+  @override
+  void dispose() {
+    tabController.dispose();
+    controller.singleCharManager.refreshController.dispose();
+    controller.doubleCharManager.refreshController.dispose();
+    controller.specialCharManager.refreshController.dispose();
+
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
@@ -41,28 +57,25 @@ class ChartPage extends BaseEmptyPage<ChartController>
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: AppBar(
+              centerTitle: false,
               backgroundColor: MyColors.pageBgColor,
               automaticallyImplyLeading: false,
               elevation: 0.0,
-              title: TabBar(
+              title: ScaleTabBar(
                 controller: tabController,
-                automaticIndicatorColorAdjustment: true,
-                tabAlignment: TabAlignment.start,
                 isScrollable: true,
+                unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                labelColor:MyColors.indicatorSelectedTextColor ,
                 unselectedLabelStyle: const TextStyle(
-                    color: MyColors.indicatorNormalTextColor, fontSize: 16),
-                labelStyle: const TextStyle(
+                    color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextScaleSize),
+                labelStyle: const  TextStyle(
                     fontWeight: FontWeight.bold,
                     color: MyColors.indicatorSelectedTextColor,
-                    fontSize: 18),
+                    fontSize: SizeConfig.titleTextDefaultSize),
                 indicator: CurvedIndicator(),
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorPadding: const EdgeInsets.only(bottom: 10),
-                splashFactory: NoSplash.splashFactory,
-                dividerHeight: 0,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 6),
-                overlayColor:
-                    const MaterialStatePropertyAll<Color>(Colors.transparent),
                 tabs: const [
                   Tab(
                     text: '单震',
@@ -92,55 +105,7 @@ class ChartPage extends BaseEmptyPage<ChartController>
     );
   }
 
-
-
-
-
-  @override
-  void activate() {
-  }
-
-  @override
-  BuildContext get context => throw UnimplementedError();
-
-  @override
-  Ticker createTicker(TickerCallback onTick) {
-    return Ticker(onTick);
-  }
-
-  @override
-  void deactivate() {
-  }
-
-  @override
-  void didChangeDependencies() {
-  }
-
-  @override
-  void didUpdateWidget(covariant StatefulWidget oldWidget) {
-  }
-
-  @override
-  void dispose() {
-  }
-
-  @override
-  void initState() {
-  }
-
-  @override
-  bool get mounted => throw UnimplementedError();
-
-  @override
-  void reassemble() {
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-  }
-
-  @override
-  StatefulWidget get widget => throw UnimplementedError();
 }
+
 
 

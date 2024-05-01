@@ -3,7 +3,8 @@ class SaveKey {
   static const sendPort = 'sendPort';
   static const loopModel = 'loopModel';
   static const dataList = 'dataList';
-
+  static const readPrivacy = 'readPrivacy';
+  static const readUserProtected = 'readUserProtected';
   //User
   static const userInfo = 'userInfo';
 

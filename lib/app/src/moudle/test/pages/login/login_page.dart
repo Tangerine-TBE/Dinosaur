@@ -16,7 +16,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
   @override
   Widget buildContent(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
           const SizedBox(
@@ -31,7 +31,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                   fontWeight: FontWeight.w500),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -41,7 +41,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                 fontSize: 14,
                 fontWeight: FontWeight.w500),
           ),
-          SizedBox(
+          const SizedBox(
             height: 60,
           ),
           TextField(
@@ -58,8 +58,8 @@ class LoginPage extends BaseEmptyPage<LoginController> {
             cursorColor: MyColors.themeTextColor,
             decoration: InputDecoration(
               hintText: '请输入手机号码',
-              contentPadding: EdgeInsets.only(top: 10),
-              constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
+              contentPadding: const EdgeInsets.only(top: 10),
+              constraints: const BoxConstraints(maxHeight: 50, minHeight: 50),
               prefixIcon: Container(
                 width: 70,
                 height: 50,
@@ -82,41 +82,43 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                 borderSide: BorderSide(color: MyColors.themeTextColor),
               ),
             ),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               textBaseline: TextBaseline.alphabetic,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          PrivacyCheckboxWidget(
-            onChanged: (checked) {
-              controller.isChecked = checked;
-            },
-            onTapPrivacy: (){
-              controller.onTapPrivacy();
-            },
-            onTapAgreement: (){
-              controller.onTapAgreement();
-            },
-            // onTapPrivacy: _showProtocolDialog,
-            controller: controller,
+          Obx(
+            () => PrivacyCheckboxWidget(
+              onChanged: (checked) {
+                controller.isChecked.value = checked;
+              },
+              onTapPrivacy: () {
+                controller.onTapPrivacy();
+              },
+              onTapAgreement: () {
+                controller.onTapAgreement();
+              },
+              // onTapPrivacy: _showProtocolDialog,
+              checked: controller.isChecked.value,
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           MaterialButton(
             onPressed: () {
               controller.onConfirmClicked();
             },
-            padding: EdgeInsets.only(
-                top: 14, bottom: 14, left: 50, right: 50),
+            padding:
+                const EdgeInsets.only(top: 14, bottom: 14, left: 50, right: 50),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             color: MyColors.bgLinearShapeColor1,
-            child: Text(
+            child: const Text(
               '确定',
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,

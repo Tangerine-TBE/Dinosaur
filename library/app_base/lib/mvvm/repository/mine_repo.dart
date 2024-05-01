@@ -1,11 +1,25 @@
 import 'package:app_base/exports.dart';
-import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/network/api.dart';
-import 'package:app_base/network/response/up_load_repsonse.dart';
+import 'package:app_base/network/response/mine_response.dart';
 import 'package:common/common/network/dio_client.dart';
-import '../../network/response/login_response.dart';
 import '../base_repo.dart';
+import '../model/mine_bean.dart';
 
 class MineRepo extends BaseRepo {
+  Future<AResponse<MineResponse>> getCollect(MineReq mineReq) {
+    return requestOnFuture(
+      Api.mineCollect,
+      method: Method.post,
+      params: mineReq.toJson(),
+      format: (data) => MineResponse.fromJson(data),
+    );
+  }
 
+  Future<AResponse<MineCommentResponse>> getMineCommentList(
+      MineCommentRsq mineCommentRsq) {
+    return requestOnFuture(Api.mineReview,
+        method: Method.post,
+        params: mineCommentRsq.toJson(),
+        format: (data) => MineCommentResponse.fromJson(data));
+  }
 }

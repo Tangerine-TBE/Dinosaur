@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/chart_bean.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/chart/chart_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../weight/awesome_chart.dart';
@@ -16,24 +18,65 @@ class SinglePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.singleCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GetBuilder<ChartController>(
-        builder: (controller) {
-          return ListView.separated(
-            itemBuilder: (context, index) {
-              return _buildSinglePageItem(
-                  index, controller.singleCharManager.data[index]);
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(
-                height: 12,
-              );
-            },
-            itemCount: controller.singleCharManager.data.length,
-          );
-        },
-        id: controller.singleCharManager.chartListId,
+      child: PageStorage(
+        bucket: controller.singleCharManager.pageBucket,
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                color: MyColors.themeTextColor,
+              )
+                  : CircularProgressIndicator(
+                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
+                ),
+                Container(
+                  width: 15.0,
+                ),
+                Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
+              ],
+            ),
+            waterDropColor: MyColors.themeTextColor,
+          ),
+          onRefresh: controller.singleCharManager.getChartList,
+          controller: controller.singleCharManager.refreshController,
+          child: CustomScrollView(
+            key: const PageStorageKey<String>('${RouteName.chartPage}SinglePage'),
+            slivers: [GetBuilder<ChartController>(
+              builder: (controller) {
+                return SliverList.separated(
+                  itemBuilder: (context, index) {
+                    return _buildSinglePageItem(
+                        index, controller.singleCharManager.data[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 12,
+                    );
+                  },
+                  itemCount: controller.singleCharManager.data.length,
+                );
+              },
+              id: controller.singleCharManager.chartListId,
+            )],
+          ),
+        ),
       ),
     );
   }

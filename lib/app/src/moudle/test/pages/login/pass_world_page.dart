@@ -15,7 +15,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
 
   @override
   Widget buildContent(BuildContext context) {
-    final defaultPinTheme = PinTheme(
+    const defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
       margin: EdgeInsets.all(10),
@@ -34,7 +34,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
     );
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
           children: [
             const SizedBox(
@@ -48,7 +48,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
@@ -60,7 +60,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(
@@ -74,7 +74,7 @@ class PassWorldPage extends BaseEmptyPage<PassWorldController> {
                 defaultPinTheme: defaultPinTheme,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Obx(

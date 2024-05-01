@@ -1,4 +1,6 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -24,9 +26,9 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: SizeConfig.titleTextDefaultSize,
             color: MyColors.textBlackColor,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
@@ -46,7 +48,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 const Text(
                   '试着用手晃动手机,体验不同的震感快乐',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: MyColors.textBlackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -124,7 +126,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
         title: Text(
           '摇一摇',
           style: TextStyle(
-            fontSize: 14,
+                    fontSize: SizeConfig.titleTextDefaultSize,
             fontWeight: FontWeight.w700,
             color: MyColors.textBlackColor,
           ),
@@ -147,7 +149,7 @@ class ShakeItPage extends BaseEmptyPage<ShakeItController> {
                 const Text(
                   '试着用手晃动手机,体验不同的震感快乐',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: MyColors.textBlackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

@@ -1,6 +1,5 @@
 class MsgCopy{
-  static const String privacyContent =''' 《小萌宠用户协议》
-
+  static const String privacyContent ='''
 欢迎注册小萌宠
 
 我们仅为18岁以上的用户提供服务
@@ -196,9 +195,8 @@ class MsgCopy{
 
 13.4 妙想未行使或执行本使用协议任何权利或规定，不构成对前述权利或权利之放弃。
 13.5 妙想对本协议享有最终解释权。
-
 ''';
-  static const String agreeContent ='''《小萌宠隐私保护政策》
+  static const String agreeContent ='''
 本政策仅适用于深圳市妙想智能科技有限公司的小萌宠APP产品及相关服务。
 最近更新日期:2024年3月26日
 即刻生效日期:2024年3月26日

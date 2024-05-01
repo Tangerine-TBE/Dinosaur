@@ -59,6 +59,7 @@ class PassWorldController extends BaseController {
   }
 
   onCompleted(String value) async {
+    await Future.delayed(const Duration(seconds: 1));
     if (value.isNotEmpty) {
       String passWorld = value;
       LoginReqBean loginReqBean = LoginReqBean(

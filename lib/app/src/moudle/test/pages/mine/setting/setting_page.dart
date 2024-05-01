@@ -1,3 +1,4 @@
+import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_controller.dart';
@@ -21,7 +22,7 @@ class SettingPage extends BaseEmptyPage<SettingController> {
         scrolledUnderElevation: 0,
         title: Text(
           '设置',
-          style: TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
         backgroundColor: Color(
           0xffeff1f3,

@@ -3,7 +3,9 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
+import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../home/home_controller.dart';
@@ -20,8 +22,16 @@ class CenterDetailsController extends BaseController {
   @override
   void onInit() {
     refreshManager = RefreshManager(controller: this, pushRepo: _pushRepo);
-    refreshManager.init();
     super.onInit();
+  }
+  @override
+  void onReady(){
+    refreshManager.init();
+  }
+  @override
+  void onClose(){
+    refreshManager.freshController.dispose();
+    super.onClose();
   }
 
   naviToDetails(PostsList item,int index) {
@@ -134,6 +144,8 @@ class RefreshManager {
   final PushRepo pushRepo;
   final dataList = <PostsList>[];
   var pageIndex = 1;
+  final freshController = RefreshController(initialRefresh: false);
+  final canLoadMore = false.obs;
 
   RefreshManager({required this.controller, required this.pushRepo});
 
@@ -146,7 +158,7 @@ class RefreshManager {
     ];
   }
 
-  Future loadMoreList() async {
+  Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await pushRepo.getPushMsg(
       PushMsgReq(
@@ -161,87 +173,98 @@ class RefreshManager {
       if (response.data?.data != null) {
         var list = response.data!.data!.postsList;
         if (list.isNotEmpty) {
+          if (isRefresh) {
+            dataList.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
           pageIndex = pageIndex+1;
           dataList.addAll(list);
           controller.update([listId]);
         }
       }
     }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        freshController.refreshCompleted();
+      } else {
+        freshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            freshController.loadNoData();
+            return;
+          }
+        }
+        freshController.loadComplete();
+      } else {
+        freshController.loadFailed();
+      }
+    }
   }
 
   init() {
     if (!isInit) {
-      getList();
+      freshController.requestRefresh();
       isInit = true;
     }
   }
 
   showBottomSheet() {
     Get.bottomSheet(
-      Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      SafeArea(
         child: Container(
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-          child: Column(
-            children: [
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () async {
-                  Get.back();
-                },
-                child: const Text(
-                  '举报',
-                  style: TextStyle(color: Colors.black),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () async {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '举报',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-              ),
-              Divider(
-                color: MyColors.textGreyColor.withOpacity(0.3),
-                thickness: 5,
-              ),
-              MaterialButton(
-                minWidth: double.infinity,
-                onPressed: () {
-                  Get.back();
-                },
-                child: const Text(
-                  '取消',
-                  style: TextStyle(color: Colors.black),
+                Divider(
+                  color: MyColors.textGreyColor.withOpacity(0.3),
+                  thickness: 5,
                 ),
-              ),
-            ],
+                MaterialButton(
+                  minWidth: double.infinity,
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text(
+                    '取消',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  getList() async {
-    final response = await pushRepo.getPushMsg(
-      PushMsgReq(
-          userId: User.loginRspBean!.userId,
-          topicId: '',
-          pageIndex: 1,
-          pageSize: 10,
-          orderBy: 'createTime desc',
-          postsType: 'Latest'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        var list = response.data!.data!.postsList;
-        if (list.isNotEmpty) {
-          dataList.addAll(list);
-          controller.update([listId]);
-        }
-      }
-    }
-  }
 }
 
 

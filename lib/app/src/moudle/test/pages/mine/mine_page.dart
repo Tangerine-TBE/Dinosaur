@@ -9,7 +9,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/mine_controller.dart';
 
 class MinePage extends BaseEmptyPage<MineController> {
   const MinePage({super.key});
-
+  @override
+  bool get canPopBack => false;
   @override
   Color get background => MyColors.pageBgColor;
 
@@ -50,26 +51,30 @@ class MinePage extends BaseEmptyPage<MineController> {
                       backgroundColor: Colors.transparent,
                       actions: [
                         Container(
-                          margin: const EdgeInsets.only(right: 21),
+                          margin: const EdgeInsets.only(right: 10),
                           child:  Row(
                             children: [
                               InkWell(
                                 onTap: (){controller.onEditInfoClicked();},
-                                child: const Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                  size: 20,
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 19,
-                              ),
+
                               InkWell(
                                 onTap: (){controller.onSettingClicked();},
-                                child: const Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                  size: 20,
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: const Icon(
+                                    Icons.settings,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
                                 ),
                               ),
                             ],
@@ -268,7 +273,7 @@ class MinePage extends BaseEmptyPage<MineController> {
               width: 8,
             ),
             Expanded(child: Text(name)),
-            Icon(Icons.arrow_right, size: 26),
+            Icon(Icons.arrow_forward_ios_rounded, size: 20,color: MyColors.textGreyColor,),
           ],
         ),
       ),

@@ -32,12 +32,19 @@ class MothItem {
     if (rangItems.isEmpty) {
       calOvulationDates=[];
     } else {
+      DateTime maxDate = DateTime(1990, 1, 1);
+      for (var i in rangItems) {
+        if (i.selectedStartDate.isAfter(maxDate)) {
+          maxDate = i.selectedStartDate;
+        }
+      }
+
       for(int i = 0 ; i < list.length ; i ++){
         list[i].calOvulationDates.clear();
         list[i].aboutTheCalOvulationDateRange.clear();
       }
       calOvulationDates.add(
-          rangItems[0].selectedStartDate.subtract(
+          maxDate.subtract(
             const Duration(days: 14),
           )
       ) ;

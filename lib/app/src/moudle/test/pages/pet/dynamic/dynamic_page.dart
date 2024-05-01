@@ -4,9 +4,11 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -22,71 +24,130 @@ class DynamicPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.dynamicManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
-      child: LoadMoreListView.customScrollView(
-        onLoadMore: controller.dynamicManager.loadMoreList,
-        loadMoreWidget: Container(
-          margin: const EdgeInsets.all(20),
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(MyColors.themeTextColor),
-          ),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  padding:
-                  const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+        child: Obx(() =>
+        PageStorage(
+          bucket: controller.dynamicManager.pageBucket,
+          child: SmartRefresher(
+            key: const PageStorageKey<String>('${RouteName.petPage}Dynamic'),
+            controller: controller.dynamicManager.refreshController,
+            onRefresh: ()async{
+              controller.dynamicManager.loadMoreList(true);
+            },
+            onLoading: () async{
+              controller.dynamicManager.loadMoreList(false);
+            },
+            header: WaterDropHeader(
+              refresh:    SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: defaultTargetPlatform == TargetPlatform.iOS
+                    ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
+                    :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
+              ),
+              complete: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(
+                    Icons.done,
+                    color: Colors.black,
                   ),
-                  child: BannerCarousel.fullScreen(
-                    animation: true,
-                    height: 106,
-                    banners: controller.dynamicManager.listBanners,
-                    showIndicator: true,
-                    indicatorBottom: false,
-                    borderRadius: 10,
-                    disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                    activeColor: const Color(0xffFFFFFF),
-                    customizedIndicators: const IndicatorModel.animation(
-                      width: 5,
-                      height: 5,
-                      spaceBetween: 4,
-                    ),
+                  Container(
+                    width: 15.0,
+                  ),
+                  Text(
+                    '刷新完成',
+                    style: TextStyle(color: MyColors.textBlackColor),
+                  )
+                ],
+              ),
+              waterDropColor: MyColors.themeTextColor,
+            ),
+            enablePullDown: true,
+            enablePullUp: controller.dynamicManager.canLoadMore.value,
+            footer: CustomFooter(
+              builder: ( context, mode){
+                Widget body ;
+                if(mode==LoadStatus.idle){
+                  body =  Text("上拉加载");
+                }
+                else if(mode==LoadStatus.loading){
+                  body =  CupertinoActivityIndicator();
+                }
+                else if(mode == LoadStatus.failed){
+                  body = Text("加载失败！点击重试！");
+                }
+                else if(mode == LoadStatus.canLoading){
+                  body = Text("松手,加载更多!");
+                }
+                else{
+                  body = Text("没有更多数据了!");
+                }
+                return Container(
+                  height: 55.0,
+                  child: Center(child:body),
+                );
+              },
+            ),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding:
+                        const EdgeInsets.only(right: 18, left: 18, bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: BannerCarousel.fullScreen(
+                          animation: true,
+                          height: 106,
+                          banners: controller.dynamicManager.listBanners,
+                          showIndicator: true,
+                          indicatorBottom: false,
+                          borderRadius: 10,
+                          disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                          activeColor: const Color(0xffFFFFFF),
+                          customizedIndicators: const IndicatorModel.animation(
+                            width: 5,
+                            height: 5,
+                            spaceBetween: 4,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
+                GetBuilder<PetController>(
+                  builder: (controller) {
+                    return controller.dynamicManager.dataList.isNotEmpty
+                        ? SliverList.builder(
+                      itemBuilder: (context, index) {
+                        return _buildItem(index,
+                            controller.dynamicManager.dataList[index], context);
+                      },
+                      itemCount: controller.dynamicManager.dataList.length,
+                    )
+                        : const SliverFillRemaining(
+                      child: SizedBox(
+                        child: NoDataWidget(
+                          title: '暂无记录',
+                        ),
+                      ),
+                    );
+                  },
+                  id: controller.dynamicManager.listId,
                 ),
               ],
             ),
           ),
-          GetBuilder<PetController>(
-            builder: (controller) {
-              return controller.dynamicManager.dataList.isNotEmpty
-                  ? SliverList.builder(
-                itemBuilder: (context, index) {
-                  return _buildItem(index,
-                      controller.dynamicManager.dataList[index], context);
-                },
-                itemCount: controller.dynamicManager.dataList.length,
-              )
-                  : const SliverFillRemaining(
-                child: SizedBox(
-                  child: NoDataWidget(
-                    title: '暂无记录',
-                  ),
-                ),
-              );
-            },
-            id: controller.dynamicManager.listId,
-          ),
-        ],
-      ),
-    );
+        )
+    ));
   }
 
   _buildItem(int index, PostsList item, BuildContext context) {
@@ -246,6 +307,7 @@ class DynamicPage extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 10,),
           Divider(
             height: 1,
             color: MyColors.textGreyColor.withOpacity(0.3),

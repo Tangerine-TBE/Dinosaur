@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:app_base/ble/ble_manager.dart';
-import 'package:app_base/ble/ble_msg.dart';
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
@@ -9,6 +7,8 @@ import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
+import '../../device/ble_manager.dart';
+import '../../device/ble_msg.dart';
 import '../../device/run_time.dart';
 import '../sideIt/obxBean/double_bean.dart';
 
@@ -26,12 +26,14 @@ class ModelController extends PlayDeviceBleController {
   Timer? processLoopCustomTimer; //与上相同
   final BleManager bleManager = BleManager();
   late TabController tabController;
+  final listData = 1;
   final _repo = Get.find<ModelRepo>();
   List<ModeList> modelList = [];
 
   @override
   void onInit() {
     super.onInit();
+    mBleMsg = BleMSg();
     _fetchModel();
   }
 
@@ -72,10 +74,11 @@ class ModelController extends PlayDeviceBleController {
     }
     processLoopCustomTimer?.cancel();
     processLoopClassicTimer?.cancel();
-    currentClassicModel.value = index;
-    if (currentClassicModel.value < 12) {
+    if (currentClassicModel.value==13 ||currentClassicModel.value < 12) {
       if (Runtime.checkRuntimeBleEnable()) {
         // if (!playModel.value) {
+        currentClassicModel.value = index;
+        update([listData]);
         Runtime.deviceInfo.value!.writeChar
             .write(BleMSg().generateModelData(currentClassicModel.value));
         if (processLoopClassicTimer == null) {
@@ -214,17 +217,6 @@ class ModelController extends PlayDeviceBleController {
     processLoopCustomTimer?.cancel();
     processLoopClassicTimer?.cancel();
     //先发送停止
-    if (index < 0) {
-      showToast('已经是最前的模式了');
-      return;
-    }
-    if (index >=    modelList[currentCustomModel.value]
-        .actions
-        .record
-        .length) {
-      showToast('已经是最后的模式了');
-      return;
-    }
     if (Runtime.checkRuntimeBleEnable()) {
       // if (!playModel.value) {
       Runtime.deviceInfo.value!.writeChar.write(mBleMsg.generateStopData());
@@ -291,7 +283,15 @@ class ModelController extends PlayDeviceBleController {
     if (currentModelPage.value == 0) {
       onClassicItemClick(currentClassicModel.value + 1);
     } else {
-      onCustomModelClick(currentCustomModel.value + 1);
+      if( currentCustomModel.value != -1 && currentCustomModel.value + 1 >=modelList.length  ){
+        showToast('当前已经是最后一个模式了');
+      }else{
+        if(currentCustomModel.value == -1){
+          onCustomModelClick(0);
+        }else{
+          onCustomModelClick(currentCustomModel.value + 1);
+        }
+      }
     }
   }
 
@@ -299,7 +299,15 @@ class ModelController extends PlayDeviceBleController {
     if (currentModelPage.value == 0) {
       onClassicItemClick(currentClassicModel.value - 1);
     } else {
-      onCustomModelClick(currentCustomModel.value - 1);
+      if(currentCustomModel.value != -1 && currentCustomModel.value -1 <0){
+        showToast('当前已经是最前的一个模式了');
+      }else{
+        if(currentCustomModel.value ==-1){
+          onCustomModelClick(0);
+        }else{
+          onCustomModelClick(currentCustomModel.value - 1);
+        }
+      }
     }
   }
 
