@@ -39,21 +39,25 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
       if (widget.url.startsWith('http')) {
         loadImageWithUrl(widget.url, context).then(
           (value) {
-            setState(
-              () {
-                widget.image = value;
-              },
-            );
+            if(mounted){
+              setState(
+                    () {
+                  widget.image = value;
+                },
+              );
+            }
           },
         );
       } else {
         loadImageWithPath(widget.url, context).then(
           (value) {
-            setState(
-              () {
-                widget.image = value;
-              },
-            );
+            if(mounted){
+              setState(
+                    () {
+                  widget.image = value;
+                },
+              );
+            }
           },
         );
       }
