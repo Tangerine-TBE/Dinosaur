@@ -16,147 +16,161 @@ import 'package:get/get.dart';
 import '../../../weight/loadmore_listview.dart';
 import '../../chart/weight/awesome_chart.dart';
 
-class DynamicPage extends StatelessWidget {
+class DynamicPage extends StatefulWidget {
   final PetController controller;
 
   const DynamicPage({super.key, required this.controller});
 
+  @override
+  State<DynamicPage> createState() => _DynamicPageState();
+}
+
+class _DynamicPageState extends State<DynamicPage>
+    with AutomaticKeepAliveClientMixin {
+  late PetController controller;
+
+  @override
+  void initState() {
+    controller = widget.controller;
+    controller.dynamicManager
+        .setRefreshController(RefreshController(initialRefresh: false));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    controller.dynamicManager.setRefreshController(RefreshController(initialRefresh: false));
+    super.build(context);
     return SafeArea(
-        child: Obx(() =>
-        PageStorage(
-          bucket: controller.dynamicManager.pageBucket,
-          child: SmartRefresher(
-            key: const PageStorageKey<String>('${RouteName.petPage}Dynamic'),
-            controller: controller.dynamicManager.refreshController,
-            onRefresh: ()async{
-              controller.dynamicManager.loadMoreList(true);
-            },
-            onLoading: () async{
-              controller.dynamicManager.loadMoreList(false);
-            },
-            header: WaterDropHeader(
-              refresh:    SizedBox(
-                width: 25.0,
-                height: 25.0,
-                child: defaultTargetPlatform == TargetPlatform.iOS
-                    ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
-                    :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
-              ),
-              complete: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(
-                    Icons.done,
-                    color: Colors.black,
-                  ),
-                  Container(
-                    width: 15.0,
-                  ),
-                  Text(
-                    '刷新完成',
-                    style: TextStyle(color: MyColors.textBlackColor),
-                  )
-                ],
-              ),
-              waterDropColor: MyColors.themeTextColor,
-            ),
-            enablePullDown: true,
-            enablePullUp: controller.dynamicManager.canLoadMore.value,
-            footer: CustomFooter(
-              builder: ( context, mode){
-                Widget body ;
-                if(mode==LoadStatus.idle){
-                  body =  Text("上拉加载");
-                }
-                else if(mode==LoadStatus.loading){
-                  body =  CupertinoActivityIndicator();
-                }
-                else if(mode == LoadStatus.failed){
-                  body = Text("加载失败！点击重试！");
-                }
-                else if(mode == LoadStatus.canLoading){
-                  body = Text("松手,加载更多!");
-                }
-                else{
-                  body = Text("没有更多数据了!");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child:body),
-                );
-              },
-            ),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding:
-                        const EdgeInsets.only(right: 18, left: 18, bottom: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: BannerCarousel.fullScreen(
-                          animation: true,
-                          height: 106,
-                          banners: controller.dynamicManager.listBanners,
-                          showIndicator: true,
-                          indicatorBottom: false,
-                          borderRadius: 10,
-                          disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                          activeColor: const Color(0xffFFFFFF),
-                          customizedIndicators: const IndicatorModel.animation(
-                            width: 5,
-                            height: 5,
-                            spaceBetween: 4,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-                GetBuilder<PetController>(
-                  builder: (controller) {
-                    return controller.dynamicManager.dataList.isNotEmpty
-                        ? SliverList.builder(
-                      itemBuilder: (context, index) {
-                        return _buildItem(index,
-                            controller.dynamicManager.dataList[index], context);
-                      },
-                      itemCount: controller.dynamicManager.dataList.length,
+        child: Obx(() => SmartRefresher(
+          key:
+              const PageStorageKey<String>('${RouteName.petPage}Dynamic'),
+          controller: controller.dynamicManager.refreshController,
+          onRefresh: () async {
+            controller.dynamicManager.loadMoreList(true);
+          },
+          onLoading: () async {
+            controller.dynamicManager.loadMoreList(false);
+          },
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                      color: MyColors.themeTextColor,
                     )
-                        : const SliverFillRemaining(
-                      child: SizedBox(
-                        child: NoDataWidget(
-                          title: '暂无记录',
-                        ),
-                      ),
-                    );
-                  },
-                  id: controller.dynamicManager.listId,
+                  : CircularProgressIndicator(
+                      strokeWidth: 2.0, color: MyColors.themeTextColor),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
                 ),
+                Container(
+                  width: 15.0,
+                ),
+                Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
               ],
             ),
+            waterDropColor: MyColors.themeTextColor,
           ),
-        )
-    ));
+          enablePullDown: true,
+          enablePullUp: controller.dynamicManager.canLoadMore.value,
+          footer: CustomFooter(
+            builder: (context, mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("上拉加载");
+              } else if (mode == LoadStatus.loading) {
+                body = CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("加载失败！点击重试！");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("松手,加载更多!");
+              } else {
+                body = Text("没有更多数据了!");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
+            },
+          ),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                          right: 18, left: 18, bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BannerCarousel.fullScreen(
+                        animation: true,
+                        height: 106,
+                        banners: controller.dynamicManager.listBanners,
+                        showIndicator: true,
+                        indicatorBottom: false,
+                        borderRadius: 10,
+                        disableColor:
+                            const Color(0xffFFFFFF).withOpacity(0.5),
+                        activeColor: const Color(0xffFFFFFF),
+                        customizedIndicators:
+                            const IndicatorModel.animation(
+                          width: 5,
+                          height: 5,
+                          spaceBetween: 4,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              GetBuilder<PetController>(
+                builder: (controller) {
+                  return controller.dynamicManager.dataList.isNotEmpty
+                      ? SliverList.builder(
+                          itemBuilder: (context, index) {
+                            return _buildItem(
+                                index,
+                                controller.dynamicManager.dataList[index],
+                                context);
+                          },
+                          itemCount:
+                              controller.dynamicManager.dataList.length,
+                        )
+                      : const SliverFillRemaining(
+                          child: SizedBox(
+                            child: NoDataWidget(
+                              title: '暂无记录',
+                            ),
+                          ),
+                        );
+                },
+                id: controller.dynamicManager.listId,
+              ),
+            ],
+          ),
+        )));
   }
-
   _buildItem(int index, PostsList item, BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 18, right: 18,top: 10),
+      padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -168,7 +182,8 @@ class DynamicPage extends StatelessWidget {
                 width: 40,
                 height: 40,
                 child: CircleAvatar(
-                  backgroundImage: loadImageProvider(item.userAvator),radius: 20,
+                  backgroundImage: loadImageProvider(item.userAvator),
+                  radius: 20,
                 ),
               ),
               SizedBox(
@@ -199,8 +214,8 @@ class DynamicPage extends StatelessWidget {
                     Visibility(
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 7, vertical: 4),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -307,7 +322,9 @@ class DynamicPage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Divider(
             height: 1,
             color: MyColors.textGreyColor.withOpacity(0.3),
@@ -360,8 +377,7 @@ class DynamicPage extends StatelessWidget {
                           TextSpan(
                             text: item.content,
                             style: TextStyle(
-                                color: MyColors.textBlackColor,
-                                fontSize: 12),
+                                color: MyColors.textBlackColor, fontSize: 12),
                           ),
                         ],
                       ),
@@ -388,7 +404,8 @@ class DynamicPage extends StatelessWidget {
                       context,
                       250,
                       index,
-                      item.images,'dynamic'),
+                      item.images,
+                      'dynamic'),
                   SizedBox(
                     height: 14,
                   ),
@@ -424,4 +441,7 @@ class DynamicPage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

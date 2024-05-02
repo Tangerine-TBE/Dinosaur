@@ -185,10 +185,13 @@ class CommonManager {
   final dataList = <PostsList>[];
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  setRefreshController(RefreshController refreshController) {
     this.refreshController = refreshController;
   }
+
   CommonManager({required this.controller, required this.pushRepo});
 
   Future loadMoreList(bool isRefresh) async {
@@ -302,8 +305,6 @@ class CommonManager {
     }
   }
 
-
-
   List<BannerModel> get listBanners {
     return [
       BannerModel(imagePath: ResName.homeAdd0, id: "1", boxFit: BoxFit.cover),
@@ -323,13 +324,14 @@ class DynamicManager {
   final pageBucket = PageStorageBucket();
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  setRefreshController(RefreshController refreshController) {
     this.refreshController = refreshController;
   }
+
   DynamicManager({required this.controller, required this.pushRepo});
-
-
 
   List<BannerModel> get listBanners {
     return [
@@ -461,10 +463,13 @@ class HandPickManager {
   final pageBucket = PageStorageBucket();
   var pageIndex = 1;
   final canLoadMore = false.obs;
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  setRefreshController(RefreshController refreshController) {
     this.refreshController = refreshController;
   }
+
   HandPickManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -531,7 +536,6 @@ class HandPickManager {
     }
   }
 
-
   showBottomSheet() {
     Get.bottomSheet(
       backgroundColor: Colors.white,
@@ -584,7 +588,6 @@ class HandPickManager {
       ),
     );
   }
-
 }
 
 class RefreshManager {
@@ -596,10 +599,13 @@ class RefreshManager {
   var pageIndex = 1;
   final pageBucket = PageStorageBucket();
   final canLoadMore = false.obs;
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  setRefreshController(RefreshController refreshController) {
     this.refreshController = refreshController;
   }
+
   RefreshManager({required this.controller, required this.pushRepo});
 
   List<BannerModel> get listBanners {
@@ -658,7 +664,6 @@ class RefreshManager {
         refreshController.loadFailed();
       }
     }
-
   }
 
   init() {
@@ -720,5 +725,4 @@ class RefreshManager {
       ),
     );
   }
-
 }

@@ -45,7 +45,6 @@ class _PetPageState extends State<PetPage> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return
       Stack(
-        key: const PageStorageKey<String>(RouteName.petPage),
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -114,6 +113,7 @@ class _PetPageState extends State<PetPage> with SingleTickerProviderStateMixin{
             ),
             body: SafeArea(
               child: TabBarView(
+
                 controller: tabController,
                 children: [
                   CommonPage(
