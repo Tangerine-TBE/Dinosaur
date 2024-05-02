@@ -12,8 +12,12 @@ class MessageController extends BaseController {
     msgPageManager = MsgPageManager(controller: this);
     friendPageManager = FriendPageManager(controller: this);
     notifyPageManager = NotifyPageManager(controller: this);
-    msgPageManager.init();
     super.onInit();
+  }
+  @override
+  void onReady(){
+    super.onReady();
+    msgPageManager.init();
   }
 
   onPageChanged(int index) {

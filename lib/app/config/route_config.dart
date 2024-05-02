@@ -2,6 +2,7 @@ import 'package:app_base/config/route_name.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
+import 'package:app_base/mvvm/repository/chart_repo.dart';
 import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
@@ -33,6 +34,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review.page.
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/push/push_msg_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
@@ -55,10 +57,14 @@ import 'package:dinosaur/app/src/moudle/test/pages/shakeit/shake_it_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/sideIt/side_it_page.dart';
 import 'package:app_base/config/user.dart';
+import '../src/moudle/test/pages/chart/chart_controller.dart';
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
+import '../src/moudle/test/pages/message/message_controller.dart';
+import '../src/moudle/test/pages/mine/mine_controller.dart';
 import '../src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
 import '../src/moudle/test/pages/mine/periodRecord/period_record_page.dart';
+import '../src/moudle/test/pages/pet/pet_controller.dart';
 
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
@@ -225,6 +231,15 @@ class RouteConfig extends ARoute {
               Get.lazyPut(
                 () => HomeController(),
               );
+              Get.lazyPut(() => PlayController());
+              Get.lazyPut(() => ChartController());
+              Get.lazyPut(() => ChartRepo());
+              Get.lazyPut(() => MineController());
+              Get.lazyPut(() => PetController());
+              Get.lazyPut(() => MessageController());
+              Get.lazyPut(() => PushRepo());
+              Get.lazyPut(() => PushRepo());
+              Get.lazyPut(() => PlayRepo());
               Get.lazyPut(() => LoginRepo());
             },
           ),

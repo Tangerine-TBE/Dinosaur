@@ -53,21 +53,7 @@ class PlaySelfContentManager {
       refreshController.refreshFailed();
     }
   }
-  onCreateTopItemClicked(){
 
-
-
-  }
-
-  _createTopCenter(
-      {required String subtitle,
-      required String imgUrl,
-      required String content,
-      required String title}) async {
-    await _repo.createTopCenter(
-        topiCenterCreateReq: TopiCenterCreateReq(
-            subtitle: subtitle, icon: imgUrl, title: title, content: content));
-  }
 }
 
 class RemoteControlContentManager {
@@ -113,6 +99,7 @@ class PlayController extends BaseController {
   late PlaySelfContentManager playSelfContentManager;
   late RemoteControlContentManager remoteControlContentManager;
   int index = 0;
+
 
   @override
   void onInit() async {

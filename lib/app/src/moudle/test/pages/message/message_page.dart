@@ -20,92 +20,95 @@ class MessagePage extends BaseEmptyPage<MessageController>
   bool get canPopBack => false;
   @override
   Widget buildContent(BuildContext context) {
-    TabController tabController = TabController(length: 3, vsync: this);
-    tabController.addListener(() {
-      controller.onPageChanged(tabController.index);
-    });
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-              MyColors.bgLinearShapeColor1,
-              MyColors.bgLinearShapeColor2,
-            ], begin: Alignment.topCenter, end: Alignment.center),
-          ),
-        ),
-        Scaffold(
-          backgroundColor: MyColors.pageBgColor,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(kToolbarHeight),
-            child: AppBar(
-              centerTitle: false,
-              backgroundColor: MyColors.pageBgColor,
-              automaticallyImplyLeading: false,
-              elevation: 0.0,
-              actions: [
-                Container(
-                  padding: EdgeInsets.only(
-                    right: 20,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      controller.onSearchClicked();
-                    },
-                    child: FaIcon(
-                      FontAwesomeIcons.userPlus,
-                      size: 16,
-                    ),
-                  ),
-                ),
-              ],
-              title: ScaleTabBar(
-                controller: tabController,
-                isScrollable: true,
-                unselectedLabelColor: MyColors.indicatorNormalTextColor,
-                labelColor:MyColors.indicatorSelectedTextColor ,
-                unselectedLabelStyle: TextStyle(
-                    color: MyColors.indicatorNormalTextColor,
-                    fontSize: SizeConfig.titleTextScaleSize),
-                labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: MyColors.indicatorSelectedTextColor,
-                    fontSize: SizeConfig.titleTextDefaultSize),
-                indicatorColor: MyColors.indicatorColor,
-                indicatorPadding: EdgeInsets.only(bottom: 10),
-                indicator: CurvedIndicator(),
-                indicatorSize: TabBarIndicatorSize.label,
-                labelPadding: EdgeInsets.symmetric(horizontal: 6),
-                tabs: const [
-                  Tab(
-                    text: '消息',
-                  ),
-                  Tab(
-                    text: '好友',
-                  ),
-                  Tab(
-                    text: '通知',
-                  ),
-                ],
+    return DefaultTabController(
+      length: 2,
+      child: Builder(builder: (context) {
+        final tabController = DefaultTabController.of(context);
+        tabController.addListener(() {
+            controller.onPageChanged(tabController.index);
+        });
+      return  Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  MyColors.bgLinearShapeColor1,
+                  MyColors.bgLinearShapeColor2,
+                ], begin: Alignment.topCenter, end: Alignment.center),
               ),
             ),
-          ),
-          body: SafeArea(
-            child: TabBarView(
-              controller: tabController,
-              children: [
-                MsgPage(
-                  messageController: controller,
+            Scaffold(
+              backgroundColor: MyColors.pageBgColor,
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(kToolbarHeight),
+                child: AppBar(
+                  centerTitle: false,
+                  backgroundColor: MyColors.pageBgColor,
+                  automaticallyImplyLeading: false,
+                  elevation: 0.0,
+                  actions: [
+                    Container(
+                      padding: EdgeInsets.only(
+                        right: 20,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          controller.onSearchClicked();
+                        },
+                        child: FaIcon(
+                          FontAwesomeIcons.userPlus,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                  title: ScaleTabBar(
+                    isScrollable: true,
+                    unselectedLabelColor: MyColors.indicatorNormalTextColor,
+                    labelColor:MyColors.indicatorSelectedTextColor ,
+                    unselectedLabelStyle: TextStyle(
+                        color: MyColors.indicatorNormalTextColor,
+                        fontSize: SizeConfig.titleTextScaleSize),
+                    labelStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.indicatorSelectedTextColor,
+                        fontSize: SizeConfig.titleTextDefaultSize),
+                    indicatorColor: MyColors.indicatorColor,
+                    indicatorPadding: EdgeInsets.only(bottom: 10),
+                    indicator: CurvedIndicator(),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    labelPadding: EdgeInsets.symmetric(horizontal: 6),
+                    tabs: const [
+                      Tab(
+                        text: '消息',
+                      ),
+                      Tab(
+                        text: '好友',
+                      ),
+                      Tab(
+                        text: '通知',
+                      ),
+                    ],
+                  ),
                 ),
-                FriPage(
-                  messageController: controller,
+              ),
+              body: SafeArea(
+                child: TabBarView(
+                  children: [
+                    MsgPage(
+                      messageController: controller,
+                    ),
+                    FriPage(
+                      messageController: controller,
+                    ),
+                    NotifyPage(),
+                  ],
                 ),
-                NotifyPage(),
-              ],
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      }),
     );
   }
 

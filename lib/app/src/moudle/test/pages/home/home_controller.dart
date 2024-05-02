@@ -23,7 +23,6 @@ import '../play/play_page.dart';
 
 class HomeController extends PlayDeviceBleController {
   final selectedTabIndex = 0.obs;
-  final _loginRepo = Get.find<LoginRepo>();
   final Map<String, Widget?> widgetList = {
     RouteName.playPage: null,
     RouteName.chartPage: null,
@@ -31,9 +30,11 @@ class HomeController extends PlayDeviceBleController {
     RouteName.petPage: null,
     RouteName.message: null,
   };
+  late PageController pageController;
 
   @override
   void onInit() async {
+    pageController = PageController();
     super.onInit();
   }
 

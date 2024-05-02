@@ -1,16 +1,22 @@
 import 'package:app_base/exports.dart';
 import 'package:app_base/res/my_colors.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/message/message_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/mine_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/pet/pet_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/play/play_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../chart/chart_page.dart';
 import 'home_controller.dart';
 
 class HomePage extends BaseEmptyPage<HomeController> {
   @override
   bool get canPopBack => false;
+
   const HomePage({super.key});
 
   @override
@@ -38,10 +44,43 @@ class HomePage extends BaseEmptyPage<HomeController> {
       ),
       body: SafeArea(
         top: false,
-        child: Navigator(
-          key: Get.nestedKey(1),
-          initialRoute: RouteName.playPage,
-          onGenerateRoute: controller.onGenerateRoute,
+        // child: Obx(
+        //   () => Stack(
+        //     children: [
+        //       Offstage(
+        //         offstage: !(controller.selectedTabIndex.value == 0),
+        //         child: const PlayPage(),
+        //       ),
+        //       Offstage(
+        //         offstage: !(controller.selectedTabIndex.value == 1),
+        //         child: const ChartPage(),
+        //       ),
+        //       Offstage(
+        //         offstage: !(controller.selectedTabIndex.value == 2),
+        //         child: const PetPage(),
+        //       ),
+        //       Offstage(
+        //         offstage: !(controller.selectedTabIndex.value == 3),
+        //         child: const MessagePage(),
+        //       ),
+        //       Offstage(
+        //         offstage: !(controller.selectedTabIndex.value == 4),
+        //         child: const MinePage(),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        child: PageView(children: [
+          const PlayPage(),
+          const ChartPage(),
+          const PetPage(),
+          const MessagePage(),
+          const MinePage(),
+        ],
+        onPageChanged: (index){
+          logE('${index}');
+        },
+        controller: controller.pageController,
         ),
       ),
     );
@@ -95,17 +134,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
             return;
           }
           controller.selectedTabIndex.value = index;
-          if (index == 0) {
-            Get.toNamed(RouteName.playPage, id: 1);
-          } else if (index == 1) {
-            Get.toNamed(RouteName.chartPage, id: 1);
-          } else if (index == 2) {
-            Get.toNamed(RouteName.petPage, id: 1);
-          } else if (index == 3) {
-            Get.toNamed(RouteName.message, id: 1);
-          } else if (index == 4) {
-            Get.toNamed(RouteName.minePage, id: 1);
-          }
+          controller.pageController.jumpToPage(index);
         },
       ),
     );
