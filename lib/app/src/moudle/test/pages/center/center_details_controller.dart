@@ -216,6 +216,8 @@ class RefreshManager {
 
   showBottomSheet() {
     Get.bottomSheet(
+      backgroundColor: Colors.white,
+      elevation: 0,
       SafeArea(
         child: Container(
           height: 120,
@@ -229,7 +231,10 @@ class RefreshManager {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
             ),
             child: Column(
               children: [
@@ -264,6 +269,7 @@ class RefreshManager {
       ),
     );
   }
+
 
 }
 

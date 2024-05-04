@@ -9,6 +9,7 @@
         <!-- 设置状态栏为白色的，状态栏文字为黑的 -->
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
     </style>
     <style name="DialogButton" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="textAllCaps">false</item>

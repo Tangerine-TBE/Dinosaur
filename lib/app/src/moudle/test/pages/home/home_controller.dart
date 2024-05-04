@@ -8,8 +8,9 @@ import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controll
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
+import 'package:status_bar_control/status_bar_control.dart';
 
 class HomeController extends PlayDeviceBleController {
   final selectedTabIndex = 0.obs;
@@ -21,12 +22,23 @@ class HomeController extends PlayDeviceBleController {
     super.onInit();
   }
 
-  toImageView(String url, String tag) {
+  toImageView(String url, String tag) async{
     Get.lazyPut(() => ImageViewController(), tag: tag);
     final Route route = PageRouteBuilder(
-         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-           return ImageViewPage(tagString: tag, urlString: url);
-    });
-    Navigator.of(Get.context!).push(route);
+      pageBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        return FadeTransition(
+          opacity: animation,
+          child: ImageViewPage(
+            tagString: tag,
+            urlString: url,
+          ),
+        );
+      },
+    );
+    StatusBarControl.setHidden(true, animation:StatusBarAnimation.SLIDE);
+   await Navigator.of(Get.context!).push(route);
+    StatusBarControl.setHidden(false, animation:StatusBarAnimation.SLIDE);
+
   }
 }

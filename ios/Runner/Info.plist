@@ -38,6 +38,8 @@
 	<string>This app always needs location to function</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app always needs photo</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
