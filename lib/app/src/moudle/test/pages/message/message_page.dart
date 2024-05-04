@@ -6,7 +6,6 @@ import 'package:dinosaur/app/src/moudle/test/pages/message/notify/notify_page.da
 import 'package:dinosaur/app/src/moudle/test/weight/my_tabs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/message/message_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,14 +13,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../play/weight/curved_indicator.dart';
 
 class MessagePage extends BaseEmptyPage<MessageController>
-    implements SingleTickerProviderStateMixin {
+      {
   const MessagePage({super.key});
   @override
   bool get canPopBack => false;
   @override
   Widget buildContent(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Builder(builder: (context) {
         final tabController = DefaultTabController.of(context);
         tabController.addListener(() {
@@ -96,10 +95,10 @@ class MessagePage extends BaseEmptyPage<MessageController>
                 child: TabBarView(
                   children: [
                     MsgPage(
-                      messageController: controller,
+                      controller: controller,
                     ),
                     FriPage(
-                      messageController: controller,
+                      controller: controller,
                     ),
                     NotifyPage(),
                   ],
@@ -111,42 +110,4 @@ class MessagePage extends BaseEmptyPage<MessageController>
       }),
     );
   }
-
-  @override
-  void activate() {}
-
-  @override
-  BuildContext get context => throw UnimplementedError();
-
-  @override
-  Ticker createTicker(TickerCallback onTick) {
-    return Ticker(onTick);
-  }
-
-  @override
-  void deactivate() {}
-
-  @override
-  void didChangeDependencies() {}
-
-  @override
-  void didUpdateWidget(covariant StatefulWidget oldWidget) {}
-
-  @override
-  void dispose() {}
-
-  @override
-  void initState() {}
-
-  @override
-  bool get mounted => throw UnimplementedError();
-
-  @override
-  void reassemble() {}
-
-  @override
-  void setState(VoidCallback fn) {}
-
-  @override
-  StatefulWidget get widget => throw UnimplementedError();
 }

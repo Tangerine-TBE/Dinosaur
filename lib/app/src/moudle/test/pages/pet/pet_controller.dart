@@ -188,9 +188,6 @@ class CommonManager {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  setRefreshController(RefreshController refreshController) {
-    this.refreshController = refreshController;
-  }
 
   CommonManager({required this.controller, required this.pushRepo});
 
@@ -327,9 +324,6 @@ class DynamicManager {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  setRefreshController(RefreshController refreshController) {
-    this.refreshController = refreshController;
-  }
 
   DynamicManager({required this.controller, required this.pushRepo});
 
@@ -466,9 +460,7 @@ class HandPickManager {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  setRefreshController(RefreshController refreshController) {
-    this.refreshController = refreshController;
-  }
+
 
   HandPickManager({required this.controller, required this.pushRepo});
 
@@ -602,9 +594,6 @@ class RefreshManager {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  setRefreshController(RefreshController refreshController) {
-    this.refreshController = refreshController;
-  }
 
   RefreshManager({required this.controller, required this.pushRepo});
 

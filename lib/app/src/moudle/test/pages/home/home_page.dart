@@ -44,43 +44,14 @@ class HomePage extends BaseEmptyPage<HomeController> {
       ),
       body: SafeArea(
         top: false,
-        // child: Obx(
-        //   () => Stack(
-        //     children: [
-        //       Offstage(
-        //         offstage: !(controller.selectedTabIndex.value == 0),
-        //         child: const PlayPage(),
-        //       ),
-        //       Offstage(
-        //         offstage: !(controller.selectedTabIndex.value == 1),
-        //         child: const ChartPage(),
-        //       ),
-        //       Offstage(
-        //         offstage: !(controller.selectedTabIndex.value == 2),
-        //         child: const PetPage(),
-        //       ),
-        //       Offstage(
-        //         offstage: !(controller.selectedTabIndex.value == 3),
-        //         child: const MessagePage(),
-        //       ),
-        //       Offstage(
-        //         offstage: !(controller.selectedTabIndex.value == 4),
-        //         child: const MinePage(),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        child: PageView(children: [
-          const PlayPage(),
-          const ChartPage(),
-          const PetPage(),
-          const MessagePage(),
-          const MinePage(),
+        child: PageView(
+        controller: controller.pageController,children: const [
+          PlayPage(),
+          ChartPage(),
+          PetPage(),
+          MessagePage(),
+          MinePage(),
         ],
-        onPageChanged: (index){
-          logE('${index}');
-        },
-        controller: controller.pageController,
         ),
       ),
     );
@@ -88,7 +59,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
 
   Widget _getButtonNavigationBar() {
     return ClipRRect(
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),

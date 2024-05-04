@@ -18,32 +18,23 @@ import '../../chart/weight/awesome_chart.dart';
 
 class DynamicPage extends StatefulWidget {
   final PetController controller;
-
-  const DynamicPage({super.key, required this.controller});
+  const DynamicPage({super.key,required this.controller});
 
   @override
   State<DynamicPage> createState() => _DynamicPageState();
 }
 
-class _DynamicPageState extends State<DynamicPage>
-    with AutomaticKeepAliveClientMixin {
+class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClientMixin{
   late PetController controller;
-
   @override
   void initState() {
-    controller = widget.controller;
-    controller.dynamicManager
-        .setRefreshController(RefreshController(initialRefresh: false));
     super.initState();
+    controller = widget.controller;
   }
-
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return SafeArea(
+    return  SafeArea(
         child: Obx(() => SmartRefresher(
-          key:
-              const PageStorageKey<String>('${RouteName.petPage}Dynamic'),
           controller: controller.dynamicManager.refreshController,
           onRefresh: () async {
             controller.dynamicManager.loadMoreList(true);
@@ -57,10 +48,10 @@ class _DynamicPageState extends State<DynamicPage>
               height: 25.0,
               child: defaultTargetPlatform == TargetPlatform.iOS
                   ? CupertinoActivityIndicator(
-                      color: MyColors.themeTextColor,
-                    )
+                color: MyColors.themeTextColor,
+              )
                   : CircularProgressIndicator(
-                      strokeWidth: 2.0, color: MyColors.themeTextColor),
+                  strokeWidth: 2.0, color: MyColors.themeTextColor),
             ),
             complete: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -121,10 +112,10 @@ class _DynamicPageState extends State<DynamicPage>
                         indicatorBottom: false,
                         borderRadius: 10,
                         disableColor:
-                            const Color(0xffFFFFFF).withOpacity(0.5),
+                        const Color(0xffFFFFFF).withOpacity(0.5),
                         activeColor: const Color(0xffFFFFFF),
                         customizedIndicators:
-                            const IndicatorModel.animation(
+                        const IndicatorModel.animation(
                           width: 5,
                           height: 5,
                           spaceBetween: 4,
@@ -141,22 +132,22 @@ class _DynamicPageState extends State<DynamicPage>
                 builder: (controller) {
                   return controller.dynamicManager.dataList.isNotEmpty
                       ? SliverList.builder(
-                          itemBuilder: (context, index) {
-                            return _buildItem(
-                                index,
-                                controller.dynamicManager.dataList[index],
-                                context);
-                          },
-                          itemCount:
-                              controller.dynamicManager.dataList.length,
-                        )
+                    itemBuilder: (context, index) {
+                      return _buildItem(
+                          index,
+                          controller.dynamicManager.dataList[index],
+                          context);
+                    },
+                    itemCount:
+                    controller.dynamicManager.dataList.length,
+                  )
                       : const SliverFillRemaining(
-                          child: SizedBox(
-                            child: NoDataWidget(
-                              title: '暂无记录',
-                            ),
-                          ),
-                        );
+                    child: SizedBox(
+                      child: NoDataWidget(
+                        title: '暂无记录',
+                      ),
+                    ),
+                  );
                 },
                 id: controller.dynamicManager.listId,
               ),
@@ -215,7 +206,7 @@ class _DynamicPageState extends State<DynamicPage>
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                        EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -376,7 +367,7 @@ class _DynamicPageState extends State<DynamicPage>
                         children: [
                           TextSpan(
                             text: item.content,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: MyColors.textBlackColor, fontSize: 12),
                           ),
                         ],
@@ -388,12 +379,12 @@ class _DynamicPageState extends State<DynamicPage>
                 onTap: () {
                   controller.naviToDetails(item, index);
                 },
-                child: Text(
+                child: const Text(
                   '全文',
                   style: TextStyle(color: Colors.pink, fontSize: 12),
                 ),
               ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             if (item.images.isNotEmpty)
@@ -406,7 +397,7 @@ class _DynamicPageState extends State<DynamicPage>
                       index,
                       item.images,
                       'dynamic'),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],
@@ -421,7 +412,7 @@ class _DynamicPageState extends State<DynamicPage>
                           MyColors.themeTextColor.withOpacity(0.3),
                           MyColors.themeTextColor.withOpacity(0.5),
                         ])),
-                    padding: EdgeInsets.only(top: 10, right: 4, left: 4),
+                    padding: const EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
                       dataList: <List<int>>[
                         List<int>.from(
@@ -431,7 +422,7 @@ class _DynamicPageState extends State<DynamicPage>
                       height: 30,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],
@@ -441,7 +432,9 @@ class _DynamicPageState extends State<DynamicPage>
       ],
     );
   }
-
   @override
   bool get wantKeepAlive => true;
 }
+
+
+

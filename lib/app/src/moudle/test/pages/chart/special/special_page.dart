@@ -10,20 +10,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../weight/awesome_chart.dart';
 import 'package:get/get.dart';
-
-class SpecialPage extends StatelessWidget {
+class SpecialPage extends StatefulWidget {
   final ChartController controller;
-
-  const SpecialPage({super.key, required this.controller});
+  const SpecialPage({super.key,required this.controller});
 
   @override
+  State<SpecialPage> createState() => _SpecialPageState();
+}
+
+class _SpecialPageState extends State<SpecialPage> with AutomaticKeepAliveClientMixin{
+  late ChartController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller;
+  }
+  @override
   Widget build(BuildContext context) {
-    controller.specialCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PageStorage(
         bucket: controller.specialCharManager.pageBucket,
         child: SmartRefresher(
+          key: const PageStorageKey<String>('${RouteName.chartPage}Special'),
           enablePullDown: true,
           header: WaterDropHeader(
             refresh: SizedBox(
@@ -57,30 +66,28 @@ class SpecialPage extends StatelessWidget {
           onRefresh: controller.specialCharManager.getChartList,
           controller: controller.specialCharManager.refreshController,
           child: CustomScrollView(
-            key: const PageStorageKey<String>('${RouteName.chartPage}Special'),
-            slivers: [GetBuilder<ChartController>(
-              builder: (controller) {
-                return SliverList.separated(
-                  itemBuilder: (context, index) {
-                    return _buildSpecialPageItem(
-                        index, controller.specialCharManager.data[index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 12,
-                    );
-                  },
-                  itemCount: controller.specialCharManager.data.length,
-                );
-              },
-              id: controller.specialCharManager.chartListId,
-            ),]
+              slivers: [GetBuilder<ChartController>(
+                builder: (controller) {
+                  return SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return _buildSpecialPageItem(
+                          index, controller.specialCharManager.data[index]);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 12,
+                      );
+                    },
+                    itemCount: controller.specialCharManager.data.length,
+                  );
+                },
+                id: controller.specialCharManager.chartListId,
+              ),]
           ),
         ),
       ),
     );
   }
-
   _buildSpecialPageItem(int index, WaveList item) {
     return Column(
       children: [
@@ -256,4 +263,7 @@ class SpecialPage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

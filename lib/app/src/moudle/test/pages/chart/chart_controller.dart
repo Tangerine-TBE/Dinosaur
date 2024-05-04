@@ -54,9 +54,6 @@ class SingleCharManager {
   SingleCharManager({required this.controller});
   final pageBucket = PageStorageBucket();
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
-    this.refreshController = refreshController;
-  }
   init() {
     if (!isInit) {
       refreshController.requestRefresh();
@@ -245,9 +242,6 @@ class SpecialCharManager {
   final pageBucket = PageStorageBucket();
   List<WaveList> data = <WaveList>[];
   RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
-    this.refreshController = refreshController;
-  }
   SpecialCharManager({required this.controller});
 
   init() {

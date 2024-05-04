@@ -4,11 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class MsgPage extends StatelessWidget {
-  final MessageController messageController;
+class MsgPage extends StatefulWidget {
+  final MessageController controller;
+  const MsgPage({super.key,required this.controller});
 
-  const MsgPage({super.key, required this.messageController});
+  @override
+  State<MsgPage> createState() => _MsgPageState();
+}
 
+class _MsgPageState extends State<MsgPage> with  AutomaticKeepAliveClientMixin{
+  late MessageController messageController;
+  @override
+  void initState() {
+    super.initState();
+    messageController = widget.controller;
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,37 +75,37 @@ class MsgPage extends StatelessWidget {
                 builder: (controller) {
                   return messageController.msgPageManager.data.isNotEmpty
                       ? SliverList.builder(
-                          itemBuilder: (BuildContext context, int index) {
-                            return _buildMsgItem();
-                          },
-                          itemCount:
-                              messageController.msgPageManager.data.length,
-                        )
+                    itemBuilder: (BuildContext context, int index) {
+                      return _buildMsgItem();
+                    },
+                    itemCount:
+                    messageController.msgPageManager.data.length,
+                  )
                       : SliverFillRemaining(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '暂无聊天记录',
-                                  style: TextStyle(
-                                      color: MyColors.textBlackColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                ),
-                                SizedBox(
-                                  height: 6,
-                                ),
-                                const Text(
-                                  '互相关注后即可畅快聊天，快去社区看看和有趣的人打个\r\n招呼吧～',
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      TextStyle(color: MyColors.textGreyColor),
-                                )
-                              ],
-                            ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '暂无聊天记录',
+                            style: TextStyle(
+                                color: MyColors.textBlackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20),
                           ),
-                        );
+                          SizedBox(
+                            height: 6,
+                          ),
+                          const Text(
+                            '互相关注后即可畅快聊天，快去社区看看和有趣的人打个\r\n招呼吧～',
+                            textAlign: TextAlign.center,
+                            style:
+                            TextStyle(color: MyColors.textGreyColor),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
                 },
                 id: messageController.msgPageManager.msgDataListId,
               )
@@ -112,4 +122,7 @@ class MsgPage extends StatelessWidget {
       width: 20,
     );
   }
+  @override
+  bool get wantKeepAlive => true;
 }
+

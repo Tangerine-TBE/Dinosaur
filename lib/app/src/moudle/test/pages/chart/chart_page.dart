@@ -18,26 +18,26 @@ class ChartPage extends BaseEmptyPage<ChartController> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Builder(builder: (context) {
-        final tabController = DefaultTabController.of(context);
-        tabController.addListener(
-          () {
-            controller.onPageChanged(tabController.index);
-          },
-        );
-        return Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  MyColors.bgLinearShapeColor1,
-                  MyColors.bgLinearShapeColor2,
-                ], begin: Alignment.topCenter, end: Alignment.center),
-              ),
-            ),
-            Scaffold(
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [
+              MyColors.bgLinearShapeColor1,
+              MyColors.bgLinearShapeColor2,
+            ], begin: Alignment.topCenter, end: Alignment.center),
+          ),
+        ),
+        DefaultTabController(
+          length: 3,
+          child: Builder(builder: (context){
+            final tabController = DefaultTabController.of(context);
+            tabController.addListener(
+                  () {
+                controller.onPageChanged(tabController.index);
+              },
+            );
+            return  Scaffold(
               backgroundColor: MyColors.pageBgColor,
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -84,10 +84,11 @@ class ChartPage extends BaseEmptyPage<ChartController> {
                   ],
                 ),
               ),
-            ),
-          ],
-        );
-      }),
+            );
+          },
+          ),
+        ),
+      ],
     );
   }
 }

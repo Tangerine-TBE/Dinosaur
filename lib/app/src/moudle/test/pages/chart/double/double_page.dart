@@ -10,71 +10,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../weight/awesome_chart.dart';
 import 'package:get/get.dart';
-
-class DoublePage extends StatelessWidget {
+class DoublePage extends StatefulWidget {
   final ChartController controller;
+  const DoublePage({super.key,required this.controller});
 
-  const DoublePage({super.key, required this.controller});
+  @override
+  State<DoublePage> createState() => _DoublePageState();
+}
+
+class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMixin{
+  late ChartController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller;
+  }
 
   @override
   Widget build(BuildContext context) {
     controller.doubleCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SmartRefresher(
-        enablePullDown: true,
-        header: WaterDropHeader(
-          refresh: SizedBox(
-            width: 25.0,
-            height: 25.0,
-            child: defaultTargetPlatform == TargetPlatform.iOS
-                ? CupertinoActivityIndicator(
-              color: MyColors.themeTextColor,
-            )
-                : CircularProgressIndicator(
-                strokeWidth: 2.0, color: MyColors.themeTextColor),
-          ),
-          complete: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(
-                Icons.done,
-                color: Colors.black,
-              ),
-              Container(
-                width: 15.0,
-              ),
-              const Text(
-                '刷新完成',
-                style: TextStyle(color: MyColors.textBlackColor),
+      child: PageStorage(
+        bucket: controller.doubleCharManager.pageBucket,
+        child: SmartRefresher(
+          key: const PageStorageKey<String>('${RouteName.chartPage}Double'),
+          enablePullDown: true,
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                color: MyColors.themeTextColor,
               )
-            ],
+                  : CircularProgressIndicator(
+                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+            ),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
+                ),
+                Container(
+                  width: 15.0,
+                ),
+                const Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
+              ],
+            ),
+            waterDropColor: MyColors.themeTextColor,
           ),
-          waterDropColor: MyColors.themeTextColor,
-        ),
-        onRefresh: controller.doubleCharManager.getChartList,
-        controller: controller.doubleCharManager.refreshController,
-        child: PageStorage(
-          bucket: controller.doubleCharManager.pageBucket,
-          child: CustomScrollView(
-            key: const PageStorageKey<String>('${RouteName.chartPage}Double'),
-            slivers: [GetBuilder<ChartController>(
-              builder: (controller) {
-                return SliverList.separated(
-                  itemBuilder: (context, index) {
-                    return _buildDoublePageItem(
-                        index, controller.doubleCharManager.data[index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 12,
-                    );
-                  },
-                  itemCount: controller.doubleCharManager.data.length,
-                );
-              },
-              id: controller.doubleCharManager.chartListId,
-            )],
+          onRefresh: controller.doubleCharManager.getChartList,
+          controller: controller.doubleCharManager.refreshController,
+          child: PageStorage(
+            bucket: controller.doubleCharManager.pageBucket,
+            child: CustomScrollView(
+              slivers: [GetBuilder<ChartController>(
+                builder: (controller) {
+                  return SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return _buildDoublePageItem(
+                          index, controller.doubleCharManager.data[index]);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 12,
+                      );
+                    },
+                    itemCount: controller.doubleCharManager.data.length,
+                  );
+                },
+                id: controller.doubleCharManager.chartListId,
+              )],
+            ),
           ),
         ),
       ),
@@ -253,4 +266,11 @@ class DoublePage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
+
+
+
+

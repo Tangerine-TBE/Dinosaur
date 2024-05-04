@@ -10,20 +10,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../weight/awesome_chart.dart';
 import 'package:get/get.dart';
-
-class SinglePage extends StatelessWidget {
+class SinglePage extends StatefulWidget {
   final ChartController controller;
-
-  const SinglePage({super.key, required this.controller});
+  const SinglePage({super.key,required this.controller});
 
   @override
+  State<SinglePage> createState() => _SinglePageState();
+}
+
+class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMixin {
+  late ChartController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller;
+  }
+  @override
   Widget build(BuildContext context) {
-    controller.singleCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PageStorage(
         bucket: controller.singleCharManager.pageBucket,
         child: SmartRefresher(
+          key: const PageStorageKey<String>('${RouteName.chartPage}Single'),
           enablePullDown: true,
           header: WaterDropHeader(
             refresh: SizedBox(
@@ -57,7 +66,6 @@ class SinglePage extends StatelessWidget {
           onRefresh: controller.singleCharManager.getChartList,
           controller: controller.singleCharManager.refreshController,
           child: CustomScrollView(
-            key: const PageStorageKey<String>('${RouteName.chartPage}SinglePage'),
             slivers: [GetBuilder<ChartController>(
               builder: (controller) {
                 return SliverList.separated(
@@ -80,7 +88,6 @@ class SinglePage extends StatelessWidget {
       ),
     );
   }
-
   _buildSinglePageItem(int index, WaveList item) {
     return Column(
       children: [
@@ -252,4 +259,9 @@ class SinglePage extends StatelessWidget {
       ],
     );
   }
+  @override
+  bool get wantKeepAlive => true;
+
 }
+
+

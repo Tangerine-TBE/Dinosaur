@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 import '../play/weight/curved_indicator.dart';
 class PetPage extends BaseEmptyPage<PetController> {

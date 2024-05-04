@@ -15,139 +15,142 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../chart/weight/awesome_chart.dart';
-
-class CommonPage extends StatelessWidget {
+class CommonPage extends StatefulWidget {
   final PetController controller;
-
-  const CommonPage({super.key, required this.controller});
-
+  const CommonPage({super.key,required this.controller});
 
   @override
+  State<CommonPage> createState() => _CommonPageState();
+}
+
+class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMixin{
+  late PetController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller;
+  }
+  @override
   Widget build(BuildContext context) {
-    controller.commonManager.setRefreshController(RefreshController(initialRefresh: false));
     return SafeArea(
-      child: Obx(() => PageStorage(
-        bucket: controller.commonManager.pageBucket,
-        child: SmartRefresher(
-          key: const PageStorageKey<String>('${RouteName.petPage}Common'),
-              controller: controller.commonManager.refreshController,
-              onRefresh: () async {
-                controller.commonManager.loadMoreList(true);
-              },
-              onLoading: () async {
-                controller.commonManager.loadMoreList(false);
-              },
-              header: WaterDropHeader(
-                refresh:    SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: defaultTargetPlatform == TargetPlatform.iOS
-                      ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
-                      :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
-                ),
-                complete: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.done,
-                      color: Colors.black,
-                    ),
-                    Container(
-                      width: 15.0,
-                    ),
-                    Text(
-                      '刷新完成',
-                      style: TextStyle(color: MyColors.textBlackColor),
-                    )
-                  ],
-                ),
-                waterDropColor: MyColors.themeTextColor,
+      child: Obx(() => SmartRefresher(
+        controller: controller.commonManager.refreshController,
+        onRefresh: () async {
+          controller.commonManager.loadMoreList(true);
+        },
+        onLoading: () async {
+          controller.commonManager.loadMoreList(false);
+        },
+        header: WaterDropHeader(
+          refresh:    SizedBox(
+            width: 25.0,
+            height: 25.0,
+            child: defaultTargetPlatform == TargetPlatform.iOS
+                ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
+                :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
+          ),
+          complete: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.done,
+                color: Colors.black,
               ),
-              enablePullDown: true,
-              enablePullUp: controller.commonManager.canLoadMore.value,
-              footer: CustomFooter(
-                builder: (context, mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("上拉加载");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator();
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("加载失败！点击重试！");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text("松手,加载更多!");
-                  } else {
-                    body = Text("没有更多数据了!");
-                  }
-                  return Container(
-                    height: 55.0,
-                    child: Center(child: body),
-                  );
-                },
+              Container(
+                width: 15.0,
               ),
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                              right: 18, left: 18, bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: BannerCarousel.fullScreen(
-                            animation: true,
-                            height: 106,
-                            banners: controller.commonManager.listBanners,
-                            showIndicator: true,
-                            indicatorBottom: false,
-                            borderRadius: 10,
-                            disableColor:
-                                const Color(0xffFFFFFF).withOpacity(0.5),
-                            activeColor: const Color(0xffFFFFFF),
-                            customizedIndicators: const IndicatorModel.animation(
-                              width: 5,
-                              height: 5,
-                              spaceBetween: 4,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
+              Text(
+                '刷新完成',
+                style: TextStyle(color: MyColors.textBlackColor),
+              )
+            ],
+          ),
+          waterDropColor: MyColors.themeTextColor,
+        ),
+        enablePullDown: true,
+        enablePullUp: controller.commonManager.canLoadMore.value,
+        footer: CustomFooter(
+          builder: (context, mode) {
+            Widget body;
+            if (mode == LoadStatus.idle) {
+              body = Text("上拉加载");
+            } else if (mode == LoadStatus.loading) {
+              body = CupertinoActivityIndicator();
+            } else if (mode == LoadStatus.failed) {
+              body = Text("加载失败！点击重试！");
+            } else if (mode == LoadStatus.canLoading) {
+              body = Text("松手,加载更多!");
+            } else {
+              body = Text("没有更多数据了!");
+            }
+            return Container(
+              height: 55.0,
+              child: Center(child: body),
+            );
+          },
+        ),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                        right: 18, left: 18, bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: BannerCarousel.fullScreen(
+                      animation: true,
+                      height: 106,
+                      banners: controller.commonManager.listBanners,
+                      showIndicator: true,
+                      indicatorBottom: false,
+                      borderRadius: 10,
+                      disableColor:
+                      const Color(0xffFFFFFF).withOpacity(0.5),
+                      activeColor: const Color(0xffFFFFFF),
+                      customizedIndicators: const IndicatorModel.animation(
+                        width: 5,
+                        height: 5,
+                        spaceBetween: 4,
+                      ),
                     ),
                   ),
-                  GetBuilder<PetController>(
-                    builder: (controller) {
-                      return controller.commonManager.dataList.isNotEmpty
-                          ? SliverList.builder(
-                              itemBuilder: (context, index) {
-                                return _buildItem(
-                                    index,
-                                    controller.commonManager.dataList[index],
-                                    context);
-                              },
-                              itemCount: controller.commonManager.dataList.length,
-                            )
-                          : const SliverFillRemaining(
-                              child: SizedBox(
-                                child: NoDataWidget(
-                                  title: '暂无记录',
-                                ),
-                              ),
-                            );
-                    },
-                    id: controller.commonManager.listId,
+                  const SizedBox(
+                    height: 10,
                   ),
                 ],
               ),
             ),
+            GetBuilder<PetController>(
+              builder: (controller) {
+                return controller.commonManager.dataList.isNotEmpty
+                    ? SliverList.builder(
+                  itemBuilder: (context, index) {
+                    return _buildItem(
+                        index,
+                        controller.commonManager.dataList[index],
+                        context);
+                  },
+                  itemCount: controller.commonManager.dataList.length,
+                )
+                    : const SliverFillRemaining(
+                  child: SizedBox(
+                    child: NoDataWidget(
+                      title: '暂无记录',
+                    ),
+                  ),
+                );
+              },
+              id: controller.commonManager.listId,
+            ),
+          ],
+        ),
       )),
     );
   }
-
   _buildItem(int index, PostsList item, BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
@@ -199,7 +202,7 @@ class CommonPage extends StatelessWidget {
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                        EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -423,4 +426,9 @@ class CommonPage extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
+
+

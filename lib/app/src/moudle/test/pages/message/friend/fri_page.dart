@@ -3,12 +3,22 @@ import 'package:app_base/res/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../message_controller.dart';
+class FriPage extends StatefulWidget {
+  final MessageController controller;
 
-class FriPage extends StatelessWidget {
-  final MessageController messageController;
+  const FriPage({super.key,required this.controller});
 
-  const FriPage({super.key, required this.messageController});
+  @override
+  State<FriPage> createState() => _FriPageState();
+}
 
+class _FriPageState extends State<FriPage> with AutomaticKeepAliveClientMixin {
+  late MessageController messageController;
+  @override
+  void initState() {
+    super.initState();
+    messageController = widget.controller;
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,7 +61,7 @@ class FriPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(left: 15),
             child: Obx(
-              () => Text(
+                  () => Text(
                 '我的好友（${messageController.friendPageManager.dataSize.value}）',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -68,28 +78,28 @@ class FriPage extends StatelessWidget {
                 builder: (controller) {
                   return messageController.msgPageManager.data.isNotEmpty
                       ? SliverList.builder(
-                          itemBuilder: (BuildContext context, int index) {
-                            return _buildMsgItem();
-                          },
-                          itemCount:
-                              messageController.msgPageManager.data.length,
-                        )
+                    itemBuilder: (BuildContext context, int index) {
+                      return _buildMsgItem();
+                    },
+                    itemCount:
+                    messageController.msgPageManager.data.length,
+                  )
                       : SliverFillRemaining(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '你还没有好友',
-                                  style: TextStyle(
-                                      color: MyColors.textBlackColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20),
-                                ),
-                              ],
-                            ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '你还没有好友',
+                            style: TextStyle(
+                                color: MyColors.textBlackColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20),
                           ),
-                        );
+                        ],
+                      ),
+                    ),
+                  );
                 },
                 id: messageController.friendPageManager.msgDataListId,
               ),
@@ -101,9 +111,13 @@ class FriPage extends StatelessWidget {
   }
 
   _buildMsgItem() {
-    return Container(
+    return const SizedBox(
       height: 20,
       width: 20,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
+

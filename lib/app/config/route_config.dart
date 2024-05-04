@@ -238,7 +238,6 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => PetController());
               Get.lazyPut(() => MessageController());
               Get.lazyPut(() => PushRepo());
-              Get.lazyPut(() => PushRepo());
               Get.lazyPut(() => PlayRepo());
               Get.lazyPut(() => LoginRepo());
             },

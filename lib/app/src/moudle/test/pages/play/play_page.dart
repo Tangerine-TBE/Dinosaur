@@ -111,8 +111,6 @@ class _ContentFra1State extends State<ContentFra1>
   Widget build(BuildContext context) {
     super.build(context);
     PlayController controller = widget.controller;
-    controller.playSelfContentManager
-        .setRefreshController(RefreshController(initialRefresh: false));
     return SmartRefresher(
       controller: controller.playSelfContentManager.refreshController,
       onRefresh: controller.playSelfContentManager.fetchTopCenterList,
