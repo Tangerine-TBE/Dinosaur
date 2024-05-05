@@ -1,12 +1,7 @@
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/bean/finger_info.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 
 
 class ImageViewPage extends StatelessWidget {
