@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/bean/finger_info.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
@@ -9,34 +7,26 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
-class ImageViewPage extends GetView<ImageViewController> {
+
+class ImageViewPage extends StatelessWidget {
   final String tagString;
   final String urlString;
-  final int height;
-  final int width;
 
-  const ImageViewPage(
-      {super.key,
-      required this.tagString,
-      required this.urlString,
-      required this.height,
-      required this.width});
-
-  @override
-  String? get tag => tagString;
+  const ImageViewPage({
+    super.key,
+    required this.tagString,
+    required this.urlString,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: ImageView(
-        controller: controller,
+        controller: ImageViewController(),
         tagString: tagString,
         urlString: urlString,
-        height: height.toInt(),
-        width: width.toInt(),
       ),
     );
   }
@@ -46,15 +36,11 @@ class ImageView extends StatefulWidget {
   final ImageViewController controller;
   final String tagString;
   final String urlString;
-  final int height;
-  final int width;
 
   const ImageView(
       {super.key,
       required this.controller,
       required this.tagString,
-      required this.height,
-      required this.width,
       required this.urlString});
 
   @override
@@ -86,6 +72,7 @@ class _ImageViewState extends State<ImageView>
   @override
   void dispose() {
     animationController.dispose();
+    widget.controller.close();
     super.dispose();
   }
 
@@ -93,11 +80,11 @@ class _ImageViewState extends State<ImageView>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        widget.controller.finish();
+        Navigator.pop(context);
       },
       onDoubleTapDown: (details) {
         logE('onDoubleTapDown');
-        widget.controller.position.value = details.localPosition;
+        widget.controller.position = details.localPosition;
       },
       onDoubleTap: () {
         widget.controller.dragModel = Model.unKnow;
@@ -105,7 +92,7 @@ class _ImageViewState extends State<ImageView>
             .getMaxScaleOnAxis();
         double targetScale = scale < 2.0 ? 2.0 : 1.0;
 
-        Offset localPosition = widget.controller.position.value;
+        Offset localPosition = widget.controller.position;
         Offset position = Offset(
           localPosition.dx /
               widget.controller.transformationController.value[0],
@@ -132,7 +119,7 @@ class _ImageViewState extends State<ImageView>
         ));
 
         animation.addListener(() {
-          if(widget.controller.dragModel == Model.unKnow){
+          if (widget.controller.dragModel == Model.unKnow) {
             widget.controller.transformationController.value = animation.value;
           }
         });
@@ -168,7 +155,7 @@ class _ImageViewState extends State<ImageView>
                 if (fingerEndInfo.type == FingerType.single &&
                     fingerStartInfo.type == FingerType.single) {
                   if (fingerEndInfo.dy - fingerStartInfo.dy >= 150) {
-                    widget.controller.finish();
+                    Navigator.pop(context);
                   } else {
                     var currentScaleSize = scaleSize;
                     var currentOffsetX = currentX;
@@ -188,7 +175,8 @@ class _ImageViewState extends State<ImageView>
                                     currentOffsetY * _animation.value;
                                 scaleSize = currentScaleSize +
                                     _animation.value * (1 - currentScaleSize);
-                                logE('scaleSize:$scaleSize currentScaleSize:$currentScaleSize');
+                                logE(
+                                    'scaleSize:$scaleSize currentScaleSize:$currentScaleSize');
                                 currentOpacity = currentOffsetOpacity +
                                     _animation.value *
                                         (1 - currentOffsetOpacity);
@@ -212,7 +200,9 @@ class _ImageViewState extends State<ImageView>
             if (details.pointerCount > 1 && details.pointerCount <= 2) {
             } else if (details.pointerCount == 1) {
               logE('${details.localFocalPoint.dy}');
-              if(widget.controller.transformationController.value.getMaxScaleOnAxis() > 1.0){
+              if (widget.controller.transformationController.value
+                      .getMaxScaleOnAxis() >
+                  1.0) {
                 return;
               }
               if (fingerStartInfo.dy - details.localFocalPoint.dy < 0) {

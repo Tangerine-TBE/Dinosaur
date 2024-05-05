@@ -33,8 +33,6 @@ class HomeController extends PlayDeviceBleController {
           child: ImageViewPage(
             tagString: tag,
             urlString: url,
-           height:  height,
-            width: width,
           ),
         );
       },
