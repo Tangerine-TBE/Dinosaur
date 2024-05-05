@@ -21,7 +21,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
 import '../chart/weight/awesome_chart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class PushMsgController extends BaseController {
   final _playRepo = Get.find<PlayRepo>();
@@ -36,6 +35,8 @@ class PushMsgController extends BaseController {
   final selectedWave = <int>[].obs;
   final selectedTag = ''.obs;
   var selectedImagesObx = <String>[];
+  var selectedImagesWidth = <int>[];
+  var selectedImagesHeight = <int>[];
   late TextEditingController editingController;
 
   @override
@@ -45,7 +46,7 @@ class PushMsgController extends BaseController {
     super.onInit();
   }
 
-  imagePreView(
+  imagePreView(List<int>width,List<int>height,
       List<String> images, BuildContext context, double size, int parentIndex) {
     if (images.isNotEmpty) {
       double reSizeHeight;
@@ -63,6 +64,8 @@ class PushMsgController extends BaseController {
         height: reSizeHeight,
         child: LongPressPreView(
           images: images,
+          height: selectedImagesHeight,
+          width: selectedImagesWidth,
           size: double.infinity,
           parentIndex:parentIndex,
           onOrderUpdateCallBack: (value) {
@@ -226,6 +229,9 @@ class PushMsgController extends BaseController {
                   String? path = await AImagePicker.instance().pickCamera();
                   if ((path?.length ?? 0) > 0) {
                     selectedImagesObx.add(path!);
+                  var image =   await loadImageWithPath(path, Get.context!);
+                    selectedImagesHeight.add(image.height);
+                    selectedImagesWidth.add(image.width);
                     update([imagesListId]);
                   }
                 },

@@ -1,31 +1,42 @@
-import 'dart:io';
+import 'dart:math';
+
 import 'package:app_base/exports.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/imageView/bean/finger_info.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
 class ImageViewPage extends GetView<ImageViewController> {
   final String tagString;
   final String urlString;
+  final int height;
+  final int width;
 
   const ImageViewPage(
-      {super.key, required this.tagString, required this.urlString});
+      {super.key,
+      required this.tagString,
+      required this.urlString,
+      required this.height,
+      required this.width});
 
   @override
   String? get tag => tagString;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body: ImageView(
         controller: controller,
         tagString: tagString,
         urlString: urlString,
+        height: height.toInt(),
+        width: width.toInt(),
       ),
     );
   }
@@ -35,11 +46,15 @@ class ImageView extends StatefulWidget {
   final ImageViewController controller;
   final String tagString;
   final String urlString;
+  final int height;
+  final int width;
 
   const ImageView(
       {super.key,
       required this.controller,
       required this.tagString,
+      required this.height,
+      required this.width,
       required this.urlString});
 
   @override
@@ -49,16 +64,23 @@ class ImageView extends StatefulWidget {
 class _ImageViewState extends State<ImageView>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
-  var currentX = 0.0 ;
+  late Animation _animation;
+  var currentX = 0.0;
   var currentY = 0.0;
   var scaleSize = 1.0;
+  var currentOpacity = 1.0;
+  FingerInfo fingerStartInfo = FingerInfo(
+      type: FingerType.unKnow, dx: 0, dy: 0, tapTime: DateTime.now());
+  FingerInfo fingerEndInfo = FingerInfo(
+      type: FingerType.unKnow, dx: 0, dy: 0, tapTime: DateTime.now());
+
   @override
   void initState() {
+    super.initState();
     animationController = AnimationController(
       duration: const Duration(milliseconds: 200),
-      vsync: this, // 请根据您的具体情况替换为正确的TickerProvider
+      vsync: this,
     );
-    super.initState();
   }
 
   @override
@@ -74,9 +96,11 @@ class _ImageViewState extends State<ImageView>
         widget.controller.finish();
       },
       onDoubleTapDown: (details) {
+        logE('onDoubleTapDown');
         widget.controller.position.value = details.localPosition;
       },
       onDoubleTap: () {
+        widget.controller.dragModel = Model.unKnow;
         double scale = widget.controller.transformationController.value
             .getMaxScaleOnAxis();
         double targetScale = scale < 2.0 ? 2.0 : 1.0;
@@ -108,92 +132,170 @@ class _ImageViewState extends State<ImageView>
         ));
 
         animation.addListener(() {
-          widget.controller.transformationController.value = animation.value;
+          if(widget.controller.dragModel == Model.unKnow){
+            widget.controller.transformationController.value = animation.value;
+          }
         });
-
         animationController.forward();
       },
-      onVerticalDragStart: (details){
-        widget.controller.dragStartPosition.value = details.localPosition;
-      },
-      onVerticalDragUpdate: (details){
-        var currentPosition = details.localPosition;
-        var currentY = currentPosition.dy;
-        var startDragY = widget.controller.dragStartPosition.value.dy;
-        var offset = startDragY - currentY;
-        if(offset < 0 ){
-          if(widget.controller.canDrag == false){
-            widget.controller.canDrag = true;
-          }else{
-            //缩小
-            //滑动的偏差与屏幕之间的比例
-            var currentScaleSize = 1+ offset/MediaQuery.of(context).size.height;
-            logE('scaleSize:$scaleSize');
-            setState(() {
-             scaleSize = currentScaleSize;
-            });
-          }
-        }else{
-          //放大到与原图一致
-        }
-        if(widget.controller.canDrag){
-          //跟随手指滑动
-          setState(() {
-            currentX =-(widget.controller.dragStartPosition.value.dx - currentPosition.dx);
-            this.currentY = -(widget.controller.dragStartPosition.value.dy - currentPosition.dy);
-          });
-        }
-      },
-      onVerticalDragEnd: (details){
-        widget.controller.canDrag  =false;
-        setState(() {
-          currentX =0;
-          currentY = 0;
-          scaleSize = 1.0;
-        });
-      },
-      child: Stack(
-        children:[
-          InteractiveViewer(
-            maxScale: 4.0,
-            transformationController: widget.controller.transformationController,
-            child: AnimatedBuilder(
-              animation: animationController,
-              builder: (BuildContext context, Widget? child) {
-                return Center(
-                  child: widget.urlString.startsWith('http')
-                      ? Hero(
-                    tag: widget.tagString,
-                    child: Stack(
-                      children:[
+      child: Container(
+        color: Colors.black.withOpacity(currentOpacity),
+        child: InteractiveViewer(
+          trackpadScrollCausesScale: true,
+          onInteractionStart: (details) {
+            if (details.pointerCount > 1 && details.pointerCount <= 2) {
+              //双指
+              fingerStartInfo.type = FingerType.double;
+              fingerStartInfo.dy = details.localFocalPoint.dy;
+              fingerStartInfo.dx = details.localFocalPoint.dx;
+            } else if (details.pointerCount == 1) {
+              //单指
+              fingerStartInfo.type = FingerType.single;
+              fingerStartInfo.dy = details.localFocalPoint.dy;
+              fingerStartInfo.dx = details.localFocalPoint.dx;
+              fingerStartInfo.tapTime = DateTime.now();
+            } else {
+              //三指或其他
+            }
+          },
+          onInteractionEnd: (details) {
+            if (details.pointerCount > 1 && details.pointerCount <= 2) {
+              //双指
+            } else if (details.pointerCount == 1) {
+              //单指
+            } else {
+              if (widget.controller.dragModel == Model.picTransformScale) {
+                if (fingerEndInfo.type == FingerType.single &&
+                    fingerStartInfo.type == FingerType.single) {
+                  if (fingerEndInfo.dy - fingerStartInfo.dy >= 150) {
+                    widget.controller.finish();
+                  } else {
+                    var currentScaleSize = scaleSize;
+                    var currentOffsetX = currentX;
+                    var currentOffsetY = currentY;
+                    var currentOffsetOpacity = currentOpacity;
+                    _animation = Tween<double>(begin: 0.0, end: 1.0)
+                        .animate(animationController)
+                      ..addListener(
+                        () {
+                          setState(
+                            () {
+                              if (widget.controller.dragModel ==
+                                  Model.picTransformScale) {
+                                currentX = currentOffsetX -
+                                    currentOffsetX * _animation.value;
+                                currentY = currentOffsetY -
+                                    currentOffsetY * _animation.value;
+                                scaleSize = currentScaleSize +
+                                    _animation.value * (1 - currentScaleSize);
+                                logE('scaleSize:$scaleSize currentScaleSize:$currentScaleSize');
+                                currentOpacity = currentOffsetOpacity +
+                                    _animation.value *
+                                        (1 - currentOffsetOpacity);
+                              }
+                            },
+                          );
+                        },
+                      )
+                      ..addStatusListener((status) {
+                        if (status == AnimationStatus.completed) {
+                          widget.controller.dragModel = Model.unKnow;
+                        }
+                      });
+                    animationController.forward(from: 0.0);
+                  }
+                }
+              }
+            }
+          },
+          onInteractionUpdate: (details) {
+            if (details.pointerCount > 1 && details.pointerCount <= 2) {
+            } else if (details.pointerCount == 1) {
+              logE('${details.localFocalPoint.dy}');
+              if(widget.controller.transformationController.value.getMaxScaleOnAxis() > 1.0){
+                return;
+              }
+              if (fingerStartInfo.dy - details.localFocalPoint.dy < 0) {
+                // var currentTime = DateTime.now();
+                // Duration duration =
+                //     currentTime.difference(fingerStartInfo.tapTime);
+                // int offsetMilliseconds = duration.inMilliseconds;
+                // double offset = details.localFocalPoint.dy - fingerStartInfo.dy;
+                // double speed = offset / offsetMilliseconds;
+                if (widget.controller.dragModel != Model.picTransformScale) {
+                  widget.controller.dragModel = Model.picTransformScale;
+                }
+
+                fingerEndInfo.dy = details.localFocalPoint.dy;
+                fingerEndInfo.dx = details.localFocalPoint.dx;
+                fingerEndInfo.tapTime = DateTime.now();
+                fingerEndInfo.type = FingerType.single;
+              }
+              if (widget.controller.dragModel == Model.picTransformScale) {
+                var startDragY = fingerStartInfo.dy;
+                var offset = startDragY - details.localFocalPoint.dy;
+                if (offset < 0) {
+                  if (widget.controller.canDrag == false) {
+                    widget.controller.canDrag = true;
+                  } else {
+                    var currentScaleSize =
+                        1 + offset / MediaQuery.of(context).size.height;
+                    setState(() {
+                      scaleSize = currentScaleSize;
+                    });
+                  }
+                }
+                setState(() {
+                  currentX = -(fingerStartInfo.dx - details.localFocalPoint.dx);
+                  currentY = -(fingerStartInfo.dy - details.localFocalPoint.dy);
+                  var calculateOpacity = 1.0 *
+                      (1 -
+                          (details.localFocalPoint.dy - fingerStartInfo.dy) /
+                              (MediaQuery.of(context).size.height -
+                                  fingerStartInfo.dy));
+                  if (calculateOpacity <= 1.0) {
+                    currentOpacity = calculateOpacity;
+                  }
+                });
+              }
+            } else {
+              //三指或其他
+            }
+          },
+          transformationController: widget.controller.transformationController,
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (BuildContext context, Widget? child) {
+              return widget.urlString.startsWith('http')
+                  ? Stack(
+                      children: [
                         Positioned(
                           left: currentX,
                           top: currentY,
-                          right: 0,
-                          bottom: 0,
-                          child: AnimatedScale(
-                            scale: scaleSize,
-                            duration: Duration(milliseconds: 200),
-                            child: Image.network(
-                              widget.urlString,
-                              fit: BoxFit.cover,
-                              width: MediaQuery.of(context).size.width,
+                          bottom: -currentY,
+                          right: -currentX,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: AnimatedScale(
+                              scale: scaleSize,
+                              duration: const Duration(milliseconds: 200),
+                              child: Hero(
+                                tag: widget.tagString,
+                                child: Image.network(
+                                  widget.urlString,
+                                  fit: BoxFit.cover,
+                                  width: MediaQuery.of(context).size.width,
+                                ),
+                              ),
                             ),
                           ),
                         )
-                      ] ,
-                    ),
-                  )
-                      : Image.file(
-                    File(widget.urlString),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                );
-              },
-            ),
-          )
-        ],
+                      ],
+                    )
+                  : Container();
+            },
+          ),
+        ),
       ),
     );
   }

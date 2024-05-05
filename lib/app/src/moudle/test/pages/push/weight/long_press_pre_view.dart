@@ -1,4 +1,3 @@
-
 import 'package:app_base/exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
@@ -9,14 +8,18 @@ import '../../pet/weight/image_preview.dart';
 
 class LongPressPreView extends StatefulWidget {
   final List<String> images;
+  final List<int> height;
+  final List<int> width;
   final double size;
   final int parentIndex;
   final Function(List<String> value) onOrderUpdateCallBack;
 
   const LongPressPreView(
       {super.key,
-        required this.parentIndex,
+      required this.parentIndex,
       required this.images,
+      required this.height,
+      required this.width,
       required this.size,
       required this.onOrderUpdateCallBack});
 
@@ -59,10 +62,15 @@ class _LongPressPreViewState extends State<LongPressPreView> {
             InkWell(
               onTap: () {
                 final homeController = Get.find<HomeController>();
-                homeController.toImageView(widget.images[index], tag);
+                homeController.toImageView(
+                  widget.images[index],
+                  tag,
+                  widget.height[index],
+                  widget.width[index],
+                );
               },
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: ImagePreView(
                   url: widget.images[index],
                   size: widget.size,
@@ -73,7 +81,7 @@ class _LongPressPreViewState extends State<LongPressPreView> {
               right: 0,
               top: 0,
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     widget.images.removeAt(index);
                     widget.onOrderUpdateCallBack.call(widget.images);

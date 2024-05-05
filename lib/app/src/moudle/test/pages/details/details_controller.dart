@@ -148,7 +148,7 @@ class DetailsController extends BaseController {
         return InkWell(
           onTap: () {
             final homeController = Get.find<HomeController>();
-            homeController.toImageView(images[0], tag);
+            homeController.toImageView(images[0], tag,list[0].height,list[0].width);
           },
           child: Hero(
             tag: tag,
@@ -197,7 +197,7 @@ class DetailsController extends BaseController {
               return InkWell(
                 onTap: () {
                   final homeController = Get.find<HomeController>();
-                  homeController.toImageView(images[index], tag);
+                  homeController.toImageView(images[index], tag,list[index].height,list[index].width);
                 },
                 child: Hero(
                   tag: tag,

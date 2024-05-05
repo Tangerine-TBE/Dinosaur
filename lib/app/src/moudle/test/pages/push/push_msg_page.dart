@@ -231,10 +231,13 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                         GetBuilder<PushMsgController>(
                           builder: (controller) {
                             return controller.imagePreView(
-                                controller.selectedImagesObx,
-                                context,
-                                300,
-                                0);
+                              controller.selectedImagesWidth,
+                              controller.selectedImagesHeight,
+                              controller.selectedImagesObx,
+                              context,
+                              300,
+                              0,
+                            );
                           },
                           id: controller.imagesListId,
                         ),
@@ -254,8 +257,8 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                       right: 10,
                                       left: 10,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 10),
                                         decoration: BoxDecoration(
                                           border:
                                               Border.all(color: Colors.black),

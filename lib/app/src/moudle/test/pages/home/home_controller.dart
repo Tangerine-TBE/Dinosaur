@@ -22,9 +22,10 @@ class HomeController extends PlayDeviceBleController {
     super.onInit();
   }
 
-  toImageView(String url, String tag) async{
+  toImageView(String url, String tag,int height,int  width) async{
     Get.lazyPut(() => ImageViewController(), tag: tag);
     final Route route = PageRouteBuilder(
+        opaque:false,
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return FadeTransition(
@@ -32,6 +33,8 @@ class HomeController extends PlayDeviceBleController {
           child: ImageViewPage(
             tagString: tag,
             urlString: url,
+           height:  height,
+            width: width,
           ),
         );
       },
