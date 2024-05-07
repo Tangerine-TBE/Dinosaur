@@ -21,6 +21,7 @@ dependencies:
   flutter_reorderable_grid_view: ^4.0.0
   status_bar_control: ^3.2.1
 #  connectivity_plus: ^5.0.2
+  cached_network_image: ^3.3.1
   gradient_slider: ^1.0.2
   vibration: ^1.8.4
   pinput: ^4.0.0

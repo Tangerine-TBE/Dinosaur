@@ -9,7 +9,6 @@ import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:dinosaur/app/src/moudle/test/dialog/my_dialog_widget.dart';
-import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/pet/weight/image_preview_single.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -391,7 +390,7 @@ class DynamicManager {
       SafeArea(
         child: Container(
           height: 120,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12),
@@ -399,7 +398,7 @@ class DynamicManager {
             ),
           ),
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),

@@ -18,7 +18,8 @@ import '../../chart/weight/awesome_chart.dart';
 
 class DynamicPage extends StatefulWidget {
   final PetController controller;
-  const DynamicPage({super.key,required this.controller});
+
+  const DynamicPage({super.key, required this.controller});
 
   @override
   State<DynamicPage> createState() => _DynamicPageState();
@@ -26,6 +27,7 @@ class DynamicPage extends StatefulWidget {
 
 class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClientMixin{
   late PetController controller;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,8 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
   }
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    super.build(context);
+    return SafeArea(
         child: Obx(() => SmartRefresher(
           controller: controller.dynamicManager.refreshController,
           onRefresh: () async {

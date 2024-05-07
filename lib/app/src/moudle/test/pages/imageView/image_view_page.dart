@@ -1,4 +1,5 @@
 import 'package:app_base/exports.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/bean/finger_info.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:flutter/material.dart';
@@ -245,33 +246,31 @@ class _ImageViewState extends State<ImageView>
           child: AnimatedBuilder(
             animation: animationController,
             builder: (BuildContext context, Widget? child) {
-              return widget.urlString.startsWith('http')
-                  ? Stack(
-                      children: [
-                        Positioned(
-                          left: currentX,
-                          top: currentY,
-                          bottom: -currentY,
-                          right: -currentX,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: AnimatedScale(
-                              scale: scaleSize,
-                              duration: const Duration(milliseconds: 200),
-                              child: Hero(
-                                tag: widget.tagString,
-                                child: Image.network(
-                                  widget.urlString,
-                                  fit: BoxFit.cover,
-                                  width: MediaQuery.of(context).size.width,
-                                ),
-                              ),
-                            ),
+              return Stack(
+                children: [
+                  Positioned(
+                    left: currentX,
+                    top: currentY,
+                    bottom: -currentY,
+                    right: -currentX,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AnimatedScale(
+                        scale: scaleSize,
+                        duration: const Duration(milliseconds: 200),
+                        child: Hero(
+                          tag: widget.tagString,
+                          child: CachedNetworkImage(
+                            imageUrl:widget.urlString,
+                            fit: BoxFit.cover,
+                            width: MediaQuery.of(context).size.width,
                           ),
-                        )
-                      ],
-                    )
-                  : Container();
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
             },
           ),
         ),

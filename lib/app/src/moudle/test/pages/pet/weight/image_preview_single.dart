@@ -1,7 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:app_base/exports.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:app_base/util/image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,9 +13,8 @@ class ImagePreViewSingle extends StatefulWidget {
   final double size;
   final int imageWidth;
   final int imageHeight;
-  ui.Image? image;
 
-  ImagePreViewSingle(
+  const ImagePreViewSingle(
       {super.key,
       required this.url,
       required this.size,
@@ -29,48 +30,8 @@ class ImagePreViewSingle extends StatefulWidget {
 class _ImagePreViewSingleState extends State<ImagePreViewSingle>
     with AutomaticKeepAliveClientMixin {
   @override
-  void initState() {
-    super.initState();
-    loadImage();
-  }
-
-  loadImage() {
-    if (widget.image == null) {
-      if (widget.url.startsWith('http')) {
-        loadImageWithUrl(widget.url, context).then(
-          (value) {
-            if(mounted){
-              setState(
-                    () {
-                  widget.image = value;
-                },
-              );
-            }
-          },
-        );
-      } else {
-        loadImageWithPath(widget.url, context).then(
-          (value) {
-            if(mounted){
-              setState(
-                    () {
-                  widget.image = value;
-                },
-              );
-            }
-          },
-        );
-      }
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant ImagePreViewSingle oldWidget) {
-    loadImage();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    super.build(context);
     var imageWidth = widget.imageWidth; //图片的实际宽度
     var imageHeight = widget.imageHeight;
     if (imageWidth > imageHeight) {
@@ -78,27 +39,22 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
     } else if (imageWidth < imageHeight) {
       return buildImageViewWithWidth();
     } else {
-      return widget.image == null?
-      SizedBox(
+      return SizedBox(
         width: widget.size,
         height: widget.size,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(4),
-          child: Image.asset(
-            ResName.loaded_failure,
-            fit: BoxFit.contain,
-          ),
-        ),
-      )
-          :
-          SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: RawImage(
-            image: widget.image,
+          child: CachedNetworkImage(
+            imageUrl: widget.url,
+            placeholder: (context, url) => Center(
+                child: SizedBox(
+                  width: 40, // 统一设置指示器的大小
+                  height: 40,
+                  child: CircularProgressIndicator(strokeWidth: 2,color: MyColors.themeTextColor,),
+                ),
+            ),
             fit: BoxFit.cover,
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
         ),
       );
@@ -107,57 +63,49 @@ class _ImagePreViewSingleState extends State<ImagePreViewSingle>
 
   Widget buildImageViewWithHeight() {
     var boxHeight = widget.size * widget.imageHeight / widget.imageWidth;
-    return widget.image == null
-        ? SizedBox(
-            width: widget.size,
-            height: boxHeight,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.asset(
-                ResName.loaded_failure,
-                fit: BoxFit.contain,
-              ),
+    return SizedBox(
+      width: widget.size,
+      height: boxHeight,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: CachedNetworkImage(
+          imageUrl: widget.url,
+          placeholder: (context, url) => Center(
+            child: SizedBox(
+              width: 40, // 统一设置指示器的大小
+              height: 40,
+              child: CircularProgressIndicator(strokeWidth: 2,color: MyColors.themeTextColor,),
             ),
-          )
-        : SizedBox(
-            width: widget.size,
-            height: boxHeight,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: RawImage(
-                image: widget.image,
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
+          ),
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      ),
+    );
   }
 
   Widget buildImageViewWithWidth() {
     double boxWidth = widget.size * widget.imageWidth / widget.imageHeight;
 
-    return widget.image == null
-        ? SizedBox(
-            width: boxWidth,
-            height: widget.size,
+    return SizedBox(
+      width: boxWidth,
+      height: widget.size,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(4),
-        child: Image.asset(
-          ResName.loaded_failure,
-          fit: BoxFit.contain,
+        child: CachedNetworkImage(
+          imageUrl: widget.url,
+          placeholder: (context, url) => Center(
+            child: SizedBox(
+              width: 40, // 统一设置指示器的大小
+              height: 40,
+              child: CircularProgressIndicator(strokeWidth: 2,color: MyColors.themeTextColor,),
+            ),
+          ),
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       ),
-          )
-        : SizedBox(
-            width: boxWidth,
-            height: widget.size,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: RawImage(
-                image: widget.image,
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
+    );
   }
 
   @override

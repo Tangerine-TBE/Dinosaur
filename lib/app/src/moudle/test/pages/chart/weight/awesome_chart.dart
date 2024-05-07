@@ -97,11 +97,14 @@ class _AwesomeChartViewState extends State<AwesomeChartView>
       onVisibilityChanged: (info) {
         if (info.visibleFraction == 0.0) {
           if (mounted) {
-            _controller.stop();
+              _controller.stop();
+
           }
         } else {
-          _controller.reset();
-          _controller.repeat(reverse: true);
+          if(!_controller.isAnimating){
+            _controller.reset();
+            _controller.repeat(reverse: true);
+          }
         }
       },
       child: AnimatedBuilder(
