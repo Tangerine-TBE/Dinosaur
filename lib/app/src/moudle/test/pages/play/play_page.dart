@@ -16,6 +16,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/play/weight/curved_indicator.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../weight/my_tabs.dart';
 
 class PlayPage extends BaseEmptyPage<PlayController> {
@@ -396,14 +397,14 @@ class _ContentFra1State extends State<ContentFra1>
                   children: [
                     Text(
                       bean.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
                     ),
                     Text(
                       bean.subtitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black,
                           fontWeight: FontWeight.w600),
@@ -416,7 +417,7 @@ class _ContentFra1State extends State<ContentFra1>
                             bottom: 0,
                             child: Text(
                               bean.subtitle,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 11, color: MyColors.textGreyColor),
                             ),
                           ),
@@ -425,7 +426,7 @@ class _ContentFra1State extends State<ContentFra1>
                             bottom: 0,
                             child: Text(
                               bean.deletedTime,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 11, color: MyColors.textGreyColor),
                             ),
                           )
@@ -470,7 +471,7 @@ class _ContentFra2State extends State<ContentFra2>
                 width: 223,
                 height: 223,
               ),
-              Text(
+              const Text(
                 '点击\r\n分享遥控',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -479,11 +480,11 @@ class _ContentFra2State extends State<ContentFra2>
                   fontSize: 18,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 42,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GetBuilder<PlayController>(
                   builder: (controller) {
                     return Wrap(
@@ -497,10 +498,10 @@ class _ContentFra2State extends State<ContentFra2>
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 '互动需双方同时链接，离开此界面自动将断开',
                 style: TextStyle(
                   fontSize: 11,
@@ -508,7 +509,7 @@ class _ContentFra2State extends State<ContentFra2>
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
             ],
@@ -525,7 +526,7 @@ class _ContentFra2State extends State<ContentFra2>
         borderRadius: BorderRadius.circular(14),
       ),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           gradient: LinearGradient(

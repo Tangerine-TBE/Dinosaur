@@ -151,6 +151,8 @@ class _SpecialPageState extends State<SpecialPage> with AutomaticKeepAliveClient
               controller.specialCharManager.onChartItemClick(index);
             },
             child: AwesomeChartView(
+              animatedInfoKey: 'special_page_chart$index',
+
               dataList: <List<int>>[SpecialWave.fromJson(jsonDecode(item.actions)).data],
               width: double.infinity,
               height: double.infinity/2,

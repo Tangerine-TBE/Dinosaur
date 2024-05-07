@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
@@ -15,8 +14,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/center/center_details_controller.dart';
-
-import '../../weight/loadmore_listview.dart';
 import '../chart/weight/awesome_chart.dart';
 
 class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
@@ -29,7 +26,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
 
   Widget buildWidget(BuildContext context) {
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
+      value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
@@ -49,7 +46,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
               preferredSize: const Size.fromHeight(kToolbarHeight),
               child: AppBar(
                 scrolledUnderElevation: 0,
-                title: Text('话题详情',style: TextStyle(color: Colors.black,fontSize: SizeConfig.titleTextDefaultSize,fontWeight: FontWeight.w500),),
+                title: const Text('话题详情',style: TextStyle(color: Colors.black,fontSize: SizeConfig.titleTextDefaultSize,fontWeight: FontWeight.w500),),
                 backgroundColor: MyColors.pageBgColor,
                 automaticallyImplyLeading: true,
                 centerTitle: false,
@@ -89,7 +86,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                           Container(
                             width: 15.0,
                           ),
-                          Text(
+                          const Text(
                             '刷新完成',
                             style: TextStyle(color: MyColors.textBlackColor),
                           )
@@ -104,17 +101,17 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                     builder: (context, mode) {
                       Widget body;
                       if (mode == LoadStatus.idle) {
-                        body = Text("上拉加载");
+                        body = const Text("上拉加载");
                       } else if (mode == LoadStatus.loading) {
-                        body = CupertinoActivityIndicator();
+                        body = const CupertinoActivityIndicator();
                       } else if (mode == LoadStatus.failed) {
-                        body = Text("加载失败！点击重试！");
+                        body = const Text("加载失败！点击重试！");
                       } else if (mode == LoadStatus.canLoading) {
-                        body = Text("松手,加载更多!");
+                        body = const Text("松手,加载更多!");
                       } else {
-                        body = Text("没有更多数据了!");
+                        body = const Text("没有更多数据了!");
                       }
-                      return Container(
+                      return SizedBox(
                         height: 55.0,
                         child: Center(child: body),
                       );
@@ -212,14 +209,14 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                   radius: 20,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Row(
@@ -227,7 +224,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                       children: [
                         Text(
                           item.userName,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                         InkWell(
@@ -241,7 +238,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                            const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -249,20 +246,20 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                         child: RichText(
                           text: TextSpan(
                             children: [
-                              TextSpan(
+                              const TextSpan(
                                 text: '#',
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: const Color(0xffFF5E65),
+                                  color: Color(0xffFF5E65),
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                               const TextSpan(text: ' '),
                               TextSpan(
                                 text: item.topicTitle,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 10,
-                                  color: const Color(0xffFF5E65),
+                                  color: Color(0xffFF5E65),
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -279,25 +276,25 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
           _buildContent(index, item, context),
           Row(
             children: [
-              SizedBox(width: 50),
-              Icon(
+              const SizedBox(width: 50),
+              const Icon(
                 Icons.remove_red_eye_outlined,
                 size: 22,
-                color: const Color(
+                color: Color(
                   0xff8F9098,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 4,
               ),
               Text(
                 item.viewsNum.toString(),
-                style: TextStyle(
-                  color: const Color(0xff8F9098),
+                style: const TextStyle(
+                  color: Color(0xff8F9098),
                   fontSize: 10,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 122,
               ),
               InkWell(
@@ -311,8 +308,8 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                     ),
                     Text(
                       item.likesNum.toString(),
-                      style: TextStyle(
-                        color: const Color(0xff8F9098),
+                      style: const TextStyle(
+                        color: Color(0xff8F9098),
                         fontWeight: FontWeight.w500,
                         fontSize: 10,
                       ),
@@ -325,7 +322,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                   onTap: () {
                     controller.naviToDetails(item, index);
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Icon(
@@ -338,7 +335,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                       Text(
                         '评论',
                         style: TextStyle(
-                            color: const Color(0xff8F9098),
+                            color: Color(0xff8F9098),
                             fontSize: 11,
                             fontWeight: FontWeight.w500),
                       )
@@ -364,7 +361,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
     final textPainter = TextPainter(
       text: TextSpan(
         text: item.content,
-        style: TextStyle(color: MyColors.textBlackColor, fontSize: 12),
+        style: const TextStyle(color: MyColors.textBlackColor, fontSize: 12),
       ),
       textDirection: TextDirection.ltr,
       maxLines: 2,
@@ -411,12 +408,12 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                 onTap: () {
                   controller.naviToDetails(item, index);
                 },
-                child: Text(
+                child: const Text(
                   '全文',
                   style: TextStyle(color: Colors.pink, fontSize: 12),
                 ),
               ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             if (item.images.isNotEmpty)
@@ -428,7 +425,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                       250,
                       index,
                       item.images),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],
@@ -445,6 +442,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                         ])),
                     padding: const EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
+                      animatedInfoKey: 'center_details_chart$index',
                       dataList: <List<int>>[
                         List<int>.from(
                             jsonDecode(item.waves[0].actions) ?? '[]')
@@ -453,7 +451,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                       height: 30,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],

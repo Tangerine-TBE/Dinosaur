@@ -266,6 +266,7 @@ class PushMsgPage extends BaseEmptyPage<PushMsgController> {
                                               BorderRadius.circular(12),
                                         ),
                                         child: AwesomeChartView(
+                                          animatedInfoKey: 'push_page_chart',
                                           dataList: <List<int>>[
                                             controller.selectedWave
                                           ],

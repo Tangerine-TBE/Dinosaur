@@ -93,14 +93,14 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if(controller.item.content.isNotEmpty)
+                        if (controller.item.content.isNotEmpty)
                           Padding(
                             padding: EdgeInsets.only(left: 50, right: 20),
                             child: Text(controller.item.content),
                           ),
-                        if(controller.item.content.isNotEmpty)
+                        if (controller.item.content.isNotEmpty)
                           SizedBox(
-                          height: 20,
+                            height: 20,
                           ),
                         Padding(
                           padding: EdgeInsets.only(left: 50),
@@ -141,6 +141,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                     ],
                                     width: 250,
                                     height: 30,
+                                    animatedInfoKey: 'detials_page_chart',
+
                                   ),
                                 ),
                               ),
@@ -186,9 +188,12 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
             ),
             SafeArea(
               child: Container(
-                color: const Color(0xFFF4F4F4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF4F4F4),
+                  borderRadius: BorderRadius.circular(12)
+                ),
                 padding:
-                    EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 16),
+                    EdgeInsets.only(left: 16 ,bottom: 2, right: 16),
                 child: Obx(
                   () => Column(
                     children: [
@@ -204,7 +209,12 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(controller.selectedCommentItem?.content ?? ''),
+                            Expanded(
+                              child: Text(
+                                controller.selectedCommentItem?.content ?? '',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ],
                         ),
                       ),

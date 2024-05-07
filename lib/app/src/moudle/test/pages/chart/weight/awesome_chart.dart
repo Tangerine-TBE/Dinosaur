@@ -5,6 +5,7 @@ import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 var gradientBoldLineDouble = LinearGradient(
   colors: [
@@ -43,15 +44,16 @@ class AwesomeChartView extends StatefulWidget {
   final List<List<int>> dataList;
   final double width;
   final double height;
-  int type;
-  List<int> shakeLevel = <int>[];
-  int controlDot;
-  int level1;
-
-  int level2;
+  final int type;
+  final List<int> shakeLevel = <int>[];
+  final int controlDot;
+  final int level1;
+  final int level2;
+  final String animatedInfoKey;
 
   AwesomeChartView({
     super.key,
+    required this.animatedInfoKey,
     required this.dataList,
     required this.width,
     required this.height,
@@ -80,7 +82,6 @@ class _AwesomeChartViewState extends State<AwesomeChartView>
 
     _animation = IntTween(begin: widget.level1, end: widget.level2)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-    _controller.repeat(reverse: true);
   }
 
   @override
@@ -91,18 +92,31 @@ class _AwesomeChartViewState extends State<AwesomeChartView>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size(widget.width, widget.height),
-          painter: AwesomeChart(
-              controllerDot: _animation.value,
-              lineList: widget.dataList,
-              type: widget.type,
-              panColor: MyColors.themeTextColor),
-        );
+    return VisibilityDetector(
+      key: Key(widget.animatedInfoKey),
+      onVisibilityChanged: (info) {
+        if (info.visibleFraction == 0.0) {
+          if (mounted) {
+            _controller.stop();
+          }
+        } else {
+          _controller.reset();
+          _controller.repeat(reverse: true);
+        }
       },
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return CustomPaint(
+            size: Size(widget.width, widget.height),
+            painter: AwesomeChart(
+                controllerDot: _animation.value,
+                lineList: widget.dataList,
+                type: widget.type,
+                panColor: MyColors.themeTextColor),
+          );
+        },
+      ),
     );
   }
 }
@@ -400,7 +414,7 @@ class AwesomeChart extends CustomPainter {
       canvas.scale(1, -1);
       TextSpan span = TextSpan(
           text: _calculateTime(chuckTime + chuckTime * i),
-          style: TextStyle(color: Colors.black, fontSize: 12));
+          style: const TextStyle(color: Colors.black, fontSize: 12));
       TextPainter textPainter = TextPainter(
         text: span,
         textAlign: TextAlign.left,

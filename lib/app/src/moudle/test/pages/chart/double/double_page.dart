@@ -157,6 +157,8 @@ class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMi
               controller.doubleCharManager.onChartItemClick(index);
             },
             child: AwesomeChartView(
+              animatedInfoKey: 'double_page_chart$index',
+
               dataList: <List<int>>[DoubleWave.fromJson(jsonDecode(item.actions)).data1,DoubleWave.fromJson(jsonDecode(item.actions)).data2,],
               width: double.infinity,
               height: 138,

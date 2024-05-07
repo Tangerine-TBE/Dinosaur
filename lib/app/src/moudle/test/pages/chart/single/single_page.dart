@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../weight/awesome_chart.dart';
 import 'package:get/get.dart';
 class SinglePage extends StatefulWidget {
@@ -149,10 +150,18 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
             onTap: () {
               controller.singleCharManager.onChartItemClick(index);
             },
-            child: AwesomeChartView(
-              dataList: <List<int>>[SingleWave.fromJson(jsonDecode(item.actions)).data],
-              width: double.infinity,
-              height: double.infinity/2,
+            child: VisibilityDetector(
+              key: Key('single_page_awesome_chart'),
+              onVisibilityChanged: (VisibilityInfo info) {
+
+              },
+              child: AwesomeChartView(
+                animatedInfoKey: 'single_page_chart$index',
+
+                dataList: <List<int>>[SingleWave.fromJson(jsonDecode(item.actions)).data],
+                width: double.infinity,
+                height: double.infinity/2,
+              ),
             ),
           ),
         ),

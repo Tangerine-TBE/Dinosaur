@@ -78,7 +78,6 @@ class _ImageViewState extends State<ImageView>
         Navigator.pop(context);
       },
       onDoubleTapDown: (details) {
-        logE('onDoubleTapDown');
         widget.controller.position = details.localPosition;
       },
       onDoubleTap: () {
@@ -114,6 +113,7 @@ class _ImageViewState extends State<ImageView>
         ));
 
         animation.addListener(() {
+          logE('animation Matrix4');
           if (widget.controller.dragModel == Model.unKnow) {
             widget.controller.transformationController.value = animation.value;
           }
@@ -160,24 +160,25 @@ class _ImageViewState extends State<ImageView>
                         .animate(animationController)
                       ..addListener(
                         () {
+                          logE('_animation Tween');
+                          if (widget.controller.dragModel ==
+                              Model.picTransformScale) {
                           setState(
                             () {
-                              if (widget.controller.dragModel ==
-                                  Model.picTransformScale) {
+
                                 currentX = currentOffsetX -
                                     currentOffsetX * _animation.value;
                                 currentY = currentOffsetY -
                                     currentOffsetY * _animation.value;
                                 scaleSize = currentScaleSize +
                                     _animation.value * (1 - currentScaleSize);
-                                logE(
-                                    'scaleSize:$scaleSize currentScaleSize:$currentScaleSize');
+
                                 currentOpacity = currentOffsetOpacity +
                                     _animation.value *
                                         (1 - currentOffsetOpacity);
                               }
-                            },
                           );
+                          }
                         },
                       )
                       ..addStatusListener((status) {
@@ -194,19 +195,12 @@ class _ImageViewState extends State<ImageView>
           onInteractionUpdate: (details) {
             if (details.pointerCount > 1 && details.pointerCount <= 2) {
             } else if (details.pointerCount == 1) {
-              logE('${details.localFocalPoint.dy}');
               if (widget.controller.transformationController.value
                       .getMaxScaleOnAxis() >
                   1.0) {
                 return;
               }
               if (fingerStartInfo.dy - details.localFocalPoint.dy < 0) {
-                // var currentTime = DateTime.now();
-                // Duration duration =
-                //     currentTime.difference(fingerStartInfo.tapTime);
-                // int offsetMilliseconds = duration.inMilliseconds;
-                // double offset = details.localFocalPoint.dy - fingerStartInfo.dy;
-                // double speed = offset / offsetMilliseconds;
                 if (widget.controller.dragModel != Model.picTransformScale) {
                   widget.controller.dragModel = Model.picTransformScale;
                 }

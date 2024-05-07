@@ -394,6 +394,8 @@ class PushMsgController extends BaseController {
           child: Column(
             children: [
               AwesomeChartView(
+                animatedInfoKey: 'push_controller_page_chart$index',
+
                 dataList: <List<int>>[item.actions.record],
                 width: double.infinity,
                 height: 138,

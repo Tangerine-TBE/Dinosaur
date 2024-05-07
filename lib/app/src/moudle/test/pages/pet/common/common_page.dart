@@ -408,6 +408,7 @@ class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMi
                         ])),
                     padding: EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
+                      animatedInfoKey: 'common_page_chart$index',
                       dataList: <List<int>>[
                         List<int>.from(
                             jsonDecode(item.waves[0].actions) ?? '[]')
