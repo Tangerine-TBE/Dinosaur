@@ -53,8 +53,15 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
                   ? CupertinoActivityIndicator(
                 color: MyColors.themeTextColor,
               )
-                  : CircularProgressIndicator(
-                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+                  : StreamBuilder<Object>(
+                  stream: null,
+                  builder: (context, snapshot) {
+                    return Container(
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2.0,
+                          color: MyColors.themeTextColor),
+                    );
+                  }),
             ),
             complete: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +73,7 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
                 Container(
                   width: 15.0,
                 ),
-                Text(
+                const Text(
                   '刷新完成',
                   style: TextStyle(color: MyColors.textBlackColor),
                 )
@@ -74,6 +81,7 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
             ),
             waterDropColor: MyColors.themeTextColor,
           ),
+
           enablePullDown: true,
           enablePullUp: controller.dynamicManager.canLoadMore.value,
           footer: CustomFooter(
@@ -244,6 +252,8 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
               ),
             ],
           ),
+          if(item.content.isNotEmpty)
+            SizedBox(height: 10,),
           _buildContent(index, item, context),
           Row(
             children: [

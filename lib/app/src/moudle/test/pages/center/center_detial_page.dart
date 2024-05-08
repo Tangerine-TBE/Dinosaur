@@ -63,35 +63,38 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
                     controller.refreshManager.loadMoreList(false);
                   },
                   header: WaterDropHeader(
-                    refresh: SafeArea(
-                      child: SizedBox(
-                        width: 25.0,
-                        height: 25.0,
-                        child: defaultTargetPlatform == TargetPlatform.iOS
-                            ? CupertinoActivityIndicator(
-                          color: MyColors.themeTextColor,
-                        )
-                            : CircularProgressIndicator(
-                            strokeWidth: 2.0, color: MyColors.themeTextColor),
-                      ),
+                    refresh: SizedBox(
+                      width: 25.0,
+                      height: 25.0,
+                      child: defaultTargetPlatform == TargetPlatform.iOS
+                          ? CupertinoActivityIndicator(
+                        color: MyColors.themeTextColor,
+                      )
+                          : StreamBuilder<Object>(
+                            stream: null,
+                            builder: (context, snapshot) {
+                              return Container(
+                                child: CircularProgressIndicator(
+                                strokeWidth: 2.0, color: MyColors.themeTextColor),
+                              );
+                            }
+                          ),
                     ),
-                    complete: SafeArea(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Icon(
-                            Icons.done,
-                            color: Colors.black,
-                          ),
-                          Container(
-                            width: 15.0,
-                          ),
-                          const Text(
-                            '刷新完成',
-                            style: TextStyle(color: MyColors.textBlackColor),
-                          )
-                        ],
-                      ),
+                    complete: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Icon(
+                          Icons.done,
+                          color: Colors.black,
+                        ),
+                        Container(
+                          width: 15.0,
+                        ),
+                        const Text(
+                          '刷新完成',
+                          style: TextStyle(color: MyColors.textBlackColor),
+                        )
+                      ],
                     ),
                     waterDropColor: MyColors.themeTextColor,
                   ),
@@ -273,6 +276,8 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
               ),
             ],
           ),
+          if(item.content.isNotEmpty)
+            SizedBox(height: 10,),
           _buildContent(index, item, context),
           Row(
             children: [

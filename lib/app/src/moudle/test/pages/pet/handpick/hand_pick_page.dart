@@ -52,8 +52,15 @@ class _HandPickPageState extends State<HandPickPage>
                       ? CupertinoActivityIndicator(
                           color: MyColors.themeTextColor,
                         )
-                      : CircularProgressIndicator(
-                          strokeWidth: 2.0, color: MyColors.themeTextColor),
+                      : StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return Container(
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2.0,
+                                  color: MyColors.themeTextColor),
+                            );
+                          }),
                 ),
                 complete: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +72,7 @@ class _HandPickPageState extends State<HandPickPage>
                     Container(
                       width: 15.0,
                     ),
-                    Text(
+                    const Text(
                       '刷新完成',
                       style: TextStyle(color: MyColors.textBlackColor),
                     )
@@ -244,6 +251,10 @@ class _HandPickPageState extends State<HandPickPage>
               ),
             ],
           ),
+          if (item.content.isNotEmpty)
+            SizedBox(
+              height: 10,
+            ),
           _buildContent(index, item, context),
           Row(
             children: [
@@ -418,7 +429,6 @@ class _HandPickPageState extends State<HandPickPage>
                     padding: EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
                       animatedInfoKey: 'handPick_page_chart$index',
-
                       dataList: <List<int>>[
                         List<int>.from(
                             jsonDecode(item.waves[0].actions) ?? '[]')

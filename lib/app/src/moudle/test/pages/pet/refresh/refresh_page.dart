@@ -51,8 +51,15 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                       ? CupertinoActivityIndicator(
                     color: MyColors.themeTextColor,
                   )
-                      : CircularProgressIndicator(
-                      strokeWidth: 2.0, color: MyColors.themeTextColor),
+                      : StreamBuilder<Object>(
+                      stream: null,
+                      builder: (context, snapshot) {
+                        return Container(
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                              color: MyColors.themeTextColor),
+                        );
+                      }),
                 ),
                 complete: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +71,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                     Container(
                       width: 15.0,
                     ),
-                    Text(
+                    const Text(
                       '刷新完成',
                       style: TextStyle(color: MyColors.textBlackColor),
                     )
@@ -72,6 +79,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                 ),
                 waterDropColor: MyColors.themeTextColor,
               ),
+
               footer: CustomFooter(
                 builder: (context, mode) {
                   Widget body;
@@ -242,6 +250,8 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
               ),
             ],
           ),
+          if(item.content.isNotEmpty)
+              SizedBox(height: 10,),
           _buildContent(index, item, context),
           Row(
             children: [
@@ -331,7 +341,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
     final textPainter = TextPainter(
       text: TextSpan(
         text: item.content,
-        style: TextStyle(color: MyColors.textBlackColor, fontSize: 12),
+        style: TextStyle(color: MyColors.textBlackColor, fontSize: 14,fontWeight: FontWeight.w500),
       ),
       textDirection: TextDirection.ltr,
       maxLines: 2,
@@ -367,7 +377,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                           TextSpan(
                             text: item.content,
                             style: TextStyle(
-                                color: MyColors.textBlackColor, fontSize: 12),
+                                color: MyColors.textBlackColor, fontSize: 14,fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
@@ -380,7 +390,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                 },
                 child: Text(
                   '全文',
-                  style: TextStyle(color: Colors.pink, fontSize: 12),
+                  style: TextStyle(color: Colors.pink, fontSize: 14,fontWeight: FontWeight.w500),
                 ),
               ),
             SizedBox(

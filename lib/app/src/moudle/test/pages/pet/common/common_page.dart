@@ -43,12 +43,22 @@ class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMi
           controller.commonManager.loadMoreList(false);
         },
         header: WaterDropHeader(
-          refresh:    SizedBox(
+          refresh: SizedBox(
             width: 25.0,
             height: 25.0,
             child: defaultTargetPlatform == TargetPlatform.iOS
-                ?  CupertinoActivityIndicator(color: MyColors.themeTextColor,)
-                :  CircularProgressIndicator(strokeWidth: 2.0,color: MyColors.themeTextColor),
+                ? CupertinoActivityIndicator(
+              color: MyColors.themeTextColor,
+            )
+                : StreamBuilder<Object>(
+                stream: null,
+                builder: (context, snapshot) {
+                  return Container(
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2.0, color: MyColors.themeTextColor),
+                  );
+                }
+            ),
           ),
           complete: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +70,7 @@ class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMi
               Container(
                 width: 15.0,
               ),
-              Text(
+              const Text(
                 '刷新完成',
                 style: TextStyle(color: MyColors.textBlackColor),
               )
@@ -237,6 +247,8 @@ class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMi
               ),
             ],
           ),
+          if(item.content.isNotEmpty)
+            SizedBox(height: 10,),
           _buildContent(index, item, context),
           Row(
             children: [
