@@ -70,7 +70,8 @@ import '../src/moudle/test/pages/pet/pet_controller.dart';
 class RouteConfig extends ARoute {
   @override
   String initialRoute =
-      User.loginRspBean == null ? RouteName.login : RouteName.homePage;
+      RouteName.login;
+      // User.loginRspBean == null ? RouteName.login : RouteName.homePage;
   @override
   String? loginRoute = RouteName.login;
 
@@ -239,7 +240,7 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => MessageController());
               Get.lazyPut(() => PushRepo(),fenix: true);
               Get.lazyPut(() => PlayRepo());
-              Get.lazyPut(() => LoginRepo());
+              Get.lazyPut(() => LoginRepo(),fenix: true);
             },
           ),
         ),

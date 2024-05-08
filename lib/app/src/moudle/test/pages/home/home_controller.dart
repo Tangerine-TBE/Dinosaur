@@ -3,6 +3,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controll
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 

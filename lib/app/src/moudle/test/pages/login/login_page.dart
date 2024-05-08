@@ -19,8 +19,33 @@ class LoginPage extends BaseEmptyPage<LoginController> {
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             height: kToolbarHeight * 3,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.transparent,
+                  ),
+                ),
+                onPressed: () {
+                  if (controller.switchType.value == 1) {
+                    controller.switchType.value = 2;
+                  } else {
+                    controller.switchType.value = 1;
+                  }
+                },
+                child: Obx(
+                  () => Text(
+                    controller.switchType.value == 1 ? '切换账号登录' : '切换手机登录',
+                    style: TextStyle(
+                      color: MyColors.themeTextColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           Obx(
             () => Text(
@@ -41,54 +66,155 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                 fontSize: 14,
                 fontWeight: FontWeight.w500),
           ),
-          const SizedBox(
-            height: 60,
-          ),
-          TextField(
-            controller: controller.phoneController,
-            enabled: true,
-            autofocus: true,
-            minLines: 1,
-            textInputAction: TextInputAction.done,
-            textAlign: TextAlign.center,
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(11),
-              FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-            ],
-            cursorColor: MyColors.themeTextColor,
-            decoration: InputDecoration(
-              hintText: '请输入手机号码',
-              contentPadding: const EdgeInsets.only(top: 10),
-              constraints: const BoxConstraints(maxHeight: 50, minHeight: 50),
-              prefixIcon: Container(
-                width: 70,
-                height: 50,
-                alignment: Alignment.center,
-                child: Text(
-                  '手机号码',
+          Obx(
+            () => controller.switchType.value == 1 ?SizedBox(
+              height: 120,
+              child: Center(
+                child: TextField(
+                  controller: controller.phoneController,
+                  enabled: true,
+                  autofocus: true,
+                  minLines: 1,
+                  textInputAction: TextInputAction.done,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: MyColors.themeTextColor,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(11),
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                  ],
+                  cursorColor: MyColors.themeTextColor,
+                  decoration: InputDecoration(
+                    hintText: '请输入手机号码',
+                    contentPadding: const EdgeInsets.only(top: 10),
+                    constraints: const BoxConstraints(maxHeight: 50, minHeight: 50),
+                    prefixIcon: Container(
+                      width: 70,
+                      height: 50,
+                      alignment: Alignment.center,
+                      child: Text(
+                        '手机号码',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: MyColors.themeTextColor,
+                        ),
+                      ),
+                    ),
+                    hintStyle: TextStyle(
+                      color: MyColors.textGreyColor.withAlpha(120),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: MyColors.themeTextColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: MyColors.themeTextColor),
+                    ),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    textBaseline: TextBaseline.alphabetic,
                   ),
                 ),
               ),
-              hintStyle: TextStyle(
-                color: MyColors.textGreyColor.withAlpha(120),
+            ):SizedBox(
+              height: 120,
+              child: Center(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: controller.accountController,
+                      enabled: true,
+                      autofocus: true,
+                      minLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textAlign: TextAlign.center,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(16),
+                      ],
+                      cursorColor: MyColors.themeTextColor,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: '请输入账号',
+                        contentPadding: const EdgeInsets.only(top: 10),
+                        constraints: const BoxConstraints(maxHeight: 50, minHeight: 50),
+                        prefixIcon: Container(
+                          width: 70,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '账号',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: MyColors.themeTextColor,
+                            ),
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                          color: MyColors.textGreyColor.withAlpha(120),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: MyColors.themeTextColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: MyColors.themeTextColor),
+                        ),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.alphabetic,
+                      ),
+                    ),
+                    TextField(
+                      controller: controller.passwordController,
+                      enabled: true,
+                      autofocus: true,
+                      minLines: 1,
+                      textInputAction: TextInputAction.done,
+                      textAlign: TextAlign.center,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(16),
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]',),),
+                      ],
+                      keyboardType: TextInputType.emailAddress,
+                      cursorColor: MyColors.themeTextColor,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: '请输入密码',
+
+                        contentPadding: const EdgeInsets.only(top: 10),
+                        constraints: const BoxConstraints(maxHeight: 50, minHeight: 50),
+                        prefixIcon: Container(
+                          width: 70,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: Text(
+                            '密码',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: MyColors.themeTextColor,
+                            ),
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                          color: MyColors.textGreyColor.withAlpha(120),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: MyColors.themeTextColor),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: MyColors.themeTextColor),
+                        ),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.alphabetic,
+                      ),
+                    )
+                  ],
+                ),
               ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-            ),
-            style: const TextStyle(
-              fontSize: 18,
-              textBaseline: TextBaseline.alphabetic,
             ),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           Obx(
             () => PrivacyCheckboxWidget(
