@@ -23,6 +23,14 @@ class StringUtils{
   static String decimalStringListToUtf8String(List<String> data){
     return data.map((decimalString) => String.fromCharCode(int.parse(decimalString))).join();
   }
+  static bool isEmail(String input) {
+    String regexEmail =
+        "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}\$";
+    if (input.isEmpty) return false;
+    return RegExp(regexEmail).hasMatch(input);
+  }
+
+
 
   // static String bytes
 }

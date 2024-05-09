@@ -15,24 +15,24 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../dialog/my_dialog_widget.dart';
 
 class LoginController extends BaseController {
-  late TextEditingController phoneController;
-  late TextEditingController accountController;
+  late TextEditingController emailController;
   late TextEditingController passwordController;
+  final visibility = false.obs;
   final _repo = Get.find<LoginRepo>();
-  final  isChecked = false.obs;
+  final isChecked = false.obs;
   final name = ''.obs;
   final switchType = 1.obs;
 
   @override
   onInit() async {
     super.onInit();
-    phoneController = TextEditingController();
-    accountController = TextEditingController();
+    emailController = TextEditingController();
     passwordController = TextEditingController();
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     name.value = packageInfo.version;
   }
-  switchLoginType(){
+
+  switchLoginType() {
     switchType.value = 2;
   }
 
@@ -41,10 +41,10 @@ class LoginController extends BaseController {
       showError('请阅读并勾选用户协议与隐私政策');
       return;
     }
-    if(switchType.value == 1){
-      var phone = phoneController.value.text;
-      if (phone.length != 11) {
-        showError('需输入正确的手机号');
+    if (switchType.value == 1) {
+      var phone = emailController.value.text;
+      if (!phone.isEmail) {
+        showError('需输入正确邮箱');
         return;
       }
       final AuthCReqBean authCReqBean = AuthCReqBean(mobile: phone);
@@ -61,12 +61,10 @@ class LoginController extends BaseController {
           navigateTo(RouteName.passWorld, args: args);
         }
       }
-    }else{
-      var account = accountController.value.text;
+    } else {
+      var account = emailController.value.text;
       var passWord = passwordController.value.text;
-
     }
-
   }
 
   onTapPrivacy() {
@@ -81,10 +79,18 @@ class LoginController extends BaseController {
     var selectedConfirm = false;
     await Get.bottomSheet(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
       backgroundColor: Colors.white,
       ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
         child: SingleChildScrollView(
           child: SafeArea(
             child: Column(
@@ -140,21 +146,29 @@ class LoginController extends BaseController {
       ),
     );
     if (selectedConfirm && SaveKey.readPrivacy.read != null) {
-      if(SaveKey.readPrivacy.read){
+      if (SaveKey.readPrivacy.read) {
         isChecked.value = true;
       }
     }
     SaveKey.readUserProtected.save(selectedConfirm);
   }
 
-  void _showPrivacyDialog() async{
+  void _showPrivacyDialog() async {
     var selectedConfirm = false;
     await Get.bottomSheet(
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
       backgroundColor: Colors.white,
       ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
         child: SingleChildScrollView(
           child: SafeArea(
             child: Column(
@@ -210,11 +224,10 @@ class LoginController extends BaseController {
       ),
     );
     if (selectedConfirm && SaveKey.readUserProtected.read != null) {
-      if(SaveKey.readUserProtected.read){
+      if (SaveKey.readUserProtected.read) {
         //打勾
         isChecked.value = true;
       }
-
     }
     SaveKey.readPrivacy.save(selectedConfirm);
   }

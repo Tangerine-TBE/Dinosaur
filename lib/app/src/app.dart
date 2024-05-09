@@ -1,8 +1,9 @@
 import 'package:common/base/app/base_material_app.dart';
 import 'package:common/common/widget/loading/g_loading.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
+import 'package:flutter_localizations/flutter_localizations.dart' ;
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/launcher/strategy/template_launcher_strategy.dart';
 
@@ -28,8 +29,18 @@ class App extends BaseMaterialApp<TemplateLauncherStrategy> {
             highlightColor: Colors.transparent),
         translations: Messages(),
         popGesture: true,
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: const [
+      Locale('zh','CN'),
+      Locale('en','US'),
+    ],
         getPages: route.getPages(),
         initialRoute: route.initialRoute,
         defaultTransition: Transition.rightToLeftWithFade,
       );
 }
+

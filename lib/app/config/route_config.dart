@@ -13,6 +13,8 @@ import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/forgotPassword/forgot_password_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/forgotPassword/forgot_password_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/login_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/login/pass_world_controller.dart';
@@ -69,14 +71,26 @@ import '../src/moudle/test/pages/pet/pet_controller.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute =
-      RouteName.login;
-      // User.loginRspBean == null ? RouteName.login : RouteName.homePage;
+  String initialRoute = RouteName.login;
+
+  // User.loginRspBean == null ? RouteName.login : RouteName.homePage;
   @override
   String? loginRoute = RouteName.login;
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.forgotPassword,
+          page: () => const ForgotPasswordPage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => ForgotPasswordController(),
+              );
+            },
+          ),
+        ),
+
         GetPage(
           name: RouteName.waveDemo,
           page: () => const WaveFormDemoPage(),
@@ -93,7 +107,6 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
-
         GetPage(
           name: RouteName.editInfo,
           page: () => const EditInfoPage(),
@@ -238,9 +251,9 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => MineController());
               Get.lazyPut(() => PetController());
               Get.lazyPut(() => MessageController());
-              Get.lazyPut(() => PushRepo(),fenix: true);
+              Get.lazyPut(() => PushRepo(), fenix: true);
               Get.lazyPut(() => PlayRepo());
-              Get.lazyPut(() => LoginRepo(),fenix: true);
+              Get.lazyPut(() => LoginRepo(), fenix: true);
             },
           ),
         ),
