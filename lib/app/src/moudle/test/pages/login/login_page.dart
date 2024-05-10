@@ -143,7 +143,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                             autofocus: true,
                             minLines: 1,
                             textInputAction: TextInputAction.done,
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.start,
                             cursorColor: MyColors.themeTextColor,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
@@ -163,7 +163,6 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                                   ),
                                 ),
                               ),
-                              suffixIcon:  const Icon(Icons.visibility_off,color: Colors.transparent,),
                               hintStyle: TextStyle(
                                 color: MyColors.textGreyColor.withAlpha(120),
                               ),
@@ -188,7 +187,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                               autofocus: true,
                               minLines: 1,
                               textInputAction: TextInputAction.done,
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.start,
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(16),
                                 FilteringTextInputFormatter.allow(
