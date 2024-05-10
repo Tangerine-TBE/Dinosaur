@@ -186,6 +186,9 @@ class RouteConfig extends ARoute {
               Get.lazyPut(
                 () => LoginRepo(),
               );
+              Get.lazyPut(
+                () => UpLoadRepo(),
+              );
             },
           ),
         ),

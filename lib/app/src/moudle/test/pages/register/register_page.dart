@@ -62,12 +62,13 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                 controller: controller.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  _buildInputEmailPage(),
-                  _buildInputAuthCodePage(),
                   _buildUserBirthPage(context),
                   _buildNickNamePage(),
                   _buildSelectPhotoPage(),
                   _buildInputPassword(),
+                  _buildInputEmailPage(),
+                  _buildInputAuthCodePage(),
+
                 ],
               ),
             ),
@@ -205,7 +206,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
             ),
           ),
           child: const Text(
-            '完成',
+            '下一步',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -536,7 +537,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
             ),
           ),
           child: const Text(
-            '下一步',
+            '完成',
             style: TextStyle(
               color: Colors.white,
             ),

@@ -279,13 +279,13 @@ class PushMsgController extends BaseController {
 
   buildTagSheetItem(TopicList item, int index) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           Container(
             decoration: const BoxDecoration(
                 shape: BoxShape.circle, color: Colors.black),
-            child: Icon(
+            child: const Icon(
               Icons.tag,
               color: Colors.white,
               size: 16,
@@ -312,7 +312,7 @@ class PushMsgController extends BaseController {
       children: [
         Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 40,
               height: 40,
               child: CircleAvatar(

@@ -26,3 +26,4 @@ class LoginAuthEmailResponse extends DataHolder<AuthCRspEmailBean> {
     convert(map, (data) => AuthCRspEmailBean.fromJson(data));
   }
 }
+

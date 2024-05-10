@@ -1,3 +1,4 @@
+import 'package:app_base/mvvm/model/register_bean.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/network/api.dart';
 import 'package:common/common/network/dio_client.dart';
@@ -14,9 +15,9 @@ class LoginRepo extends BaseRepo {
       format: (data) => LoginUserWithCodeResponse.fromJson(data),
     );
   }
+
   Future<AResponse<LoginUserWithPasswordResponse>> loginWithPassword(
-  {required LoginReqBean loginReqBean}
-      ){
+      {required LoginReqBean loginReqBean}) {
     return requestOnFuture(
       Api.loginClientPassword,
       method: Method.post,
@@ -24,8 +25,6 @@ class LoginRepo extends BaseRepo {
       format: (data) => LoginUserWithPasswordResponse.fromJson(data),
     );
   }
-
-
 
   Future<AResponse<dynamic>> logOut({required LogoutReqBean bean}) {
     return requestOnFuture(Api.logoutClient,
@@ -39,6 +38,15 @@ class LoginRepo extends BaseRepo {
       method: Method.post,
       params: authCReqBean.toJson(),
       format: (data) => LoginAuthPhoneResponse.fromJson(data),
+    );
+  }
+
+  Future<AResponse<dynamic>> register(
+      {required RegisterReqBean registerReqBean}) {
+    return requestOnFuture(
+      Api.registerClient,
+      method: Method.post,
+      params: registerReqBean.toJson(),
     );
   }
 

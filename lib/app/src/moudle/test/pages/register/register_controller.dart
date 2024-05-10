@@ -1,10 +1,22 @@
+import 'dart:io';
+
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/oss_auth_bean.dart';
+import 'package:app_base/mvvm/model/register_bean.dart';
+import 'package:app_base/mvvm/model/user_bean.dart';
+import 'package:app_base/mvvm/repository/login_repo.dart';
+import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:pinput/pinput.dart';
+import 'package:flutter_oss_aliyun/flutter_oss_aliyun.dart';
+import 'package:app_base/util/image.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterController extends BaseController {
+  final _repo = Get.find<LoginRepo>();
+  final _uploadRepo = Get.find<UpLoadRepo>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController authCodeController = TextEditingController();
   final TextEditingController birthController = TextEditingController();
@@ -83,32 +95,8 @@ class RegisterController extends BaseController {
     });
   }
 
-  onIndex0PageNextStep() {
-    if (emailController.text.isEmpty) {
-      emailErrorText.value = '请输入邮箱地址!';
-      return;
-    }
-    if (!emailController.text.isEmail) {
-      emailErrorText.value = '请输入正确的邮箱地址';
-      return;
-    }
-    //Todo  清除焦点并隐藏软键盘 发起注册请求成功后跳转
-    emailFocusNode.unfocus();
-    pageController.jumpToPage(1);
-  }
-
-  onIndex1PageNextStep() {
-    if (authCodeController.text.isEmpty) {
-      authCodeErrorText.value = '请输入邮箱验证码';
-      return;
-    }
-    //Todo 校验验证码
-    authCodeFocusNode.unfocus();
-    pageController.jumpToPage(2);
-  }
-
   onIndex2PageNextStep() {
-    pageController.jumpToPage(3);
+    pageController.jumpToPage(1);
   }
 
   onIndex3PageNextStep() {
@@ -117,7 +105,7 @@ class RegisterController extends BaseController {
       return;
     }
     nickNameFocusNode.unfocus();
-    pageController.jumpToPage(4);
+    pageController.jumpToPage(2);
   }
 
   onIndex4PageNextStep() {
@@ -125,7 +113,7 @@ class RegisterController extends BaseController {
       showToast('请选择对应的性别');
       return;
     }
-    pageController.jumpToPage(5);
+    pageController.jumpToPage(3);
   }
 
   onIndex5PageNextStep() {
@@ -139,7 +127,103 @@ class RegisterController extends BaseController {
     }
     passwordFocusNode.unfocus();
     //Todo finish
-    offAllNavigateTo(RouteName.homePage);
+    pageController.jumpToPage(4);
+  }
+
+  onIndex0PageNextStep() async {
+    if (emailController.text.isEmpty) {
+      emailErrorText.value = '请输入邮箱地址!';
+      return;
+    }
+    if (!emailController.text.isEmail) {
+      emailErrorText.value = '请输入正确的邮箱地址';
+      return;
+    }
+    //Todo  清除焦点并隐藏软键盘 发起注册请求成功后跳转
+    emailFocusNode.unfocus();
+    AuthCReqEmailBean authCReqEmailBean =
+        AuthCReqEmailBean(mail: emailController.text, type: 'register');
+    final response =
+        await _repo.authCodeEmail(authCReqEmailBean: authCReqEmailBean);
+    if (response.isSuccess) {
+      if (response.data?.data == null) {
+        showError('验证信息请求失败!');
+      } else {
+        final AuthCRspEmailBean authCRspBean = response.data!.data!;
+        Map<String, dynamic> args = {
+          'phone': emailController.text,
+          'expiresIn': authCRspBean.expiresIn
+        };
+        pageController.jumpToPage(5);
+      }
+    } else {
+      showError(response.message);
+    }
+  }
+
+  onIndex1PageNextStep() async {
+    if (authCodeController.text.isEmpty) {
+      authCodeErrorText.value = '请输入邮箱验证码';
+      return;
+    }
+    authCodeFocusNode.unfocus();
+    //先上传头像
+    final response = await _uploadRepo.getUploadAuth();
+    var imageUrls = '';
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        OssAuthBean ossAuthBean = response.data!.data!;
+        final auth = Auth(
+          accessKey: ossAuthBean.accessKeyId,
+          accessSecret: ossAuthBean.accessKeySecret,
+          secureToken: ossAuthBean.securityToken,
+          expire: ossAuthBean.expiration,
+        );
+        Client.init(
+            ossEndpoint: "oss-cn-hangzhou.aliyuncs.com",
+            bucketName: "cxw-user",
+            authGetter: () => auth);
+        if (selectedImagesObx.value.isNotEmpty) {
+          final bytes = await compressFile(File(selectedImagesObx.value));
+          final udid = const Uuid().v4();
+          final targetPath = "src/pet/${udid.replaceAll("-", "")}.jpeg";
+          await Client().putObject(
+            bytes,
+            targetPath,
+            option: PutRequestOption(
+              onSendProgress: (count, total) {},
+              override: true,
+              aclModel: AclMode.inherited,
+              storageType: StorageType.ia,
+              headers: {"cache-control": "no-cache"},
+            ),
+          );
+          imageUrls =
+              "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$targetPath";
+        }
+      }
+    }
+
+    //
+    final RegisterReqBean registerReqBean = RegisterReqBean(
+      password: passwordController.text,
+      application: 'cutepet',
+      nickName: nickNameController.text,
+      organization: 'miaoai',
+      userName: emailController.text,
+      authCode: authCodeController.text,
+      gender: sex.value == '男' ? 'male' : 'female',
+      birthday: birthController.text,
+      avator: imageUrls,
+    );
+    final registerResponse =
+        await _repo.register(registerReqBean: registerReqBean);
+    if (registerResponse.isSuccess) {
+      showToast('注册成功');
+      Get.back();
+    } else {
+      showError('注册失败');
+    }
   }
 
   showImagePickerBottomSheet(RxString value) async {
