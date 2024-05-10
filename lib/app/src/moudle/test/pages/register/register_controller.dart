@@ -358,12 +358,17 @@ class RegisterController extends BaseController {
 
   @override
   onClose() {
-    super.onClose();
     emailController.dispose();
     authCodeController.dispose();
     birthController.dispose();
     nickNameController.dispose();
     passwordController.dispose();
+    emailFocusNode.dispose();
+    authCodeFocusNode.dispose();
+    birthFocusNode.dispose();
+    nickNameFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.onClose();
   }
 
   onIndex2PageShowBirDialog(BuildContext context) async {
