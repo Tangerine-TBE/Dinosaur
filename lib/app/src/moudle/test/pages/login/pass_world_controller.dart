@@ -46,10 +46,10 @@ class PassWorldController extends BaseController {
 
   onReCallAuth() async {
     final response =
-        await _repo.authCode(authCReqBean: AuthCReqBean(mobile: phone));
+        await _repo.authCodePhone(authCReqBean: AuthCReqPhoneBean(mobile: phone));
     if (response.isSuccess) {
       if (response.data?.data != null) {
-        final AuthCRspBean authCRspBean = response.data!.data!;
+        final AuthCRspPhoneBean authCRspBean = response.data!.data!;
         expiresIn = authCRspBean.expiresIn;
         releaseTimer();
       }else{
@@ -62,13 +62,13 @@ class PassWorldController extends BaseController {
     await Future.delayed(const Duration(seconds: 1));
     if (value.isNotEmpty) {
       String passWorld = value;
-      LoginReqBean loginReqBean = LoginReqBean(
+      LoginWithCodeReqBean loginReqBean = LoginWithCodeReqBean(
         mobile: phone,
         authCode: passWorld,
       );
-      final response = await _repo.login(loginReqBean: loginReqBean);
+      final response = await _repo.loginWithCode(loginReqBean: loginReqBean);
       if (response.isSuccess) {
-        LoginRspBean? responseData = response.data?.data;
+        LoginWithCodeRspBean? responseData = response.data?.data;
         if (responseData != null) {
           SaveKey.userInfo.save(responseData.toJson());
           User.loginRspBean = responseData;

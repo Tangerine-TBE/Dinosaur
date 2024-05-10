@@ -20,7 +20,7 @@ class AppLauncher {
     //加载本地缓存信息
     var info = SaveKey.userInfo.read;
     if(info != null){
-      User.loginRspBean = LoginRspBean.fromJson(SaveKey.userInfo.read);
+      User.loginRspBean = LoginWithCodeRspBean.fromJson(SaveKey.userInfo.read);
     }
     BuildConfig.envName = launcherStrategy.envName;
     BuildConfig.host = launcherStrategy.host;

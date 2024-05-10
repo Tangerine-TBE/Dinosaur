@@ -89,6 +89,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                     child: Center(
                       child: TextField(
                         controller: controller.emailController,
+                        focusNode: controller.emailFocus,
                         enabled: true,
                         autofocus: true,
                         minLines: 1,

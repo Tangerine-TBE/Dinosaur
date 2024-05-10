@@ -1,10 +1,12 @@
 import 'package:app_base/config/route_name.dart';
 import 'package:app_base/config/size.dart';
 import 'package:app_base/config/translations/msg_cn.dart';
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/base_controller.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
+import 'package:app_base/util/md5_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -17,6 +19,8 @@ import '../../dialog/my_dialog_widget.dart';
 class LoginController extends BaseController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  final emailFocus = FocusNode();
+  final passwordFocus = FocusNode();
   final visibility = false.obs;
   final _repo = Get.find<LoginRepo>();
   final isChecked = false.obs;
@@ -47,23 +51,59 @@ class LoginController extends BaseController {
         showError('需输入正确邮箱');
         return;
       }
-      final AuthCReqBean authCReqBean = AuthCReqBean(mobile: phone);
-      final response = await _repo.authCode(authCReqBean: authCReqBean);
+      emailFocus.unfocus();
+      final AuthCReqEmailBean authCReqBean =
+          AuthCReqEmailBean(mail: phone, type: 'login');
+      final response =
+          await _repo.authCodeEmail(authCReqEmailBean: authCReqBean);
       if (response.isSuccess) {
         if (response.data?.data == null) {
           showError('验证信息请求失败!');
         } else {
-          final AuthCRspBean authCRspBean = response.data!.data!;
+          final AuthCRspEmailBean authCRspBean = response.data!.data!;
           Map<String, dynamic> args = {
             'phone': phone,
             'expiresIn': authCRspBean.expiresIn
           };
           navigateTo(RouteName.passWorld, args: args);
         }
+      } else {
+        showError(response.message);
       }
     } else {
       var account = emailController.value.text;
       var passWord = passwordController.value.text;
+      if (account.isEmpty) {
+        showError('请输入账号!');
+        return;
+      }
+      if (passWord.isEmpty) {
+        showError('请输入密码!');
+        return;
+      }
+      passwordFocus.unfocus();
+      emailFocus.unfocus();
+      final LoginReqBean loginReqBean = LoginReqBean(
+        application: 'cutepet',
+        organization: 'miaoai',
+        userName: account,
+        password: Md5Utils.generateMD5(passWord),
+        type: 'password',
+      );
+      final response =
+          await _repo.loginWithPassword(loginReqBean: loginReqBean);
+      if (response.isSuccess) {
+        if (response.data?.data == null) {
+          showError('请求失败!');
+        } else {
+          final LoginWithCodeRspBean loginWithCodeRspBean = response.data!.data!;
+          SaveKey.userInfo.save(loginWithCodeRspBean.toJson());
+          User.loginRspBean = loginWithCodeRspBean;
+          offAllNavigateTo(RouteName.homePage);
+        }
+      } else {
+        showError(response.message);
+      }
     }
   }
 
