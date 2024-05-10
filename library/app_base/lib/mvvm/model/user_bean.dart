@@ -192,3 +192,23 @@ class LoginWithCodeRspBean {
         "refreshToken": refreshToken,
       };
 }
+
+class ForgotReqBean {
+  final String userName;
+  final String password;
+  final String authCode;
+
+  ForgotReqBean(
+      {required this.userName, required this.password, required this.authCode});
+
+  factory ForgotReqBean.create(Map<dynamic, dynamic> json) => ForgotReqBean(
+      userName: json['userName'] ?? '',
+      password: json['password'] ?? '',
+      authCode: json['authCode'] ?? '');
+
+  Map<String, dynamic> toJson() => {
+        'userName': userName,
+        'password': password,
+        'authCode': authCode,
+      };
+}

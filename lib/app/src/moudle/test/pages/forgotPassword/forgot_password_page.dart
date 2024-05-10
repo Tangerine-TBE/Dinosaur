@@ -83,7 +83,7 @@ class ForgotPasswordPage extends BaseEmptyPage<ForgotPasswordController> {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Obx(
                 () => TextField(
                   enabled: true,

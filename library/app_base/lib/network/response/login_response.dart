@@ -27,3 +27,4 @@ class LoginAuthEmailResponse extends DataHolder<AuthCRspEmailBean> {
   }
 }
 
+

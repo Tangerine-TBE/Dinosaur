@@ -59,4 +59,13 @@ class LoginRepo extends BaseRepo {
       format: (data) => LoginAuthEmailResponse.fromJson(data),
     );
   }
+
+  Future<AResponse<dynamic>> forgotPassword(
+      {required ForgotReqBean forgotReqBean}) {
+    return requestOnFuture(
+      Api.forgotPassword,
+      method: Method.post,
+      params: forgotReqBean.toJson(),
+    );
+  }
 }

@@ -3,6 +3,7 @@ class Api {
   static const loginClientCode = '/api/v1/smart/user/login';
   static const loginClientPassword = '/api/v1/meng/user/login';
   static const logoutClient = '/api/v1/smart/user/logout';
+  static const forgotPassword = '/api/v1/meng/user/forgot';
   //话题中心列表请求与创建
   static const topCenterClient = '/api/v1/meng/topic/list';
   static const topCenterCreate = '/api/v1/meng/topic';
