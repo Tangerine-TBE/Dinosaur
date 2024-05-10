@@ -18,7 +18,7 @@ class RegisterController extends BaseController {
   final passwordFocusNode = FocusNode();
   final emailErrorText = ''.obs;
   final authCodeErrorText = ''.obs;
-  final nickNameErrorText =''.obs;
+  final nickNameErrorText = ''.obs;
   final passwordErrorText = ''.obs;
 
   final currentIndex = 0.obs;
@@ -27,35 +27,57 @@ class RegisterController extends BaseController {
   final sex = ''.obs;
   final visibility = true.obs;
 
+  onLastStep() {
+    if (birthFocusNode.hasFocus) {
+      birthFocusNode.unfocus();
+    }
+    if (emailFocusNode.hasFocus) {
+      emailFocusNode.unfocus();
+    }
+    if (authCodeFocusNode.hasFocus) {
+      authCodeFocusNode.unfocus();
+    }
+    if (nickNameFocusNode.hasFocus) {
+      nickNameFocusNode.unfocus();
+    }
+    if (passwordFocusNode.hasFocus) {
+      passwordFocusNode.unfocus();
+    }
+  }
+
   @override
   onInit() {
     super.onInit();
     birthController.setText(DateTime.now().toString().split(' ')[0]);
     emailController.addListener(
       () {
-        if (emailController.text.isNotEmpty && emailErrorText.value.isNotEmpty) {
+        if (emailController.text.isNotEmpty &&
+            emailErrorText.value.isNotEmpty) {
           emailErrorText.value = '';
         }
       },
     );
     authCodeController.addListener(() {
-      if (authCodeController.text.isNotEmpty && authCodeErrorText.value.isNotEmpty) {
+      if (authCodeController.text.isNotEmpty &&
+          authCodeErrorText.value.isNotEmpty) {
         authCodeErrorText.value = '';
       }
     });
     nickNameController.addListener(() {
-      if(nickNameController.text.isNotEmpty && nickNameErrorText.value.isNotEmpty){
+      if (nickNameController.text.isNotEmpty &&
+          nickNameErrorText.value.isNotEmpty) {
         nickNameErrorText.value = '';
       }
     });
     passwordController.addListener(() {
-      if(passwordController.text.isNotEmpty && passwordErrorText.value.isNotEmpty){
+      if (passwordController.text.isNotEmpty &&
+          passwordErrorText.value.isNotEmpty) {
         passwordErrorText.value = '';
       }
     });
 
     pageController.addListener(() {
-      if(pageController.page != null){
+      if (pageController.page != null) {
         currentIndex.value = pageController.page!.toInt();
       }
     });
@@ -73,8 +95,8 @@ class RegisterController extends BaseController {
     //Todo  清除焦点并隐藏软键盘 发起注册请求成功后跳转
     emailFocusNode.unfocus();
     pageController.jumpToPage(1);
-
   }
+
   onIndex1PageNextStep() {
     if (authCodeController.text.isEmpty) {
       authCodeErrorText.value = '请输入邮箱验证码';
@@ -84,10 +106,12 @@ class RegisterController extends BaseController {
     authCodeFocusNode.unfocus();
     pageController.jumpToPage(2);
   }
-  onIndex2PageNextStep(){
+
+  onIndex2PageNextStep() {
     pageController.jumpToPage(3);
   }
-  onIndex3PageNextStep(){
+
+  onIndex3PageNextStep() {
     if (nickNameController.text.isEmpty) {
       nickNameErrorText.value = '请输入昵称';
       return;
@@ -95,25 +119,29 @@ class RegisterController extends BaseController {
     nickNameFocusNode.unfocus();
     pageController.jumpToPage(4);
   }
-  onIndex4PageNextStep(){
-    if(sex.value.isEmpty){
+
+  onIndex4PageNextStep() {
+    if (sex.value.isEmpty) {
       showToast('请选择对应的性别');
       return;
     }
     pageController.jumpToPage(5);
   }
-  onIndex5PageNextStep(){
-    if(passwordController.text.isEmpty){
-      passwordErrorText.value ='请输入您的密码';
+
+  onIndex5PageNextStep() {
+    if (passwordController.text.isEmpty) {
+      passwordErrorText.value = '请输入您的密码';
       return;
     }
-    if(passwordController.text.length < 6){
-      passwordErrorText.value ='输入的密码必须大于等于6位数';
+    if (passwordController.text.length < 6) {
+      passwordErrorText.value = '输入的密码必须大于等于6位数';
       return;
     }
     passwordFocusNode.unfocus();
     //Todo finish
+    offAllNavigateTo(RouteName.homePage);
   }
+
   showImagePickerBottomSheet(RxString value) async {
     await Get.bottomSheet(
       backgroundColor: Colors.white,
@@ -123,7 +151,8 @@ class RegisterController extends BaseController {
           height: value.value.isNotEmpty ? 200 : 150,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), topRight: Radius.circular(12)),
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -177,7 +206,7 @@ class RegisterController extends BaseController {
                         compressQuality: 100,
                         maxHeight: 700,
                         maxWidth: 700,
-                        aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
+                        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
                         uiSettings: [
                           AndroidUiSettings(
                             toolbarTitle: '裁剪',
@@ -186,7 +215,8 @@ class RegisterController extends BaseController {
                             initAspectRatio: CropAspectRatioPreset.square,
                             lockAspectRatio: true,
                           ),
-                          IOSUiSettings(title: '裁剪',
+                          IOSUiSettings(
+                            title: '裁剪',
                             aspectRatioLockEnabled: true,
                             resetAspectRatioEnabled: false,
                           )
@@ -241,8 +271,9 @@ class RegisterController extends BaseController {
       ),
     );
   }
+
   @override
-  onClose(){
+  onClose() {
     super.onClose();
     emailController.dispose();
     authCodeController.dispose();
@@ -253,17 +284,22 @@ class RegisterController extends BaseController {
 
   onIndex2PageShowBirDialog(BuildContext context) async {
     birthFocusNode.requestFocus();
-    DateTime? dateTime = await showDatePicker(context: context , firstDate: DateTime(1900,1,1), lastDate: DateTime.now());
+    DateTime? dateTime = await showDatePicker(
+        context: context,
+        firstDate: DateTime(1900, 1, 1),
+        lastDate: DateTime.now());
     birthFocusNode.unfocus();
-    if(dateTime != null){
+    if (dateTime != null) {
       birthController.setText(dateTime.toString().split(' ')[0]);
-      birDayTime .value = calculateAge(dateTime);
+      birDayTime.value = calculateAge(dateTime);
     }
   }
+
   int calculateAge(DateTime birthDate) {
     final now = DateTime.now();
     int age = now.year - birthDate.year;
-    if (now.month < birthDate.month || (now.month == birthDate.month && now.day < birthDate.day)) {
+    if (now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day)) {
       age--;
     }
     return age;

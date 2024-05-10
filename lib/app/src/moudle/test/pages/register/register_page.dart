@@ -32,6 +32,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                   onTap: () {
                     controller.pageController
                         .jumpToPage(controller.currentIndex.value - 1);
+                    controller.onLastStep();
                   },
                   child: Text(
                     '返回上一步',
