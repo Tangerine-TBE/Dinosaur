@@ -13,6 +13,18 @@ class MineResponse extends DataHolder<MineRsq> {
 
 class MineCommentResponse extends DataHolder<MineCommentRsp> {
   MineCommentResponse.fromJson(dynamic map) {
-    convert(map, (data) => MineCommentRsp.fromJson(data));
+    convert(
+      map,
+      (data) => MineCommentRsp.fromJson(data),
+    );
+  }
+}
+
+class MineLikeResponse extends DataHolder<MineLikeRsp> {
+  MineLikeResponse.fromJson(dynamic map) {
+    convert(
+      map,
+      (data) => MineLikeRsp.fromJson(data),
+    );
   }
 }

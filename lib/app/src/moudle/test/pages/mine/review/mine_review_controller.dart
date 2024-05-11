@@ -21,7 +21,7 @@ class MineReviewController extends BaseController {
   _fetchPostList() async {
     final response = await _repo.getMineCommentList(
       MineReq(
-          userId: User.loginRspBean!.userId,
+          userId: User.loginRspBean.userId,
           pageSize: 10,
           pageIndex: 1,
           orderBy: 'createTime desc'),

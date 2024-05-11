@@ -17,7 +17,7 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           '经期记录',
           style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
@@ -32,11 +32,13 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
                 crossAxisCount: 7,
                 children: List.generate(7, (index) => _buildItem(index)),
               ),
-              Divider(height: 1),
+              const Divider(height: 1),
               Expanded(
                 child: ScrollTargetView(
-                  dateSelectValue: (String, int) {
-                    logE(String);
+                  dateSelectValue: (item) {
+                      for(var i in item){
+                        logE('${i.selectedStartDate}---${i.selectedEndDate}');
+                      }
                   },
                 ),
               ),
@@ -49,34 +51,34 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
 
   _buildItem(int index) {
     if (index == 0) {
-      return Center(
+      return const Center(
         child: Text(
           '一',
           style: TextStyle(color: Colors.pinkAccent),
         ),
       );
     } else if (index == 1) {
-      return Center(
+      return const Center(
         child: Text('二', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 2) {
-      return Center(
+      return const Center(
         child: Text('三', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 3) {
-      return Center(
+      return const Center(
         child: Text('四', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 4) {
-      return Center(
+      return const Center(
         child: Text('五', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 5) {
-      return Center(
+      return const Center(
         child: Text('六', style: TextStyle(color: Colors.pinkAccent)),
       );
     } else if (index == 6) {
-      return Center(
+      return const Center(
         child: Text('日', style: TextStyle(color: Colors.pinkAccent)),
       );
     }
@@ -86,7 +88,7 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
 class ScrollTargetView extends StatefulWidget {
   const ScrollTargetView({super.key, required this.dateSelectValue});
 
-  final Function(String, int) dateSelectValue;
+  final Function(List<RangeItem> item) dateSelectValue;
 
   @override
   State<ScrollTargetView> createState() => _ScrollTargetViewState();
@@ -95,7 +97,6 @@ class ScrollTargetView extends StatefulWidget {
 class _ScrollTargetViewState extends State<ScrollTargetView> {
   final ScrollController _scrollController = ScrollController();
   final list = <MothItem>[];
-  DateTime? calOvulationDate;
 
   @override
   void initState() {
@@ -108,6 +109,31 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
     list.add(MothItem(currentDateTime: now));
     for (int i = 1; i <= 12; i++) {
       list.add(MothItem(currentDateTime: DateTime(now.year, now.month + i)));
+    }
+    _fetchSelectedDateTime();
+  }
+
+  void _fetchSelectedDateTime() {
+    RangeItem rangeItem  =   RangeItem(
+      selectedStartDate: DateTime(2024, 5, 1),
+      selectedEndDate: DateTime(2024, 5, 5),
+    );
+    if(rangeItem.selectedStartDate.month < DateTime.now().month && rangeItem.selectedEndDate.month < DateTime.now().month){
+      //推算2024 3 4 间隔  30天 = 3月 29 非本月 继续
+      DateTime calStartDateTime = rangeItem.selectedStartDate;
+      DateTime calEndDateTime = rangeItem.selectedEndDate;
+      while(calEndDateTime.year != DateTime.now().year || calEndDateTime.month != DateTime.now().month
+      ){
+        calStartDateTime = calStartDateTime.add(const Duration(days: 28));
+        calEndDateTime = calEndDateTime.add(const Duration(days: 28));
+      }
+      list[0].addRangItem(
+          RangeItem(selectedStartDate: calStartDateTime, selectedEndDate: calEndDateTime),
+          list);
+    }else{
+      list[0].addRangItem(
+          rangeItem,
+          list);
     }
   }
 
@@ -225,6 +251,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                 onNextMonthEndDateDismiss(i.selectedEndDate.day, index);
               }
               hashDeal = true;
+              widget.dateSelectValue.call(list[0].rangItems);
               return;
             } else {
               hashDeal = true;
@@ -234,6 +261,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                 onLastMothEndDateChanged(
                     i.selectedStartDate, i.selectedEndDate, index);
               }
+              widget.dateSelectValue.call(list[0].rangItems);
             }
           }
         }
@@ -265,6 +293,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                       i.selectedStartDate, i.selectedEndDate, index);
                 }
               }
+              widget.dateSelectValue.call(list[0].rangItems);
               return;
             }
           }
@@ -308,6 +337,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
             );
             hashDeal = true;
             //选择一个区间内最晚的日期
+            widget.dateSelectValue.call(list[0].rangItems);
 
             return;
           }
@@ -342,6 +372,7 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
             }
           });
         }
+        widget.dateSelectValue.call(list[0].rangItems);
       }
     });
   }

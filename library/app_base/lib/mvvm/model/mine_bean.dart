@@ -1,3 +1,4 @@
+import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 
 import 'comment_bean.dart';
@@ -15,14 +16,16 @@ class MineReq {
   int pageSize;
   String orderBy;
 
-  factory MineReq.fromJson(Map<dynamic, dynamic> json) => MineReq(
-    userId: json["userId"]??'',
+  factory MineReq.fromJson(Map<dynamic, dynamic> json) =>
+      MineReq(
+        userId: json["userId"] ?? '',
         pageIndex: json["pageIndex"] ?? 0,
         pageSize: json["pageSize"] ?? 0,
         orderBy: json["orderBy"] ?? '',
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "userId": userId,
         "pageIndex": pageIndex,
         "pageSize": pageSize,
@@ -37,13 +40,16 @@ class MineRsq {
 
   List<PostsList> postsList;
 
-  factory MineRsq.fromJson(Map<dynamic, dynamic> json) => MineRsq(
-    postsList: List<PostsList>.from(json["postsList"]??[].map((x) => MyPostsList.fromJson(x))),
-  );
+  factory MineRsq.fromJson(Map<dynamic, dynamic> json) =>
+      MineRsq(
+        postsList: List<PostsList>.from(
+            json["postsList"] ?? [].map((x) => MyPostsList.fromJson(x))),
+      );
 
-  Map<String, dynamic> toJson() => {
-    "postsList": List<dynamic>.from(postsList.map((x) => x.toJson())),
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "postsList": List<dynamic>.from(postsList.map((x) => x.toJson())),
+      };
 }
 
 class MineCommentRsq {
@@ -59,19 +65,21 @@ class MineCommentRsq {
   int pageSize;
   String orderBy;
 
-  factory MineCommentRsq.fromJson(Map<dynamic, dynamic> json) => MineCommentRsq(
-    postsId: json["postsId"],
-    pageIndex: json["pageIndex"],
-    pageSize: json["pageSize"],
-    orderBy: json["orderBy"],
-  );
+  factory MineCommentRsq.fromJson(Map<dynamic, dynamic> json) =>
+      MineCommentRsq(
+        postsId: json["postsId"],
+        pageIndex: json["pageIndex"],
+        pageSize: json["pageSize"],
+        orderBy: json["orderBy"],
+      );
 
-  Map<String, dynamic> toJson() => {
-    "postsId": postsId,
-    "pageIndex": pageIndex,
-    "pageSize": pageSize,
-    "orderBy": orderBy,
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        "postsId": postsId,
+        "pageIndex": pageIndex,
+        "pageSize": pageSize,
+        "orderBy": orderBy,
+      };
 }
 
 class MineCommentRsp {
@@ -81,11 +89,45 @@ class MineCommentRsp {
 
   List<CommentList> commentList;
 
-  factory MineCommentRsp.fromJson(Map<dynamic, dynamic> json) => MineCommentRsp(
-    commentList: List<CommentList>.from(json["commentList"].map((x) => CommentList.fromJson(x))),
-  );
+  factory MineCommentRsp.fromJson(Map<dynamic, dynamic> json) =>
+      MineCommentRsp(
+        commentList: List<CommentList>.from(
+            json["commentList"].map((x) => CommentList.fromJson(x))),
+      );
 
-  Map<dynamic, dynamic> toJson() => {
-    "commentList": List<dynamic>.from(commentList.map((x) => x.toJson())),
-  };
+  Map<dynamic, dynamic> toJson() =>
+      {
+        "commentList": List<dynamic>.from(commentList.map((x) => x.toJson())),
+      };
+}
+
+class MineLikeRsp {
+  MineLikeRsp({
+    required this.commentList,
+    required this.waveList,
+    required this.postList,
+  });
+
+  List<CommentList> commentList;
+  List<WaveList> waveList;
+  List<PostsList> postList;
+
+  factory MineLikeRsp.fromJson(Map<dynamic, dynamic> json) =>
+      MineLikeRsp(
+        commentList: List<CommentList>.from(
+          json["commentList"].map(
+                (x) => CommentList.fromJson(x),
+          ),
+        ),
+        waveList: List<WaveList>.from(
+          json["waveList"].map(
+                (x) => WaveList.fromJson(x),
+          ),
+        ),
+        postList:List<PostsList>.from(
+          json["postList"].map(
+                (x) => PostsList.fromJson(x),
+          ),
+        ),
+      );
 }

@@ -29,9 +29,6 @@ class MonthView extends StatelessWidget {
       dayTiles.add(Container()); // empty days to align the first day
     }
     for (int i = 1; i <= daysInMonth; i++) {
-      if(i == 3){
-        logE('3');
-      }
       final day = DateTime(month.year, month.month, i);
       bool isSelected = false;
       bool isOvulation = false;
@@ -46,7 +43,6 @@ class MonthView extends StatelessWidget {
           }
         }
         //确定了这个月的排卵日，那么经期周期也随之确定了
-
         if (aboutTheCalOvulationDateRange.isNotEmpty) {
           var currentDate = DateTime(month.year,month.month,i);
           for(var i in aboutTheCalOvulationDateRange){

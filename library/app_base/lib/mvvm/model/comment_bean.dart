@@ -59,7 +59,7 @@ class CommentList {
     required this.createTime,
     required this.id,
     required this.commentsNum,
-    required this. isMyLike,
+    required this.isMyLike,
     required this.nickName,
     required this.userAvator,
     required this.userName,
@@ -85,27 +85,46 @@ class CommentList {
   String userAvator;
 
   factory CommentList.fromJson(Map<dynamic, dynamic> json) => CommentList(
-    id: json["id"]??'',
-    parentId: json["parentId"]??'',
-    path: json["path"]??'',
-    sortIndex: json["sortIndex"]??0,
-    level: json["level"]??0,
-    postsId: json["postsId"]??'',
-    content: json["content"]??'',
-    userId: json["userId"]??'',
-    likesNum: json["likesNum"]??'',
-    commentsNum: json["commentsNum"]??'',
-    isMyLike: json["isMyLike"]??'',
-    userName: json['userName']??'',
-    nickName: json['nickName']??'',
-    userAvator: json['userAvator']??'',
-    creatorId: json["creatorId"]??'',
-    modifierId: json["modifierId"]??'',
-    modifyTime: json["modifyTime"]??0,
-    createTime: json["createTime"]??0,
+        id: json["id"] ?? '',
+        parentId: json["parentId"] ?? '',
+        path: json["path"] ?? '',
+        sortIndex: json["sortIndex"] ?? 0,
+        level: json["level"] ?? 0,
+        postsId: json["postsId"] ?? '',
+        content: json["content"] ?? '',
+        userId: json["userId"] ?? '',
+        likesNum: json["likesNum"] ?? '',
+        commentsNum: json["commentsNum"] ?? '',
+        isMyLike: json["isMyLike"] ?? '',
+        userName: json['userName'] ?? '',
+        nickName: json['nickName'] ?? '',
+        userAvator: json['userAvator'] ?? '',
+        creatorId: json["creatorId"] ?? '',
+        modifierId: json["modifierId"] ?? '',
+        modifyTime: json["modifyTime"] ?? 0,
+        createTime: json["createTime"] ?? 0,
       );
-  factory CommentList.mock()=>CommentList(postsId: '123', likesNum: '123', sortIndex: 1, level: 1, creatorId: '1231', modifierId: '12312', userId: '123131', parentId: '13123', content: '好哦啊', path: '/', modifyTime: 1, createTime: 188899, id: '1213'
-      '', commentsNum: '123', isMyLike: false, nickName: '超级赛亚人', userAvator: 'https://via.placeholder.com/150/0000F0/808080?Text=Image0', userName: '1762094255@qq.com');
+
+  factory CommentList.mock() => CommentList(
+      postsId: '123',
+      likesNum: '123',
+      sortIndex: 1,
+      level: 1,
+      creatorId: '1231',
+      modifierId: '12312',
+      userId: '123131',
+      parentId: '13123',
+      content: '好哦啊',
+      path: '/',
+      modifyTime: 1,
+      createTime: 188899,
+      id: '1213'
+          '',
+      commentsNum: '123',
+      isMyLike: false,
+      nickName: '超级赛亚人',
+      userAvator: 'https://via.placeholder.com/150/0000F0/808080?Text=Image0',
+      userName: '1762094255@qq.com');
 
   Map<dynamic, dynamic> toJson() => {
         "postsId": postsId,
@@ -123,7 +142,6 @@ class CommentList {
         "id": id,
         "commentsNum": commentsNum,
       };
-
 }
 
 class CommentCreateReq {
@@ -147,13 +165,13 @@ class CommentCreateReq {
 
   factory CommentCreateReq.fromJson(Map<dynamic, dynamic> json) =>
       CommentCreateReq(
-        postsId: json["postsId"]??'',
-        path: json["path"]??'',
-        sortIndex: json["sortIndex"]??0,
-        level: json["level"]??0,
-        userId: json["userId"]??'',
-        parentId: json["parentId"]??'',
-        content: json["content"]??'',
+        postsId: json["postsId"] ?? '',
+        path: json["path"] ?? '',
+        sortIndex: json["sortIndex"] ?? 0,
+        level: json["level"] ?? 0,
+        userId: json["userId"] ?? '',
+        parentId: json["parentId"] ?? '',
+        content: json["content"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -190,14 +208,14 @@ class CommentCreateRsp {
 
   factory CommentCreateRsp.fromJson(Map<dynamic, dynamic> json) =>
       CommentCreateRsp(
-        postsId: json["postsId"]??'',
-        path: json["path"]??'',
-        sortIndex: json["sortIndex"]??0,
-        level: json["level"]??0,
-        id: json["id"]??'',
-        userId: json["userId"]??'',
-        parentId: json["parentId"]??'',
-        content: json["content"]??'',
+        postsId: json["postsId"] ?? '',
+        path: json["path"] ?? '',
+        sortIndex: json["sortIndex"] ?? 0,
+        level: json["level"] ?? 0,
+        id: json["id"] ?? '',
+        userId: json["userId"] ?? '',
+        parentId: json["parentId"] ?? '',
+        content: json["content"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

@@ -18,19 +18,19 @@ class MineLikeController extends BaseController {
     super.onInit();
   }
   _fetchPostList() async {
-    final response = await _repo.getCollect(
+    final response = await _repo.getLike(
       MineReq(
-        userId: User.loginRspBean!.userId,
+        userId: User.loginRspBean.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
         pageIndex: 1,
       ),
     );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        list.addAll(response.data!.data!.postsList);
-        update([listId]);
-      }
-    }
+    // if (response.isSuccess) {
+    //   if (response.data?.data != null) {
+    //     list.addAll(response.data!.data!.postsList);
+    //     update([listId]);
+    //   }
+    // }
   }
 }
