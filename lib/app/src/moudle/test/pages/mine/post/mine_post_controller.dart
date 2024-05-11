@@ -21,7 +21,7 @@ class MinePostController extends BaseController {
   _fetchPostList() async {
     final response = await _repo.getPost(
       MineReq(
-        userId: User.loginRspBean.userId,
+        userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
         pageIndex: 1,

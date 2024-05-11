@@ -39,7 +39,7 @@ class HomeController extends PlayDeviceBleController {
           User.loginUserInfo = HomeRsp.fromJson(SaveKey.loginUserBaseInfo.read);
         }else{
           //没有缓存信息，则
-          showError('无法获取个人信息，请重新登录');
+          showToast('无法获取个人信息，请重新登录');
         }
       }
   }

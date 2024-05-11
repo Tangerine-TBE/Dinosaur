@@ -72,9 +72,8 @@ import '../src/moudle/test/pages/pet/pet_controller.dart';
 /// 服务项目的页面路由配置
 class RouteConfig extends ARoute {
   @override
-  String initialRoute = RouteName.login;
-
-  // User.loginRspBean == null ? RouteName.login : RouteName.homePage;
+  String initialRoute =
+  User.loginRspBean == null ? RouteName.login : RouteName.homePage;
   @override
   String? loginRoute = RouteName.login;
 

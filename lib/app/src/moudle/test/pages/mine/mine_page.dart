@@ -1,3 +1,4 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
 import 'package:flutter/cupertino.dart';
@@ -93,26 +94,26 @@ class MinePage extends BaseEmptyPage<MineController> {
                             Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage: loadImageProvider(''),
+                                  backgroundImage: loadImageProvider(User.getUserAvator()),
                                   radius: 28,
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                const Column(
+                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '王晓明',
-                                      style: TextStyle(
+                                      User.getUserNickName(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     Text(
-                                      'ID: 9527',
-                                      style: TextStyle(
+                                     User.getUserId(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -125,20 +126,20 @@ class MinePage extends BaseEmptyPage<MineController> {
                             const SizedBox(
                               height: 32,
                             ),
-                            const Row(
+                             Row(
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '6546',
-                                      style: TextStyle(
+                                      User.getUserFansCount().toString(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       '粉丝',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -153,14 +154,14 @@ class MinePage extends BaseEmptyPage<MineController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '46',
-                                      style: TextStyle(
+                                      User.getUserFavorCount().toString(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       '关注',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -170,19 +171,19 @@ class MinePage extends BaseEmptyPage<MineController> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 45,),
+                                const SizedBox(width: 45,),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '654',
-                                      style: TextStyle(
+                                      User.getUserLikeCount().toString(),
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       '获赞',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -213,7 +214,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                     borderRadius: BorderRadius.circular(26),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                     child: Column(
                       children: [
                         Row(
@@ -226,7 +227,7 @@ class MinePage extends BaseEmptyPage<MineController> {
                                   e.value.name, e.value.assetName, e.key))
                               .toList(),
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         Expanded(
                           child: ListView.separated(
                             itemBuilder: (context, index) {
@@ -257,7 +258,7 @@ class MinePage extends BaseEmptyPage<MineController> {
 
   _buildContentItem(String name, String assetName, int index) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       child: InkWell(
         onTap: () {
           controller.onContentItemClicked(index);
@@ -269,11 +270,11 @@ class MinePage extends BaseEmptyPage<MineController> {
               width: 24,
               height: 24,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Expanded(child: Text(name)),
-            Icon(Icons.arrow_forward_ios_rounded, size: 20,color: MyColors.textGreyColor,),
+            const Icon(Icons.arrow_forward_ios_rounded, size: 20,color: MyColors.textGreyColor,),
           ],
         ),
       ),
@@ -292,7 +293,7 @@ class MinePage extends BaseEmptyPage<MineController> {
             width: 32,
             height: 32,
           ),
-          SizedBox(
+          const SizedBox(
             height: 6,
           ),
           Text(
