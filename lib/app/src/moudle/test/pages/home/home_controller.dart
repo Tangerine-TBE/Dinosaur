@@ -15,10 +15,16 @@ class HomeController extends PlayDeviceBleController {
   final selectedTabIndex = 0.obs;
   late PageController pageController;
   final _repo = Get.find<HomeRepo>();
-
+  double? currentPage = 0.0;
   @override
   void onInit() async {
     pageController = PageController();
+    pageController.addListener(() {
+      if(currentPage == 3){
+        SaveKey.loginUserExtendsInfo.save(User.loginUserInfo?.toJson());
+      }
+      currentPage = pageController.page;
+    });
     _fetchUserData();
     super.onInit();
   }

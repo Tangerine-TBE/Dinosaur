@@ -1,8 +1,13 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/home_bean.dart';
+import 'package:app_base/mvvm/repository/edit_info_repo.dart';
+import 'package:app_base/mvvm/repository/upload_repo.dart';
+import 'package:app_base/network/utils/upload_utils.dart';
 import 'package:app_base/util/image.dart';
+import 'package:audio_wave/audio_wave.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/weight/record_sound_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -15,42 +20,70 @@ import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
 class EditInfoController extends BaseController {
+  final _repo = Get.find<EditInfoRepo>();
+  final _upLoadRepo = Get.find<UpLoadRepo>();
   final listData = <ItemBean>[];
   final listId = 1;
-  final imageUrl1 = ''.obs;
-  final imageUrl2 = ''.obs;
-  final imageUrl3 = ''.obs;
-  final imageUrl4 = ''.obs;
-  final imageUrl5 = ''.obs;
-  final imageUrl6 = ''.obs;
+  final images = <String>['', '', '', '', '', ''].obs;
   late FlutterSoundRecorder record;
   late FlutterSoundPlayer play;
+  HomeRsp? homeRsp = User.loginUserInfo;
+  final imageArr = <String>[];
+  var copyImages = <String>[];
+  final playVoice = false.obs;
+  final voiceFile = ''.obs;
 
   @override
   void onInit() {
     fetchItems();
     record = FlutterSoundRecorder(logLevel: Level.debug);
     play = FlutterSoundPlayer(logLevel: Level.debug);
+    if (homeRsp != null) {
+      voiceFile.value = homeRsp!.voiceSign;
+      images[0] = homeRsp!.avator;
+      for (int i = 0; i < homeRsp!.images.length - 1; i++) {
+        if (i == 0) {
+          images[1] = homeRsp!.images[i];
+        } else if (i == 1) {
+          images[2] = homeRsp!.images[i];
+        } else if (i == 2) {
+          images[3] = homeRsp!.images[i];
+        } else if (i == 3) {
+          images[4] = homeRsp!.images[i];
+        } else if (i == 4) {
+          images[5] = homeRsp!.images[i];
+        }
+      }
+    }
     super.onInit();
   }
 
   fetchItems() {
     listData.add(
-      ItemBean(title: '昵称', content: 'bennitfy', hintText: ''),
+      ItemBean(
+          title: '昵称', content: User.getUserNickName(), hintText: '还未设置昵称哦'),
     );
     listData.add(
-      ItemBean(title: '语音签名', content: '呀！我好喜欢。', hintText: '还未设置语音签名哦'),
+      ItemBean(
+          title: '语音签名',
+          content: User.getUserVoiceSign(),
+          hintText: '还未设置语音签名哦'),
     );
     listData.add(
-      ItemBean(title: '签名', content: '呀！我好喜欢。', hintText: ''),
+      ItemBean(title: '签名', content: User.getUserSign(), hintText: '还未设置签名信息哦'),
     );
     listData.add(
-      ItemBean(title: '来自', content: '中国 * 大陆', hintText: ''),
+      ItemBean(
+          title: '来自', content: User.getUserAddress(), hintText: '还未设置地区信息'),
     );
     listData.add(
-      ItemBean(title: '生日', content: '1997-12-16', hintText: ''),
+      ItemBean(title: '生日', content: User.getBirthday(), hintText: '还未设置生日信息呢'),
     );
     update([listId]);
+  }
+
+  _editUserInfo(Map<String, dynamic> map) {
+    _repo.editUserInfo(map);
   }
 
   onItemClicked(int index) {
@@ -73,6 +106,11 @@ class EditInfoController extends BaseController {
               content: '${date.year}-${date.month}-${date.day}',
               hintText: listData[4].hintText);
           listData[4] = exchangedBean;
+          _editUserInfo({'sign': '${date.year}-${date.month}-${date.day}'});
+          HomeRsp? homeRsp = User.loginUserInfo;
+          if (homeRsp != null) {
+            homeRsp.birthday = '${date.year}-${date.month}-${date.day}';
+          }
           update([listId]);
         },
         currentTime: DateTime.tryParse(listData[index].content),
@@ -82,46 +120,40 @@ class EditInfoController extends BaseController {
   }
 
   onImage1Clicked() {
-    showImagePickerBottomSheet(imageUrl1);
+    showImagePickerBottomSheet(1);
   }
 
   onImage2Clicked() {
-    logE('2');
-
-    showImagePickerBottomSheet(imageUrl2);
+    showImagePickerBottomSheet(2);
   }
 
   onImage3Clicked() {
-    logE('3');
-
-    showImagePickerBottomSheet(imageUrl3);
+    showImagePickerBottomSheet(3);
   }
 
   onImage4Clicked() {
-    logE('4');
-    showImagePickerBottomSheet(imageUrl4);
+    showImagePickerBottomSheet(4);
   }
 
   onImage5Clicked() {
-    logE('5');
-    showImagePickerBottomSheet(imageUrl5);
+    showImagePickerBottomSheet(5);
   }
 
   onImage6Clicked() {
-    logE('6');
-    showImagePickerBottomSheet(imageUrl6);
+    showImagePickerBottomSheet(6);
   }
 
-  showImagePickerBottomSheet(RxString value) async {
+  showImagePickerBottomSheet(int index) async {
     await Get.bottomSheet(
       backgroundColor: Colors.white,
       elevation: 0,
       SafeArea(
         child: Container(
-          height: value.value.isNotEmpty ? 200 : 150,
-          decoration: BoxDecoration(
+          height: images[index - 1].isNotEmpty ? 200 : 150,
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), topRight: Radius.circular(12)),
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -151,7 +183,41 @@ class EditInfoController extends BaseController {
                         ],
                       );
                       if (croppedFile != null) {
-                        value.value = croppedFile.path;
+                        images[index - 1] = croppedFile.path;
+                        if (index == 1) {
+                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', path,
+                              (path) => _editUserInfo({'avator': path}));
+                          if (homeRsp != null) {
+                            homeRsp!.avator = images[index - 1];
+                          }
+                        } else {
+                          var currentImages = <String>[];
+                          for (int i = 0; i < images.length; i++) {
+                            if (i != 0) {
+                              currentImages.add(images[i]);
+                            }
+                          }
+                          copyImages.clear();
+                          copyImages.addAll(currentImages);
+                          UploadUtils.upLoadFile(
+                            _upLoadRepo,
+                            'jpeg',
+                            path,
+                            (path) {
+                              copyImages[index - 2] = path;
+                              _editUserInfo(
+                                {
+                                  'imageArr': List<dynamic>.from(
+                                    copyImages.map((x) => x),
+                                  ),
+                                },
+                              );
+                            },
+                          );
+                          if (homeRsp != null) {
+                            homeRsp!.images[index - 1] = images[index - 1];
+                          }
+                        }
                       }
                     }
                   },
@@ -175,7 +241,8 @@ class EditInfoController extends BaseController {
                         compressQuality: 100,
                         maxHeight: 700,
                         maxWidth: 700,
-                        aspectRatio: CropAspectRatio(ratioX: 1,ratioY: 1),
+                        aspectRatio:
+                            const CropAspectRatio(ratioX: 1, ratioY: 1),
                         uiSettings: [
                           AndroidUiSettings(
                             toolbarTitle: '裁剪',
@@ -184,14 +251,49 @@ class EditInfoController extends BaseController {
                             initAspectRatio: CropAspectRatioPreset.square,
                             lockAspectRatio: true,
                           ),
-                          IOSUiSettings(title: '裁剪',
+                          IOSUiSettings(
+                            title: '裁剪',
                             aspectRatioLockEnabled: true,
                             resetAspectRatioEnabled: false,
                           )
                         ],
                       );
                       if (croppedFile != null) {
-                        value.value = croppedFile.path;
+                        images[index - 1] = croppedFile.path;
+                        if (index == 1) {
+                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', path,
+                              (path) => _editUserInfo({'avator': path}));
+                          if (homeRsp != null) {
+                            homeRsp!.avator = images[index - 1];
+                          }
+                        } else {
+                          var currentImages = <String>[];
+                          for (int i = 0; i < images.length; i++) {
+                            if (i != 0) {
+                              currentImages.add(images[i]);
+                            }
+                          }
+                          copyImages.clear();
+                          copyImages.addAll(currentImages);
+                          UploadUtils.upLoadFile(
+                            _upLoadRepo,
+                            'jpeg',
+                            path,
+                            (path) {
+                              copyImages[index - 2] = path;
+                              _editUserInfo(
+                                {
+                                  'imageArr': List<dynamic>.from(
+                                    copyImages.map((x) => x),
+                                  ),
+                                },
+                              );
+                            },
+                          );
+                          if (homeRsp != null) {
+                            homeRsp!.images[index - 1] = images[index - 1];
+                          }
+                        }
                       }
                     }
                   },
@@ -200,16 +302,28 @@ class EditInfoController extends BaseController {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                if (value.value.isNotEmpty)
+                if (images[index - 1].isNotEmpty)
                   const Divider(
                     height: 1,
                     color: Colors.pink,
                   ),
-                if (value.value.isNotEmpty)
+                if (images[index - 1].isNotEmpty)
                   MaterialButton(
                     minWidth: double.infinity,
                     onPressed: () {
-                      value.value = '';
+                      images[index - 1] = '';
+                      if (index == 1) {
+                        _editUserInfo({'avator': ''});
+                      } else {
+                        copyImages[index - 2] = '';
+                        _editUserInfo(
+                          {
+                            'imageArr': List<dynamic>.from(
+                              copyImages.map((x) => x),
+                            ),
+                          },
+                        );
+                      }
                       Get.back();
                     },
                     child: const Text(
@@ -290,6 +404,10 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[0] = exchangedBean;
                     update([listId]);
+                    _editUserInfo({'nickName': textEditController.text});
+                    if (homeRsp != null) {
+                      homeRsp!.nickName = textEditController.text;
+                    }
                     finish();
                   },
                   child: const Text('保存'),
@@ -347,11 +465,11 @@ class EditInfoController extends BaseController {
                     const SizedBox(
                       width: 20,
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         // itemBean.title,
                         '设置语音签名',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: MyColors.textBlackColor,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -361,7 +479,7 @@ class EditInfoController extends BaseController {
                   ],
                 ),
               ),
-              Text('不知道说什么？点这里找灵感'),
+              const Text('不知道说什么？点这里找灵感'),
               const SizedBox(
                 height: 10,
               ),
@@ -384,7 +502,7 @@ class EditInfoController extends BaseController {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   Stack(
@@ -392,7 +510,7 @@ class EditInfoController extends BaseController {
                       CircleAvatar(
                         backgroundImage: loadImageProvider(''),
                       ),
-                      Positioned(
+                      const Positioned(
                         right: 0,
                         bottom: 0,
                         child: Icon(
@@ -403,7 +521,7 @@ class EditInfoController extends BaseController {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   Stack(
@@ -411,7 +529,7 @@ class EditInfoController extends BaseController {
                       CircleAvatar(
                         backgroundImage: loadImageProvider(''),
                       ),
-                      Positioned(
+                      const Positioned(
                         right: 0,
                         bottom: 0,
                         child: Icon(
@@ -422,7 +540,7 @@ class EditInfoController extends BaseController {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   Stack(
@@ -430,7 +548,7 @@ class EditInfoController extends BaseController {
                       CircleAvatar(
                         backgroundImage: loadImageProvider(''),
                       ),
-                      Positioned(
+                      const Positioned(
                         right: 0,
                         bottom: 0,
                         child: Icon(
@@ -443,45 +561,160 @@ class EditInfoController extends BaseController {
                   ),
                 ],
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 34),
                 child: Divider(),
               ),
+              Obx(() => voiceFile.isNotEmpty?
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  margin: EdgeInsets.only(right: 34),
-                  constraints: BoxConstraints.loose(Size(200, 60)),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  margin: const EdgeInsets.only(right: 34),
+                  constraints: BoxConstraints.loose(const Size(200, 60)),
                   decoration: BoxDecoration(
                     color: MyColors.themeTextColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Row(
+                  child:
+                  Row(
                     children: [
-                      Icon(Icons.surround_sound),
-                      Expanded(
-                        child: Text('sousd'),
+                      const Icon(Icons.record_voice_over),
+                      const SizedBox(
+                        width: 10,
                       ),
-                      Icon(Icons.cancel_outlined),
+                      Expanded(
+                        child: Obx(
+                              () => InkWell(
+                            onTap: () {
+                              if (!playVoice.value) {
+                                startPlay(1);
+                              } else {
+                                stopPlay(1);
+                              }
+                            },
+                            child: playVoice.value
+                                ? AudioWave(
+                              height: 20,
+                              width: 90,
+                              spacing: 2.5,
+                              animation: true,
+                              bars: [
+                                AudioWaveBar(
+                                    heightFactor: 0.2,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.1,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.9,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.8,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 1.0,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.5,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.6,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.7,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.7,
+                                    color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 1.0,
+                                    color: Colors.black),
+                              ],
+                            )
+                                : const Icon(Icons.play_arrow_sharp),
+                          ),
+                        ),
+                      ),
+                      const Text('29\'\''),
+                      InkWell(
+                        onTap: (){
+                          //delete
+                          _editUserInfo({'voiceSign':''});
+                          if(homeRsp != null){
+                            homeRsp!.voiceSign = '';
+                          }
+                          if(play.isPlaying){
+                            stopPlay(1);
+                          }
+                          voiceFile.value = '';
+                        },
+                        child: const Icon(Icons.cancel_outlined),
+                      ),
                     ],
-                  ),
+                  )
+                  ,
                 ),
-              ),
-              SizedBox(
+              ):Container(),
+
+    ),
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 '录制长于10秒的声音',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
-              Text(
+              const Text(
                 '你的用心让TA听到',
                 style: TextStyle(
                   color: MyColors.textGreyColor,
@@ -496,7 +729,24 @@ class EditInfoController extends BaseController {
                     },
                     recordStartCallback: recordStart,
                     saveRecordClicked: () {
-                      logE('save');
+                      if (recordUrl != null) {
+                        UploadUtils.upLoadFile(
+                          _upLoadRepo,
+                          "mp3",
+                          recordUrl!,
+                          (path) => _repo.editUserInfo(
+                            {
+                              'voiceSign':
+                                  "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$path",
+                            },
+                          ),
+                        );
+                        if (homeRsp != null) {
+                          homeRsp!.voiceSign = recordUrl!;
+                        }
+                        voiceFile.value = recordUrl!;
+                        playVoice.value = false;
+                      }
                     },
                     dismissRecordClicked: () {},
                     startPlayed: () {
@@ -519,7 +769,7 @@ class EditInfoController extends BaseController {
     }
   }
 
-  String? recordUrl = '';
+  String? recordUrl = User.getUserVoiceSign();
 
   Future recordStart() async {
     await record.openRecorder();
@@ -534,14 +784,24 @@ class EditInfoController extends BaseController {
     //保存上传
   }
 
-  startPlay() async {
+  startPlay([int type = 0]) async {
     await play.openPlayer();
-    await play.startPlayer(fromURI: recordUrl, codec: Codec.mp3);
+    await play.startPlayer(fromURI: recordUrl, codec: Codec.mp3,whenFinished: (){
+      if (type == 1) {
+        playVoice.value = false;
+      }
+    });
+    if (type == 1) {
+      playVoice.value = true;
+    }
   }
 
-  stopPlay() async {
+  stopPlay([int type = 0]) async {
     if (play.isOpen()) {
       await play.pausePlayer();
+    }
+    if (type == 1) {
+      playVoice.value = false;
     }
   }
 
@@ -595,6 +855,10 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[2] = exchangedBean;
                     update([listId]);
+                    _editUserInfo({'sign': textEditController.text});
+                    if (homeRsp != null) {
+                      homeRsp!.sign = textEditController.text;
+                    }
                     finish();
                   },
                   child: const Text('保存'),
@@ -625,7 +889,7 @@ class EditInfoController extends BaseController {
 
   showComeFromEditBottomSheet(RxString value) {}
 
-  showBirDayEditBottomSheet(RxString value) {}
+  showBirDayEditBottomSheet() {}
 }
 
 class ItemBean {

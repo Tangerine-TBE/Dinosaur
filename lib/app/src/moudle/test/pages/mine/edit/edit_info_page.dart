@@ -1,6 +1,7 @@
 import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +47,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                   children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.width,
-                      child: Obx(() =>
-                          Column(
+                      child: Obx(() => Column(
                             children: [
                               Flexible(
                                 flex: 2,
@@ -57,50 +57,56 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       flex: 2,
                                       child: InkWell(
                                         onTap: controller.onImage1Clicked,
-                                        child: controller.imageUrl1.value.isEmpty
+                                        child: controller.images[0].isEmpty
                                             ? Container(
-                                          decoration: BoxDecoration(
-                                            color: MyColors.textGreyColor
-                                                ,
-                                            border: const Border(
-                                              right: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              bottom: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
+                                                decoration: const BoxDecoration(
+                                                  color: MyColors.textGreyColor,
+                                                  border: Border(
+                                                    right: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              )
                                             : Container(
-                                          decoration: BoxDecoration(
-                                            color: MyColors.textGreyColor
-                                                ,
-                                            border: const Border(
-                                              right: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
+                                                decoration: const BoxDecoration(
+                                                  color: MyColors.textGreyColor,
+                                                  border: Border(
+                                                    right: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: controller.images[0]
+                                                        .startsWith('http')
+                                                    ? CachedNetworkImage(
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        imageUrl: controller
+                                                            .images[0],
+                                                      )
+                                                    : loadImageByPath(
+                                                        controller.images[0],
+                                                        double.infinity,
+                                                        double.infinity,
+                                                      ),
                                               ),
-                                              bottom: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: loadImageByPath(
-                                            controller.imageUrl1.value,
-                                            double.infinity,
-                                            double.infinity,
-                                          ),
-                                        ),
                                       ),
                                     ),
                                     Flexible(
@@ -110,99 +116,117 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                           Flexible(
                                             child: InkWell(
                                               onTap: controller.onImage2Clicked,
-                                              child: controller.imageUrl2.value.isEmpty
+                                              child: controller
+                                                      .images[1].isEmpty
                                                   ? Container(
-                                                decoration: BoxDecoration(
-                                                  color: MyColors.textGreyColor
-                                                      ,
-                                                  border: const Border(
-                                                    right: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                    bottom: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: const Center(
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              )
+                                                      decoration: BoxDecoration(
+                                                        color: MyColors
+                                                            .textGreyColor,
+                                                        border: const Border(
+                                                          right: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                          bottom: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
                                                   : Container(
-                                                decoration: BoxDecoration(
-                                                  color: MyColors.textGreyColor
-                                                      ,
-                                                  border: const Border(
-                                                    right: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
+                                                      decoration: BoxDecoration(
+                                                        color: MyColors
+                                                            .textGreyColor,
+                                                        border: const Border(
+                                                          right: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                          bottom: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: controller.images[1]
+                                                          .startsWith('http')
+                                                          ? CachedNetworkImage(
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        imageUrl: controller
+                                                            .images[1],
+                                                      )
+                                                          : loadImageByPath(
+                                                        controller.images[1],
+                                                        double.infinity,
+                                                        double.infinity,
+                                                      ),
                                                     ),
-                                                    bottom: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: loadImageByPath(
-                                                  controller.imageUrl2.value,
-                                                  double.infinity,
-                                                  double.infinity,
-                                                ),
-                                              ),
                                             ),
                                           ),
                                           Flexible(
                                             child: InkWell(
                                               onTap: controller.onImage3Clicked,
-                                              child: controller.imageUrl3.value.isEmpty
+                                              child: controller
+                                                      .images[2].isEmpty
                                                   ? Container(
-                                                decoration: BoxDecoration(
-                                                  color: MyColors.textGreyColor
-                                                      ,
-                                                  border: const Border(
-                                                    right: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                    bottom: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: const Center(
-                                                  child: Icon(
-                                                    Icons.add,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              )
+                                                      decoration: BoxDecoration(
+                                                        color: MyColors
+                                                            .textGreyColor,
+                                                        border: const Border(
+                                                          right: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                          bottom: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
                                                   : Container(
-                                                decoration: BoxDecoration(
-                                                  color: MyColors.textGreyColor
-                                                      ,
-                                                  border: const Border(
-                                                    right: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
+                                                      decoration: BoxDecoration(
+                                                        color: MyColors
+                                                            .textGreyColor,
+                                                        border: const Border(
+                                                          right: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                          bottom: BorderSide(
+                                                            color: Colors.white,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: controller.images[2]
+                                                          .startsWith('http')
+                                                          ? CachedNetworkImage(
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        imageUrl: controller
+                                                            .images[2],
+                                                      )
+                                                          : loadImageByPath(
+                                                        controller.images[2],
+                                                        double.infinity,
+                                                        double.infinity,
+                                                      ),
                                                     ),
-                                                    bottom: BorderSide(
-                                                      color: Colors.white,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: loadImageByPath(
-                                                  controller.imageUrl3.value,
-                                                  double.infinity,
-                                                  double.infinity,
-                                                ),
-                                              ),
                                             ),
                                           ),
                                         ],
@@ -219,167 +243,187 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       flex: 1,
                                       child: InkWell(
                                         onTap: controller.onImage4Clicked,
-                                        child: controller.imageUrl4.value.isEmpty
+                                        child: controller.images[3].isEmpty
                                             ? Container(
-                                          decoration: BoxDecoration(
-                                            color: MyColors.textGreyColor
-                                                ,
-                                            border: const Border(
-                                              right: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                              bottom: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
+                                                decoration: BoxDecoration(
+                                                  color: MyColors.textGreyColor,
+                                                  border: const Border(
+                                                    right: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              )
                                             : Container(
-                                          decoration: BoxDecoration(
-                                            color: MyColors.textGreyColor
-                                                ,
-                                            border: const Border(
-                                              right: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
+                                                decoration: BoxDecoration(
+                                                  color: MyColors.textGreyColor,
+                                                  border: const Border(
+                                                    right: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                    bottom: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: controller.images[3]
+                                                    .startsWith('http')
+                                                    ? CachedNetworkImage(
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  imageUrl: controller
+                                                      .images[3],
+                                                )
+                                                    : loadImageByPath(
+                                                  controller.images[3],
+                                                  double.infinity,
+                                                  double.infinity,
+                                                ),
                                               ),
-                                              bottom: BorderSide(
-                                                color: Colors.white,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: loadImageByPath(
-                                            controller.imageUrl4.value,
-                                            double.infinity,
-                                            double.infinity,
-                                          ),
-                                        ),
                                       ),
                                     ),
                                     Flexible(
                                         flex: 1,
                                         child: InkWell(
                                           onTap: controller.onImage5Clicked,
-                                          child: controller.imageUrl5.value.isEmpty
+                                          child: controller.images[4].isEmpty
                                               ? Container(
-                                            decoration: BoxDecoration(
-                                              color: MyColors.textGreyColor
-                                                  ,
-                                              border: const Border(
-                                                right: BorderSide(
-                                                  color: Colors.white,
-                                                  width: 1,
-                                                ),
-                                                bottom: BorderSide(
-                                                  color: Colors.white,
-                                                  width: 1,
-                                                ),
-                                              ),
-                                            ),
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    border: const Border(
+                                                      right: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                      bottom: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                )
                                               : Container(
-                                            decoration: BoxDecoration(
-                                              color: MyColors.textGreyColor
-                                                  ,
-                                              border: const Border(
-                                                right: BorderSide(
-                                                  color: Colors.white,
-                                                  width: 1,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    border: const Border(
+                                                      right: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                      bottom: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: controller.images[4]
+                                                      .startsWith('http')
+                                                      ? CachedNetworkImage(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    imageUrl: controller
+                                                        .images[4],
+                                                  )
+                                                      : loadImageByPath(
+                                                    controller.images[4],
+                                                    double.infinity,
+                                                    double.infinity,
+                                                  ),
                                                 ),
-                                                bottom: BorderSide(
-                                                  color: Colors.white,
-                                                  width: 1,
-                                                ),
-                                              ),
-                                            ),
-                                            child: loadImageByPath(
-                                              controller.imageUrl5.value,
-                                              double.infinity,
-                                              double.infinity,
-                                            ),
-                                          ),
-                                        )
-                                    ),
+                                        )),
                                     Flexible(
                                       flex: 1,
                                       child: InkWell(
-                                          child: InkWell(
-                                            onTap: controller.onImage6Clicked,
-                                            child: controller.imageUrl6.value.isEmpty
-                                                ? Container(
-                                              decoration: BoxDecoration(
-                                                color: MyColors.textGreyColor
-                                                    ,
-                                                border: const Border(
-                                                  right: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1,
+                                        child: InkWell(
+                                          onTap: controller.onImage6Clicked,
+                                          child: controller.images[5].isEmpty
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    border: const Border(
+                                                      right: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                      bottom: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                    ),
                                                   ),
-                                                  bottom: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1,
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    border: const Border(
+                                                      right: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                      bottom: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child:controller.images[5]
+                                                      .startsWith('http')
+                                                      ? CachedNetworkImage(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    imageUrl: controller
+                                                        .images[5],
+                                                  )
+                                                      : loadImageByPath(
+                                                    controller.images[5],
+                                                    double.infinity,
+                                                    double.infinity,
                                                   ),
                                                 ),
-                                              ),
-                                              child: const Center(
-                                                child: Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )
-                                                : Container(
-                                              decoration: BoxDecoration(
-                                                color: MyColors.textGreyColor
-                                                    ,
-                                                border: const Border(
-                                                  right: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1,
-                                                  ),
-                                                  bottom: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1,
-                                                  ),
-                                                ),
-                                              ),
-                                              child: loadImageByPath(
-                                                controller.imageUrl6.value,
-                                                double.infinity,
-                                                double.infinity,
-                                              ),
-                                            ),
-                                          )
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ),
                   ],
                 ),
               ),
-              GetBuilder<EditInfoController>(builder: (controller){
-                return
-                  SliverPadding(
+              GetBuilder<EditInfoController>(
+                builder: (controller) {
+                  return SliverPadding(
                     padding: const EdgeInsets.only(left: 30),
                     sliver: SliverList.builder(
                       itemBuilder: (context, index) {
@@ -388,7 +432,9 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                       itemCount: controller.listData.length,
                     ),
                   );
-              },id: controller.listId,),
+                },
+                id: controller.listId,
+              ),
             ],
           ),
         )
@@ -398,7 +444,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
 
   _buildItem(int index) {
     return InkWell(
-      onTap: ()=>controller.onItemClicked(index),
+      onTap: () => controller.onItemClicked(index),
       child: Column(
         children: [
           Container(
@@ -418,7 +464,11 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                 ),
                 Expanded(
                   child: Text(
-                    controller.listData[index].content,overflow: TextOverflow.ellipsis,softWrap: true,
+                    controller.listData[index].content.isEmpty
+                        ? controller.listData[index].hintText
+                        : controller.listData[index].content,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
                 ),
                 const Icon(

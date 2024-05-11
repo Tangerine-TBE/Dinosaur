@@ -48,4 +48,32 @@ class User{
          return loginUserInfo!.likeCount;
       }
    }
+   static String getUserSign(){
+      if(loginUserInfo == null){
+         return '';
+      }else{
+         return loginUserInfo!.sign;
+      }
+   }
+   static String getUserVoiceSign(){
+      if(loginUserInfo == null){
+         return '';
+      }else{
+         return loginUserInfo!.voiceSign;
+      }
+   }
+   static String getUserAddress(){
+      if(loginUserInfo == null){
+         return '';
+      }else{
+         return loginUserInfo!.address;
+      }
+   }
+   static String getBirthday(){
+      if(loginUserInfo == null){
+         return '';
+      }else{
+         return loginUserInfo!.birthday;
+      }
+   }
 }

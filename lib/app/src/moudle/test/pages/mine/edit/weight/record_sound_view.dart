@@ -194,7 +194,11 @@ class _RecordSoundViewState extends State<RecordSoundView>
                 child: InkWell(
                   onTap: () {
                     widget.saveRecordClicked.call();
+                    setState(() {
+                      recordStatus = RecordStatus.refreshRecord;
+                    });
                   },
+
                   child: const Icon(Icons.done, size: 40),
                 ),
               ),
