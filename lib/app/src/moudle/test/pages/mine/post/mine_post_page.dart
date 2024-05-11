@@ -45,7 +45,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: loadImageProvider(''),
+                backgroundImage: loadImageProvider(User.getUserAvator()),
               ),
               SizedBox(
                 width: 10,
@@ -54,7 +54,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(controller.list[index].userName),
+                    Text(User.getUserNickName()),
                   ],
                 ),
               ),
@@ -65,7 +65,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
             height: 10,
           ),
           Text(
-              'xxxxxxxxxxxxxxxxx................................................................'),
+              controller.list[index].content),
           SizedBox(
             height: 20,
           ),

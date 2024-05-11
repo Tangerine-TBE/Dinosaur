@@ -14,7 +14,14 @@ class MineRepo extends BaseRepo {
       format: (data) => MineResponse.fromJson(data),
     );
   }
-
+  Future<AResponse<MineResponse>> getPost(MineReq mineReq) {
+    return requestOnFuture(
+      Api.minePost,
+      method: Method.post,
+      params: mineReq.toJson(),
+      format: (data) => MineResponse.fromJson(data),
+    );
+  }
   Future<AResponse<MineCommentResponse>> getMineCommentList(
       MineReq mineCommentRsq) {
     return requestOnFuture(Api.mineReview,

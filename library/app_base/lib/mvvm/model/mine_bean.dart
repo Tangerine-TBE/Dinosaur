@@ -38,7 +38,7 @@ class MineRsq {
   List<PostsList> postsList;
 
   factory MineRsq.fromJson(Map<dynamic, dynamic> json) => MineRsq(
-    postsList: List<PostsList>.from(json["postsList"]??[].map((x) => PostsList.fromJson(x))),
+    postsList: List<PostsList>.from(json["postsList"]??[].map((x) => MyPostsList.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

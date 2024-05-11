@@ -19,12 +19,14 @@ class MinePostController extends BaseController {
   }
 
   _fetchPostList() async {
-    final response = await _repo.getCollect(MineReq(
-      userId: User.loginRspBean!.userId,
-      pageSize: 10,
-      orderBy: 'createTime desc',
-      pageIndex: 1,
-    ));
+    final response = await _repo.getPost(
+      MineReq(
+        userId: User.loginRspBean.userId,
+        pageSize: 10,
+        orderBy: 'createTime desc',
+        pageIndex: 1,
+      ),
+    );
     if (response.isSuccess) {
       if (response.data?.data != null) {
         list.addAll(response.data!.data!.postsList);
