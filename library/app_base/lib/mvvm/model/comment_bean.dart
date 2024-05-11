@@ -95,7 +95,7 @@ class CommentList {
         userId: json["userId"] ?? '',
         likesNum: json["likesNum"] ?? '',
         commentsNum: json["commentsNum"] ?? '',
-        isMyLike: json["isMyLike"] ?? '',
+        isMyLike: json["isMyLike"] ?? false,
         userName: json['userName'] ?? '',
         nickName: json['nickName'] ?? '',
         userAvator: json['userAvator'] ?? '',

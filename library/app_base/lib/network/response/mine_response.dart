@@ -5,8 +5,9 @@ import 'package:common/base/mvvm/repo/api_repository.dart';
 class MineResponse extends DataHolder<MineRsq> {
   MineResponse.fromJson(dynamic map) {
     convert(
-      map,
-      (data) => MineRsq.fromJson(data),
+      map, (data) {
+        return MineRsq.fromJson(data);
+      },
     );
   }
 }
@@ -20,11 +21,11 @@ class MineCommentResponse extends DataHolder<MineCommentRsp> {
   }
 }
 
-class MineLikeResponse extends DataHolder<MineLikeRsp> {
+class MineLikeResponse extends DataHolder<MineRsq> {
   MineLikeResponse.fromJson(dynamic map) {
     convert(
       map,
-      (data) => MineLikeRsp.fromJson(data),
+      (data) => MineRsq.fromJson(data),
     );
   }
 }
