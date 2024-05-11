@@ -9,6 +9,7 @@ import 'package:app_base/mvvm/repository/home_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
+import 'package:app_base/mvvm/repository/period_record_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
@@ -413,6 +414,9 @@ class RouteConfig extends ARoute {
             () {
               Get.lazyPut(
                 () => PeriodRecordController(),
+              );
+              Get.lazyPut(
+                () => PeriodRecordRepo(),
               );
             },
           ),

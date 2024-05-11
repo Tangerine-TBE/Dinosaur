@@ -33,7 +33,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                   return _buildItem(index, controller.list[index], context);
                 },
                 separatorBuilder: (context, index) {
-                  return SizedBox();
+                  return const SizedBox(height: 10,);
                 },
                 itemCount: controller.list.length);
           },id: controller.listId,
@@ -66,14 +66,14 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                     radius: 20,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Row(
@@ -81,7 +81,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                         children: [
                           Text(
                             User.getUserNickName(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           InkWell(
@@ -95,7 +95,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                         visible: item.topicTitle.isNotEmpty,
                         child: Container(
                           padding:
-                          EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                          const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                           decoration: BoxDecoration(
                             color: const Color(0xffFF5E65).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
@@ -194,8 +194,8 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                         ),
                         Text(
                           item.viewsNum.toString(),
-                          style: TextStyle(
-                              color: const Color(0xff8F9098),
+                          style: const TextStyle(
+                              color: Color(0xff8F9098),
                               fontSize: 8,
                               fontWeight: FontWeight.w500),
                         ),

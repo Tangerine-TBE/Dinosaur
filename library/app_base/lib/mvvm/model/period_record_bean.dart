@@ -1,35 +1,25 @@
 class SavePeriodRecordReq {
   SavePeriodRecordReq({
-    required this.deletes,
-    required this.creates,
+    required this.endDate,
+    required this.startDate,
     required this.userId,
   });
 
-  List<DateTime> deletes;
-  List<DateTime> creates;
+  DateTime startDate;
+  DateTime endDate;
   String userId;
 
-  factory SavePeriodRecordReq.fromJson(Map<dynamic, dynamic> json) =>
-      SavePeriodRecordReq(
-        deletes:
-            List<DateTime>.from(json["deletes"].map((x) => DateTime.parse(x))),
-        creates:
-            List<DateTime>.from(json["creates"].map((x) => DateTime.parse(x))),
-        userId: json["userId"],
-      );
 
   Map<String, dynamic> toJson() => {
-        "deletes": List<dynamic>.from(deletes.map((x) =>
-            "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}")),
-        "creates": List<dynamic>.from(creates.map((x) =>
-            "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}")),
+        "startDate": "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
+        "endDate": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
         "userId": userId,
       };
 }
 
 class GetPeriodRecordReq {
-  List<DateTime> fromDate;
-  List<DateTime> toDate;
+  DateTime fromDate;
+  DateTime toDate;
   String userId;
 
   GetPeriodRecordReq({
@@ -38,20 +28,11 @@ class GetPeriodRecordReq {
     required this.userId,
   });
 
-  factory GetPeriodRecordReq.fromJson(Map<dynamic, dynamic> json) =>
-      GetPeriodRecordReq(
-        fromDate:
-            List<DateTime>.from(json["deletes"].map((x) => DateTime.parse(x))),
-        toDate:
-            List<DateTime>.from(json["creates"].map((x) => DateTime.parse(x))),
-        userId: json["userId"],
-      );
-
   Map<String, dynamic> toJson() => {
-        "fromDate": List<dynamic>.from(fromDate.map((x) =>
-            "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}")),
-        "toDate": List<dynamic>.from(toDate.map((x) =>
-            "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}")),
+        "fromDate":
+            "${fromDate.year.toString().padLeft(4, '0')}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.day.toString().padLeft(2, '0')}",
+        "toDate":
+            "${toDate.year.toString().padLeft(4, '0')}-${toDate.month.toString().padLeft(2, '0')}-${toDate.day.toString().padLeft(2, '0')}",
         "userId": userId,
       };
 }
@@ -61,21 +42,36 @@ class GetPeriodRecordRsp {
     required this.dateList,
   });
 
-  List<DateTime> dateList;
+  DateList dateList;
 
   factory GetPeriodRecordRsp.fromJson(Map<dynamic, dynamic> json) =>
       GetPeriodRecordRsp(
-        dateList: List<DateTime>.from(
-          json["dateList"].map(
-            (x) => DateTime.parse(x),
-          ),
-        ),
+        dateList: DateList.fromJson(json["dateList"]??''),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "dateList": dateList.toJson(),
+      };
+}
+
+class DateList {
+  DateList({
+    required this.endDate,
+    required this.startDate,
+  });
+
+  DateTime endDate;
+  DateTime startDate;
+
+  factory DateList.fromJson(Map<dynamic, dynamic> json) => DateList(
+        endDate: DateTime.parse(json["endDate"]??'1990-10-01'),
+        startDate: DateTime.parse(json["startDate"]??'1990-10-01'),
       );
 
   Map<dynamic, dynamic> toJson() => {
-        "dateList": List<dynamic>.from(
-          dateList.map((x) =>
-              "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}"),
-        ),
+        "endDate":
+            "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+        "startDate":
+            "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
       };
 }

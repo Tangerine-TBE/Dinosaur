@@ -1,5 +1,6 @@
 import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
+import 'package:app_base/mvvm/model/period_record_bean.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/bean/month_item.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/periodRecord/weight/date_picker.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
   const PeriodRecordPage({super.key});
@@ -34,12 +36,13 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
               ),
               const Divider(height: 1),
               Expanded(
-                child: ScrollTargetView(
-                  dateSelectValue: (item) {
-                      for(var i in item){
-                        logE('${i.selectedStartDate}---${i.selectedEndDate}');
-                      }
-                  },
+                child: Obx(
+                  () => ScrollTargetView(
+                    dateSelectValue: (item) {
+                      controller.savePeriodRecord(item);
+                    },
+                    getPeriodRecordRsp: controller.getPeriodRecordRsp.value,
+                  ),
                 ),
               ),
             ],
@@ -86,8 +89,12 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
 }
 
 class ScrollTargetView extends StatefulWidget {
-  const ScrollTargetView({super.key, required this.dateSelectValue});
+  const ScrollTargetView(
+      {super.key,
+      required this.dateSelectValue,
+      required this.getPeriodRecordRsp});
 
+  final GetPeriodRecordRsp getPeriodRecordRsp;
   final Function(List<RangeItem> item) dateSelectValue;
 
   @override
@@ -114,26 +121,29 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
   }
 
   void _fetchSelectedDateTime() {
-    RangeItem rangeItem  =   RangeItem(
-      selectedStartDate: DateTime(2024, 5, 1),
-      selectedEndDate: DateTime(2024, 5, 5),
-    );
-    if(rangeItem.selectedStartDate.month < DateTime.now().month && rangeItem.selectedEndDate.month < DateTime.now().month){
-      //推算2024 3 4 间隔  30天 = 3月 29 非本月 继续
-      DateTime calStartDateTime = rangeItem.selectedStartDate;
-      DateTime calEndDateTime = rangeItem.selectedEndDate;
-      while(calEndDateTime.year != DateTime.now().year || calEndDateTime.month != DateTime.now().month
-      ){
-        calStartDateTime = calStartDateTime.add(const Duration(days: 28));
-        calEndDateTime = calEndDateTime.add(const Duration(days: 28));
+    if (widget.getPeriodRecordRsp.dateList.startDate.year != 1990) {
+      RangeItem rangeItem = RangeItem(
+        selectedStartDate: widget.getPeriodRecordRsp.dateList.startDate,
+        selectedEndDate: widget.getPeriodRecordRsp.dateList.endDate,
+      );
+      if (rangeItem.selectedStartDate.month < DateTime.now().month &&
+          rangeItem.selectedEndDate.month < DateTime.now().month) {
+        //推算2024 3 4 间隔  30天 = 3月 29 非本月 继续
+        DateTime calStartDateTime = rangeItem.selectedStartDate;
+        DateTime calEndDateTime = rangeItem.selectedEndDate;
+        while (calEndDateTime.year != DateTime.now().year ||
+            calEndDateTime.month != DateTime.now().month) {
+          calStartDateTime = calStartDateTime.add(const Duration(days: 28));
+          calEndDateTime = calEndDateTime.add(const Duration(days: 28));
+        }
+        list[0].addRangItem(
+            RangeItem(
+                selectedStartDate: calStartDateTime,
+                selectedEndDate: calEndDateTime),
+            list);
+      } else {
+        list[0].addRangItem(rangeItem, list);
       }
-      list[0].addRangItem(
-          RangeItem(selectedStartDate: calStartDateTime, selectedEndDate: calEndDateTime),
-          list);
-    }else{
-      list[0].addRangItem(
-          rangeItem,
-          list);
     }
   }
 
