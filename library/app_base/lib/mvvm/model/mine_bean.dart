@@ -4,33 +4,29 @@ import 'comment_bean.dart';
 
 class MineReq {
   MineReq({
-    required this.topicId,
+    required this.userId,
     required this.pageIndex,
     required this.pageSize,
     required this.orderBy,
-    required this.topicType,
   });
 
-  String topicId;
+  String userId;
   int pageIndex;
   int pageSize;
   String orderBy;
-  String topicType;
 
   factory MineReq.fromJson(Map<dynamic, dynamic> json) => MineReq(
-        topicId: json["topicId"] ?? '',
+    userId: json["userId"]??'',
         pageIndex: json["pageIndex"] ?? 0,
         pageSize: json["pageSize"] ?? 0,
         orderBy: json["orderBy"] ?? '',
-        topicType: json["topicType"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
-        "topicId": topicId,
+        "userId": userId,
         "pageIndex": pageIndex,
         "pageSize": pageSize,
         "orderBy": orderBy,
-        "topicType": topicType,
       };
 }
 

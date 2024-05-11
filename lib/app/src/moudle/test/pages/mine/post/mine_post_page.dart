@@ -10,7 +10,6 @@ import 'package:flutter/src/widgets/framework.dart';
 class MinePostPage extends BaseEmptyPage<MinePostController> {
   const MinePostPage({super.key});
 
-
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
@@ -18,8 +17,12 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
         appBar: AppBar(
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
-          title:  Text('我的帖子',style: TextStyle(                fontSize: SizeConfig.titleTextDefaultSize,
-          ),),
+          title: const Text(
+            '我的帖子',
+            style: TextStyle(
+              fontSize: SizeConfig.titleTextDefaultSize,
+            ),
+          ),
         ),
         body: ListView.separated(
             itemBuilder: (context, index) {
@@ -33,7 +36,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
 
   _buildItem(int index) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       color: Colors.white,
       width: double.infinity,
       child: Column(
@@ -51,7 +54,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('你好呀'),
+                    Text(controller.list[index].userName),
                   ],
                 ),
               ),

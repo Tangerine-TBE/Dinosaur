@@ -97,7 +97,7 @@ class LoginController extends BaseController {
           showError('请求失败!');
         } else {
           final LoginWithCodeRspBean loginWithCodeRspBean = response.data!.data!;
-          SaveKey.userInfo.save(loginWithCodeRspBean.toJson());
+          SaveKey.loginUserBaseInfo.save(loginWithCodeRspBean.toJson());
           User.loginRspBean = loginWithCodeRspBean;
           offAllNavigateTo(RouteName.homePage);
         }

@@ -4,7 +4,9 @@ import 'package:app_base/util/image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../play/weight/curved_indicator.dart';
 
@@ -32,7 +34,8 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
             title: TabBar(
               automaticIndicatorColorAdjustment: true,
               unselectedLabelStyle: TextStyle(
-                  color: MyColors.indicatorNormalTextColor, fontSize: SizeConfig.titleTextDefaultSize),
+                  color: MyColors.indicatorNormalTextColor,
+                  fontSize: SizeConfig.titleTextDefaultSize),
               labelStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: MyColors.indicatorSelectedTextColor,
@@ -83,7 +86,7 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
 
   _buildCommentContent() {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
       child: ListView.separated(
@@ -102,15 +105,15 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Colors.white,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.grey,
-              offset: const Offset(2, 2),
+              offset: Offset(2, 2),
               blurRadius: 4,
               spreadRadius: 0,
             ),
           ]),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       width: double.infinity,
       child: Column(
         children: [
@@ -118,66 +121,76 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: loadImageProvider(''),
+                backgroundImage: loadImageProvider(controller.list[index].userAvator),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('你好呀'),
+                    Text(controller.list[index].userName),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_drop_down),
+              InkWell(
+                onTap: () {
+                  //Todo 向下箭头按下后
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: const Icon(Icons.arrow_drop_down),
+                ),
+              ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text(
-              'xxxxxxxxxxxxxxxxx................................................................'),
-          SizedBox(
+          Text(controller.list[index].content),
+          const SizedBox(
             height: 20,
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.message_outlined,
                 color: Colors.grey,
                 size: 16,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text(
-                '1',
-                style: TextStyle(
+                controller.list[index].commentsNum,
+                style: const TextStyle(
                   color: MyColors.textBlackColor,
                   fontSize: 10,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 40,
               ),
-              Icon(
+              const Icon(
                 Icons.hotel_class,
                 color: Colors.grey,
                 size: 16,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Text(
+              //接口缺收藏数
+              const Text(
                 '3',
                 style: TextStyle(
                   color: MyColors.textBlackColor,
                   fontSize: 10,
                 ),
               ),
-              Expanded(
+              //Todo 接口缺浏览数
+              const Expanded(
                 child: Text(
                   '浏览 1.0k',
                   textAlign: TextAlign.right,

@@ -70,7 +70,7 @@ class PassWorldController extends BaseController {
       if (response.isSuccess) {
         LoginWithCodeRspBean? responseData = response.data?.data;
         if (responseData != null) {
-          SaveKey.userInfo.save(responseData.toJson());
+          SaveKey.loginUserBaseInfo.save(responseData.toJson());
           User.loginRspBean = responseData;
           offAllNavigateTo(RouteName.homePage);
         }

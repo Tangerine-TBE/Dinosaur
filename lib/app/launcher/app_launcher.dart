@@ -18,9 +18,9 @@ class AppLauncher {
   ) async {
     await Storage.init();
     //加载本地缓存信息
-    var info = SaveKey.userInfo.read;
+    var info = SaveKey.loginUserBaseInfo.read;
     if(info != null){
-      User.loginRspBean = LoginWithCodeRspBean.fromJson(SaveKey.userInfo.read);
+      User.loginRspBean = LoginWithCodeRspBean.fromJson(SaveKey.loginUserBaseInfo.read);
     }
     BuildConfig.envName = launcherStrategy.envName;
     BuildConfig.host = launcherStrategy.host;

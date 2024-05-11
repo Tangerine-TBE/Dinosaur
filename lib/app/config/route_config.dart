@@ -4,6 +4,7 @@ import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/model/top_pic_center.dart';
 import 'package:app_base/mvvm/repository/chart_repo.dart';
 import 'package:app_base/mvvm/repository/details_repo.dart';
+import 'package:app_base/mvvm/repository/home_repo.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
 import 'package:app_base/mvvm/repository/model_repo.dart';
@@ -257,6 +258,7 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => PushRepo(), fenix: true);
               Get.lazyPut(() => PlayRepo());
               Get.lazyPut(() => LoginRepo(), fenix: true);
+              Get.lazyPut(() => HomeRepo(),);
             },
           ),
         ),

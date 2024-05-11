@@ -22,12 +22,12 @@ class PushMsgReq {
         pageIndex: json["pageIndex"],
         pageSize: json["pageSize"],
         orderBy: json["orderBy"],
-        userId:json["userId"],
+        userId: json["userId"],
         postsType: json["topicType"],
       );
 
   Map<String, dynamic> toJson() => {
-        "userId":userId,
+        "userId": userId,
         "topicId": topicId,
         "pageIndex": pageIndex,
         "pageSize": pageSize,
@@ -92,35 +92,42 @@ class PostsList {
   int modifyTime;
   int createTime;
   String id;
-  String isRecomed;
+  bool isRecomed;
   int commentsNum;
-  String isCurated;
+  bool isCurated;
   String userAvator;
   String userName;
 
   factory PostsList.fromJson(Map<dynamic, dynamic> json) => PostsList(
-        waves: List<Wave>.from(
-            jsonDecode(json["waves"] ?? '[]').map((x) => Wave.fromJson(x))),
-        images: List<ImageString>.from(jsonDecode(json["images"] ?? '[]')
-            .map((x) => ImageString.fromJson(x))),
-        likesNum: json["likesNum"] ?? 0,
-        creatorId: json["creatorId"] ?? '',
-        modifierId: json["modifierId"] ?? '',
-        favorsNum: json["favorsNum"] ?? 0,
-        viewsNum: json["viewsNum"] ?? 0,
-        userId: json["userId"] ?? '',
-        content: json["content"] ?? '',
-        topicTitle: json["topicTitle"] ?? '',
-        topicId: json["topicId"] ?? '',
-        participantNum: json["participantNum"] ?? 0,
-        modifyTime: json["modifyTime"] ?? 0,
-        createTime: json["createTime"] ?? 0,
         id: json["id"] ?? '',
-        isRecomed: json["isRecomed"] ?? '',
-        commentsNum: json["commentsNum"] ?? 0,
-        isCurated: json["isCurated"] ?? '',
-        userAvator: json["userAvator"] ?? '',
-        userName: json["userName"] ?? '',
+        topicId: json["topicId"] ?? '',
+        topicTitle: json["topicTitle"] ?? '',
+        content: json["content"] ?? '',
+        images: List<ImageString>.from(
+          jsonDecode(json["images"] ?? '[]').map(
+            (x) => ImageString.fromJson(x),
+          ),
+        ),
+        waves: List<Wave>.from(
+          jsonDecode(json["waves"] ?? '[]').map(
+            (x) => Wave.fromJson(x),
+          ),
+        ),
+    userId: json["userId"] ?? '',
+    viewsNum: json["viewsNum"] ?? 0,
+    likesNum: json["likesNum"] ?? 0,
+    commentsNum: json["commentsNum"] ?? 0,
+    favorsNum: json["favorsNum"] ?? 0,
+    participantNum: json["participantNum"] ?? 0,
+    isRecomed: json["isRecomed"] ?? false,
+    isCurated: json["isCurated"] ?? false,
+    userAvator: json["userAvator"] ?? '',
+    userName: json["userName"] ?? '',
+    creatorId: json["creatorId"] ?? '',
+    createTime: json["createTime"] ?? 0,
+    modifierId: json["modifierId"] ?? '',
+    modifyTime: json["modifyTime"] ?? 0,
+
       );
 
   Map<dynamic, dynamic> toJson() => {

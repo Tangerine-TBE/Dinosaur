@@ -6,6 +6,7 @@ class SaveKey {
   static const readPrivacy = 'readPrivacy';
   static const readUserProtected = 'readUserProtected';
   //User
-  static const userInfo = 'userInfo';
+  static const loginUserBaseInfo = 'userInfo';
+  static const loginUserExtendsInfo = 'userExtendsInfo';
 
 }

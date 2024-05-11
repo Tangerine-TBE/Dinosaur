@@ -1,3 +1,4 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
@@ -19,9 +20,8 @@ class MineLikeController extends BaseController {
   _fetchPostList() async {
     final response = await _repo.getCollect(
       MineReq(
-        topicId: '124',
+        userId: User.loginRspBean!.userId,
         pageSize: 10,
-        topicType: 'Dynamic',
         orderBy: 'createTime desc',
         pageIndex: 1,
       ),

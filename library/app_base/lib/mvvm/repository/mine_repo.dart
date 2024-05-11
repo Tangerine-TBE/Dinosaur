@@ -16,7 +16,7 @@ class MineRepo extends BaseRepo {
   }
 
   Future<AResponse<MineCommentResponse>> getMineCommentList(
-      MineCommentRsq mineCommentRsq) {
+      MineReq mineCommentRsq) {
     return requestOnFuture(Api.mineReview,
         method: Method.post,
         params: mineCommentRsq.toJson(),

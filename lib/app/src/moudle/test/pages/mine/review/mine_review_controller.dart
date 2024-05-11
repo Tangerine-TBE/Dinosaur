@@ -1,3 +1,4 @@
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
@@ -19,8 +20,8 @@ class MineReviewController extends BaseController {
 
   _fetchPostList() async {
     final response = await _repo.getMineCommentList(
-      MineCommentRsq(
-          postsId: '123',
+      MineReq(
+          userId: User.loginRspBean!.userId,
           pageSize: 10,
           pageIndex: 1,
           orderBy: 'createTime desc'),

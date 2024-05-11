@@ -55,13 +55,13 @@ class AuthCReqEmailBean {
 }
 
 class AuthCRspEmailBean {
-  String expiresIn;
+  int expiresIn;
 
   AuthCRspEmailBean({required this.expiresIn});
 
   factory AuthCRspEmailBean.fromJson(Map<dynamic, dynamic> json) =>
       AuthCRspEmailBean(
-        expiresIn: json['expiresIn'] ?? '',
+        expiresIn: json['expiresIn'] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
