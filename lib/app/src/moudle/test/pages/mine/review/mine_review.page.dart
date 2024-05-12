@@ -4,8 +4,11 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/util/time_utils.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -105,19 +108,101 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
-        child: GetBuilder<MineReviewController>(
-          builder: (controller) {
-            return ListView.separated(
-                itemBuilder: (context, index) {
-                  return _buildContentItem(index,controller.list[index]);
+          child: Obx(
+                () => SmartRefresher(
+              onRefresh: () async {
+                controller.loadMoreList(true);
+              },
+              onLoading: () async {
+                controller.loadMoreList(false);
+              },
+              header: WaterDropHeader(
+                refresh: SizedBox(
+                  width: 25.0,
+                  height: 25.0,
+                  child: defaultTargetPlatform == TargetPlatform.iOS
+                      ? CupertinoActivityIndicator(
+                    color: MyColors.themeTextColor,
+                  )
+                      : StreamBuilder<Object>(
+                    stream: null,
+                    builder: (context, snapshot) {
+                      return CircularProgressIndicator(
+                          strokeWidth: 2.0, color: MyColors.themeTextColor);
+                    },
+                  ),
+                ),
+                complete: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(
+                      Icons.done,
+                      color: Colors.black,
+                    ),
+                    Container(
+                      width: 15.0,
+                    ),
+                    const Text(
+                      '刷新完成',
+                      style: TextStyle(color: MyColors.textBlackColor),
+                    )
+                  ],
+                ),
+                waterDropColor: MyColors.themeTextColor,
+              ),
+              enablePullDown: true,
+              enablePullUp: controller.canLoadMore.value,
+              footer: CustomFooter(
+                builder: (context, mode) {
+                  Widget body;
+                  if (mode == LoadStatus.idle) {
+                    body = const Text("上拉加载");
+                  } else if (mode == LoadStatus.loading) {
+                    body = const CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = const Text("加载失败！点击重试！");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = const Text("松手,加载更多!");
+                  } else {
+                    body = const Text("没有更多数据了!");
+                  }
+                  return SizedBox(
+                    height: 55.0,
+                    child: Center(child: body),
+                  );
                 },
-                separatorBuilder: (context, index) {
-                  return  const SizedBox(height: 20,);
-                },
-                itemCount: controller.list.length);
-          },
-          id: controller.listId,
-        ),
+              ),
+              controller: controller.refreshController,
+              child: CustomScrollView(slivers: [
+                GetBuilder<MineReviewController>(
+                  builder: (controller) {
+                    return controller.list.isNotEmpty
+                        ? SliverList.separated(
+                      itemBuilder: (context, index) {
+                        return _buildContentItem(
+                            index, controller.list[index]);
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 10,
+                        );
+                      },
+                      itemCount: controller.list.length,
+                    )
+                        : const SliverFillRemaining(
+                      child: SizedBox(
+                        child: NoDataWidget(
+                          title: '暂无记录',
+                        ),
+                      ),
+                    );
+                  },
+                  id: controller.listId,
+                )
+
+              ],),
+            ),
+          )
       ),
     );
   }

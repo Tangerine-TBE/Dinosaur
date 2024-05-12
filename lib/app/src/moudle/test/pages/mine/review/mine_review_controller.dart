@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,12 +12,26 @@ class MineReviewController extends BaseController {
   final _repo = Get.find<MineRepo>();
   final list = <CommentList>[];
   final listId = 1;
+  var pageIndex = 1;
+  final canLoadMore = false.obs;
+  var init = false;
+  final  RefreshController refreshController =
+  RefreshController(initialRefresh: false);
 
   @override
-  onInit() {
-    _fetchPostList();
-    super.onInit();
+  void onReady(){
+    super.onReady();
+    if(!init){
+      init = true;
+      refreshController.requestRefresh();
+    }
   }
+  @override
+  void onClose(){
+    refreshController.dispose();
+    super.onClose();
+  }
+
   onItemLike() {
     logE('like');
   }
@@ -25,7 +40,55 @@ class MineReviewController extends BaseController {
     // var map = {'item': item, 'index': index};
     // navigateTo(RouteName.details, args: map);
   }
-  
+
+  Future loadMoreList(bool isRefresh) async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await _repo.getMineCommentList(
+      MineReq(
+        userId: User.loginRspBean!.userId,
+        pageSize: 10,
+        orderBy: 'createTime desc',
+        pageIndex: pageIndex,
+      ),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.commentList;
+        if (list.isNotEmpty) {
+          if (isRefresh) {
+            this.list.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
+          this.list.addAll(list);
+          update([listId]);
+        }
+      }
+    }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.commentList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    }
+  }
+
+
   onItemMoreClick(CommentList item) {
     Get.bottomSheet(
       SafeArea(

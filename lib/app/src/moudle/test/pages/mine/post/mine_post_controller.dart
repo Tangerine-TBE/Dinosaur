@@ -116,7 +116,11 @@ class MinePostController extends BaseController {
       }
     }
   }
-
+  @override
+  void onClose(){
+    refreshController.dispose();
+    super.onClose();
+  }
   _fetchPostList() async {
     final response = await _repo.getPost(
       MineReq(
