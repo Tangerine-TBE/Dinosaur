@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 enum FingerType{
   single,
