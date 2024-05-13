@@ -48,7 +48,7 @@ class MineReviewController extends BaseController {
         userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
-        pageIndex: pageIndex,
+        pageIndex: isRefresh?1:pageIndex,
       ),
     );
     if (response.isSuccess) {

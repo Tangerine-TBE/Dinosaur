@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +11,13 @@ import '../../home/home_controller.dart';
 import '../../pet/weight/image_preview_single.dart';
 
 class MineCollectController extends BaseController {
-  final postList = [1];
-  final postListId = 1;
   final _repo = Get.find<MineRepo>();
   final list = <PostsList>[];
   final listId = 1;
-
+  var pageIndex = 1;
+  final canLoadMore = false.obs;
+  final  RefreshController refreshController =
+  RefreshController(initialRefresh: true);
   _fetchPostList() async {
     final response = await _repo.getCollect(
       MineReq(
@@ -36,6 +38,58 @@ class MineCollectController extends BaseController {
     var map = {'item': item, 'index': index};
     navigateTo(RouteName.details, args: map);
   }
+  @override
+  void onClose(){
+    refreshController.dispose();
+    super.onClose();
+  }
+  Future loadMoreList(bool isRefresh) async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await _repo.getCollect(
+      MineReq(
+        userId: User.loginRspBean!.userId,
+        pageSize: 10,
+        orderBy: 'createTime desc',
+        pageIndex: isRefresh?1:pageIndex,
+      ),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          if (isRefresh) {
+            this.list.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
+          this.list.addAll(list);
+          update([listId]);
+        }
+      }
+    }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    }
+  }
+
   imagePreView(List<String> images, BuildContext context, double size,
       int parentIndex, List<ImageString> list, String type) {
     ///每一张预期图片都是一个正方形

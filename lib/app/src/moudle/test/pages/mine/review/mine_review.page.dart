@@ -58,13 +58,16 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
               splashFactory: NoSplash.splashFactory,
               dividerHeight: 0,
               overlayColor:
-                  const MaterialStatePropertyAll<Color>(Colors.transparent),
+              const MaterialStatePropertyAll<Color>(Colors.transparent),
               tabs: [
+                GetBuilder<MineReviewController>(builder: (controller) {
+                  return Tab(
+                    text: '评论 ${controller.list.length}',
+                  );
+                },id: controller.listId,),
+
                 Tab(
-                  text: '评论0',
-                ),
-                Tab(
-                  text: '回复0',
+                  text: '回复 0',
                 ),
               ],
             ),
@@ -102,115 +105,116 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
   }
 
   _buildCommentContent() {
-    return Container(
-      color : const Color(0xffeff1f3),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-          child: Obx(
-                () => SmartRefresher(
-              onRefresh: () async {
-                controller.loadMoreList(true);
-              },
-              onLoading: () async {
-                controller.loadMoreList(false);
-              },
-              header: WaterDropHeader(
-                refresh: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: defaultTargetPlatform == TargetPlatform.iOS
-                      ? CupertinoActivityIndicator(
-                    color: MyColors.themeTextColor,
-                  )
-                      : StreamBuilder<Object>(
-                    stream: null,
-                    builder: (context, snapshot) {
-                      return CircularProgressIndicator(
-                          strokeWidth: 2.0, color: MyColors.themeTextColor);
+    return SafeArea(
+      child: Container(
+        color: const Color(0xffeff1f3),
+        child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+            ),
+            child: Obx(
+                  () =>
+                  SmartRefresher(
+                    onRefresh: () async {
+                      controller.loadMoreList(true);
                     },
-                  ),
-                ),
-                complete: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.done,
-                      color: Colors.black,
-                    ),
-                    Container(
-                      width: 15.0,
-                    ),
-                    const Text(
-                      '刷新完成',
-                      style: TextStyle(color: MyColors.textBlackColor),
-                    )
-                  ],
-                ),
-                waterDropColor: MyColors.themeTextColor,
-              ),
-              enablePullDown: true,
-              enablePullUp: controller.canLoadMore.value,
-              footer: CustomFooter(
-                builder: (context, mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = const Text("上拉加载");
-                  } else if (mode == LoadStatus.loading) {
-                    body = const CupertinoActivityIndicator();
-                  } else if (mode == LoadStatus.failed) {
-                    body = const Text("加载失败！点击重试！");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = const Text("松手,加载更多!");
-                  } else {
-                    body = const Text("没有更多数据了!");
-                  }
-                  return SizedBox(
-                    height: 55.0,
-                    child: Center(child: body),
-                  );
-                },
-              ),
-              controller: controller.refreshController,
-              child: CustomScrollView(slivers: [
-                GetBuilder<MineReviewController>(
-                  builder: (controller) {
-                    return controller.list.isNotEmpty
-                        ? SliverList.separated(
-                      itemBuilder: (context, index) {
-                        return _buildContentItem(
-                            index, controller.list[index]);
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          height: 10,
-                        );
-                      },
-                      itemCount: controller.list.length,
-                    )
-                        : const SliverFillRemaining(
-                      child: SizedBox(
-                        child: NoDataWidget(
-                          title: '暂无记录',
+                    onLoading: () async {
+                      controller.loadMoreList(false);
+                    },
+                    header: WaterDropHeader(
+                      refresh: SizedBox(
+                        width: 25.0,
+                        height: 25.0,
+                        child: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoActivityIndicator(
+                          color: MyColors.themeTextColor,
+                        )
+                            : StreamBuilder<Object>(
+                          stream: null,
+                          builder: (context, snapshot) {
+                            return CircularProgressIndicator(
+                                strokeWidth: 2.0, color: MyColors.themeTextColor);
+                          },
                         ),
                       ),
-                    );
-                  },
-                  id: controller.listId,
-                )
-
-              ],),
-            ),
-          )
+                      complete: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.done,
+                            color: Colors.black,
+                          ),
+                          Container(
+                            width: 15.0,
+                          ),
+                          const Text(
+                            '刷新完成',
+                            style: TextStyle(color: MyColors.textBlackColor),
+                          )
+                        ],
+                      ),
+                      waterDropColor: MyColors.themeTextColor,
+                    ),
+                    enablePullDown: true,
+                    enablePullUp: controller.canLoadMore.value,
+                    footer: CustomFooter(
+                      builder: (context, mode) {
+                        Widget body;
+                        if (mode == LoadStatus.idle) {
+                          body = const Text("上拉加载");
+                        } else if (mode == LoadStatus.loading) {
+                          body = const CupertinoActivityIndicator();
+                        } else if (mode == LoadStatus.failed) {
+                          body = const Text("加载失败！点击重试！");
+                        } else if (mode == LoadStatus.canLoading) {
+                          body = const Text("松手,加载更多!");
+                        } else {
+                          body = const Text("没有更多数据了!");
+                        }
+                        return SizedBox(
+                          height: 55.0,
+                          child: Center(child: body),
+                        );
+                      },
+                    ),
+                    controller: controller.refreshController,
+                    child: CustomScrollView(slivers: [
+                      GetBuilder<MineReviewController>(
+                        builder: (controller) {
+                          return controller.list.isNotEmpty
+                              ? SliverList.separated(
+                            itemBuilder: (context, index) {
+                              return _buildContentItem(
+                                  index, controller.list[index]);
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(
+                                height: 10,
+                              );
+                            },
+                            itemCount: controller.list.length,
+                          )
+                              : const SliverFillRemaining(
+                            child: SizedBox(
+                              child: NoDataWidget(
+                                title: '暂无记录',
+                              ),
+                            ),
+                          );
+                        },
+                        id: controller.listId,
+                      )
+      
+                    ],),
+                  ),
+            )
+        ),
       ),
     );
   }
 
-  _buildContentItem(
-      int index,
-      CommentList item,
-      ) {
+  _buildContentItem(int index,
+      CommentList item,) {
     return GestureDetector(
       onTap: () {
         controller.naviToDetails(item, index);

@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
+import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,11 +14,14 @@ class MineLikeController extends BaseController {
   final _repo = Get.find<MineRepo>();
   final list = <PostsList>[];
   final listId = 1;
-
+  var pageIndex = 1;
+  final canLoadMore = false.obs;
+  final  RefreshController refreshController =
+  RefreshController(initialRefresh: true);
   @override
-  onInit() {
-    _fetchPostList();
-    super.onInit();
+  void onClose(){
+    refreshController.dispose();
+    super.onClose();
   }
   imagePreView(List<String> images, BuildContext context, double size,
       int parentIndex, List<ImageString> list, String type) {
@@ -169,6 +173,52 @@ class MineLikeController extends BaseController {
         ),
       ),
     );
+  }
+  Future loadMoreList(bool isRefresh) async {
+    await Future.delayed(const Duration(seconds: 1));
+    final response = await _repo.getLike(
+      MineReq(
+        userId: User.loginRspBean!.userId,
+        pageSize: 10,
+        orderBy: 'createTime desc',
+        pageIndex: isRefresh?1:pageIndex,
+      ),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
+        var list = response.data!.data!.postsList;
+        if (list.isNotEmpty) {
+          if (isRefresh) {
+            this.list.clear();
+            canLoadMore.value = true;
+            pageIndex = 1;
+          } else {
+            pageIndex = pageIndex + 1;
+          }
+          this.list.addAll(list);
+          update([listId]);
+        }
+      }
+    }
+    if (isRefresh) {
+      if (response.isSuccess) {
+        refreshController.refreshCompleted();
+      } else {
+        refreshController.refreshFailed();
+      }
+    } else {
+      if (response.isSuccess) {
+        if (response.data?.data != null) {
+          if (response.data!.data!.postsList.isEmpty) {
+            refreshController.loadNoData();
+            return;
+          }
+        }
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    }
   }
 
   naviToDetails(PostsList item, int index) {

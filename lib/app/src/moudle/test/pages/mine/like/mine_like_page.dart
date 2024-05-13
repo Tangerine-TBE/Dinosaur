@@ -5,8 +5,11 @@ import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/util/image.dart';
+import 'package:app_base/widget/listview/no_data_widget.dart';
+import 'package:app_base/widget/listview/smart_refresh_listview.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -28,22 +31,106 @@ class MineLikePage extends BaseEmptyPage<MineLikeController> {
           style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
       ),
-      body: GetBuilder<MineLikeController>(
-        builder: (controller) {
-          return ListView.separated(
-              itemBuilder: (context, index) {
-                return _buildItem(index, controller.list[index], context);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 20,
+      body: SafeArea(
+        child: Obx(
+              () => SmartRefresher(
+            onRefresh: () async {
+              controller.loadMoreList(true);
+            },
+            onLoading: () async {
+              controller.loadMoreList(false);
+            },
+            header: WaterDropHeader(
+              refresh: SizedBox(
+                width: 25.0,
+                height: 25.0,
+                child: defaultTargetPlatform == TargetPlatform.iOS
+                    ? CupertinoActivityIndicator(
+                  color: MyColors.themeTextColor,
+                )
+                    : StreamBuilder<Object>(
+                  stream: null,
+                  builder: (context, snapshot) {
+                    return CircularProgressIndicator(
+                        strokeWidth: 2.0, color: MyColors.themeTextColor);
+                  },
+                ),
+              ),
+              complete: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(
+                    Icons.done,
+                    color: Colors.black,
+                  ),
+                  Container(
+                    width: 15.0,
+                  ),
+                  const Text(
+                    '刷新完成',
+                    style: TextStyle(color: MyColors.textBlackColor),
+                  )
+                ],
+              ),
+              waterDropColor: MyColors.themeTextColor,
+            ),
+            enablePullDown: true,
+            enablePullUp: controller.canLoadMore.value,
+            footer: CustomFooter(
+              builder: (context, mode) {
+                Widget body;
+                if (mode == LoadStatus.idle) {
+                  body = const Text("上拉加载");
+                } else if (mode == LoadStatus.loading) {
+                  body = const CupertinoActivityIndicator();
+                } else if (mode == LoadStatus.failed) {
+                  body = const Text("加载失败！点击重试！");
+                } else if (mode == LoadStatus.canLoading) {
+                  body = const Text("松手,加载更多!");
+                } else {
+                  body = const Text("没有更多数据了!");
+                }
+                return SizedBox(
+                  height: 55.0,
+                  child: Center(child: body),
                 );
               },
-              itemCount: controller.list.length);
-        },id: controller.listId,
+            ),
+            controller: controller.refreshController,
+            child: CustomScrollView(slivers: [
+              GetBuilder<MineLikeController>(
+                builder: (controller) {
+                  return controller.list.isNotEmpty
+                      ? SliverList.separated(
+                    itemBuilder: (context, index) {
+                      return _buildItem(
+                          index, controller.list[index], context);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 10,
+                      );
+                    },
+                    itemCount: controller.list.length,
+                  )
+                      : const SliverFillRemaining(
+                    child: SizedBox(
+                      child: NoDataWidget(
+                        title: '暂无记录',
+                      ),
+                    ),
+                  );
+                },
+                id: controller.listId,
+              )
+
+            ],),
+          ),
+        ),
       ),
     );
   }
+
 
   _buildItem(int index, PostsList item, BuildContext context) {
     return InkWell(
@@ -100,7 +187,7 @@ class MineLikePage extends BaseEmptyPage<MineLikeController> {
                         visible: item.topicTitle.isNotEmpty,
                         child: Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                          EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                           decoration: BoxDecoration(
                             color: const Color(0xffFF5E65).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
