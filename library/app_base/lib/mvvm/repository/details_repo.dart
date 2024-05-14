@@ -21,4 +21,37 @@ class DetailsRepo extends BaseRepo {
         params: commentCreateReq.toJson(),
         format: (data) => CommentCreateResponse.fromJson(data));
   }
+
+  Future<AResponse<dynamic>> likeComment({required String commentId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.likeComment}/$commentId",
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> collectComment(
+      {required String commentId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      Api.collectComment,
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> likePush({required String pushId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.likePush}/$pushId",
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> collectPush({required String pushId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.collectPush}/$pushId",
+      method: Method.post,
+      params: map,
+    );
+  }
 }

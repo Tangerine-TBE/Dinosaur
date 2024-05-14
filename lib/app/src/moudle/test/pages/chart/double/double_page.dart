@@ -28,6 +28,7 @@ class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     controller.doubleCharManager.setRefreshController(RefreshController(initialRefresh: false));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -143,12 +144,12 @@ class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMi
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Container(
           height: 138,
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: const Color(0xffff5e65).withAlpha(60)),
@@ -158,39 +159,37 @@ class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMi
             },
             child: AwesomeChartView(
               animatedInfoKey: 'double_page_chart$index',
-
               dataList: <List<int>>[DoubleWave.fromJson(jsonDecode(item.actions)).data1,DoubleWave.fromJson(jsonDecode(item.actions)).data2,],
               width: double.infinity,
               height: 138,
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Row(
           children: [
             InkWell(
               onTap: () {
-                controller.doubleCharManager.onChartLikeClicked(index);
+                controller.doubleCharManager.onChartLikeClicked(item.id,index,);
               },
-              //Todo
               child: Image.asset(
-                false? ResName.heart1 : ResName.heart,
+                item.isMyLike?
+                ResName.heart1 : ResName.heart,
                 width: 14,
                 height: 14,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
             Text(
               item.likesNum.toString(),
-              style: TextStyle(
+              style:  TextStyle(
                 fontSize: 11,
-                //Todo
-                color: false
-                    ? const Color(0xffff5e65)
+                color: item.isMyLike?
+                const Color(0xffff5e65)
                     : MyColors.textBlackColor,
               ),
             ),
@@ -229,30 +228,30 @@ class _DoublePageState extends State<DoublePage> with AutomaticKeepAliveClientMi
               ),
             ),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      controller.singleCharManager.onChartLinkClicked(index);
-                    },
-                    //Todo
-                    child: Image.asset(
-                      false ? ResName.start1 : ResName.start2,
+              child: InkWell(
+                onTap: () {
+                  controller.singleCharManager.onChartLinkClicked(item.id,index);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      item.isMyFavor? ResName.start1 : ResName.start2,
                       width: 14,
                       height: 14,
                     ),
-                  ),
-                  Text(
-                    '收藏',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: MyColors.textBlackColor,
+                    Text(
+                      '收藏',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: MyColors.textBlackColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
+
           ],
         ),
         SizedBox(

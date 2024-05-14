@@ -110,6 +110,8 @@ class WaveList {
     required this.createTime,
     required this.modifierId,
     required this.modifyTime,
+    required this.isMyLike,
+    required this.isMyFavor,
   });
 
   int likesNum;
@@ -130,51 +132,55 @@ class WaveList {
   String id;
   String attribute;
   String actions;
+  bool isMyLike;
+  bool isMyFavor;
   int commentsNum;
 
   factory WaveList.fromJson(Map<dynamic, dynamic> json) => WaveList(
-    likesNum: json["likesNum"]??0,
-    creatorId: json["creatorId"]??'',
-    modifierId: json["modifierId"]??'',
-    description: json["description"]??'',
-    favorsNum: json["favorsNum"]??0,
-    type: json["type"]??'',
-    viewsNum: json["viewsNum"]??0,
-    userId: json["userId"]??'',
-    tags: json["tags"]??'',
-    kcal: json["kcal"]?.toDouble()??0.0,
-    modifyTime: json["modifyTime"]??0,
-    createTime: json["createTime"]??0,
-    appId: json["appId"]??'',
-    name: json["name"]??'',
-    tenantId: json["tenantId"]??'',
-    id: json["id"]??'',
-    attribute: json["attribute"]??'',
-    actions: json["actions"]??'',
-    commentsNum: json["commentsNum"]??0,
-  );
-  Map<dynamic, dynamic> toJson() => {
-    "likesNum": likesNum,
-    "creatorId": creatorId,
-    "modifierId": modifierId,
-    "description": description,
-    "favorsNum": favorsNum,
-    "type": type,
-    "viewsNum": viewsNum,
-    "userId": userId,
-    "tags": tags,
-    "kcal": kcal,
-    "modifyTime": modifyTime,
-    "createTime": createTime,
-    "appId": appId,
-    "name": name,
-    "tenantId": tenantId,
-    "id": id,
-    "attribute": attribute,
-    "actions": actions,
-    "commentsNum": commentsNum,
-  };
+        likesNum: json["likesNum"] ?? 0,
+        creatorId: json["creatorId"] ?? '',
+        modifierId: json["modifierId"] ?? '',
+        description: json["description"] ?? '',
+        favorsNum: json["favorsNum"] ?? 0,
+        type: json["type"] ?? '',
+        viewsNum: json["viewsNum"] ?? 0,
+        userId: json["userId"] ?? '',
+        tags: json["tags"] ?? '',
+        kcal: json["kcal"]?.toDouble() ?? 0.0,
+        modifyTime: json["modifyTime"] ?? 0,
+        createTime: json["createTime"] ?? 0,
+        appId: json["appId"] ?? '',
+        name: json["name"] ?? '',
+        tenantId: json["tenantId"] ?? '',
+        id: json["id"] ?? '',
+        attribute: json["attribute"] ?? '',
+        actions: json["actions"] ?? '',
+        commentsNum: json["commentsNum"] ?? 0,
+        isMyLike: json['isMyLike'] ?? false,
+        isMyFavor: json['isMyFavor'] ?? false,
+      );
 
+  Map<dynamic, dynamic> toJson() => {
+        "likesNum": likesNum,
+        "creatorId": creatorId,
+        "modifierId": modifierId,
+        "description": description,
+        "favorsNum": favorsNum,
+        "type": type,
+        "viewsNum": viewsNum,
+        "userId": userId,
+        "tags": tags,
+        "kcal": kcal,
+        "modifyTime": modifyTime,
+        "createTime": createTime,
+        "appId": appId,
+        "name": name,
+        "tenantId": tenantId,
+        "id": id,
+        "attribute": attribute,
+        "actions": actions,
+        "commentsNum": commentsNum,
+      };
 }
 
 class SingleWave {
@@ -196,9 +202,9 @@ class DoubleWave {
   DoubleWave({required this.data1, required this.data2});
 
   factory DoubleWave.fromJson(Map<dynamic, dynamic> map) {
-    List<dynamic> dynamicList = map["record"]??'';
+    List<dynamic> dynamicList = map["record"] ?? '';
     List<int> intList = dynamicList.map((e) => e as int).toList();
-    return DoubleWave(data1: intList,data2: intList);
+    return DoubleWave(data1: intList, data2: intList);
   }
 }
 

@@ -28,6 +28,7 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
   }
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PageStorage(
@@ -151,7 +152,7 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
               controller.singleCharManager.onChartItemClick(index);
             },
             child: VisibilityDetector(
-              key: Key('single_page_awesome_chart'),
+              key: const Key('single_page_awesome_chart'),
               onVisibilityChanged: (VisibilityInfo info) {
 
               },
@@ -172,11 +173,11 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
           children: [
             InkWell(
               onTap: () {
-                controller.singleCharManager.onChartLikeClicked(index);
+                controller.singleCharManager.onChartLikeClicked(item.id,index);
               },
               child: Image.asset(
-                //Todo
-                false ? ResName.heart1 : ResName.heart,
+                item.isMyLike?
+                ResName.heart1 : ResName.heart,
                 width: 14,
                 height: 14,
               ),
@@ -186,11 +187,10 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
             ),
             Text(
               item.likesNum.toString(),
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 11,
-                //Todo
-                color: false
-                    ? Color(0xffff5e65)
+                color: item.isMyLike?
+                const Color(0xffff5e65)
                     : MyColors.textBlackColor,
               ),
             ),
@@ -229,28 +229,27 @@ class _SinglePageState extends State<SinglePage> with AutomaticKeepAliveClientMi
               ),
             ),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      controller.singleCharManager.onChartLinkClicked(index);
-                    },
-                    child: Image.asset(
-                      //Todo
-                      false? ResName.start1 : ResName.start2,
+              child: InkWell(
+                onTap: () {
+                  controller.singleCharManager.onChartLinkClicked(item.id,index);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      item.isMyFavor? ResName.start1 : ResName.start2,
                       width: 14,
                       height: 14,
                     ),
-                  ),
-                  Text(
-                    '收藏',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: MyColors.textBlackColor,
+                    Text(
+                      '收藏',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: MyColors.textBlackColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

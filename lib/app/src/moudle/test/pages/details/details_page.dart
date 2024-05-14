@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
+import 'package:app_base/res/my_colors.dart';
 import 'package:app_base/util/image.dart';
 import 'package:app_base/util/time_utils.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
@@ -15,8 +16,7 @@ import '../chart/weight/awesome_chart.dart';
 class DetailsPage extends BaseEmptyPage<DetailsController> {
   const DetailsPage({super.key});
 
-  @override
-  bool get resizeToAvoidBottomInset => true;
+
 
   @override
   Widget buildContent(BuildContext context) {
@@ -32,13 +32,13 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
           child: Row(
             children: [
               const BackButton(),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               CircleAvatar(
                 backgroundImage: loadImageProvider(controller.item.userAvator),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Column(
@@ -142,7 +142,6 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                     width: 250,
                                     height: 30,
                                     animatedInfoKey: 'detials_page_chart',
-
                                   ),
                                 ),
                               ),
@@ -188,37 +187,46 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
             ),
             SafeArea(
               child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF4F4F4),
-                  borderRadius: BorderRadius.circular(12)
-                ),
-                padding:
-                    EdgeInsets.only(left: 16 ,bottom: 2, right: 16),
+                decoration: const BoxDecoration(
+                    color: Color(0xFFF4F4F4),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(2, 2),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),),
+                padding: const EdgeInsets.only(left: 16, bottom: 2, right: 16),
                 child: Obx(
                   () => Column(
                     children: [
                       Visibility(
                         visible: controller.showSend.value &&
                             controller.selectedCommentItem != null,
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: loadImageProvider(''),
-                              radius: 10,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Text(
-                                controller.selectedCommentItem?.content ?? '',
-                                overflow: TextOverflow.ellipsis,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: loadImageProvider(controller.selectedCommentItem?.userAvator??''),
+                                radius: 10,
                               ),
-                            ),
-                          ],
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  controller.selectedCommentItem?.content ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Row(
@@ -268,42 +276,66 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          controller.onInputLike();
+                                          controller
+                                              .onInputLike(controller.item.id);
                                         },
-                                        child: Column(
-                                          children: [
-                                            Icon(
-                                              Icons.heart_broken_rounded,
-                                              size: 20,
-                                            ),
-                                            Text(
-                                              '1',
-                                              style: TextStyle(
-                                                  color: MyColors.textGreyColor,
-                                                  fontSize: 12),
-                                            )
-                                          ],
+                                        child: Obx(
+                                          () => Column(
+                                            children: [
+                                              controller.isLike.value
+                                                  ? Image.asset(
+                                                      ResName.heart1,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )
+                                                  : Image.asset(
+                                                      ResName.heart,
+                                                      width: 20,
+                                                      height: 20,
+                                                    ),
+                                              Text(
+                                                controller.item.likesNum
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    fontSize: 12),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          controller.onInputCollect();
+                                          controller.onInputCollect(
+                                              controller.item.id);
                                         },
-                                        child: Column(
-                                          children: [
-                                            Icon(
-                                              Icons.hotel_class,
-                                              size: 20,
-                                            ),
-                                            Text(
-                                              '1',
-                                              style: TextStyle(
-                                                  color: MyColors.textGreyColor,
-                                                  fontSize: 12),
-                                            )
-                                          ],
+                                        child: Obx(
+                                          () => Column(
+                                            children: [
+                                              controller.isCollect.value
+                                                  ? Image.asset(
+                                                      ResName.start1,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )
+                                                  : Image.asset(
+                                                      ResName.start2,
+                                                      width: 20,
+                                                      height: 20,
+                                                    ),
+                                              Text(
+                                                controller.item.favorsNum
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    color:
+                                                        MyColors.textGreyColor,
+                                                    fontSize: 12),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                      )
+                                      ),
                                     ],
                                   )
                                 : MaterialButton(
@@ -364,8 +396,8 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        '我和我的猫咪们',
+                       Text(
+                        item.userName,
                         style: TextStyle(
                           color: MyColors.textBlackColor,
                         ),
@@ -403,21 +435,24 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                   onTap: () {
                     controller.onItemComment(item);
                   },
-                  child: Icon(
-                    Icons.message,
-                    size: 14,
+                  child:  const FaIcon(
+                    FontAwesomeIcons.message,
+                    color: MyColors.textGreyColor,
+                    size: 12,
                   ),
                 ),
-                SizedBox(
+                Text(item.commentsNum,style: TextStyle(color:MyColors.themeTextColor,),),
+                const SizedBox(
                   width: 40,
                 ),
                 InkWell(
                   onTap: () {
-                    controller.onItemLike();
+                    controller.onItemLike(item.id,index);
                   },
-                  child: FaIcon(
-                    FontAwesomeIcons.heart,
-                    size: 14,
+                  child:  Image.asset(
+                    item.isMyLike?ResName.heart1:ResName.heart,
+                    width: 14,
+                    height: 14,
                   ),
                 ),
               ],

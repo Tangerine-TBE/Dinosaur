@@ -75,6 +75,8 @@ class PostsList {
     required this.isCurated,
     required this.userAvator,
     required this.userName,
+    required this.isMyFavor,
+    required this.isMyLike,
   });
 
   List<Wave> waves;
@@ -97,6 +99,8 @@ class PostsList {
   bool isCurated;
   String userAvator;
   String userName;
+  bool isMyLike;
+  bool isMyFavor;
 
   factory PostsList.fromJson(Map<dynamic, dynamic> json) => PostsList(
         id: json["id"] ?? '',
@@ -127,6 +131,8 @@ class PostsList {
         createTime: json["createTime"] ?? 0,
         modifierId: json["modifierId"] ?? '',
         modifyTime: json["modifyTime"] ?? 0,
+        isMyFavor: json['isMyFavor'] ?? false,
+        isMyLike: json['isMyLike']??false,
       );
 
   Map<dynamic, dynamic> toJson() => {

@@ -22,4 +22,5 @@ class PushRepo extends BaseRepo {
       format: (data) => PushCreateResponse.fromJson(data),
     );
   }
+
 }

@@ -16,4 +16,20 @@ class ChartRepo extends BaseRepo {
     return requestOnFuture(Api.pushCharts,
         method: Method.post, params: chartCreateReq.toJson());
   }
+
+  Future<AResponse<dynamic>> likeChart({required String chartId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      '${Api.likeCharts}/$chartId',
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> collectChart({required String chartId,required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      '${Api.collectCharts}/$chartId',
+      method: Method.post,
+      params: map,
+    );
+  }
 }

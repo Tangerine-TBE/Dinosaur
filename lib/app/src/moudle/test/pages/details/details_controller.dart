@@ -23,7 +23,10 @@ class DetailsController extends BaseController {
   final FocusNode focusNode = FocusNode();
   final showSend = false.obs;
 
-  DetailsController({required this.item, required this.index}) {}
+  DetailsController({required this.item, required this.index}) {
+    isLike.value = item.isMyLike;
+    isCollect.value = item.isMyFavor;
+  }
 
   @override
   onInit() {
@@ -50,8 +53,15 @@ class DetailsController extends BaseController {
     selectedCommentItem = commentList;
   }
 
-  onItemLike() {
-    logE('like');
+  onItemLike(String commentId, int index) {
+    if (!list[index].isMyLike) {
+      list[index].isMyLike = true;
+      _repo.likeComment(
+        commentId: commentId,
+        map: {'userId': User.loginRspBean!.userId},
+      );
+      update([listId]);
+    }
   }
 
   onItemMoreClick(CommentList item) {
@@ -96,8 +106,6 @@ class DetailsController extends BaseController {
         ),
       ),
     );
-
-
   }
 
   onInputSubmit() async {
@@ -121,20 +129,38 @@ class DetailsController extends BaseController {
     );
     editTextController.clear();
     if (response.isSuccess) {
-      if(response.data?.data != null){
-        list.insert(0,response.data!.data!);
+      if (response.data?.data != null) {
+        list.insert(0, response.data!.data!);
         update([listId]);
         EasyLoading.showSuccess('评论成功！');
       }
     }
   }
 
-  onInputCollect() {
+  onInputCollect(String pushId) {
     //对于主题帖子来说
+    if (!item.isMyFavor) {
+      item.favorsNum = item.favorsNum + 1;
+      item.isMyFavor = true;
+      isCollect.value = true;
+      _repo.collectPush(
+        pushId: pushId,
+        map: {'userId': User.loginRspBean!.userId},
+      );
+    }
   }
 
-  onInputLike() {
+  onInputLike(String pushId) {
     //对于主题帖子来说
+    if (!item.isMyLike) {
+      item.likesNum = item.likesNum + 1;
+      item.isMyLike = true;
+      isLike.value = true;
+      _repo.likePush(
+        pushId: pushId,
+        map: {'userId': User.loginRspBean!.userId},
+      );
+    }
   }
 
   imagePreView(List<String> images, BuildContext context, double size,
@@ -148,7 +174,8 @@ class DetailsController extends BaseController {
         return InkWell(
           onTap: () {
             final homeController = Get.find<HomeController>();
-            homeController.toImageView(images[0], tag,list[0].height,list[0].width);
+            homeController.toImageView(
+                images[0], tag, list[0].height, list[0].width);
           },
           child: Hero(
             tag: tag,
@@ -197,7 +224,8 @@ class DetailsController extends BaseController {
               return InkWell(
                 onTap: () {
                   final homeController = Get.find<HomeController>();
-                  homeController.toImageView(images[index], tag,list[index].height,list[index].width);
+                  homeController.toImageView(images[index], tag,
+                      list[index].height, list[index].width);
                 },
                 child: Hero(
                   tag: tag,

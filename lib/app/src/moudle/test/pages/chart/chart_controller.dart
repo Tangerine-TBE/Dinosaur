@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/chart_bean.dart';
 import 'package:app_base/mvvm/model/record_bean.dart';
@@ -34,6 +35,9 @@ class ChartController extends BaseController {
     onPageChanged(initialIndex);
   }
 
+  
+  
+
   onPageChanged(int index) {
     initialIndex = index;
     if (index == 0) {
@@ -60,7 +64,9 @@ class SingleCharManager {
       isInit = true;
     }
   }
+  onCollectChart(String chartId){
 
+  }
   getChartList() async {
     final response = await controller.chartRepo.getCharts(
         ChartReq(
@@ -168,14 +174,22 @@ class SingleCharManager {
     // controller.update([chartListId]);
   }
 
-  onChartLikeClicked(int index) {
-    // data[index].like = !data[index].like;
-    // controller.update([chartListId]);
+  onChartLikeClicked(String chartId,int index) {
+    if(!data[index].isMyLike){
+      data[index].isMyLike  = true;
+      data[index].likesNum  = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 
-  onChartLinkClicked(int index) {
-    // data[index].link = !data[index].link;
-    // controller.update([chartListId]);
+  onChartLinkClicked(String chartId,int index) {
+    if(!data[index].isMyFavor){
+      data[index].isMyFavor  = true;
+      data[index].favorsNum  = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 }
 
@@ -224,14 +238,22 @@ class DoubleCharManager {
     controller.update([chartListId]);
   }
 
-  onChartLikeClicked(int index) {
-    // data[index].like = !data[index].like;
-    // controller.update([chartListId]);
+  onChartLikeClicked(String chartId,int index) {
+    if(!data[index].isMyLike){
+      data[index].isMyLike  = true;
+      data[index].likesNum  = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 
-  onChartLinkClicked(int index) {
-    // data[index].link = !data[index].link;
-    // controller.update([chartListId]);
+  onChartLinkClicked(String chartId,int index) {
+    if(!data[index].isMyFavor){
+      data[index].isMyFavor  = true;
+      data[index].favorsNum  = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 }
 
@@ -276,13 +298,21 @@ class SpecialCharManager {
     controller.update([chartListId]);
   }
 
-  onChartLikeClicked(int index) {
-    // data[index].like = !data[index].like;
-    // controller.update([chartListId]);
+  onChartLikeClicked(String chartId,int index) {
+    if(!data[index].isMyLike){
+      data[index].isMyLike  = true;
+      data[index].likesNum  = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 
-  onChartLinkClicked(int index) {
-    // data[index].link = !data[index].link;
-    // controller.update([chartListId]);
+  onChartLinkClicked(String chartId,int index) {
+    if(!data[index].isMyFavor){
+      data[index].isMyFavor  = true;
+      data[index].favorsNum  = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    }
   }
 }

@@ -17,9 +17,19 @@ class Api {
 
   //帖子获取与创建 （推荐，精选，动态，最新）
   static const getPushMsg = '/api/v1/meng/posts/list';
+  //喜欢帖子
+  static const likePush= '/api/v1/meng/posts/like';
+  //收藏帖子
+  static const collectPush ='/api/v1/meng/posts/favorite';
+  //帖子推送
   static const pushMsg = '/api/v1/meng/posts';
   //波形获取与创建
   static const getCharts ='/api/v1/meng/wave/list';
+  //收藏波形
+  static const collectCharts ='/api/v1/meng/wave/favorite';
+  //点赞波形
+  static const likeCharts ='/api/v1/meng/wave/like';
+  //推送帖子
   static const pushCharts = '/api/v1/meng/wave';
   //我的（帖子）
   static const minePost ='/api/v1/meng/my/posts/list';
@@ -35,6 +45,10 @@ class Api {
   static const getCommentList = '/api/v1/meng/comment/list';
   //创建评论
   static const createComment = '/api/v1/meng/comment';
+  //点赞评论
+  static const likeComment = '/api/v1/meng/posts/like';
+  //收藏评论
+  static const collectComment = '/api/v1/meng/posts/favorite';
   //登出
   static const logOut = '/api/v1/meng/user/logout';
   //获取登录用户信息
@@ -51,5 +65,5 @@ class Api {
   static const getSettingInfo = '/api/v1/meng/my/setting/query';
   //保存我的配置
   static const saveSettingInfo = '/api/v1/meng/my/setting/save';
-  
+
 }

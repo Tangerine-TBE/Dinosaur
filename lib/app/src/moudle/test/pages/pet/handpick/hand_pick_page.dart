@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../chart/weight/awesome_chart.dart';
 
@@ -307,8 +308,9 @@ class _HandPickPageState extends State<HandPickPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
-                        Icons.message,
+                      FaIcon(
+                        FontAwesomeIcons.message,
+                        color: MyColors.textGreyColor,
                         size: 22,
                       ),
                       SizedBox(

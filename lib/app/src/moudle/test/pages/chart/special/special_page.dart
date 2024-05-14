@@ -169,7 +169,7 @@ class _SpecialPageState extends State<SpecialPage> with AutomaticKeepAliveClient
           children: [
             InkWell(
               onTap: () {
-                controller.specialCharManager.onChartLikeClicked(index);
+                controller.specialCharManager.onChartLikeClicked(item.id,index);
               },
               child: Image.asset(
                 //Todo
@@ -231,7 +231,7 @@ class _SpecialPageState extends State<SpecialPage> with AutomaticKeepAliveClient
                 children: [
                   InkWell(
                     onTap: () {
-                      controller.specialCharManager.onChartLinkClicked(index);
+                      controller.specialCharManager.onChartLinkClicked(item.id,index);
                     },
                     child: Image.asset(
                       //Todo
