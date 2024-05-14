@@ -47,4 +47,9 @@ class Api {
   static const getPeriodRecord1 = '/api/v1/meng/my/menstrual/query';
   //修改个人信息
   static const editUserInf0 = '/api/v1/meng/user';
+  //获取我的配置
+  static const getSettingInfo = '/api/v1/meng/my/setting/query';
+  //保存我的配置
+  static const saveSettingInfo = '/api/v1/meng/my/setting/save';
+  
 }

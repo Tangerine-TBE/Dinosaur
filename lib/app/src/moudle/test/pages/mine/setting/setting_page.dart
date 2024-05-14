@@ -10,21 +10,17 @@ import 'package:get/get.dart';
 
 class SettingPage extends BaseEmptyPage<SettingController> {
   const SettingPage({super.key});
-  
-  
-  
-
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffeff1f3),
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           '设置',
           style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
-        backgroundColor: Color(
+        backgroundColor: const Color(
           0xffeff1f3,
         ),
       ),
@@ -34,8 +30,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
             SliverList.list(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: const Row(
                     children: [
                       Expanded(
                         child: Text(
@@ -48,18 +44,18 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                 ),
                 Container(
                   height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.white,
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Text('APP 图标'),
                       ),
                       loadImage('', 20, 20),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_forward_ios_rounded,
                         size: 14,
                       ),
@@ -68,11 +64,11 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                 ),
                 Container(
                   height: 50,
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),
                   color: Colors.white,
-                  child: Row(
+                  child: const Row(
                     children: [
                       Expanded(
                         child: Text('选择品牌'),
@@ -115,6 +111,7 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                      Obx(() =>
                          CupertinoSwitch(value: controller.allowToBother.value, onChanged: (value) {
                            controller.allowToBother.value = value;
+                           controller.saveSettingInfo(SettingKey.allowToBother.toString(), value?"1":"2");
                          })
                      )
                     ],
@@ -134,6 +131,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Obx(() =>
                           CupertinoSwitch(value: controller.allowToPublic.value, onChanged: (value) {
                             controller.allowToPublic.value = value;
+                            controller.saveSettingInfo(SettingKey.allowToPublic.toString(), value?"1":"2");
+
                           })
                       )
                     ],
@@ -165,6 +164,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       ),
                       Obx(() =>    CupertinoSwitch(value: controller.petMessageNotify.value, onChanged: (value) {
                         controller.petMessageNotify.value =value;
+                        controller.saveSettingInfo(SettingKey.petMessageNotify.toString(), value?"1":"2");
+
                       }))
                     ],
                   ),
@@ -182,6 +183,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       ),
                       Obx(() => CupertinoSwitch(value: controller.chartMessageNotify.value, onChanged: (value) {
                         controller.chartMessageNotify.value = value;
+                        controller.saveSettingInfo(SettingKey.chartMessageNotify.toString(), value?"1":"2");
+
                       }))
                     ],
                   ),
@@ -200,6 +203,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Obx(() =>
                           CupertinoSwitch(value: controller.botherMessageNotify.value, onChanged: (value) {
                             controller.botherMessageNotify.value = value;
+                            controller.saveSettingInfo(SettingKey.botherMessageNotify.toString(), value?"1":"2");
+
                           })
                       )
                     ],
@@ -219,6 +224,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Obx(() =>
                           CupertinoSwitch(value: controller.subscribeMessageNotify.value, onChanged: (value) {
                             controller.subscribeMessageNotify.value = value;
+                            controller.saveSettingInfo(SettingKey.subscribeMessageNotify.toString(), value?"1":"2");
+
                           })
                       )
                     ],
@@ -237,6 +244,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       ),
                       Obx(() => CupertinoSwitch(value: controller.chatPrivateMessageNotify.value, onChanged: (value) {
                         controller.chatPrivateMessageNotify.value = value;
+                        controller.saveSettingInfo(SettingKey.chatPrivateMessageNotify.toString(), value?"1":"2");
+
                       }))
                     ],
                   ),

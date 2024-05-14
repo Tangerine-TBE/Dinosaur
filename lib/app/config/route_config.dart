@@ -13,6 +13,7 @@ import 'package:app_base/mvvm/repository/period_record_repo.dart';
 import 'package:app_base/mvvm/repository/play_repo.dart';
 import 'package:app_base/mvvm/repository/push_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
+import 'package:app_base/mvvm/repository/setting_repo.dart';
 import 'package:common/base/route/a_route.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/details/details_page.dart';
@@ -92,7 +93,6 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
-
         GetPage(
           name: RouteName.waveDemo,
           page: () => const WaveFormDemoPage(),
@@ -133,6 +133,9 @@ class RouteConfig extends ARoute {
             () {
               Get.lazyPut(
                 () => SettingController(),
+              );
+              Get.lazyPut(
+                () => SettingRepo(),
               );
             },
           ),
