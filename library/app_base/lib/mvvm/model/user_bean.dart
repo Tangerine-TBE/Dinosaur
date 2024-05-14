@@ -122,18 +122,18 @@ class LoginRspBean {
 ///登录请求（带验证码 @LoginRspBean）
 class LoginWithCodeReqBean {
   LoginWithCodeReqBean({
-    required this.mobile,
+    required this.mail,
     required this.authCode,
   });
 
-  String mobile;
+  String mail;
   String authCode;
 
   factory LoginWithCodeReqBean.fromJson(Map<dynamic, dynamic> json) =>
-      LoginWithCodeReqBean(mobile: json["mobile"], authCode: json["authCode"]);
+      LoginWithCodeReqBean(mail: json["mail"], authCode: json["authCode"]);
 
   Map<String, dynamic> toJson() => {
-        "mobile": mobile,
+        "mail": mail,
         "authCode": authCode,
       };
 }

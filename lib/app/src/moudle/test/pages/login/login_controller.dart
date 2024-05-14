@@ -13,9 +13,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-import '../../dialog/my_dialog_widget.dart';
-
 class LoginController extends BaseController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
