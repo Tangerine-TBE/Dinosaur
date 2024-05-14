@@ -41,8 +41,10 @@ class Api {
   static const getUserInfo = '/api/v1/meng/user';
   //保存我的经期
   static const savePeriodRecord = '/api/v1/meng/my/menstrual/save';
-  //获取我的经期
+  //获取我的经期1
   static const getPeriodRecord ='/api/v1/meng/my/menstrual/query/history';
+  //获取我的经期2
+  static const getPeriodRecord1 = '/api/v1/meng/my/menstrual/query';
   //修改个人信息
   static const editUserInf0 = '/api/v1/meng/user';
 }

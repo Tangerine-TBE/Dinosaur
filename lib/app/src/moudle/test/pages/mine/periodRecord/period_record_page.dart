@@ -37,12 +37,15 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
               const Divider(height: 1),
               Expanded(
                 child: Obx(
-                  () => ScrollTargetView(
-                    dateSelectValue: (item) {
-                      controller.savePeriodRecord(item);
-                    },
-                    getPeriodRecordRsp: controller.getPeriodRecordRsp.value,
-                  ),
+                  () => controller.getPeriodRecordRsp1.value == null
+                      ? Container()
+                      : ScrollTargetView(
+                          dateSelectValue: (item) {
+                            controller.savePeriodRecord(item);
+                          },
+                          getPeriodRecordRsp1:
+                              controller.getPeriodRecordRsp1.value,
+                        ),
                 ),
               ),
             ],
@@ -89,12 +92,13 @@ class PeriodRecordPage extends BaseEmptyPage<PeriodRecordController> {
 }
 
 class ScrollTargetView extends StatefulWidget {
-  const ScrollTargetView(
-      {super.key,
-      required this.dateSelectValue,
-      required this.getPeriodRecordRsp});
+  const ScrollTargetView({
+    super.key,
+    required this.dateSelectValue,
+    required this.getPeriodRecordRsp1,
+  });
 
-  final GetPeriodRecordRsp getPeriodRecordRsp;
+  final GetPeriodRecordRsp1 getPeriodRecordRsp1;
   final Function(List<RangeItem> item) dateSelectValue;
 
   @override
@@ -104,10 +108,12 @@ class ScrollTargetView extends StatefulWidget {
 class _ScrollTargetViewState extends State<ScrollTargetView> {
   final ScrollController _scrollController = ScrollController();
   final list = <MothItem>[];
+  late GetPeriodRecordRsp1 getPeriodRecordRsp1;
 
   @override
   void initState() {
     super.initState();
+    getPeriodRecordRsp1 = widget.getPeriodRecordRsp1;
     _fetchDateTime();
   }
 
@@ -121,10 +127,10 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
   }
 
   void _fetchSelectedDateTime() {
-    if (widget.getPeriodRecordRsp.dateList.startDate.year != 1990) {
+    if (getPeriodRecordRsp1.startDate.year != 1990) {
       RangeItem rangeItem = RangeItem(
-        selectedStartDate: widget.getPeriodRecordRsp.dateList.startDate,
-        selectedEndDate: widget.getPeriodRecordRsp.dateList.endDate,
+        selectedStartDate: getPeriodRecordRsp1.startDate,
+        selectedEndDate: getPeriodRecordRsp1.endDate,
       );
       if (rangeItem.selectedStartDate.month < DateTime.now().month &&
           rangeItem.selectedEndDate.month < DateTime.now().month) {
@@ -138,11 +144,15 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
         }
         list[0].addRangItem(
             RangeItem(
-                selectedStartDate: calStartDateTime,
-                selectedEndDate: calEndDateTime),
+              selectedStartDate: calStartDateTime,
+              selectedEndDate: calEndDateTime,
+            ),
             list);
       } else {
-        list[0].addRangItem(rangeItem, list);
+        list[0].addRangItem(
+          rangeItem,
+          list,
+        );
       }
     }
   }
@@ -377,12 +387,12 @@ class _ScrollTargetViewState extends State<ScrollTargetView> {
                     ),
                     list,
                   );
+                  widget.dateSelectValue.call(list[0].rangItems);
                 }
               });
             }
           });
         }
-        widget.dateSelectValue.call(list[0].rangItems);
       }
     });
   }

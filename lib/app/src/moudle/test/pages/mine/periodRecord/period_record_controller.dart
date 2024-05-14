@@ -14,13 +14,7 @@ class PeriodRecordController extends BaseController {
   final createDate = <String>[];
   final deletesDate = <String>[];
   final _repo = Get.find<PeriodRecordRepo>();
-  final getPeriodRecordRsp = Rx(
-    GetPeriodRecordRsp(
-      dateList: DateList(
-        endDate: DateTime.parse('1990-10-01'),
-        startDate: DateTime.parse('1990-10-01'),
-      ),
-    ),
+  final getPeriodRecordRsp1 = Rxn(
   );
 
   @override
@@ -59,11 +53,11 @@ class PeriodRecordController extends BaseController {
         fromDate: firstDayOfMonth,
         toDate: DateTime.now(),
         userId: User.loginRspBean!.userId);
-    final response = await _repo.getPeriodRecord(recordReq: recordReq);
+    final response = await _repo.getPeriodRecord1(map: {'userId':User.loginRspBean!.userId});
     if (response.isSuccess) {
       if (response.data != null) {
         if (response.data!.data != null) {
-          getPeriodRecordRsp.value = response.data!.data!;
+          getPeriodRecordRsp1.value = response.data!.data!;
         }
       }
     }

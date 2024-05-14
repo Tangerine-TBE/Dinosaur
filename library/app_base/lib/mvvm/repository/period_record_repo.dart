@@ -23,4 +23,13 @@ class PeriodRecordRepo extends BaseRepo {
       format: (data) => PeriodRecordResponse.fromJson(data),
     );
   }
+  Future<AResponse<PeriodRecordResponse1>> getPeriodRecord1(
+      {required Map<String,dynamic> map}) {
+    return requestOnFuture(
+      Api.getPeriodRecord1,
+      method: Method.post,
+      params: map,
+      format: (data) => PeriodRecordResponse1.fromJson(data),
+    );
+  }
 }

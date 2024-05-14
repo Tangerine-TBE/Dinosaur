@@ -9,3 +9,12 @@ class PeriodRecordResponse extends DataHolder<GetPeriodRecordRsp> {
     );
   }
 }
+
+class PeriodRecordResponse1 extends DataHolder<GetPeriodRecordRsp1> {
+  PeriodRecordResponse1.fromJson(dynamic map) {
+    convert(
+      map,
+      (data) => GetPeriodRecordRsp1.fromJson(data),
+    );
+  }
+}
