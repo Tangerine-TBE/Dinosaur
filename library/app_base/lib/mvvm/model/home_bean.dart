@@ -41,7 +41,7 @@ class HomeRsp {
 
     factory HomeRsp.fromJson(Map<dynamic, dynamic> json) => HomeRsp(
         birthday: json["birthday"]??'',
-        images: List<String>.from(json["images"].map((x) => x)),
+        images: List<String>.from((json["images"]??[]).map((x) => x)),
         address: json["address"]??'',
         gender: json["gender"]??'',
         nickName: json["nickName"]??'',

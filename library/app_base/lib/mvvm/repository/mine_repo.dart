@@ -14,6 +14,7 @@ class MineRepo extends BaseRepo {
       format: (data) => MineResponse.fromJson(data),
     );
   }
+
   Future<AResponse<MineResponse>> getPost(MineReq mineReq) {
     return requestOnFuture(
       Api.minePost,
@@ -22,6 +23,7 @@ class MineRepo extends BaseRepo {
       format: (data) => MineResponse.fromJson(data),
     );
   }
+
   Future<AResponse<MineLikeResponse>> getLike(MineReq mineReq) {
     return requestOnFuture(
       Api.minePost,
@@ -37,5 +39,14 @@ class MineRepo extends BaseRepo {
         method: Method.post,
         params: mineCommentRsq.toJson(),
         format: (data) => MineCommentResponse.fromJson(data));
+  }
+
+  Future<AResponse<SingleCommentResponse>> getPostItem(
+      {required String postId}) {
+    return requestOnFuture(
+      '${Api.querySingleOnePost}/$postId',
+      method: Method.get,
+      format: (data) => SingleCommentResponse.fromJson(data),
+    );
   }
 }

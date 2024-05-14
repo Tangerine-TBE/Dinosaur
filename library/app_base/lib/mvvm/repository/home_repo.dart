@@ -8,9 +8,8 @@ import '../../network/api.dart';
 class HomeRepo extends BaseRepo {
   Future<AResponse<HomeResponse>> getUserInfo({required HomeReq homeReq}) {
     return requestOnFuture(
-      Api.getUserInfo,
+      '${Api.getUserInfo}/${homeReq.id}',
       method: Method.get,
-      params: homeReq.toJson(),
       format: (data) => HomeResponse.fromJson(data),
     );
   }

@@ -2,6 +2,7 @@ import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
+import 'package:app_base/mvvm/model/push_bean.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
 import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,19 +16,20 @@ class MineReviewController extends BaseController {
   var pageIndex = 1;
   final canLoadMore = false.obs;
   var init = false;
-  final  RefreshController refreshController =
-  RefreshController(initialRefresh: false);
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
-  void onReady(){
+  void onReady() {
     super.onReady();
-    if(!init){
+    if (!init) {
       init = true;
       refreshController.requestRefresh();
     }
   }
+
   @override
-  void onClose(){
+  void onClose() {
     refreshController.dispose();
     super.onClose();
   }
@@ -35,10 +37,19 @@ class MineReviewController extends BaseController {
   onItemLike() {
     logE('like');
   }
-  naviToDetails(CommentList item, int index) {
+
+  naviToDetails(CommentList commentItem, int index) async {
     //Todo 跳转到评论页面
-    // var map = {'item': item, 'index': index};
-    // navigateTo(RouteName.details, args: map);
+    final response = await apiLaunch(
+      () => _repo.getPostItem(postId: commentItem.postsId),
+    );
+    if (response != null) {
+      if (response.data != null) {
+        final PostsList item = response.data!;
+        var map = {'item': item, 'index': index};
+        navigateTo(RouteName.details, args: map);
+      }
+    }
   }
 
   Future loadMoreList(bool isRefresh) async {
@@ -48,7 +59,7 @@ class MineReviewController extends BaseController {
         userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
-        pageIndex: isRefresh?1:pageIndex,
+        pageIndex: isRefresh ? 1 : pageIndex,
       ),
     );
     if (response.isSuccess) {
@@ -88,7 +99,6 @@ class MineReviewController extends BaseController {
     }
   }
 
-
   onItemMoreClick(CommentList item) {
     Get.bottomSheet(
       SafeArea(
@@ -96,12 +106,18 @@ class MineReviewController extends BaseController {
           height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(12),topLeft: Radius.circular(12),),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(12),
+              topLeft: Radius.circular(12),
+            ),
           ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(topRight: Radius.circular(12),topLeft: Radius.circular(12),),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                topLeft: Radius.circular(12),
+              ),
             ),
             child: Column(
               children: [
@@ -133,8 +149,6 @@ class MineReviewController extends BaseController {
         ),
       ),
     );
-
-
   }
 
   _fetchPostList() async {

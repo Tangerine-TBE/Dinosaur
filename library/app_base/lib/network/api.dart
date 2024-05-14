@@ -1,8 +1,8 @@
 class Api {
-  static const registerClient = '/api/v1/smart/user/regsiter';
-  static const loginClientCode = '/api/v1/smart/user/login';
+  static const registerClient = '/api/v1/meng/user/regsiter';
+  static const loginClientCode = '/api/v1/meng/user/login';
   static const loginClientPassword = '/api/v1/meng/user/login';
-  static const logoutClient = '/api/v1/smart/user/logout';
+  static const logoutClient = '/api/v1/meng/user/logout';
   static const forgotPassword = '/api/v1/meng/user/forgot';
   //话题中心列表请求与创建
   static const topCenterClient = '/api/v1/meng/topic/list';
@@ -65,5 +65,6 @@ class Api {
   static const getSettingInfo = '/api/v1/meng/my/setting/query';
   //保存我的配置
   static const saveSettingInfo = '/api/v1/meng/my/setting/save';
-
+  //查询单条帖子
+  static const querySingleOnePost = '/api/v1/meng/posts';
 }
