@@ -63,8 +63,10 @@ class PassWorldController extends BaseController {
     if (value.isNotEmpty) {
       String passWorld = value;
       LoginWithCodeReqBean loginReqBean = LoginWithCodeReqBean(
-        mail: phone,
-        authCode: passWorld,
+        userName: phone,
+
+        type: 'authCode',
+        authCode: passWorld, application: 'cutepet', organization: 'miaoai',
       );
       final response = await _repo.loginWithCode(loginReqBean: loginReqBean);
       if (response.isSuccess) {

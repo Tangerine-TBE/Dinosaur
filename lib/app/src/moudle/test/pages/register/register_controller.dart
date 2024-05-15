@@ -6,6 +6,7 @@ import 'package:app_base/mvvm/model/register_bean.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
+import 'package:app_base/util/md5_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -126,7 +127,7 @@ class RegisterController extends BaseController {
       return;
     }
     passwordFocusNode.unfocus();
-    //Todo finish
+
     pageController.jumpToPage(4);
   }
 
@@ -206,7 +207,7 @@ class RegisterController extends BaseController {
 
     //
     final RegisterReqBean registerReqBean = RegisterReqBean(
-      password: passwordController.text,
+      password: Md5Utils.generateMD5(passwordController.text),
       application: 'cutepet',
       nickName: nickNameController.text,
       organization: 'miaoai',

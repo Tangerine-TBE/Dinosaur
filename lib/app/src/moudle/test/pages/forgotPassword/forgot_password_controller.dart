@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/mvvm/repository/login_repo.dart';
 import 'package:app_base/util/StringUtils.dart';
+import 'package:app_base/util/md5_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -112,7 +113,7 @@ class ForgotPasswordController extends BaseController {
     }
     final ForgotReqBean forgotReqBean = ForgotReqBean(
         userName: emailController.text,
-        password: newPasswordController.text,
+        password: Md5Utils.generateMD5(newPasswordController.text),
         authCode: authCodeController.text);
     final response = await _repo.forgotPassword(forgotReqBean: forgotReqBean);
     if (response.isSuccess) {
