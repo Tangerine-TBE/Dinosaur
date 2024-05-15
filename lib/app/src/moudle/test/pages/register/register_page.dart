@@ -2,9 +2,11 @@ import 'dart:io';
 import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/register/register_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pinput/pinput.dart';
 
 class RegisterPage extends BaseEmptyPage<RegisterController> {
   const RegisterPage({super.key});
@@ -68,7 +70,6 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                   _buildInputPassword(),
                   _buildInputEmailPage(),
                   _buildInputAuthCodePage(),
-
                 ],
               ),
             ),
@@ -77,7 +78,6 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
       ),
     );
   }
-
 
   _buildTitleBarItem(int index) {
     return Row(
@@ -125,15 +125,17 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
     );
   }
 
-  _buildInputPassword(){
+  _buildInputPassword() {
     return Column(
       children: [
         const SizedBox(
           height: 20,
         ),
-        Obx(() =>
-
-            TextField(
+        Obx(
+          () => Container(
+            alignment: Alignment.center,
+            height: 100,
+            child: TextField(
               controller: controller.passwordController,
               autofocus: true,
               enabled: true,
@@ -141,7 +143,9 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
               focusNode: controller.passwordFocusNode,
               textInputAction: TextInputAction.done,
               textAlign: TextAlign.start,
-              inputFormatters: [LengthLimitingTextInputFormatter(16),],
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(16),
+              ],
               obscureText: controller.visibility.value,
               keyboardType: TextInputType.emailAddress,
               cursorColor: MyColors.themeTextColor,
@@ -160,10 +164,11 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                 ),
                 suffixIcon: InkWell(
                   onTap: () {
-                    controller.visibility.value =
-                    !controller.visibility.value;
+                    controller.visibility.value = !controller.visibility.value;
                   },
-                  child: controller.visibility.value ? const Icon(Icons.visibility_off):const Icon(Icons.visibility),
+                  child: controller.visibility.value
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -177,13 +182,25 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: MyColors.themeTextColor),
                 ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                ),
               ),
               style: const TextStyle(
                 fontSize: 16,
                 textBaseline: TextBaseline.alphabetic,
               ),
             ),
-
+          ),
         ),
         const SizedBox(
           height: 20,
@@ -214,8 +231,8 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
         )
       ],
     );
-
   }
+
   _buildSelectPhotoPage() {
     return Column(
       children: [
@@ -227,7 +244,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
             controller.showImagePickerBottomSheet(controller.selectedImagesObx);
           },
           child: Obx(
-                () => ClipRRect(
+            () => ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Container(
                 width: 100,
@@ -235,13 +252,13 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                 color: MyColors.textGreyColor,
                 child: controller.selectedImagesObx.value.isEmpty
                     ? const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                )
+                        Icons.add,
+                        color: Colors.white,
+                      )
                     : Image.file(
-                  fit: BoxFit.cover,
-                  File(controller.selectedImagesObx.value),
-                ),
+                        fit: BoxFit.cover,
+                        File(controller.selectedImagesObx.value),
+                      ),
               ),
             ),
           ),
@@ -253,10 +270,12 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('性别:'),
-            const SizedBox(width: 20,),
+            const SizedBox(
+              width: 20,
+            ),
             const Text('男'),
             Obx(
-                  () => Radio(
+              () => Radio(
                 value: '男',
                 groupValue: controller.sex.value,
                 activeColor: MyColors.themeTextColor,
@@ -269,7 +288,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
             ),
             const Text('女'),
             Obx(
-                  () => Radio(
+              () => Radio(
                 value: '女',
                 groupValue: controller.sex.value,
                 activeColor: MyColors.themeTextColor,
@@ -316,45 +335,63 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
         const SizedBox(
           height: 20,
         ),
-        TextField(
-          controller: controller.nickNameController,
-          autofocus: true,
-          enabled: true,
-          minLines: 1,
-          focusNode: controller.nickNameFocusNode,
-          textInputAction: TextInputAction.done,
-          textAlign: TextAlign.start,
-          keyboardType: TextInputType.emailAddress,
-          cursorColor: MyColors.themeTextColor,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.only(top: 10, left: 14),
-            hintStyle: TextStyle(
-              color: MyColors.textGreyColor.withAlpha(120),
-              fontSize: 16,
+        Obx(
+          () => Container(
+            alignment: Alignment.center,
+            height: 100,
+            child: TextField(
+              controller: controller.nickNameController,
+              autofocus: true,
+              enabled: true,
+              minLines: 1,
+              focusNode: controller.nickNameFocusNode,
+              textInputAction: TextInputAction.done,
+              textAlign: TextAlign.start,
+              keyboardType: TextInputType.emailAddress,
+              cursorColor: MyColors.themeTextColor,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(top: 10, left: 14),
+                hintStyle: TextStyle(
+                  color: MyColors.textGreyColor.withAlpha(120),
+                  fontSize: 16,
+                ),
+                errorText: controller.nickNameErrorText.value == ''
+                    ? null
+                    : controller.nickNameErrorText.value,
+                labelText: '昵称',
+                labelStyle: const TextStyle(
+                  color: Colors.indigoAccent,
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: MyColors.textGreyColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              style: const TextStyle(
+                fontSize: 16,
+                textBaseline: TextBaseline.alphabetic,
+              ),
             ),
-            errorText: controller.nickNameErrorText.value == ''
-                ? null
-                : controller.nickNameErrorText.value,
-            labelText: '昵称',
-            labelStyle: const TextStyle(
-              color: Colors.indigoAccent,
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: MyColors.themeTextColor),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: MyColors.textGreyColor),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: MyColors.themeTextColor),
-            ),
-          ),
-          style: const TextStyle(
-            fontSize: 16,
-            textBaseline: TextBaseline.alphabetic,
           ),
         ),
         const SizedBox(
@@ -401,43 +438,48 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
           child: IgnorePointer(
             ignoring: true,
             child: Obx(
-              () => TextField(
-                controller: controller.birthController,
-                autofocus: false,
-                enabled: true,
-                readOnly: true,
-                minLines: 1,
-                focusNode: controller.birthFocusNode,
-                textInputAction: TextInputAction.done,
-                textAlign: TextAlign.start,
-                keyboardType: TextInputType.emailAddress,
-                cursorColor: MyColors.themeTextColor,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 10, left: 14),
-                  hintStyle: TextStyle(
-                    color: MyColors.textGreyColor.withAlpha(120),
+              () => Container(
+                alignment: Alignment.center,
+                height: 100,
+                child: TextField(
+                  controller: controller.birthController,
+                  autofocus: false,
+                  enabled: true,
+                  readOnly: true,
+                  minLines: 1,
+                  focusNode: controller.birthFocusNode,
+                  textInputAction: TextInputAction.done,
+                  textAlign: TextAlign.start,
+                  keyboardType: TextInputType.emailAddress,
+                  cursorColor: MyColors.themeTextColor,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(top: 10, left: 14),
+                    hintStyle: TextStyle(
+                      color: MyColors.textGreyColor.withAlpha(120),
+                      fontSize: 16,
+                    ),
+                    labelText: '出生日期（${controller.birDayTime.value}岁）',
+                    labelStyle: const TextStyle(
+                      color: Colors.indigoAccent,
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: MyColors.themeTextColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          const BorderSide(color: MyColors.textGreyColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: MyColors.themeTextColor),
+                    ),
+                  ),
+                  style: const TextStyle(
                     fontSize: 16,
+                    textBaseline: TextBaseline.alphabetic,
                   ),
-                  labelText: '出生日期（${controller.birDayTime.value}岁）',
-                  labelStyle: const TextStyle(
-                    color: Colors.indigoAccent,
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: MyColors.themeTextColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: MyColors.textGreyColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: MyColors.themeTextColor),
-                  ),
-                ),
-                style: const TextStyle(
-                  fontSize: 16,
-                  textBaseline: TextBaseline.alphabetic,
                 ),
               ),
             ),
@@ -475,74 +517,72 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
   }
 
   _buildInputAuthCodePage() {
+    const defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(top: 20),
+      textStyle: TextStyle(
+          fontSize: 20,
+          color: MyColors.textBlackColor,
+          fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: MyColors.textGreyColor,
+          ),
+        ),
+      ),
+    );
     return Column(
       children: [
         const SizedBox(
           height: 20,
         ),
-        Obx(
-          () => TextField(
-            controller: controller.authCodeController,
-            autofocus: true,
-            minLines: 1,
-            focusNode: controller.authCodeFocusNode,
-            textInputAction: TextInputAction.done,
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.emailAddress,
-            cursorColor: MyColors.themeTextColor,
-            decoration: InputDecoration(
-              hintText: '请输入邮箱验证码',
-              errorText: controller.authCodeErrorText.value == ''
-                  ? null
-                  : controller.authCodeErrorText.value,
-              contentPadding: const EdgeInsets.only(top: 10),
-              hintStyle: TextStyle(
-                color: MyColors.textGreyColor.withAlpha(120),
-                fontSize: 16,
-              ),
-              disabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-            ),
-            style: const TextStyle(
-              fontSize: 16,
-              textBaseline: TextBaseline.alphabetic,
-            ),
+        SizedBox(
+          height: 100,
+          child: Pinput(
+            mainAxisAlignment: MainAxisAlignment.center,
+            length: 4,
+            onCompleted: (value) {
+              controller.onIndex1PageNextStep(value);
+            },
+            defaultPinTheme: defaultPinTheme,
           ),
         ),
         const SizedBox(
           height: 20,
         ),
-        TextButton(
-          onPressed: () {
-            controller.onIndex1PageNextStep();
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              MyColors.themeTextColor,
-            ),
-            padding: MaterialStateProperty.all(
-              const EdgeInsets.symmetric(
-                horizontal: 50,
+        Obx(
+          () => TextButton(
+            onPressed: controller.countDown.value
+                ? null
+                : () {
+                    controller.onIndex0PageNextStep();
+                  },
+            style: ButtonStyle(
+              backgroundColor: controller.countDown.value
+                  ? MaterialStateProperty.all(MyColors.textGreyColor)
+                  : MaterialStateProperty.all(
+                      MyColors.themeTextColor,
+                    ),
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
+              ),
+              overlayColor: MaterialStateProperty.all(
+                MyColors.iconSelectedColor,
               ),
             ),
-            overlayColor: MaterialStateProperty.all(
-              MyColors.iconSelectedColor,
+            child: Text(
+              controller.countDownText.value,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
-          child: const Text(
-            '完成',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        )
+        ),
       ],
     );
   }
@@ -554,38 +594,56 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
           height: 20,
         ),
         Obx(
-          () => TextField(
-            controller: controller.emailController,
-            autofocus: true,
-            minLines: 1,
-            focusNode: controller.emailFocusNode,
-            textInputAction: TextInputAction.done,
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.emailAddress,
-            cursorColor: MyColors.themeTextColor,
-            decoration: InputDecoration(
-              hintText: '请输入邮箱',
-              errorText: controller.emailErrorText.value == ''
-                  ? null
-                  : controller.emailErrorText.value,
-              contentPadding: const EdgeInsets.only(top: 10),
-              hintStyle: TextStyle(
-                color: MyColors.textGreyColor.withAlpha(120),
+          () => Container(
+            alignment: Alignment.center,
+            height: 100,
+            child: TextField(
+              controller: controller.emailController,
+              autofocus: true,
+              minLines: 1,
+              focusNode: controller.emailFocusNode,
+              textInputAction: TextInputAction.done,
+              textAlign: TextAlign.start,
+              keyboardType: TextInputType.emailAddress,
+              cursorColor: MyColors.themeTextColor,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(top: 10, left: 14),
+                labelText: '邮箱',
+                hintText: '请输入邮箱',
+                errorText: controller.emailErrorText.value == ''
+                    ? null
+                    : controller.emailErrorText.value,
+                hintStyle: TextStyle(
+                  color: MyColors.textGreyColor.withAlpha(120),
+                  fontSize: 16,
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: MyColors.textGreyColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: MyColors.themeTextColor),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Colors.red),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              style: const TextStyle(
                 fontSize: 16,
+                textBaseline: TextBaseline.alphabetic,
               ),
-              disabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-              enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: MyColors.themeTextColor),
-              ),
-            ),
-            style: const TextStyle(
-              fontSize: 16,
-              textBaseline: TextBaseline.alphabetic,
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_base/exports.dart';
@@ -33,13 +34,15 @@ class RegisterController extends BaseController {
   final authCodeErrorText = ''.obs;
   final nickNameErrorText = ''.obs;
   final passwordErrorText = ''.obs;
-
+  final countDownText = '获取验证码'.obs;
+  final countDown = true.obs;
+  var expiresIn = 0;
   final currentIndex = 0.obs;
   final birDayTime = 0.obs;
   final selectedImagesObx = ''.obs;
   final sex = ''.obs;
   final visibility = true.obs;
-
+  Timer? countDownTimer ;
   onLastStep() {
     if (birthFocusNode.hasFocus) {
       birthFocusNode.unfocus();
@@ -116,7 +119,23 @@ class RegisterController extends BaseController {
     }
     pageController.jumpToPage(3);
   }
-
+  releaseTimer() {
+    var i = expiresIn;
+    countDown.value = true;
+    countDownTimer = Timer.periodic(
+      const Duration(seconds: 1),
+          (timer) {
+        i--;
+        if (i < 1) {
+          timer.cancel();
+          countDown.value = false;
+          countDownText.value = '获取验证码';
+        } else {
+          countDownText.value = '获取验证码($i)';
+        }
+      },
+    );
+  }
   onIndex5PageNextStep() {
     if (passwordController.text.isEmpty) {
       passwordErrorText.value = '请输入您的密码';
@@ -151,10 +170,7 @@ class RegisterController extends BaseController {
         showError('验证信息请求失败!');
       } else {
         final AuthCRspEmailBean authCRspBean = response.data!.data!;
-        Map<String, dynamic> args = {
-          'phone': emailController.text,
-          'expiresIn': authCRspBean.expiresIn
-        };
+        expiresIn =  authCRspBean.expiresIn;
         pageController.jumpToPage(5);
       }
     } else {
@@ -162,12 +178,7 @@ class RegisterController extends BaseController {
     }
   }
 
-  onIndex1PageNextStep() async {
-    if (authCodeController.text.isEmpty) {
-      authCodeErrorText.value = '请输入邮箱验证码';
-      return;
-    }
-    authCodeFocusNode.unfocus();
+  onIndex1PageNextStep(String value) async {
     //先上传头像
     final response = await _uploadRepo.getUploadAuth();
     var imageUrls = '';
@@ -212,7 +223,7 @@ class RegisterController extends BaseController {
       nickName: nickNameController.text,
       organization: 'miaoai',
       userName: emailController.text,
-      authCode: authCodeController.text,
+      authCode: value,
       gender: sex.value == '男' ? 'male' : 'female',
       birthday: birthController.text,
       avator: imageUrls,
@@ -369,6 +380,7 @@ class RegisterController extends BaseController {
     birthFocusNode.dispose();
     nickNameFocusNode.dispose();
     passwordFocusNode.dispose();
+    countDownTimer?.cancel();
     super.onClose();
   }
 
