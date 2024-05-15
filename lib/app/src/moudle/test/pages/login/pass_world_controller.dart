@@ -76,6 +76,8 @@ class PassWorldController extends BaseController {
           User.loginRspBean = responseData;
           offAllNavigateTo(RouteName.homePage);
         }
+      }else{
+        showError(response.message);
       }
     } else if (passWorld == '8888') {
       showLoading(userInteraction: false);

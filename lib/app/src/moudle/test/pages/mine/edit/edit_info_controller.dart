@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app_base/config/user.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/home_bean.dart';
@@ -82,8 +84,11 @@ class EditInfoController extends BaseController {
     update([listId]);
   }
 
-  _editUserInfo(Map<String, dynamic> map) {
-    _repo.editUserInfo(map);
+  _editUserInfo(String path, Map<String, dynamic> map) {
+    _repo.editUserInfo(
+      path: path,
+      map: map,
+    );
   }
 
   onItemClicked(int index) {
@@ -106,7 +111,7 @@ class EditInfoController extends BaseController {
               content: '${date.year}-${date.month}-${date.day}',
               hintText: listData[4].hintText);
           listData[4] = exchangedBean;
-          _editUserInfo({'sign': '${date.year}-${date.month}-${date.day}'});
+          _editUserInfo(User.getUserId(),{'sign': '${date.year}-${date.month}-${date.day}'});
           HomeRsp? homeRsp = User.loginUserInfo;
           if (homeRsp != null) {
             homeRsp.birthday = '${date.year}-${date.month}-${date.day}';
@@ -185,8 +190,8 @@ class EditInfoController extends BaseController {
                       if (croppedFile != null) {
                         images[index - 1] = croppedFile.path;
                         if (index == 1) {
-                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', path,
-                              (path) => _editUserInfo({'avator': path}));
+                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', croppedFile.path,
+                              (path) => _editUserInfo(User.getUserId(),{'avator': path}));
                           if (homeRsp != null) {
                             homeRsp!.avator = images[index - 1];
                           }
@@ -202,14 +207,15 @@ class EditInfoController extends BaseController {
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
                             'jpeg',
-                            path,
+                            images[index - 1],
                             (path) {
                               copyImages[index - 2] = path;
-                              _editUserInfo(
+                              _editUserInfo(User.getUserId(),
                                 {
                                   'imageArr': List<dynamic>.from(
                                     copyImages.map((x) => x),
                                   ),
+
                                 },
                               );
                             },
@@ -261,8 +267,8 @@ class EditInfoController extends BaseController {
                       if (croppedFile != null) {
                         images[index - 1] = croppedFile.path;
                         if (index == 1) {
-                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', path,
-                              (path) => _editUserInfo({'avator': path}));
+                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', croppedFile.path,
+                              (path) => _editUserInfo(User.getUserId(),{'avator': path}));
                           if (homeRsp != null) {
                             homeRsp!.avator = images[index - 1];
                           }
@@ -278,10 +284,10 @@ class EditInfoController extends BaseController {
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
                             'jpeg',
-                            path,
+                            croppedFile.path,
                             (path) {
                               copyImages[index - 2] = path;
-                              _editUserInfo(
+                              _editUserInfo(User.getUserId(),
                                 {
                                   'imageArr': List<dynamic>.from(
                                     copyImages.map((x) => x),
@@ -313,14 +319,15 @@ class EditInfoController extends BaseController {
                     onPressed: () {
                       images[index - 1] = '';
                       if (index == 1) {
-                        _editUserInfo({'avator': ''});
+                        _editUserInfo(User.getUserId(),{'avator': ''});
                       } else {
                         copyImages[index - 2] = '';
-                        _editUserInfo(
+                        _editUserInfo(User.getUserId(),
                           {
                             'imageArr': List<dynamic>.from(
                               copyImages.map((x) => x),
                             ),
+
                           },
                         );
                       }
@@ -404,7 +411,7 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[0] = exchangedBean;
                     update([listId]);
-                    _editUserInfo({'nickName': textEditController.text});
+                    _editUserInfo(User.getUserId(),{'nickName': textEditController.text});
                     if (homeRsp != null) {
                       homeRsp!.nickName = textEditController.text;
                     }
@@ -565,142 +572,142 @@ class EditInfoController extends BaseController {
                 padding: EdgeInsets.symmetric(horizontal: 34),
                 child: Divider(),
               ),
-              Obx(() => voiceFile.isNotEmpty?
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  margin: const EdgeInsets.only(right: 34),
-                  constraints: BoxConstraints.loose(const Size(200, 60)),
-                  decoration: BoxDecoration(
-                    color: MyColors.themeTextColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child:
-                  Row(
-                    children: [
-                      const Icon(Icons.record_voice_over),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Obx(
-                              () => InkWell(
-                            onTap: () {
-                              if (!playVoice.value) {
-                                startPlay(1);
-                              } else {
-                                stopPlay(1);
-                              }
-                            },
-                            child: playVoice.value
-                                ? AudioWave(
-                              height: 20,
-                              width: 90,
-                              spacing: 2.5,
-                              animation: true,
-                              bars: [
-                                AudioWaveBar(
-                                    heightFactor: 0.2,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.3,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.1,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.9,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.2,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.3,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.2,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.8,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.3,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.2,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 1.0,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.5,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.6,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.7,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.3,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.2,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.4,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 0.7,
-                                    color: Colors.black),
-                                AudioWaveBar(
-                                    heightFactor: 1.0,
-                                    color: Colors.black),
-                              ],
-                            )
-                                : const Icon(Icons.play_arrow_sharp),
+              Obx(
+                () => voiceFile.isNotEmpty
+                    ? Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 8),
+                          margin: const EdgeInsets.only(right: 34),
+                          constraints:
+                              BoxConstraints.loose(const Size(200, 60)),
+                          decoration: BoxDecoration(
+                            color: MyColors.themeTextColor,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.record_voice_over),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Obx(
+                                  () => InkWell(
+                                    onTap: () {
+                                      if (!playVoice.value) {
+                                        startPlay(1);
+                                      } else {
+                                        stopPlay(1);
+                                      }
+                                    },
+                                    child: playVoice.value
+                                        ? AudioWave(
+                                            height: 20,
+                                            width: 90,
+                                            spacing: 2.5,
+                                            animation: true,
+                                            bars: [
+                                              AudioWaveBar(
+                                                  heightFactor: 0.2,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.3,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.1,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.9,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.2,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.3,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.2,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.8,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.3,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.2,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 1.0,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.5,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.6,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.7,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.3,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.2,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.4,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 0.7,
+                                                  color: Colors.black),
+                                              AudioWaveBar(
+                                                  heightFactor: 1.0,
+                                                  color: Colors.black),
+                                            ],
+                                          )
+                                        : const Icon(Icons.play_arrow_sharp),
+                                  ),
+                                ),
+                              ),
+                              const Text('29\'\''),
+                              InkWell(
+                                onTap: () {
+                                  //delete
+                                  _editUserInfo(User.getUserId(),{'voiceSign': ''});
+                                  if (homeRsp != null) {
+                                    homeRsp!.voiceSign = '';
+                                  }
+                                  if (play.isPlaying) {
+                                    stopPlay(1);
+                                  }
+                                  voiceFile.value = '';
+                                },
+                                child: const Icon(Icons.cancel_outlined),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      const Text('29\'\''),
-                      InkWell(
-                        onTap: (){
-                          //delete
-                          _editUserInfo({'voiceSign':''});
-                          if(homeRsp != null){
-                            homeRsp!.voiceSign = '';
-                          }
-                          if(play.isPlaying){
-                            stopPlay(1);
-                          }
-                          voiceFile.value = '';
-                        },
-                        child: const Icon(Icons.cancel_outlined),
-                      ),
-                    ],
-                  )
-                  ,
-                ),
-              ):Container(),
-
-    ),
+                      )
+                    : Container(),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -734,8 +741,8 @@ class EditInfoController extends BaseController {
                           _upLoadRepo,
                           "mp3",
                           recordUrl!,
-                          (path) => _repo.editUserInfo(
-                            {
+                          (path) => _repo.editUserInfo(path:User.getUserId(),
+                           map: {
                               'voiceSign':
                                   "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$path",
                             },
@@ -786,11 +793,14 @@ class EditInfoController extends BaseController {
 
   startPlay([int type = 0]) async {
     await play.openPlayer();
-    await play.startPlayer(fromURI: recordUrl, codec: Codec.mp3,whenFinished: (){
-      if (type == 1) {
-        playVoice.value = false;
-      }
-    });
+    await play.startPlayer(
+        fromURI: recordUrl,
+        codec: Codec.mp3,
+        whenFinished: () {
+          if (type == 1) {
+            playVoice.value = false;
+          }
+        });
     if (type == 1) {
       playVoice.value = true;
     }
@@ -855,7 +865,7 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[2] = exchangedBean;
                     update([listId]);
-                    _editUserInfo({'sign': textEditController.text});
+                    _editUserInfo(User.getUserId(),{'sign': textEditController.text});
                     if (homeRsp != null) {
                       homeRsp!.sign = textEditController.text;
                     }

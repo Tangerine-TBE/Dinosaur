@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:app_base/mvvm/model/register_bean.dart';
 import 'package:app_base/mvvm/model/user_bean.dart';
 import 'package:app_base/network/api.dart';
@@ -13,6 +15,16 @@ class LoginRepo extends BaseRepo {
       method: Method.post,
       params: loginReqBean.toJson(),
       format: (data) => LoginUserWithCodeResponse.fromJson(data),
+    );
+  }
+
+  Future<AResponse<dynamic>> userCancel({
+    required Map<String, dynamic> map,
+  }) {
+    return requestOnFuture(
+      Api.cancelUser,
+      method: Method.post,
+      params: map,
     );
   }
 

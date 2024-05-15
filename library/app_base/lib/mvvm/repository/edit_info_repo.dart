@@ -5,7 +5,7 @@ import '../../network/api.dart';
 
 class EditInfoRepo extends BaseRepo{
 
-  Future<AResponse<dynamic>> editUserInfo(Map<String,dynamic> map){
-    return requestOnFuture(Api.editUserInf0,method: Method.put,params: map);
+  Future<AResponse<dynamic>> editUserInfo({required String path,required Map<String,dynamic> map}){
+    return requestOnFuture("${Api.editUserInf0}/$path",method: Method.put,params: map);
   }
 }

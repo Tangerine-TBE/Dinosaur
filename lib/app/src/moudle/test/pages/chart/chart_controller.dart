@@ -29,14 +29,12 @@ class ChartController extends BaseController {
     specialCharManager = SpecialCharManager(controller: this);
     super.onInit();
   }
+
   @override
-  void onReady(){
+  void onReady() {
     super.onReady();
     onPageChanged(initialIndex);
   }
-
-  
-  
 
   onPageChanged(int index) {
     initialIndex = index;
@@ -55,38 +53,41 @@ class SingleCharManager {
   final ChartController controller;
   final chartListId = 1;
   List<WaveList> data = <WaveList>[];
+
   SingleCharManager({required this.controller});
+
   final pageBucket = PageStorageBucket();
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   init() {
     if (!isInit) {
       refreshController.requestRefresh();
       isInit = true;
     }
   }
-  onCollectChart(String chartId){
 
-  }
+  onCollectChart(String chartId) {}
+
   getChartList() async {
     final response = await controller.chartRepo.getCharts(
-        ChartReq(
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            type: 'Single'),
-      );
-    if(response.isSuccess){
-      if(response.data?.data != null){
+      ChartReq(
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          type: 'Single'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
         data = response.data!.data!.waveList;
         controller.update([chartListId]);
         refreshController.refreshCompleted();
-      }else{
+      } else {
         refreshController.refreshToIdle();
       }
-    }else{
+    } else {
       refreshController.refreshFailed();
     }
-
   }
 
   onChartItemClick(int index) {
@@ -136,9 +137,14 @@ class SingleCharManager {
                             side: BorderSide(color: Colors.black)),
                         onPressed: () async {
                           Get.back();
-                          await controller.navigateForResult(RouteName.scanPage);
-                          if(Runtime.deviceInfo.value != null){
-                              controller.navigateTo(RouteName.waveDemo,args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPreview]);
+                          await controller
+                              .navigateForResult(RouteName.scanPage);
+                          if (Runtime.deviceInfo.value != null) {
+                            controller.navigateTo(RouteName.waveDemo, args: [
+                              Data.fromJson(json.decode(data[index].actions))
+                                  .record,
+                              TypicalClass.demoPreview
+                            ]);
                           }
                         },
                         child: Text('去连接'),
@@ -149,11 +155,14 @@ class SingleCharManager {
                             borderRadius: BorderRadius.circular(40),
                             side: BorderSide(color: Colors.black)),
                         color: Colors.green,
-                        onPressed: ()  {
+                        onPressed: () {
                           Get.back();
-                           controller.navigateForResult(RouteName.waveDemo,
-                              args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPreview]);
-
+                          controller.navigateForResult(RouteName.waveDemo,
+                              args: [
+                                Data.fromJson(json.decode(data[index].actions))
+                                    .record,
+                                TypicalClass.demoPreview
+                              ]);
                         },
                         child: Text('预览'),
                       ),
@@ -166,28 +175,44 @@ class SingleCharManager {
         ),
       );
     } else {
-      controller.navigateTo(RouteName.waveDemo,args: [Data.fromJson(json.decode(data[index].actions)).record,TypicalClass.demoPlay]);
-
+      controller.navigateTo(RouteName.waveDemo, args: [
+        Data.fromJson(json.decode(data[index].actions)).record,
+        TypicalClass.demoPlay
+      ]);
     }
 
     // controller.navigateTo(RouteName.waveDemo);
     // controller.update([chartListId]);
   }
 
-  onChartLikeClicked(String chartId,int index) {
-    if(!data[index].isMyLike){
-      data[index].isMyLike  = true;
-      data[index].likesNum  = data[index].likesNum + 1;
-      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLikeClicked(String chartId, int index) {
+    if (!data[index].isMyLike) {
+      data[index].isMyLike = true;
+      data[index].likesNum = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyLike = false;
+      data[index].likesNum = data[index].likesNum - 1;
+      controller.chartRepo.unLikeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }
 
-  onChartLinkClicked(String chartId,int index) {
-    if(!data[index].isMyFavor){
-      data[index].isMyFavor  = true;
-      data[index].favorsNum  = data[index].favorsNum + 1;
-      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLinkClicked(String chartId, int index) {
+    if (!data[index].isMyFavor) {
+      data[index].isMyFavor = true;
+      data[index].favorsNum = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyFavor = false;
+      data[index].favorsNum = data[index].favorsNum - 1;
+      controller.chartRepo.unCollectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }
@@ -199,10 +224,13 @@ class DoubleCharManager {
   final chartListId = 2;
   List<WaveList> data = <WaveList>[];
   final pageBucket = PageStorageBucket();
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-  setRefreshController(RefreshController refreshController){
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  setRefreshController(RefreshController refreshController) {
     this.refreshController = refreshController;
   }
+
   DoubleCharManager({required this.controller});
 
   init() {
@@ -213,23 +241,22 @@ class DoubleCharManager {
   }
 
   getChartList() async {
-    final response = await
-      controller.chartRepo.getCharts(
-        ChartReq(
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            type: 'Double'),
-      );
-    if(response.isSuccess){
-      if(response.data?.data != null){
+    final response = await controller.chartRepo.getCharts(
+      ChartReq(
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          type: 'Double'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
         data = response.data!.data!.waveList;
         controller.update([chartListId]);
         refreshController.refreshCompleted();
-      }else{
+      } else {
         refreshController.refreshToIdle();
       }
-    }else{
+    } else {
       refreshController.refreshFailed();
     }
   }
@@ -238,20 +265,34 @@ class DoubleCharManager {
     controller.update([chartListId]);
   }
 
-  onChartLikeClicked(String chartId,int index) {
-    if(!data[index].isMyLike){
-      data[index].isMyLike  = true;
-      data[index].likesNum  = data[index].likesNum + 1;
-      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLikeClicked(String chartId, int index) {
+    if (!data[index].isMyLike) {
+      data[index].isMyLike = true;
+      data[index].likesNum = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyLike = false;
+      data[index].likesNum = data[index].likesNum - 1;
+      controller.chartRepo.unLikeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }
 
-  onChartLinkClicked(String chartId,int index) {
-    if(!data[index].isMyFavor){
-      data[index].isMyFavor  = true;
-      data[index].favorsNum  = data[index].favorsNum + 1;
-      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLinkClicked(String chartId, int index) {
+    if (!data[index].isMyFavor) {
+      data[index].isMyFavor = true;
+      data[index].favorsNum = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyFavor = false;
+      data[index].favorsNum = data[index].favorsNum - 1;
+      controller.chartRepo.unCollectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }
@@ -263,7 +304,9 @@ class SpecialCharManager {
   final chartListId = 2;
   final pageBucket = PageStorageBucket();
   List<WaveList> data = <WaveList>[];
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
   SpecialCharManager({required this.controller});
 
   init() {
@@ -274,22 +317,22 @@ class SpecialCharManager {
   }
 
   getChartList() async {
-    final response = await  controller.chartRepo.getCharts(
-        ChartReq(
-            pageIndex: 1,
-            pageSize: 10,
-            orderBy: 'createTime desc',
-            type: 'Suction'),
-      );
-    if(response.isSuccess){
-      if(response.data?.data != null){
+    final response = await controller.chartRepo.getCharts(
+      ChartReq(
+          pageIndex: 1,
+          pageSize: 10,
+          orderBy: 'createTime desc',
+          type: 'Suction'),
+    );
+    if (response.isSuccess) {
+      if (response.data?.data != null) {
         data = response.data!.data!.waveList;
         controller.update([chartListId]);
         refreshController.refreshCompleted();
-      }else{
+      } else {
         refreshController.refreshToIdle();
       }
-    }else{
+    } else {
       refreshController.refreshFailed();
     }
   }
@@ -298,20 +341,34 @@ class SpecialCharManager {
     controller.update([chartListId]);
   }
 
-  onChartLikeClicked(String chartId,int index) {
-    if(!data[index].isMyLike){
-      data[index].isMyLike  = true;
-      data[index].likesNum  = data[index].likesNum + 1;
-      controller.chartRepo.likeChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLikeClicked(String chartId, int index) {
+    if (!data[index].isMyLike) {
+      data[index].isMyLike = true;
+      data[index].likesNum = data[index].likesNum + 1;
+      controller.chartRepo.likeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyLike = false;
+      data[index].likesNum = data[index].likesNum - 1;
+      controller.chartRepo.unLikeChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }
 
-  onChartLinkClicked(String chartId,int index) {
-    if(!data[index].isMyFavor){
-      data[index].isMyFavor  = true;
-      data[index].favorsNum  = data[index].favorsNum + 1;
-      controller.chartRepo.collectChart(chartId:chartId,map: {'userId':User.loginRspBean!.userId});
+  onChartLinkClicked(String chartId, int index) {
+    if (!data[index].isMyFavor) {
+      data[index].isMyFavor = true;
+      data[index].favorsNum = data[index].favorsNum + 1;
+      controller.chartRepo.collectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
+      controller.update([chartListId]);
+    } else {
+      data[index].isMyFavor = false;
+      data[index].favorsNum = data[index].favorsNum - 1;
+      controller.chartRepo.unCollectChart(
+          chartId: chartId, map: {'userId': User.loginRspBean!.userId});
       controller.update([chartListId]);
     }
   }

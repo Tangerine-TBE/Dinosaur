@@ -259,16 +259,21 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                     horizontal: 20,
                   ),
                   color: Colors.white,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text('账号注销'),
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                      ),
-                    ],
+                  child: InkWell(
+                    onTap: (){
+                      controller.onUserCancel(context);
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text('账号注销'),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(

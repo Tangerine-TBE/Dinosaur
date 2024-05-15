@@ -16,11 +16,12 @@ class HomeController extends PlayDeviceBleController {
   late PageController pageController;
   final _repo = Get.find<HomeRepo>();
   double? currentPage = 0.0;
+
   @override
   void onInit() async {
     pageController = PageController();
     pageController.addListener(() {
-      if(currentPage == 3){
+      if (currentPage == 3) {
         SaveKey.loginUserExtendsInfo.save(User.loginUserInfo?.toJson());
       }
       currentPage = pageController.page;
@@ -33,21 +34,31 @@ class HomeController extends PlayDeviceBleController {
     final HomeReq homeReq = HomeReq(id: User.loginRspBean!.userId);
     final response = await apiLaunch(() => _repo.getUserInfo(homeReq: homeReq),
         enableLoading: true);
-      if(response != null){
-        if(response.data != null){
-            SaveKey.loginUserExtendsInfo.save(response.data!.toJson());
-            User.loginUserInfo = response.data;
+    if (response != null) {
+      if (response.data != null) {
+        final HomeRsp? homeRsp = response.data;
+        if (homeRsp != null) {
+          if (homeRsp.images.isEmpty || homeRsp.images.length < 6) {
+            var size = 5 - homeRsp.images.length;
+            for (int i = 1; i <= size; i++) {
+              homeRsp.images.add('');
+            }
+          }
+          SaveKey.loginUserExtendsInfo.save(response.data!.toJson());
+          User.loginUserInfo = response.data;
         }
       }
-      if(User.loginUserInfo == null){
-        var info =  SaveKey.loginUserExtendsInfo.read;
-        if(info != null){
-          User.loginUserInfo = HomeRsp.fromJson(SaveKey.loginUserBaseInfo.read);
-        }else{
-          //没有缓存信息，则
-          showToast('无法获取个人信息，请重新登录');
-        }
+    }
+    if (User.loginUserInfo == null) {
+      var info = SaveKey.loginUserExtendsInfo.read;
+      if (info != null) {
+        User.loginUserInfo = HomeRsp.fromJson(SaveKey.loginUserBaseInfo.read);
+      } else {
+        //没有缓存信息，则
+        showToast('登录出错!');
+        offAllNavigateTo(RouteName.login);
       }
+    }
   }
 
   toImageView(String url, String tag, int height, int width) async {

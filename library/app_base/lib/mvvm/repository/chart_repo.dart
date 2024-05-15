@@ -12,12 +12,18 @@ class ChartRepo extends BaseRepo {
         format: (data) => ChartResponse.fromJson(data));
   }
 
-  Future<AResponse<dynamic>> pushChart(ChartCreateReq chartCreateReq) {
-    return requestOnFuture(Api.pushCharts,
-        method: Method.post, params: chartCreateReq.toJson());
+  Future<AResponse<dynamic>> pushChart(
+    ChartCreateReq chartCreateReq,
+  ) {
+    return requestOnFuture(
+      Api.pushCharts,
+      method: Method.post,
+      params: chartCreateReq.toJson(),
+    );
   }
 
-  Future<AResponse<dynamic>> likeChart({required String chartId,required Map<String, dynamic> map}) {
+  Future<AResponse<dynamic>> likeChart(
+      {required String chartId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       '${Api.likeCharts}/$chartId',
       method: Method.post,
@@ -25,9 +31,28 @@ class ChartRepo extends BaseRepo {
     );
   }
 
-  Future<AResponse<dynamic>> collectChart({required String chartId,required Map<String, dynamic> map}) {
+  Future<AResponse<dynamic>> unLikeChart(
+      {required String chartId, required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      '${Api.unLikeChart}/$chartId',
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> collectChart(
+      {required String chartId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       '${Api.collectCharts}/$chartId',
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> unCollectChart(
+      {required String chartId, required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      '${Api.unCollectCharts}/$chartId',
       method: Method.post,
       params: map,
     );

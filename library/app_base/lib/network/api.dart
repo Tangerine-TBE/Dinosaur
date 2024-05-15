@@ -4,6 +4,8 @@ class Api {
   static const loginClientPassword = '/api/v1/meng/user/login';
   static const logoutClient = '/api/v1/meng/user/logout';
   static const forgotPassword = '/api/v1/meng/user/forgot';
+  //用户注销
+  static const cancelUser = '/api/v1/meng/user/cancle';
   //话题中心列表请求与创建
   static const topCenterClient = '/api/v1/meng/topic/list';
   static const topCenterCreate = '/api/v1/meng/topic';
@@ -27,8 +29,12 @@ class Api {
   static const getCharts ='/api/v1/meng/wave/list';
   //收藏波形
   static const collectCharts ='/api/v1/meng/wave/favorite';
+  //取消收藏波形
+  static const unCollectCharts ='/api/v1/meng/wave/unfavorite';
   //点赞波形
   static const likeCharts ='/api/v1/meng/wave/like';
+  //取消点赞波形
+  static const unLikeChart = '/api/v1/meng/wave/unlike';
   //推送帖子
   static const pushCharts = '/api/v1/meng/wave';
   //我的（帖子）
