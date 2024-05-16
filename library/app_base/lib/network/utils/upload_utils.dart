@@ -29,9 +29,9 @@ class UploadUtils {
               bucketName: "cxw-user",
               authGetter: () => auth,
             );
-            final bytes = await compressFile(File(path));
+            final bytes = await File(path).readAsBytes();
             final udid = const Uuid().v4();
-            final targetPath = "src/pet/${udid.replaceAll("-", "")}.$fileType";
+            final targetPath = "src/pet/${udid.replaceAll("-", "")}";
             await Client().putObject(
               bytes,
               targetPath,

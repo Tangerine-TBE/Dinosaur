@@ -191,7 +191,7 @@ class EditInfoController extends BaseController {
                         if (index == 0) {
                           UploadUtils.upLoadFile(
                               _upLoadRepo,
-                              'jpeg',
+                              '.jpeg',
                               croppedFile.path,
                               (path) => _editUserInfo(
                                   User.getUserId(), {'avator': path}));
@@ -201,18 +201,17 @@ class EditInfoController extends BaseController {
                         } else {
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
-                            'jpeg',
+                            '.jpeg',
                             obxValue.value,
                             (path) {
                               _editUserInfo(
                                 User.getUserId(),
                                 {
-                                  'image$index': obxValue.value,
+                                  'image$index': path,
                                 },
                               );
                             },
                           );
-                          if (index == 1) {}
                           switch (index) {
                             case 1:
                               homeRsp!.image1 = obxValue.value;
@@ -278,7 +277,7 @@ class EditInfoController extends BaseController {
                         if (index == 0) {
                           UploadUtils.upLoadFile(
                               _upLoadRepo,
-                              'jpeg',
+                              '.jpeg',
                               croppedFile.path,
                                   (path) => _editUserInfo(
                                   User.getUserId(), {'avator': path}));
@@ -288,13 +287,13 @@ class EditInfoController extends BaseController {
                         } else {
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
-                            'jpeg',
+                            '.jpeg',
                             obxValue.value,
                                 (path) {
                               _editUserInfo(
                                 User.getUserId(),
                                 {
-                                  'image$index': obxValue.value,
+                                  'image$index': path,
                                 },
                               );
                             },
@@ -345,7 +344,7 @@ class EditInfoController extends BaseController {
                         _editUserInfo(
                           User.getUserId(),
                           {
-                            'image$index': obxValue.value,
+                            'image$index': '',
                           },
                         );
                       }
@@ -759,13 +758,12 @@ class EditInfoController extends BaseController {
                       if (recordUrl != null) {
                         UploadUtils.upLoadFile(
                           _upLoadRepo,
-                          "mp3",
+                          "",
                           recordUrl!,
                           (path) => _repo.editUserInfo(
                             path: User.getUserId(),
                             map: {
-                              'voiceSign':
-                                  "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$path",
+                              'voiceSign': path,
                             },
                           ),
                         );
@@ -793,7 +791,6 @@ class EditInfoController extends BaseController {
     );
     if (Get.isBottomSheetOpen == false) {
       stopPlay();
-      recordStop();
     }
   }
 
@@ -828,8 +825,9 @@ class EditInfoController extends BaseController {
   }
 
   stopPlay([int type = 0]) async {
-    if (play.isOpen()) {
-      await play.pausePlayer();
+    if (play.isPlaying) {
+      playVoice.value = false;
+      await play.closePlayer();
     }
     if (type == 1) {
       playVoice.value = false;

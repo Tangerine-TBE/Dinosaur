@@ -192,9 +192,7 @@ class LoginPage extends BaseEmptyPage<LoginController> {
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(16),
                                 FilteringTextInputFormatter.allow(
-                                  RegExp(
-                                    '[a-zA-Z0-9]',
-                                  ),
+                                  RegExp('[a-zA-z]|[0-9]|[+-/*?.><%@#!&()]'),
                                 ),
                               ],
                               keyboardType: TextInputType.emailAddress,

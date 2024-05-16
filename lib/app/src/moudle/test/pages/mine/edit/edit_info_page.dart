@@ -1,6 +1,7 @@
 import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:app_base/util/image.dart';
+import 'package:audio_wave/audio_wave.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +58,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       flex: 2,
                                       child: InkWell(
                                         onTap: controller.onImage1Clicked,
-                                        child:  controller.imagesObxAvator.value.isEmpty
+                                        child: controller
+                                                .imagesObxAvator.value.isEmpty
                                             ? Container(
                                                 decoration: const BoxDecoration(
                                                   color: MyColors.textGreyColor,
@@ -93,15 +95,19 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                     ),
                                                   ),
                                                 ),
-                                                child:  controller.imagesObxAvator.value
+                                                child: controller
+                                                        .imagesObxAvator.value
                                                         .startsWith('http')
                                                     ? CachedNetworkImage(
                                                         width: double.infinity,
                                                         height: double.infinity,
-                                                        imageUrl:  controller.imagesObxAvator.value
-                                                      )
+                                                        imageUrl: controller
+                                                            .imagesObxAvator
+                                                            .value)
                                                     : loadImageByPath(
-                                                        controller.imagesObxAvator.value,
+                                                        controller
+                                                            .imagesObxAvator
+                                                            .value,
                                                         double.infinity,
                                                         double.infinity,
                                                       ),
@@ -115,8 +121,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                           Flexible(
                                             child: InkWell(
                                               onTap: controller.onImage2Clicked,
-                                              child:   controller
-                                                  .imagesObxValue1.value.isEmpty
+                                              child: controller.imagesObxValue1
+                                                      .value.isEmpty
                                                   ? Container(
                                                       decoration: BoxDecoration(
                                                         color: MyColors
@@ -497,13 +503,78 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    controller.listData[index].content.isEmpty
-                        ? controller.listData[index].hintText
-                        : controller.listData[index].content,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                  ),
+                  child: index != 1
+                      ? Text(
+                          controller.listData[index].content.isEmpty
+                              ? controller.listData[index].hintText
+                              : controller.listData[index].content,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                        )
+                      : controller.listData[index].content.isNotEmpty
+                          ? AudioWave(
+                              height: 20,
+                              width: 90,
+                              spacing: 2.5,
+                              animation: false,
+                              bars: [
+                                AudioWaveBar(
+                                    heightFactor: 0.2, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.1, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.9, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.8, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 1.0, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.5, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.6, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.7, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.3, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.2, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.4, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 0.7, color: Colors.black),
+                                AudioWaveBar(
+                                    heightFactor: 1.0, color: Colors.black),
+                              ],
+                            )
+                          : Text(
+                              controller.listData[index].content.isEmpty
+                                  ? controller.listData[index].hintText
+                                  : controller.listData[index].content,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                            ),
                 ),
                 const Icon(
                   Icons.keyboard_arrow_right_sharp,

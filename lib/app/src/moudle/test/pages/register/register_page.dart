@@ -145,6 +145,9 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
               textAlign: TextAlign.start,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(16),
+                FilteringTextInputFormatter.allow(
+                  RegExp('[a-zA-z]|[0-9]|[+-/*?.><%@#!&()]'),
+                ),
               ],
               obscureText: controller.visibility.value,
               keyboardType: TextInputType.emailAddress,
@@ -347,6 +350,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
               focusNode: controller.nickNameFocusNode,
               textInputAction: TextInputAction.done,
               textAlign: TextAlign.start,
+              inputFormatters: [LengthLimitingTextInputFormatter(6)],
               keyboardType: TextInputType.emailAddress,
               cursorColor: MyColors.themeTextColor,
               decoration: InputDecoration(

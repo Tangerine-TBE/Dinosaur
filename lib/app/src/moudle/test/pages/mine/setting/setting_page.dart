@@ -44,26 +44,6 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                 ),
                 Container(
                   height: 50,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: Text('APP 图标'),
-                      ),
-                      loadImage('', 20, 20),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 50,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),

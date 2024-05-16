@@ -206,6 +206,8 @@ class SettingController extends BaseController {
     final response = await _repo.logOut(
         bean: LogoutReqBean(accessToken: User.loginRspBean!.accessToken));
     if (response.isSuccess) {
+      SaveKey.loginUserExtendsInfo.save('');
+      SaveKey.loginUserBaseInfo.save('');
       Get.offAllNamed(RouteName.login);
     }
   }
