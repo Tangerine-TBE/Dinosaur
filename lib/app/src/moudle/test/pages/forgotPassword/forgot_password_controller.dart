@@ -25,6 +25,10 @@ class ForgotPasswordController extends BaseController {
   @override
   onInit() {
     super.onInit();
+
+  }
+  @override
+  void onReady() {
     emailController.addListener(() {
       if (emailController.text.isNotEmpty && emailErrorText.value.isNotEmpty) {
         emailErrorText.value = '';
@@ -48,6 +52,7 @@ class ForgotPasswordController extends BaseController {
         againPassWordErrorText.value = '';
       }
     });
+    super.onReady();
   }
 
   @override

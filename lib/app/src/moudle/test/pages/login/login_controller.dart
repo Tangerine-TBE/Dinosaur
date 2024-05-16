@@ -25,14 +25,18 @@ class LoginController extends BaseController {
   final switchType = 1.obs;
 
   @override
-  onInit() async {
-    super.onInit();
+  onInit()  {
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    super.onInit();
+
+
+  }
+  @override
+  onReady() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     name.value = packageInfo.version;
   }
-
   switchLoginType() {
     switchType.value = 2;
   }

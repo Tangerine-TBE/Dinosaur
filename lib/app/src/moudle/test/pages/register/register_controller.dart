@@ -64,9 +64,13 @@ class RegisterController extends BaseController {
   @override
   onInit() {
     super.onInit();
+
+  }
+  @override
+  onReady(){
     birthController.setText(DateTime.now().toString().split(' ')[0]);
     emailController.addListener(
-      () {
+          () {
         if (emailController.text.isNotEmpty &&
             emailErrorText.value.isNotEmpty) {
           emailErrorText.value = '';
@@ -97,6 +101,7 @@ class RegisterController extends BaseController {
         currentIndex.value = pageController.page!.toInt();
       }
     });
+    super.onReady();
   }
 
   onIndex2PageNextStep() {
