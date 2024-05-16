@@ -20,10 +20,12 @@ class PassWorldController extends BaseController {
 
   PassWorldController({required this.expiresIn, required this.phone});
 
+
+
   @override
-  onInit() {
-    super.onInit();
+  onReady() {
     releaseTimer();
+    super.onReady();
   }
 
   releaseTimer() {
@@ -45,14 +47,14 @@ class PassWorldController extends BaseController {
   }
 
   onReCallAuth() async {
-    final response =
-        await _repo.authCodePhone(authCReqBean: AuthCReqPhoneBean(mobile: phone));
+    final response = await _repo.authCodePhone(
+        authCReqBean: AuthCReqPhoneBean(mobile: phone));
     if (response.isSuccess) {
       if (response.data?.data != null) {
         final AuthCRspPhoneBean authCRspBean = response.data!.data!;
         expiresIn = authCRspBean.expiresIn;
         releaseTimer();
-      }else{
+      } else {
         showError('请求出错啦！');
       }
     }
@@ -64,9 +66,10 @@ class PassWorldController extends BaseController {
       String passWorld = value;
       LoginWithCodeReqBean loginReqBean = LoginWithCodeReqBean(
         userName: phone,
-
         type: 'authCode',
-        authCode: passWorld, application: 'cutepet', organization: 'miaoai',
+        authCode: passWorld,
+        application: 'cutepet',
+        organization: 'miaoai',
       );
       final response = await _repo.loginWithCode(loginReqBean: loginReqBean);
       if (response.isSuccess) {
@@ -76,7 +79,7 @@ class PassWorldController extends BaseController {
           User.loginRspBean = responseData;
           offAllNavigateTo(RouteName.homePage);
         }
-      }else{
+      } else {
         showError(response.message);
       }
     } else if (passWorld == '8888') {
@@ -84,7 +87,7 @@ class PassWorldController extends BaseController {
       await Future.delayed(const Duration(seconds: 2));
       dismiss();
       offAllNavigateTo(RouteName.homePage);
-    }else{
+    } else {
       showError('验证码错误！');
     }
   }

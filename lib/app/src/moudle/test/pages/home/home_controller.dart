@@ -17,8 +17,13 @@ class HomeController extends PlayDeviceBleController {
   double? currentPage = 0.0;
 
   @override
-  void onInit() async {
+  void onInit()  {
     pageController = PageController();
+
+    super.onInit();
+  }
+  @override
+  void onReady(){
     pageController.addListener(() {
       if (currentPage == 3) {
         SaveKey.loginUserExtendsInfo.save(User.loginUserInfo?.toJson());
@@ -26,9 +31,8 @@ class HomeController extends PlayDeviceBleController {
       currentPage = pageController.page;
     });
     _fetchUserData();
-    super.onInit();
+    super.onReady();
   }
-
   _fetchUserData() async {
     final HomeReq homeReq = HomeReq(id: User.loginRspBean!.userId);
     final response = await apiLaunch(() => _repo.getUserInfo(homeReq: homeReq),

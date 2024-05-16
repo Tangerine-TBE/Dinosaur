@@ -14,14 +14,18 @@ class PeriodRecordController extends BaseController {
   final createDate = <String>[];
   final deletesDate = <String>[];
   final _repo = Get.find<PeriodRecordRepo>();
-  final getPeriodRecordRsp1 = Rxn(
-  );
+  final getPeriodRecordRsp1 = Rxn();
 
   @override
   void onInit() async {
     super.onInit();
+  }
+
+  @override
+  onReady() async {
     _fetchDateTime();
     getPeriodRecord();
+    super.onReady();
   }
 
   savePeriodRecord(List<RangeItem> items) async {
@@ -36,24 +40,21 @@ class PeriodRecordController extends BaseController {
     SavePeriodRecordReq savePeriodRecordReq = SavePeriodRecordReq(
       endDate: endTime,
       startDate: startTime,
-      userId: User.loginRspBean!.userId,);
-     await _repo.savePeriodRecord(recordReq:savePeriodRecordReq);
-
+      userId: User.loginRspBean!.userId,
+    );
+    await _repo.savePeriodRecord(recordReq: savePeriodRecordReq);
   }
 
   getPeriodRecord() async {
     final firstDayOfMonth =
-    DateTime(DateTime
-        .now()
-        .year, DateTime
-        .now()
-        .month, 1);
+        DateTime(DateTime.now().year, DateTime.now().month, 1);
 
     final GetPeriodRecordReq recordReq = GetPeriodRecordReq(
         fromDate: firstDayOfMonth,
         toDate: DateTime.now(),
         userId: User.loginRspBean!.userId);
-    final response = await _repo.getPeriodRecord1(map: {'userId':User.loginRspBean!.userId});
+    final response = await _repo
+        .getPeriodRecord1(map: {'userId': User.loginRspBean!.userId});
     if (response.isSuccess) {
       if (response.data != null) {
         if (response.data!.data != null) {

@@ -22,6 +22,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
     return Scaffold(
         backgroundColor: const Color(0xffeff1f3),
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           backgroundColor: const Color(0xffeff1f3),
           centerTitle: false,
           title: const Text(

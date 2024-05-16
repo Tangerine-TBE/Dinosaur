@@ -38,6 +38,7 @@ class PetController extends BaseController {
   void onReady() {
     commonManager.init();
     showTipDialog();
+    super.onReady();
   }
 
   naviToDetails(PostsList item, int index) {

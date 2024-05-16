@@ -32,8 +32,8 @@ class ChartController extends BaseController {
 
   @override
   void onReady() {
-    super.onReady();
     onPageChanged(initialIndex);
+    super.onReady();
   }
 
   onPageChanged(int index) {

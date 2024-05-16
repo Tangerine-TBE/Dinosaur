@@ -79,9 +79,7 @@ class RemoteControlContentManager {
   }
 
   _close() {
-    // subscription.cancel();
   }
-
   _fetchShareWorld() {
     shareData.add(ShareDeviceBean(assetName: ResName.pic33, text: '我准备好了~'));
     shareData.add(ShareDeviceBean(assetName: ResName.pic42, text: '停一会儿~'));
@@ -94,48 +92,39 @@ class RemoteControlContentManager {
     update([shareWorldsId]);
   }
 }
-
 class PlayController extends BaseController {
   late PlaySelfContentManager playSelfContentManager;
   late RemoteControlContentManager remoteControlContentManager;
   int index = 0;
-
-
   @override
   void onInit() async {
-    super.onInit();
     playSelfContentManager = PlaySelfContentManager(update: update);
     remoteControlContentManager = RemoteControlContentManager(update: update);
-    remoteControlContentManager._fetchShareWorld();
+    super.onInit();
   }
   @override
   void onReady() {
-    super.onReady();
+    remoteControlContentManager._fetchShareWorld();
     playSelfContentManager.init();
+    super.onReady();
   }
-
   @override
   void onClose() {
     remoteControlContentManager._close();
     super.onClose();
   }
-
   void onScanClicked() {
     navigateTo(RouteName.scanPage);
   }
-
   void onSideItClicked() {
     navigateTo(RouteName.sidePage);
   }
-
   void onShakeItClicked() {
     navigateTo(RouteName.shakePage);
   }
-
   void onModelClicked() {
     navigateTo(RouteName.modelPage);
   }
-
   onCenterDetailsIndexTap(TopicList bean) {
     navigateTo(RouteName.centerDetailsPage, args: bean);
   }

@@ -25,7 +25,7 @@ class MinePostController extends BaseController {
       SafeArea(
         child: Container(
           height: 120,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(12),
@@ -120,22 +120,6 @@ class MinePostController extends BaseController {
   void onClose(){
     refreshController.dispose();
     super.onClose();
-  }
-  _fetchPostList() async {
-    final response = await _repo.getPost(
-      MineReq(
-        userId: User.loginRspBean!.userId,
-        pageSize: 10,
-        orderBy: 'createTime desc',
-        pageIndex: 1,
-      ),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        list.addAll(response.data!.data!.postsList);
-        update([listId]);
-      }
-    }
   }
   naviToDetails(PostsList item, int index) {
     var map = {'item': item, 'index': index};
