@@ -8,6 +8,7 @@ import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:app_base/network/utils/upload_utils.dart';
 import 'package:app_base/util/image.dart';
 import 'package:audio_wave/audio_wave.dart';
+import 'package:dinosaur/app/src/moudle/test/device/country.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/weight/record_sound_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
+import 'package:city_pickers/city_pickers.dart';
 
 class EditInfoController extends BaseController {
   final _repo = Get.find<EditInfoRepo>();
@@ -86,7 +88,7 @@ class EditInfoController extends BaseController {
     );
   }
 
-  onItemClicked(int index) {
+  onItemClicked(int index) async {
     if (index == 0) {
       showNickNameEditBottomSheet(listData[0]);
     } else if (index == 1) {
@@ -94,6 +96,51 @@ class EditInfoController extends BaseController {
     } else if (index == 2) {
       showSignTextEditBottomSheet(listData[2]);
     } else if (index == 3) {
+      Result? result = await CityPickers.showCityPicker(
+        showType: ShowType.p,
+        locationCode: '719',
+        height: 380,
+        confirmWidget: Text(
+          '确定',
+          style: TextStyle(
+            color: MyColors.themeTextColor,
+          ),
+        ),
+        itemExtent: 50,
+        cancelWidget: Text(
+          '取消',
+          style: TextStyle(
+            color: MyColors.themeTextColor,
+          ),
+        ),
+        itemBuilder: (value, list, index) {
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: Text(
+              value,
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+        provincesData: countriesData,
+        context: Get.context!,
+      );
+      if (result != null) {
+        ItemBean exchangedBean = ItemBean(
+            title: listData[3].title,
+            content: result.provinceName!,
+            hintText: listData[3].hintText);
+        listData[3] = exchangedBean;
+        _editUserInfo(User.getUserId(),
+            {'address': result.provinceName!});
+        if(homeRsp != null){
+          homeRsp!.address = result.provinceName!;
+        }
+        update([listId]);
+
+      }
     } else if (index == 4) {
       DatePicker.showDatePicker(
         Get.context!,
@@ -121,27 +168,27 @@ class EditInfoController extends BaseController {
   }
 
   onImage1Clicked() {
-    showImagePickerBottomSheet(imagesObxAvator,0);
+    showImagePickerBottomSheet(imagesObxAvator, 0);
   }
 
   onImage2Clicked() {
-    showImagePickerBottomSheet(imagesObxValue1,1);
+    showImagePickerBottomSheet(imagesObxValue1, 1);
   }
 
   onImage3Clicked() {
-    showImagePickerBottomSheet(imagesObxValue2,2);
+    showImagePickerBottomSheet(imagesObxValue2, 2);
   }
 
   onImage4Clicked() {
-    showImagePickerBottomSheet(imagesObxValue3,3);
+    showImagePickerBottomSheet(imagesObxValue3, 3);
   }
 
   onImage5Clicked() {
-    showImagePickerBottomSheet(imagesObxValue4,4);
+    showImagePickerBottomSheet(imagesObxValue4, 4);
   }
 
   onImage6Clicked() {
-    showImagePickerBottomSheet(imagesObxValue5,5);
+    showImagePickerBottomSheet(imagesObxValue5, 5);
   }
 
   showImagePickerBottomSheet(
@@ -279,7 +326,7 @@ class EditInfoController extends BaseController {
                               _upLoadRepo,
                               '.jpeg',
                               croppedFile.path,
-                                  (path) => _editUserInfo(
+                              (path) => _editUserInfo(
                                   User.getUserId(), {'avator': path}));
                           if (homeRsp != null) {
                             homeRsp!.avator = obxValue.value;
@@ -289,7 +336,7 @@ class EditInfoController extends BaseController {
                             _upLoadRepo,
                             '.jpeg',
                             obxValue.value,
-                                (path) {
+                            (path) {
                               _editUserInfo(
                                 User.getUserId(),
                                 {
@@ -320,7 +367,6 @@ class EditInfoController extends BaseController {
                           }
                         }
                       }
-
                     }
                   },
                   child: const Text(

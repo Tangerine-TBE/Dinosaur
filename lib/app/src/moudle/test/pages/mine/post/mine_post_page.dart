@@ -161,14 +161,14 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                     radius: 20,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Row(
@@ -176,7 +176,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                         children: [
                           Text(
                             User.getUserNickName(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           InkWell(
@@ -190,7 +190,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                         visible: item.topicTitle.isNotEmpty,
                         child: Container(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                              const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                           decoration: BoxDecoration(
                             color: const Color(0xffFF5E65).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
@@ -198,20 +198,20 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                TextSpan(
+                                const TextSpan(
                                   text: '#',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: const Color(0xffFF5E65),
+                                    color: Color(0xffFF5E65),
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 const TextSpan(text: ' '),
                                 TextSpan(
                                   text: item.topicTitle,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 10,
-                                    color: const Color(0xffFF5E65),
+                                    color: Color(0xffFF5E65),
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -226,46 +226,46 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
               ],
             ),
             if (item.content.isNotEmpty)
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
             _buildContent(index, item, context),
             Row(
               children: [
-                SizedBox(width: 50),
-                Icon(
+                const SizedBox(width: 50),
+                const Icon(
                   Icons.chat,
                   size: 14,
-                  color: const Color(
+                  color: Color(
                     0xff8F9098,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Text(
                   item.commentsNum.toString(),
-                  style: TextStyle(
-                    color: const Color(0xff8F9098),
+                  style: const TextStyle(
+                    color: Color(0xff8F9098),
                     fontSize: 10,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 122,
                 ),
                 InkWell(
                   onTap: () {},
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.star_rounded,
                         size: 14,
                         color: MyColors.textGreyColor,
                       ),
                       Text(
                         item.favorsNum.toString(),
-                        style: TextStyle(
-                          color: const Color(0xff8F9098),
+                        style: const TextStyle(
+                          color: Color(0xff8F9098),
                           fontWeight: FontWeight.w500,
                           fontSize: 10,
                         ),
@@ -281,10 +281,10 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
+                        const Text(
                           '浏览',
                           style: TextStyle(
-                              color: const Color(0xff8F9098),
+                              color: Color(0xff8F9098),
                               fontSize: 11,
                               fontWeight: FontWeight.w500),
                         ),
@@ -293,8 +293,8 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                         ),
                         Text(
                           item.viewsNum.toString(),
-                          style: TextStyle(
-                              color: const Color(0xff8F9098),
+                          style: const TextStyle(
+                              color: Color(0xff8F9098),
                               fontSize: 8,
                               fontWeight: FontWeight.w500),
                         ),
@@ -304,7 +304,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Divider(
@@ -324,7 +324,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
     final textPainter = TextPainter(
       text: TextSpan(
         text: item.content,
-        style: TextStyle(
+        style: const TextStyle(
             color: MyColors.textBlackColor,
             fontSize: 14,
             fontWeight: FontWeight.w500),
@@ -340,7 +340,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
     }
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 50,
         ),
         Column(
@@ -362,7 +362,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                         children: [
                           TextSpan(
                             text: item.content,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: MyColors.textBlackColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500),
@@ -376,7 +376,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                 onTap: () {
                   controller.naviToDetails(item, index);
                 },
-                child: Text(
+                child: const Text(
                   '全文',
                   style: TextStyle(
                       color: Colors.pink,
@@ -384,7 +384,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             if (item.images.isNotEmpty)
@@ -397,7 +397,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                       index,
                       item.images,
                       'refresh'),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],
@@ -412,7 +412,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                           MyColors.themeTextColor.withOpacity(0.3),
                           MyColors.themeTextColor.withOpacity(0.5),
                         ])),
-                    padding: EdgeInsets.only(top: 10, right: 4, left: 4),
+                    padding: const EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
                       animatedInfoKey: 'refresh_page_chart$index',
                       dataList: <List<int>>[
@@ -423,7 +423,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                       height: 30,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 14,
                   ),
                 ],
