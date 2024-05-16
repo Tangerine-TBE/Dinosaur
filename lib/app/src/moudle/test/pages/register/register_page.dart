@@ -51,7 +51,7 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
       body: Column(
         children: [
           const SizedBox(
-            height: kToolbarHeight * 2,
+            height: kToolbarHeight * 1.5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -570,10 +570,8 @@ class RegisterPage extends BaseEmptyPage<RegisterController> {
                   : MaterialStateProperty.all(
                       MyColors.themeTextColor,
                     ),
-              padding: MaterialStateProperty.all(
-                const EdgeInsets.symmetric(
-                  horizontal: 50,
-                ),
+              fixedSize: MaterialStateProperty.all(
+                const Size(200, 50),
               ),
               overlayColor: MaterialStateProperty.all(
                 MyColors.iconSelectedColor,

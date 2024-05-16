@@ -171,6 +171,7 @@ class RegisterController extends BaseController {
       } else {
         final AuthCRspEmailBean authCRspBean = response.data!.data!;
         expiresIn =  authCRspBean.expiresIn;
+        releaseTimer();
         pageController.jumpToPage(5);
       }
     } else {
@@ -180,6 +181,7 @@ class RegisterController extends BaseController {
 
   onIndex1PageNextStep(String value) async {
     //先上传头像
+    showLoading();
     final response = await _uploadRepo.getUploadAuth();
     var imageUrls = '';
     if (response.isSuccess) {

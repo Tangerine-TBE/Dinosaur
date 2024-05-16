@@ -2,6 +2,7 @@ import 'package:app_base/config/size.dart';
 import 'package:app_base/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,12 @@ class ForgotPasswordPage extends BaseEmptyPage<ForgotPasswordController> {
                   textAlign: TextAlign.start,
                   keyboardType: TextInputType.emailAddress,
                   cursorColor: MyColors.themeTextColor,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(16),
+                    FilteringTextInputFormatter.allow(
+                      RegExp('[a-zA-z]|[0-9]|[+-/*?.><%@#!&()]'),
+                    ),
+                  ],
                   decoration: InputDecoration(
                     hintText: '请输入邮箱',
                     suffix: TextButton(
