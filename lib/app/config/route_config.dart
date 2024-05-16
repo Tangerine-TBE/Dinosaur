@@ -38,6 +38,10 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_controlle
 import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review.page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/review/mine_review_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/about_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/about_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/select_device_controller.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/select_device_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/setting/setting_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/play/play_controller.dart';
@@ -93,6 +97,28 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
+        GetPage(
+          name: RouteName.selectDevice,
+          page: () => const SelectDevicePage(),
+          binding: BindingsBuilder(
+            () {
+              Get.lazyPut(
+                () => SelectDeviceController(),
+              );
+            },
+          ),
+        ),
+    GetPage(
+      name: RouteName.about,
+      page: () => const AboutPage(),
+      binding: BindingsBuilder(
+            () {
+          Get.lazyPut(
+                () => AboutController(),
+          );
+        },
+      ),
+    ),
         GetPage(
           name: RouteName.waveDemo,
           page: () => const WaveFormDemoPage(),

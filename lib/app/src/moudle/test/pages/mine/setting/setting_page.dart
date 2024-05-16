@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 
 class SettingPage extends BaseEmptyPage<SettingController> {
   const SettingPage({super.key});
+
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffeff1f3),
+      backgroundColor: const Color(0xffeff1f3),
       appBar: AppBar(
         scrolledUnderElevation: 0,
         title: const Text(
@@ -30,7 +31,8 @@ class SettingPage extends BaseEmptyPage<SettingController> {
             SliverList.list(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: const Row(
                     children: [
                       Expanded(
@@ -42,26 +44,31 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                     ],
                   ),
                 ),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  color: Colors.white,
-                  child: const Row(
-                    children: [
-                      Expanded(
-                        child: Text('选择品牌'),
-                      ),
-                      Text('小萌宠'),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                      ),
-                    ],
+                InkWell(
+                  onTap: () {
+                    controller.naviToSelectDevicePage();
+                  },
+                  child: Container(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    color: Colors.white,
+                    child: const Row(
+                      children: [
+                        Expanded(
+                          child: Text('选择品牌'),
+                        ),
+                        Text('小萌宠'),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -88,12 +95,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('允许被搭讪'),
                       ),
-                     Obx(() =>
-                         CupertinoSwitch(value: controller.allowToBother.value, onChanged: (value) {
-                           controller.allowToBother.value = value;
-                           controller.saveSettingInfo(SettingKey.allowToBother.toString(), value?"1":"2");
-                         })
-                     )
+                      Obx(() => CupertinoSwitch(
+                          value: controller.allowToBother.value,
+                          onChanged: (value) {
+                            controller.allowToBother.value = value;
+                            controller.saveSettingInfo(
+                                SettingKey.allowToBother.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -108,13 +117,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('波形作品公开'),
                       ),
-                      Obx(() =>
-                          CupertinoSwitch(value: controller.allowToPublic.value, onChanged: (value) {
+                      Obx(() => CupertinoSwitch(
+                          value: controller.allowToPublic.value,
+                          onChanged: (value) {
                             controller.allowToPublic.value = value;
-                            controller.saveSettingInfo(SettingKey.allowToPublic.toString(), value?"1":"2");
-
-                          })
-                      )
+                            controller.saveSettingInfo(
+                                SettingKey.allowToPublic.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -142,11 +152,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('萌宠物圈互动消息'),
                       ),
-                      Obx(() =>    CupertinoSwitch(value: controller.petMessageNotify.value, onChanged: (value) {
-                        controller.petMessageNotify.value =value;
-                        controller.saveSettingInfo(SettingKey.petMessageNotify.toString(), value?"1":"2");
-
-                      }))
+                      Obx(() => CupertinoSwitch(
+                          value: controller.petMessageNotify.value,
+                          onChanged: (value) {
+                            controller.petMessageNotify.value = value;
+                            controller.saveSettingInfo(
+                                SettingKey.petMessageNotify.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -161,11 +174,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('波形互动消息'),
                       ),
-                      Obx(() => CupertinoSwitch(value: controller.chartMessageNotify.value, onChanged: (value) {
-                        controller.chartMessageNotify.value = value;
-                        controller.saveSettingInfo(SettingKey.chartMessageNotify.toString(), value?"1":"2");
-
-                      }))
+                      Obx(() => CupertinoSwitch(
+                          value: controller.chartMessageNotify.value,
+                          onChanged: (value) {
+                            controller.chartMessageNotify.value = value;
+                            controller.saveSettingInfo(
+                                SettingKey.chartMessageNotify.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -180,13 +196,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('搭讪消息'),
                       ),
-                      Obx(() =>
-                          CupertinoSwitch(value: controller.botherMessageNotify.value, onChanged: (value) {
+                      Obx(() => CupertinoSwitch(
+                          value: controller.botherMessageNotify.value,
+                          onChanged: (value) {
                             controller.botherMessageNotify.value = value;
-                            controller.saveSettingInfo(SettingKey.botherMessageNotify.toString(), value?"1":"2");
-
-                          })
-                      )
+                            controller.saveSettingInfo(
+                                SettingKey.botherMessageNotify.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -201,13 +218,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('被关注消息'),
                       ),
-                      Obx(() =>
-                          CupertinoSwitch(value: controller.subscribeMessageNotify.value, onChanged: (value) {
+                      Obx(() => CupertinoSwitch(
+                          value: controller.subscribeMessageNotify.value,
+                          onChanged: (value) {
                             controller.subscribeMessageNotify.value = value;
-                            controller.saveSettingInfo(SettingKey.subscribeMessageNotify.toString(), value?"1":"2");
-
-                          })
-                      )
+                            controller.saveSettingInfo(
+                                SettingKey.subscribeMessageNotify.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -222,11 +240,14 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                       Expanded(
                         child: Text('私信消息'),
                       ),
-                      Obx(() => CupertinoSwitch(value: controller.chatPrivateMessageNotify.value, onChanged: (value) {
-                        controller.chatPrivateMessageNotify.value = value;
-                        controller.saveSettingInfo(SettingKey.chatPrivateMessageNotify.toString(), value?"1":"2");
-
-                      }))
+                      Obx(() => CupertinoSwitch(
+                          value: controller.chatPrivateMessageNotify.value,
+                          onChanged: (value) {
+                            controller.chatPrivateMessageNotify.value = value;
+                            controller.saveSettingInfo(
+                                SettingKey.chatPrivateMessageNotify.toString(),
+                                value ? "1" : "2");
+                          }))
                     ],
                   ),
                 ),
@@ -240,10 +261,10 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                   ),
                   color: Colors.white,
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       controller.onUserCancel(context);
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Expanded(
                           child: Text('账号注销'),
@@ -256,28 +277,33 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 50,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text('关于'),
-                      ),
-                      Text(
-                        'v1.0.1(1)',
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 14,
-                      ),
-                    ],
+                InkWell(
+                  onTap: (){
+                    navigateTo(RouteName.about);
+                  },
+                  child: Container(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                    ),
+                    color: Colors.white,
+                    child: const Row(
+                      children: [
+                        Expanded(
+                          child: Text('关于'),
+                        ),
+                        Text(
+                          'v1.0.1(1)',
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 14,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -285,11 +311,12 @@ class SettingPage extends BaseEmptyPage<SettingController> {
                 ),
                 Center(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       controller.onLogOutClicked();
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow: [

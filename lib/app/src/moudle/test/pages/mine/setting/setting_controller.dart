@@ -36,6 +36,9 @@ class SettingController extends BaseController {
 
     _fetchSettingInfo();
   }
+  naviToSelectDevicePage(){
+    navigateTo(RouteName.selectDevice);
+  }
 
   _fetchSettingInfo() async {
     final response = await _settingRepo.getSettingInfo(

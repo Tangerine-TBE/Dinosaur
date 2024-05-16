@@ -120,5 +120,6 @@ class ResName {
   static const String pet3 = 'assets/images/159.png';
   static const String pet4 = 'assets/images/160.png';
   static const String pet5 = 'assets/images/161.png';
+  static const String logo = 'assets/images/logo.png';
 
 }
