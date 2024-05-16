@@ -7,7 +7,6 @@ import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controll
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
@@ -38,12 +37,6 @@ class HomeController extends PlayDeviceBleController {
       if (response.data != null) {
         final HomeRsp? homeRsp = response.data;
         if (homeRsp != null) {
-          if (homeRsp.images.isEmpty || homeRsp.images.length < 6) {
-            var size = 5 - homeRsp.images.length;
-            for (int i = 1; i <= size; i++) {
-              homeRsp.images.add('');
-            }
-          }
           SaveKey.loginUserExtendsInfo.save(response.data!.toJson());
           User.loginUserInfo = response.data;
         }

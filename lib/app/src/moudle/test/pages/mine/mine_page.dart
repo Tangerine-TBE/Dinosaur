@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/mine_controller.dart';
 
 class MinePage extends BaseEmptyPage<MineController> {
@@ -56,10 +57,12 @@ class MinePage extends BaseEmptyPage<MineController> {
                           child:  Row(
                             children: [
                               InkWell(
-                                onTap: (){controller.onEditInfoClicked();},
-                                child: Padding(
+                                onTap: (){
+                                  controller.onEditInfoClicked();
+                                  },
+                                child: const Padding(
                                   padding: EdgeInsets.all(10),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.edit,
                                     color: Colors.white,
                                     size: 20,
@@ -69,9 +72,9 @@ class MinePage extends BaseEmptyPage<MineController> {
 
                               InkWell(
                                 onTap: (){controller.onSettingClicked();},
-                                child: Padding(
+                                child: const Padding(
                                   padding: EdgeInsets.all(10),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.settings,
                                     color: Colors.white,
                                     size: 20,
@@ -93,9 +96,13 @@ class MinePage extends BaseEmptyPage<MineController> {
                             SizedBox(height: 14),
                             Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundImage: loadImageProvider(User.getUserAvator()),
-                                  radius: 28,
+                                GetBuilder<MineController>(
+                                 builder: (controller){
+                                   return     CircleAvatar(
+                                     backgroundImage: loadImageProvider(User.getUserAvator()),
+                                     radius: 28,
+                                   );
+                                 },id: controller.avatorId,
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -103,14 +110,16 @@ class MinePage extends BaseEmptyPage<MineController> {
                                  Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      User.getUserNickName(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                                      GetBuilder<MineController>(builder: (controller){
+                                        return              Text(
+                                          User.getUserNickName(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        );
+                                      },id: controller.nickNameId,),
                                     Text(
                                      User.getUserId(),
                                       style: const TextStyle(

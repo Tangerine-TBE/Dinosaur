@@ -74,7 +74,11 @@ ImageProvider loadImageProvider(String url) {
     return const AssetImage(ResName.loaded_failure);
   } else {
     try {
-      return NetworkImage(url);
+      if(url.startsWith('http')){
+        return NetworkImage(url);
+      }else{
+        return FileImage(File(url));
+      }
     } catch (e) {
       return const AssetImage(ResName.loaded_failure);
     }

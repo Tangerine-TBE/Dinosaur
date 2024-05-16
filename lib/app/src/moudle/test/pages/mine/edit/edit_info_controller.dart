@@ -26,12 +26,15 @@ class EditInfoController extends BaseController {
   final _upLoadRepo = Get.find<UpLoadRepo>();
   final listData = <ItemBean>[];
   final listId = 1;
-  final images = <String>['', '', '', '', '', ''].obs;
+  final imagesObxAvator = ''.obs;
+  final imagesObxValue1 = ''.obs;
+  final imagesObxValue2 = ''.obs;
+  final imagesObxValue3 = ''.obs;
+  final imagesObxValue4 = ''.obs;
+  final imagesObxValue5 = ''.obs;
   late FlutterSoundRecorder record;
   late FlutterSoundPlayer play;
   HomeRsp? homeRsp = User.loginUserInfo;
-  final imageArr = <String>[];
-  var copyImages = <String>[];
   final playVoice = false.obs;
   final voiceFile = ''.obs;
 
@@ -42,20 +45,12 @@ class EditInfoController extends BaseController {
     play = FlutterSoundPlayer(logLevel: Level.debug);
     if (homeRsp != null) {
       voiceFile.value = homeRsp!.voiceSign;
-      images[0] = homeRsp!.avator;
-      for (int i = 0; i < homeRsp!.images.length - 1; i++) {
-        if (i == 0) {
-          images[1] = homeRsp!.images[i];
-        } else if (i == 1) {
-          images[2] = homeRsp!.images[i];
-        } else if (i == 2) {
-          images[3] = homeRsp!.images[i];
-        } else if (i == 3) {
-          images[4] = homeRsp!.images[i];
-        } else if (i == 4) {
-          images[5] = homeRsp!.images[i];
-        }
-      }
+      imagesObxAvator.value = homeRsp!.avator;
+      imagesObxValue1.value = homeRsp!.image1;
+      imagesObxValue2.value = homeRsp!.image2;
+      imagesObxValue3.value = homeRsp!.image3;
+      imagesObxValue4.value = homeRsp!.image4;
+      imagesObxValue5.value = homeRsp!.image5;
     }
     super.onInit();
   }
@@ -111,7 +106,8 @@ class EditInfoController extends BaseController {
               content: '${date.year}-${date.month}-${date.day}',
               hintText: listData[4].hintText);
           listData[4] = exchangedBean;
-          _editUserInfo(User.getUserId(),{'sign': '${date.year}-${date.month}-${date.day}'});
+          _editUserInfo(User.getUserId(),
+              {'sign': '${date.year}-${date.month}-${date.day}'});
           HomeRsp? homeRsp = User.loginUserInfo;
           if (homeRsp != null) {
             homeRsp.birthday = '${date.year}-${date.month}-${date.day}';
@@ -125,36 +121,39 @@ class EditInfoController extends BaseController {
   }
 
   onImage1Clicked() {
-    showImagePickerBottomSheet(1);
+    showImagePickerBottomSheet(imagesObxAvator,0);
   }
 
   onImage2Clicked() {
-    showImagePickerBottomSheet(2);
+    showImagePickerBottomSheet(imagesObxValue1,1);
   }
 
   onImage3Clicked() {
-    showImagePickerBottomSheet(3);
+    showImagePickerBottomSheet(imagesObxValue2,2);
   }
 
   onImage4Clicked() {
-    showImagePickerBottomSheet(4);
+    showImagePickerBottomSheet(imagesObxValue3,3);
   }
 
   onImage5Clicked() {
-    showImagePickerBottomSheet(5);
+    showImagePickerBottomSheet(imagesObxValue4,4);
   }
 
   onImage6Clicked() {
-    showImagePickerBottomSheet(6);
+    showImagePickerBottomSheet(imagesObxValue5,5);
   }
 
-  showImagePickerBottomSheet(int index) async {
+  showImagePickerBottomSheet(
+    RxString obxValue,
+    int index,
+  ) async {
     await Get.bottomSheet(
       backgroundColor: Colors.white,
       elevation: 0,
       SafeArea(
         child: Container(
-          height: images[index - 1].isNotEmpty ? 200 : 150,
+          height: obxValue.value.isNotEmpty ? 200 : 150,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -188,40 +187,50 @@ class EditInfoController extends BaseController {
                         ],
                       );
                       if (croppedFile != null) {
-                        images[index - 1] = croppedFile.path;
-                        if (index == 1) {
-                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', croppedFile.path,
-                              (path) => _editUserInfo(User.getUserId(),{'avator': path}));
+                        obxValue.value = croppedFile.path;
+                        if (index == 0) {
+                          UploadUtils.upLoadFile(
+                              _upLoadRepo,
+                              'jpeg',
+                              croppedFile.path,
+                              (path) => _editUserInfo(
+                                  User.getUserId(), {'avator': path}));
                           if (homeRsp != null) {
-                            homeRsp!.avator = images[index - 1];
+                            homeRsp!.avator = obxValue.value;
                           }
                         } else {
-                          var currentImages = <String>[];
-                          for (int i = 0; i < images.length; i++) {
-                            if (i != 0) {
-                              currentImages.add(images[i]);
-                            }
-                          }
-                          copyImages.clear();
-                          copyImages.addAll(currentImages);
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
                             'jpeg',
-                            images[index - 1],
+                            obxValue.value,
                             (path) {
-                              copyImages[index - 2] = path;
-                              _editUserInfo(User.getUserId(),
+                              _editUserInfo(
+                                User.getUserId(),
                                 {
-                                  'imageArr': List<dynamic>.from(
-                                    copyImages.map((x) => x),
-                                  ),
-
+                                  'image$index': obxValue.value,
                                 },
                               );
                             },
                           );
-                          if (homeRsp != null) {
-                            homeRsp!.images[index - 1] = images[index - 1];
+                          if (index == 1) {}
+                          switch (index) {
+                            case 1:
+                              homeRsp!.image1 = obxValue.value;
+                              break;
+                            case 2:
+                              homeRsp!.image2 = obxValue.value;
+                              break;
+                            case 3:
+                              homeRsp!.image3 = obxValue.value;
+                              break;
+                            case 4:
+                              homeRsp!.image4 = obxValue.value;
+                              break;
+                            case 5:
+                              homeRsp!.image5 = obxValue.value;
+                              break;
+                            default:
+                              break;
                           }
                         }
                       }
@@ -265,42 +274,54 @@ class EditInfoController extends BaseController {
                         ],
                       );
                       if (croppedFile != null) {
-                        images[index - 1] = croppedFile.path;
-                        if (index == 1) {
-                          UploadUtils.upLoadFile(_upLoadRepo, 'jpeg', croppedFile.path,
-                              (path) => _editUserInfo(User.getUserId(),{'avator': path}));
+                        obxValue.value = croppedFile.path;
+                        if (index == 0) {
+                          UploadUtils.upLoadFile(
+                              _upLoadRepo,
+                              'jpeg',
+                              croppedFile.path,
+                                  (path) => _editUserInfo(
+                                  User.getUserId(), {'avator': path}));
                           if (homeRsp != null) {
-                            homeRsp!.avator = images[index - 1];
+                            homeRsp!.avator = obxValue.value;
                           }
                         } else {
-                          var currentImages = <String>[];
-                          for (int i = 0; i < images.length; i++) {
-                            if (i != 0) {
-                              currentImages.add(images[i]);
-                            }
-                          }
-                          copyImages.clear();
-                          copyImages.addAll(currentImages);
                           UploadUtils.upLoadFile(
                             _upLoadRepo,
                             'jpeg',
-                            croppedFile.path,
-                            (path) {
-                              copyImages[index - 2] = path;
-                              _editUserInfo(User.getUserId(),
+                            obxValue.value,
+                                (path) {
+                              _editUserInfo(
+                                User.getUserId(),
                                 {
-                                  'imageArr': List<dynamic>.from(
-                                    copyImages.map((x) => x),
-                                  ),
+                                  'image$index': obxValue.value,
                                 },
                               );
                             },
                           );
-                          if (homeRsp != null) {
-                            homeRsp!.images[index - 1] = images[index - 1];
+                          if (index == 1) {}
+                          switch (index) {
+                            case 1:
+                              homeRsp!.image1 = obxValue.value;
+                              break;
+                            case 2:
+                              homeRsp!.image2 = obxValue.value;
+                              break;
+                            case 3:
+                              homeRsp!.image3 = obxValue.value;
+                              break;
+                            case 4:
+                              homeRsp!.image4 = obxValue.value;
+                              break;
+                            case 5:
+                              homeRsp!.image5 = obxValue.value;
+                              break;
+                            default:
+                              break;
                           }
                         }
                       }
+
                     }
                   },
                   child: const Text(
@@ -308,26 +329,23 @@ class EditInfoController extends BaseController {
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
-                if (images[index - 1].isNotEmpty)
+                if (obxValue.value.isNotEmpty)
                   const Divider(
                     height: 1,
                     color: Colors.pink,
                   ),
-                if (images[index - 1].isNotEmpty)
+                if (obxValue.value.isNotEmpty)
                   MaterialButton(
                     minWidth: double.infinity,
                     onPressed: () {
-                      images[index - 1] = '';
+                      obxValue.value = '';
                       if (index == 1) {
-                        _editUserInfo(User.getUserId(),{'avator': ''});
+                        _editUserInfo(User.getUserId(), {'avator': ''});
                       } else {
-                        copyImages[index - 2] = '';
-                        _editUserInfo(User.getUserId(),
+                        _editUserInfo(
+                          User.getUserId(),
                           {
-                            'imageArr': List<dynamic>.from(
-                              copyImages.map((x) => x),
-                            ),
-
+                            'image$index': obxValue.value,
                           },
                         );
                       }
@@ -411,7 +429,8 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[0] = exchangedBean;
                     update([listId]);
-                    _editUserInfo(User.getUserId(),{'nickName': textEditController.text});
+                    _editUserInfo(User.getUserId(),
+                        {'nickName': textEditController.text});
                     if (homeRsp != null) {
                       homeRsp!.nickName = textEditController.text;
                     }
@@ -691,7 +710,8 @@ class EditInfoController extends BaseController {
                               InkWell(
                                 onTap: () {
                                   //delete
-                                  _editUserInfo(User.getUserId(),{'voiceSign': ''});
+                                  _editUserInfo(
+                                      User.getUserId(), {'voiceSign': ''});
                                   if (homeRsp != null) {
                                     homeRsp!.voiceSign = '';
                                   }
@@ -741,8 +761,9 @@ class EditInfoController extends BaseController {
                           _upLoadRepo,
                           "mp3",
                           recordUrl!,
-                          (path) => _repo.editUserInfo(path:User.getUserId(),
-                           map: {
+                          (path) => _repo.editUserInfo(
+                            path: User.getUserId(),
+                            map: {
                               'voiceSign':
                                   "https://cxw-user.oss-cn-hangzhou.aliyuncs.com/$path",
                             },
@@ -865,7 +886,8 @@ class EditInfoController extends BaseController {
                         hintText: itemBean.hintText);
                     listData[2] = exchangedBean;
                     update([listId]);
-                    _editUserInfo(User.getUserId(),{'sign': textEditController.text});
+                    _editUserInfo(
+                        User.getUserId(), {'sign': textEditController.text});
                     if (homeRsp != null) {
                       homeRsp!.sign = textEditController.text;
                     }

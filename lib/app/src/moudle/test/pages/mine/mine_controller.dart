@@ -1,5 +1,8 @@
 import 'package:app_base/exports.dart';
+import 'package:get/get.dart';
 class MineController extends BaseController {
+  final avatorId = 1;
+  final nickNameId = 2;
   List<ItemBean> buildTitleItem() {
     var list = <ItemBean>[];
     list.add(
@@ -48,8 +51,10 @@ class MineController extends BaseController {
     }
   }
 
-  onEditInfoClicked() {
-    navigateTo(RouteName.editInfo);
+  onEditInfoClicked() async {
+    await Get.toNamed(RouteName.editInfo);
+    update([avatorId]);
+    update([nickNameId]);
   }
 
   onSettingClicked() {

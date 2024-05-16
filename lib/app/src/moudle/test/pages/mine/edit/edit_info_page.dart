@@ -57,7 +57,7 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       flex: 2,
                                       child: InkWell(
                                         onTap: controller.onImage1Clicked,
-                                        child: controller.images[0].isEmpty
+                                        child:  controller.imagesObxAvator.value.isEmpty
                                             ? Container(
                                                 decoration: const BoxDecoration(
                                                   color: MyColors.textGreyColor,
@@ -93,16 +93,15 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                     ),
                                                   ),
                                                 ),
-                                                child: controller.images[0]
+                                                child:  controller.imagesObxAvator.value
                                                         .startsWith('http')
                                                     ? CachedNetworkImage(
                                                         width: double.infinity,
                                                         height: double.infinity,
-                                                        imageUrl: controller
-                                                            .images[0],
+                                                        imageUrl:  controller.imagesObxAvator.value
                                                       )
                                                     : loadImageByPath(
-                                                        controller.images[0],
+                                                        controller.imagesObxAvator.value,
                                                         double.infinity,
                                                         double.infinity,
                                                       ),
@@ -116,8 +115,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                           Flexible(
                                             child: InkWell(
                                               onTap: controller.onImage2Clicked,
-                                              child: controller
-                                                      .images[1].isEmpty
+                                              child:   controller
+                                                  .imagesObxValue1.value.isEmpty
                                                   ? Container(
                                                       decoration: BoxDecoration(
                                                         color: MyColors
@@ -155,27 +154,35 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                           ),
                                                         ),
                                                       ),
-                                                      child: controller.images[1]
-                                                          .startsWith('http')
+                                                      child: controller
+                                                              .imagesObxValue1
+                                                              .value
+                                                              .startsWith(
+                                                                  'http')
                                                           ? CachedNetworkImage(
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        imageUrl: controller
-                                                            .images[1],
-                                                      )
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                              imageUrl: controller
+                                                                  .imagesObxValue1
+                                                                  .value,
+                                                            )
                                                           : loadImageByPath(
-                                                        controller.images[1],
-                                                        double.infinity,
-                                                        double.infinity,
-                                                      ),
+                                                              controller
+                                                                  .imagesObxValue1
+                                                                  .value,
+                                                              double.infinity,
+                                                              double.infinity,
+                                                            ),
                                                     ),
                                             ),
                                           ),
                                           Flexible(
                                             child: InkWell(
                                               onTap: controller.onImage3Clicked,
-                                              child: controller
-                                                      .images[2].isEmpty
+                                              child: controller.imagesObxValue2
+                                                      .value.isEmpty
                                                   ? Container(
                                                       decoration: BoxDecoration(
                                                         color: MyColors
@@ -213,19 +220,27 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                           ),
                                                         ),
                                                       ),
-                                                      child: controller.images[2]
-                                                          .startsWith('http')
+                                                      child: controller
+                                                              .imagesObxValue2
+                                                              .value
+                                                              .startsWith(
+                                                                  'http')
                                                           ? CachedNetworkImage(
-                                                        width: double.infinity,
-                                                        height: double.infinity,
-                                                        imageUrl: controller
-                                                            .images[2],
-                                                      )
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                              imageUrl: controller
+                                                                  .imagesObxValue2
+                                                                  .value,
+                                                            )
                                                           : loadImageByPath(
-                                                        controller.images[2],
-                                                        double.infinity,
-                                                        double.infinity,
-                                                      ),
+                                                              controller
+                                                                  .imagesObxValue2
+                                                                  .value,
+                                                              double.infinity,
+                                                              double.infinity,
+                                                            ),
                                                     ),
                                             ),
                                           ),
@@ -243,7 +258,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       flex: 1,
                                       child: InkWell(
                                         onTap: controller.onImage4Clicked,
-                                        child: controller.images[3].isEmpty
+                                        child: controller
+                                                .imagesObxValue3.value.isEmpty
                                             ? Container(
                                                 decoration: BoxDecoration(
                                                   color: MyColors.textGreyColor,
@@ -279,19 +295,23 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                     ),
                                                   ),
                                                 ),
-                                                child: controller.images[3]
-                                                    .startsWith('http')
+                                                child: controller
+                                                        .imagesObxValue3.value
+                                                        .startsWith('http')
                                                     ? CachedNetworkImage(
-                                                  width: double.infinity,
-                                                  height: double.infinity,
-                                                  imageUrl: controller
-                                                      .images[3],
-                                                )
+                                                        width: double.infinity,
+                                                        height: double.infinity,
+                                                        imageUrl: controller
+                                                            .imagesObxValue3
+                                                            .value,
+                                                      )
                                                     : loadImageByPath(
-                                                  controller.images[3],
-                                                  double.infinity,
-                                                  double.infinity,
-                                                ),
+                                                        controller
+                                                            .imagesObxValue3
+                                                            .value,
+                                                        double.infinity,
+                                                        double.infinity,
+                                                      ),
                                               ),
                                       ),
                                     ),
@@ -299,7 +319,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                         flex: 1,
                                         child: InkWell(
                                           onTap: controller.onImage5Clicked,
-                                          child: controller.images[4].isEmpty
+                                          child: controller
+                                                  .imagesObxValue4.value.isEmpty
                                               ? Container(
                                                   decoration: BoxDecoration(
                                                     color:
@@ -337,19 +358,25 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                       ),
                                                     ),
                                                   ),
-                                                  child: controller.images[4]
-                                                      .startsWith('http')
+                                                  child: controller
+                                                          .imagesObxValue4.value
+                                                          .startsWith('http')
                                                       ? CachedNetworkImage(
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    imageUrl: controller
-                                                        .images[4],
-                                                  )
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          imageUrl: controller
+                                                              .imagesObxValue4
+                                                              .value,
+                                                        )
                                                       : loadImageByPath(
-                                                    controller.images[4],
-                                                    double.infinity,
-                                                    double.infinity,
-                                                  ),
+                                                          controller
+                                                              .imagesObxValue4
+                                                              .value,
+                                                          double.infinity,
+                                                          double.infinity,
+                                                        ),
                                                 ),
                                         )),
                                     Flexible(
@@ -357,7 +384,8 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                       child: InkWell(
                                         child: InkWell(
                                           onTap: controller.onImage6Clicked,
-                                          child: controller.images[5].isEmpty
+                                          child: controller
+                                                  .imagesObxValue5.value.isEmpty
                                               ? Container(
                                                   decoration: BoxDecoration(
                                                     color:
@@ -395,19 +423,25 @@ class EditInfoPage extends BaseEmptyPage<EditInfoController> {
                                                       ),
                                                     ),
                                                   ),
-                                                  child:controller.images[5]
-                                                      .startsWith('http')
+                                                  child: controller
+                                                          .imagesObxValue5.value
+                                                          .startsWith('http')
                                                       ? CachedNetworkImage(
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    imageUrl: controller
-                                                        .images[5],
-                                                  )
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          imageUrl: controller
+                                                              .imagesObxValue5
+                                                              .value,
+                                                        )
                                                       : loadImageByPath(
-                                                    controller.images[5],
-                                                    double.infinity,
-                                                    double.infinity,
-                                                  ),
+                                                          controller
+                                                              .imagesObxValue5
+                                                              .value,
+                                                          double.infinity,
+                                                          double.infinity,
+                                                        ),
                                                 ),
                                         ),
                                       ),
