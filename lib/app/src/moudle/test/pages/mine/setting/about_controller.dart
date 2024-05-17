@@ -38,7 +38,12 @@ class AboutController extends BaseController {
   onTapAgreement() {
     _showProtocolDialog();
   }
-
+  onUserUseAgreement(){
+    _showUserUseDialog();
+  }
+  onUseUserAgreement(){
+    _showUseUserDialog();
+  }
   void _showProtocolDialog() async {
     var selectedConfirm = false;
     await Get.bottomSheet(
@@ -192,6 +197,161 @@ class AboutController extends BaseController {
     }
     SaveKey.readPrivacy.save(selectedConfirm);
   }
+  void _showUserUseDialog() async {
+    var selectedConfirm = false;
+    await Get.bottomSheet(
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: Text(
+                    '《小萌宠APP用户使用规范》',
+                    style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(MsgCopy.appUseUser)),
+                Container(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        onPressed: () {
+                          finish();
+                        },
+                        height: 40,
+                        color: Colors.red,
+                        child: const Text('取消'),
+                      ),
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        onPressed: () {
+                          selectedConfirm = true;
+                          finish();
+                        },
+                        height: 40,
+                        color: Colors.green,
+                        child: Text('确定'),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (selectedConfirm && SaveKey.readUserProtected.read != null) {
+      if (SaveKey.readUserProtected.read) {
+        //打勾
+      }
+    }
+    SaveKey.readPrivacy.save(selectedConfirm);
+  }
+  void _showUseUserDialog() async {
+    var selectedConfirm = false;
+    await Get.bottomSheet(
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 12),
+                  child: Text(
+                    '《小萌宠APP社区规范》',
+                    style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(MsgCopy.appUserUse)),
+                Container(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        onPressed: () {
+                          finish();
+                        },
+                        height: 40,
+                        color: Colors.red,
+                        child: const Text('取消'),
+                      ),
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        onPressed: () {
+                          selectedConfirm = true;
+                          finish();
+                        },
+                        height: 40,
+                        color: Colors.green,
+                        child: Text('确定'),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (selectedConfirm && SaveKey.readUserProtected.read != null) {
+      if (SaveKey.readUserProtected.read) {
+        //打勾
+      }
+    }
+    SaveKey.readPrivacy.save(selectedConfirm);
+  }
+
 
   onItemClicked(int index) {
     switch (index) {
@@ -207,9 +367,11 @@ class AboutController extends BaseController {
         break;
       case 3:
         //Todo 弹出APP用户使用规范
+        onUserUseAgreement();
         break;
       case 4:
         //Todo 弹出APP社区规范
+        onUseUserAgreement();
         break;
       default:
         break;

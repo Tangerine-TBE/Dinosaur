@@ -15,13 +15,13 @@ class FaqPage extends BaseEmptyPage<FaqController> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: Text(
+        title: const Text(
           '常见问题',
           style: TextStyle(fontSize: SizeConfig.titleTextDefaultSize),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         shadowColor: null,
         elevation: 0,
         color: Colors.transparent,
@@ -96,7 +96,9 @@ class FaqPage extends BaseEmptyPage<FaqController> {
 
   _buildItem(int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        controller.onItemClicked(index);
+      },
       child: Container(
         alignment: Alignment.centerLeft,
         height: 50,

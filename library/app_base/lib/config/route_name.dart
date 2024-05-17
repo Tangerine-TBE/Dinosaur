@@ -39,7 +39,8 @@ class RouteName {
   static const String forgotPassword = '/forgotPassword';
   static const String selectDevice = '/selectDevice';
   static const String about = '/about';
-
+  static const String faqSecond ='/faqSecond';
+  static const String faqSecondContent ='/faqSecondContent';
   //shake
   static const String mainPage = '/main';
   static const String instructionsPage = '/instructions';

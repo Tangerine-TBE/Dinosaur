@@ -32,6 +32,8 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/edit_info_page.dart
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/ask/faq_ask_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page_second.dart';
+import 'package:dinosaur/app/src/moudle/test/pages/mine/faq/faq_page_second_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/like/mine_like_page.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_controller.dart';
@@ -71,6 +73,8 @@ import '../src/moudle/test/pages/chart/chart_controller.dart';
 import '../src/moudle/test/pages/home/home_controller.dart';
 import '../src/moudle/test/pages/home/home_page.dart';
 import '../src/moudle/test/pages/message/message_controller.dart';
+import '../src/moudle/test/pages/mine/faq/faq_page_second_content.dart';
+import '../src/moudle/test/pages/mine/faq/faq_page_second_content_controller.dart';
 import '../src/moudle/test/pages/mine/mine_controller.dart';
 import '../src/moudle/test/pages/mine/periodRecord/period_record_controller.dart';
 import '../src/moudle/test/pages/mine/periodRecord/period_record_page.dart';
@@ -86,6 +90,38 @@ class RouteConfig extends ARoute {
 
   @override
   List<GetPage> getPages() => [
+        GetPage(
+          name: RouteName.faqSecondContent,
+          page: () => const FaqPageSecondContent(),
+          binding: BindingsBuilder(
+            () {
+              Map<String,String> content = Get.arguments;
+              Get.lazyPut(
+                  () => FaqPageSecondContentController(content: content.values.first,title: content.keys.first));
+            },
+          ),
+        ),
+        GetPage(
+          name: RouteName.faqSecond,
+          page: () => const FaqPageSecond(),
+          binding: BindingsBuilder(
+            () {
+              Map<String, Map<String, Map<String, String>>> map = Get.arguments;
+              Map<String, Map<String, String>> data = map['params'] ??
+                  {
+                    '': {'': ''}
+                  };
+              String title = data.keys.first;
+              Map<String, String> content = data[title] ?? {'': ''};
+              Get.lazyPut(
+                () => FaqPageSecondController(
+                  title: title,
+                  content: content,
+                ),
+              );
+            },
+          ),
+        ),
         GetPage(
           name: RouteName.forgotPassword,
           page: () => const ForgotPasswordPage(),
@@ -108,17 +144,17 @@ class RouteConfig extends ARoute {
             },
           ),
         ),
-    GetPage(
-      name: RouteName.about,
-      page: () => const AboutPage(),
-      binding: BindingsBuilder(
+        GetPage(
+          name: RouteName.about,
+          page: () => const AboutPage(),
+          binding: BindingsBuilder(
             () {
-          Get.lazyPut(
+              Get.lazyPut(
                 () => AboutController(),
-          );
-        },
-      ),
-    ),
+              );
+            },
+          ),
+        ),
         GetPage(
           name: RouteName.waveDemo,
           page: () => const WaveFormDemoPage(),
