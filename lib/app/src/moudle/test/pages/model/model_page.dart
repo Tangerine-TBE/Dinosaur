@@ -89,7 +89,7 @@ class ModelPage extends BaseEmptyPage<ModelController>
             child: Column(
               children: [
                 Flexible(
-                  flex: 4,
+                  flex: 2,
                   child: TabBarView(
                     controller: tabController,
                     children: [
@@ -115,77 +115,80 @@ class ModelPage extends BaseEmptyPage<ModelController>
   }
 
   _buildBottomBar() {
-    return Column(
-      children: [
-        Obx(
-          () => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 2),
-            child: RepaintBoundary(
-              child: CustomPaint(
-                size: const Size(280, 60),
-                painter: ChartsPainter(
-                    process: controller.process.value.obx, processMax: 1023),
+    return Padding(
+      padding: EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          Obx(
+            () => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 2),
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  size: const Size(280, 60),
+                  painter: ChartsPainter(
+                      process: controller.process.value.obx, processMax: 1023),
+                ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            child: SizedBox(
-              width: double.infinity,
-              height: 75,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      controller.onLastClick();
-                    },
-                    child: Container(
-                      child: Image.asset(
-                        ResName.playerBack,
-                        width: 36,
-                        height: 36,
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: double.infinity,
+                height: 75,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        controller.onLastClick();
+                      },
+                      child: Container(
+                        child: Image.asset(
+                          ResName.playerBack,
+                          width: 36,
+                          height: 36,
+                        ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.onPlayClick();
-                    },
-                    child: Obx(
-                      () => controller.playModel.value
-                          ? Image.asset(
-                              ResName.buttonL,
-                              width: 64,
-                              height: 64,
-                            )
-                          : Image.asset(
-                              ResName.buttonR,
-                              width: 64,
-                              height: 64,
-                            ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller.onNextClick();
-                    },
-                    child: Container(
-                      child: Image.asset(
-                        ResName.playerSkip,
-                        width: 36,
-                        height: 36,
+                    GestureDetector(
+                      onTap: () {
+                        controller.onPlayClick();
+                      },
+                      child: Obx(
+                        () => controller.playModel.value
+                            ? Image.asset(
+                                ResName.buttonL,
+                                width: 64,
+                                height: 64,
+                              )
+                            : Image.asset(
+                                ResName.buttonR,
+                                width: 64,
+                                height: 64,
+                              ),
                       ),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        controller.onNextClick();
+                      },
+                      child: Container(
+                        child: Image.asset(
+                          ResName.playerSkip,
+                          width: 36,
+                          height: 36,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

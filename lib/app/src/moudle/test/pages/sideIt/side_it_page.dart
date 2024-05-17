@@ -339,7 +339,7 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                           child: Obx(
                             () => RepaintBoundary(
                               child: CustomPaint(
-                                size: Size(280, 70),
+                                size: const Size(280, 70),
                                 painter: ChartsPainter(
                                     process: controller.process.value.obx,
                                     processMax: 1023),
@@ -350,31 +350,34 @@ class SideItPage extends BaseEmptyPage<SideItController> {
                         Obx(
                           () => Visibility(
                             visible: controller.slideItModel.value == 1,
-                            child: Countdown(
-                              seconds: 10,
-                              controller: controller.countdownController,
-                              onFinished: () {
-                                controller.onCountDownFinish();
-                              },
-                              build: (context, double time) {
-                                return Text(
-                                  time.toString(),
-                                  style: TextStyle(
-                                      color: MyColors.textBlackColor,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold),
-                                );
-                              },
-                              buildPause: (context) {
-                                return Text(
-                                  '请滑动滑条',
-                                  style: TextStyle(
-                                      color: MyColors.textBlackColor,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold),
-                                );
-                              },
-                              interval: const Duration(milliseconds: 100),
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Countdown(
+                                seconds: 10,
+                                controller: controller.countdownController,
+                                onFinished: () {
+                                  controller.onCountDownFinish();
+                                },
+                                build: (context, double time) {
+                                  return Text(
+                                    time.toString(),
+                                    style: TextStyle(
+                                        color: MyColors.textBlackColor,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  );
+                                },
+                                buildPause: (context) {
+                                  return Text(
+                                    '请滑动滑条',
+                                    style: TextStyle(
+                                        color: MyColors.textBlackColor,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold),
+                                  );
+                                },
+                                interval: const Duration(milliseconds: 100),
+                              ),
                             ),
                           ),
                         ),
