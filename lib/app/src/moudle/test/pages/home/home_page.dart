@@ -45,6 +45,7 @@ class HomePage extends BaseEmptyPage<HomeController> {
       body: SafeArea(
         top: false,
         child: PageView(
+          physics: const NeverScrollableScrollPhysics(),
         controller: controller.pageController,children: const [
           PlayPage(),
           ChartPage(),

@@ -122,10 +122,10 @@ class _ContentFra1State extends State<ContentFra1>
           height: 25.0,
           child: defaultTargetPlatform == TargetPlatform.iOS
               ? CupertinoActivityIndicator(
-                  color: MyColors.themeTextColor,
-                )
+            color: MyColors.themeTextColor,
+          )
               : CircularProgressIndicator(
-                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+              strokeWidth: 2.0, color: MyColors.themeTextColor),
         ),
         complete: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -179,36 +179,46 @@ class _ContentFra1State extends State<ContentFra1>
                     width: double.infinity,
                     child: Stack(
                       children: [
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          top: 26,
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.onScanClicked();
-                            },
-                            child: Image.asset(
-                              ResName.iconImg,
-                              width: 150,
-                              height: 176,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 49,
-                          top: 50,
-                          child: Obx(
-                            () => Text(
-                              Runtime.deviceInfo.value == null
-                                  ? '点我\r\n连接设备哦'
-                                  : '\r\n${Runtime.deviceInfo.value!.bluetoothDevice.platformName}\r\n已链接',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: MyColors.textBlackColor,
-                                fontWeight: FontWeight.w500,
+                        GestureDetector(
+                        onTap: (){
+                          controller.onScanClicked();
+                        },
+                          child: Stack(children: [
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 26,
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.onScanClicked();
+                                },
+                                child: Image.asset(
+                                  ResName.iconImg,
+                                  width: 150,
+                                  height: 176,
+                                ),
                               ),
                             ),
-                          ),
+                            Positioned(
+                              left: 49,
+                              top: 50,
+                              child: Obx(
+                                    () =>
+                                    Text(
+                                      Runtime.deviceInfo.value == null
+                                          ? '点我\r\n连接设备哦'
+                                          : '\r\n${Runtime.deviceInfo.value!
+                                          .bluetoothDevice
+                                          .platformName}\r\n已链接',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: MyColors.textBlackColor,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                              ),
+                            ),
+                          ],),
                         ),
                         Positioned(
                           left: 0,
@@ -334,19 +344,19 @@ class _ContentFra1State extends State<ContentFra1>
                 return controller.playSelfContentManager.dataList.isNotEmpty
                     ? _buildSliverList()
                     : controller.playSelfContentManager.refreshing
-                        ? SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: Center(
-                              child: LoadingAnimationWidget.newtonCradle(
-                                color: MyColors.homePageNaviItemSelectColor,
-                                size: 100,
-                              ),
-                            ),
-                          )
-                        : const SliverFillRemaining(
-                            hasScrollBody: false,
-                            child: NoDataWidget(),
-                          );
+                    ? SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: LoadingAnimationWidget.newtonCradle(
+                      color: MyColors.homePageNaviItemSelectColor,
+                      size: 100,
+                    ),
+                  ),
+                )
+                    : const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: NoDataWidget(),
+                );
               },
               id: controller.playSelfContentManager.dataListId,
             ),
@@ -359,10 +369,10 @@ class _ContentFra1State extends State<ContentFra1>
   _buildSliverList() {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
+            (context, index) {
           return _centerItem(
             widget.controller.playSelfContentManager.dataList[index],
-            () {
+                () {
               widget.controller.onCenterDetailsIndexTap(
                 widget.controller.playSelfContentManager.dataList[index],
               );
