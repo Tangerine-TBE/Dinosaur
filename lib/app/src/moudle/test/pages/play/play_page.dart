@@ -278,7 +278,7 @@ class _ContentFra1State extends State<ContentFra1>
                                         width: 46,
                                         height: 46,
                                       ),
-                                      Text(
+                                      const Text(
                                         '摇一摇',
                                         style: TextStyle(
                                           fontSize: 14,

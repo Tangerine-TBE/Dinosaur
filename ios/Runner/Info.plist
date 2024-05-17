@@ -31,15 +31,30 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app needs Bluetooth Peripheral to function</string>
 	<key>NSCameraUsageDescription</key>
-	<string>需要请求相机权限才可以使用哦</string>
+	<string>MyApp does not need this permission</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app always needs location and when in use to function</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app always needs location to function</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app always needs photo</string>
-    <key>UIViewControllerBasedStatusBarAppearance</key>
-    <false/>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>MyApp uses the microphone to record your speech and convert it to text.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>MyApp does not need this permission</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>MyApp uses the microphone to record your speech and convert it to text.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

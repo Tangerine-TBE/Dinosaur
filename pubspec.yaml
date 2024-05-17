@@ -27,7 +27,9 @@ dependencies:
   pinput: ^4.0.0
   image: ^4.1.7
   flutter_native_splash: ^2.4.0
-  flutter_sound: ^9.4.6
+  flutter_sound: ^9.4.11
+  flutter_sound_platform_interface: 9.4.11
+  audio_session: ^0.1.6
   sensors_plus: ^4.0.2
   banner_carousel: ^1.2.1
   font_awesome_flutter: ^10.7.0

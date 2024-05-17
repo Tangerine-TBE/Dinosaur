@@ -7,6 +7,7 @@ import 'package:app_base/mvvm/repository/edit_info_repo.dart';
 import 'package:app_base/mvvm/repository/upload_repo.dart';
 import 'package:app_base/network/utils/upload_utils.dart';
 import 'package:app_base/util/image.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:dinosaur/app/src/moudle/test/device/country.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/mine/edit/weight/record_sound_view.dart';
@@ -133,13 +134,11 @@ class EditInfoController extends BaseController {
             content: result.provinceName!,
             hintText: listData[3].hintText);
         listData[3] = exchangedBean;
-        _editUserInfo(User.getUserId(),
-            {'address': result.provinceName!});
-        if(homeRsp != null){
+        _editUserInfo(User.getUserId(), {'address': result.provinceName!});
+        if (homeRsp != null) {
           homeRsp!.address = result.provinceName!;
         }
         update([listId]);
-
       }
     } else if (index == 4) {
       DatePicker.showDatePicker(
@@ -804,7 +803,7 @@ class EditInfoController extends BaseController {
                       if (recordUrl != null) {
                         UploadUtils.upLoadFile(
                           _upLoadRepo,
-                          "",
+                          ".mp4",
                           recordUrl!,
                           (path) => _repo.editUserInfo(
                             path: User.getUserId(),
@@ -844,7 +843,28 @@ class EditInfoController extends BaseController {
 
   Future recordStart() async {
     await record.openRecorder();
-    await record.startRecorder(toFile: Uuid().v4());
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+    await record.startRecorder(
+      toFile: '${const Uuid().v4()}.mp4',
+      codec: Codec.aacMP4,
+    );
   }
 
   recordStop() async {
@@ -859,7 +879,7 @@ class EditInfoController extends BaseController {
     await play.openPlayer();
     await play.startPlayer(
         fromURI: recordUrl,
-        codec: Codec.mp3,
+        codec: Codec.aacMP4,
         whenFinished: () {
           if (type == 1) {
             playVoice.value = false;
