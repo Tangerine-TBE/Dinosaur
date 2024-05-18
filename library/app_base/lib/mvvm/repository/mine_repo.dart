@@ -24,6 +24,13 @@ class MineRepo extends BaseRepo {
     );
   }
 
+  Future<AResponse<dynamic>> deletePost({required String pathId}) {
+    return requestOnFuture(
+      '${Api.mineDeltePost}/$pathId',
+      method: Method.delete,
+    );
+  }
+
   Future<AResponse<MineLikeResponse>> getLike(MineReq mineReq) {
     return requestOnFuture(
       Api.minePost,

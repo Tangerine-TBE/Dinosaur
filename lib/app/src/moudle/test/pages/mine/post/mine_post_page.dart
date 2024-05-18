@@ -11,10 +11,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/mine/post/mine_post_controlle
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 import '../../chart/weight/awesome_chart.dart';
 
 class MinePostPage extends BaseEmptyPage<MinePostController> {
@@ -181,41 +178,46 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                           ),
                           InkWell(
                               onTap: () {
-                                controller.showBottomSheet();
+                                controller.showBottomSheet(index);
                               },
                               child: const Icon(Icons.more_horiz)),
                         ],
                       ),
-                      Visibility(
-                        visible: item.topicTitle.isNotEmpty,
-                        child: Container(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFF5E65).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                const TextSpan(
-                                  text: '#',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Color(0xffFF5E65),
-                                    fontWeight: FontWeight.w700,
+                      Opacity(
+                        opacity: item.topicTitle.isNotEmpty?1.0:0.0,
+                        child: IntrinsicWidth(
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 7,vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xffFF5E65).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: const TextStyle(height: 1.0),
+                                children: [
+                                  const TextSpan(
+                                    text: '#',
+                                    style: TextStyle(
+                                      color: Color(0xffFF5E65),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                ),
-                                const TextSpan(text: ' '),
-                                TextSpan(
-                                  text: item.topicTitle,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Color(0xffFF5E65),
-                                    fontWeight: FontWeight.w400,
+                                  const TextSpan(text: ' '),
+                                  TextSpan(
+                                    text: item.topicTitle,
+                                    style: const TextStyle(
+                                      color: Color(0xffFF5E65),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -288,7 +290,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                               fontSize: 11,
                               fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                         Text(

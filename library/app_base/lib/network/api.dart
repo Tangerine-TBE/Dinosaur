@@ -39,6 +39,8 @@ class Api {
   static const pushCharts = '/api/v1/meng/wave';
   //我的（帖子）
   static const minePost ='/api/v1/meng/my/posts/list';
+  //删除我的帖子
+  static const mineDeltePost ='/api/v1/meng/posts';
   //我的（评论）
   static const mineReview ='/api/v1/meng/my/comment/list';
   //我的（点赞）

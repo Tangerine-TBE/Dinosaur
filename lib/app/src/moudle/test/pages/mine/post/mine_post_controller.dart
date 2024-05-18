@@ -16,9 +16,10 @@ class MinePostController extends BaseController {
   final listId = 1;
   var pageIndex = 1;
   final canLoadMore = false.obs;
- final  RefreshController refreshController =
-  RefreshController(initialRefresh: true);
-  showBottomSheet() {
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: true);
+
+  showBottomSheet(int index) {
     Get.bottomSheet(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -42,10 +43,18 @@ class MinePostController extends BaseController {
                 MaterialButton(
                   minWidth: double.infinity,
                   onPressed: () async {
+                    showLoading();
+                    final response =
+                        await _repo.deletePost(pathId: list[index].id);
+                    dismiss();
+                    if (response.isSuccess) {
+                      list.removeAt(index);
+                      update([listId]);
+                    }
                     Get.back();
                   },
                   child: const Text(
-                    '举报',
+                    '删除',
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -70,6 +79,7 @@ class MinePostController extends BaseController {
       ),
     );
   }
+
   Future loadMoreList(bool isRefresh) async {
     await Future.delayed(const Duration(seconds: 1));
     final response = await _repo.getPost(
@@ -77,7 +87,7 @@ class MinePostController extends BaseController {
         userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
-        pageIndex: isRefresh?1:pageIndex,
+        pageIndex: isRefresh ? 1 : pageIndex,
       ),
     );
     if (response.isSuccess) {
@@ -116,15 +126,18 @@ class MinePostController extends BaseController {
       }
     }
   }
+
   @override
-  void onClose(){
+  void onClose() {
     refreshController.dispose();
     super.onClose();
   }
+
   naviToDetails(PostsList item, int index) {
     var map = {'item': item, 'index': index};
     navigateTo(RouteName.details, args: map);
   }
+
   imagePreView(List<String> images, BuildContext context, double size,
       int parentIndex, List<ImageString> list, String type) {
     ///每一张预期图片都是一个正方形
@@ -136,7 +149,8 @@ class MinePostController extends BaseController {
         return InkWell(
           onTap: () {
             final homeController = Get.find<HomeController>();
-            homeController.toImageView(images[0], tag,list[0].height,list[0].width);
+            homeController.toImageView(
+                images[0], tag, list[0].height, list[0].width);
           },
           child: Hero(
             tag: tag,
@@ -185,7 +199,8 @@ class MinePostController extends BaseController {
               return InkWell(
                 onTap: () {
                   final homeController = Get.find<HomeController>();
-                  homeController.toImageView(images[index], tag,list[index].height,list[index].width);
+                  homeController.toImageView(images[index], tag,
+                      list[index].height, list[index].width);
                 },
                 child: Hero(
                   tag: tag,
