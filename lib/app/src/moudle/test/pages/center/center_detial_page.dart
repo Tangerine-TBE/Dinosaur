@@ -55,132 +55,135 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
               ),
             ),
             body: Obx(() =>
-                SmartRefresher(
-                  controller: controller.refreshManager.freshController,
-                  onRefresh: () async {
-                    controller.refreshManager.loadMoreList(true);
-                  },
-                  onLoading: () async {
-                    controller.refreshManager.loadMoreList(false);
-                  },
-                  header: WaterDropHeader(
-                    refresh: SizedBox(
-                      width: 25.0,
-                      height: 25.0,
-                      child: defaultTargetPlatform == TargetPlatform.iOS
-                          ? CupertinoActivityIndicator(
-                        color: MyColors.themeTextColor,
-                      )
-                          : StreamBuilder<Object>(
-                            stream: null,
-                            builder: (context, snapshot) {
-                              return Container(
-                                child: CircularProgressIndicator(
-                                strokeWidth: 2.0, color: MyColors.themeTextColor),
-                              );
-                            }
-                          ),
-                    ),
-                    complete: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Icon(
-                          Icons.done,
-                          color: Colors.black,
-                        ),
-                        Container(
-                          width: 15.0,
-                        ),
-                        const Text(
-                          '刷新完成',
-                          style: TextStyle(color: MyColors.textBlackColor),
-                        )
-                      ],
-                    ),
-                    waterDropColor: MyColors.themeTextColor,
-                  ),
-                  enablePullDown: true,
-                  enablePullUp: controller.refreshManager.canLoadMore.value,
-                  footer: CustomFooter(
-                    builder: (context, mode) {
-                      Widget body;
-                      if (mode == LoadStatus.idle) {
-                        body = const Text("上拉加载");
-                      } else if (mode == LoadStatus.loading) {
-                        body = const CupertinoActivityIndicator();
-                      } else if (mode == LoadStatus.failed) {
-                        body = const Text("加载失败！点击重试！");
-                      } else if (mode == LoadStatus.canLoading) {
-                        body = const Text("松手,加载更多!");
-                      } else {
-                        body = const Text("没有更多数据了!");
-                      }
-                      return SizedBox(
-                        height: 55.0,
-                        child: Center(child: body),
-                      );
+                SafeArea(
+                  child: SmartRefresher(
+                    controller: controller.refreshManager.freshController,
+                    onRefresh: () async {
+                      controller.refreshManager.loadMoreList(true);
                     },
-                  ),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverSafeArea(
-                        bottom: false,
-                        sliver: SliverToBoxAdapter(
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    right: 18, left: 18, bottom: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: BannerCarousel.fullScreen(
-                                  animation: true,
-                                  height: 106,
-                                  banners: controller.refreshManager.listBanners,
-                                  showIndicator: true,
-                                  indicatorBottom: false,
-                                  borderRadius: 10,
-                                  disableColor:
-                                  const Color(0xffFFFFFF).withOpacity(0.5),
-                                  activeColor: const Color(0xffFFFFFF),
-                                  customizedIndicators: const IndicatorModel.animation(
-                                    width: 5,
-                                    height: 5,
-                                    spaceBetween: 4,
+                    onLoading: () async {
+                      controller.refreshManager.loadMoreList(false);
+                    },
+                    header: WaterDropHeader(
+                      refresh: SizedBox(
+                        width: 25.0,
+                        height: 25.0,
+                        child: defaultTargetPlatform == TargetPlatform.iOS
+                            ? CupertinoActivityIndicator(
+                          color: MyColors.themeTextColor,
+                        )
+                            : StreamBuilder<Object>(
+                              stream: null,
+                              builder: (context, snapshot) {
+                                return Container(
+                                  child: CircularProgressIndicator(
+                                  strokeWidth: 2.0, color: MyColors.themeTextColor),
+                                );
+                              }
+                            ),
+                      ),
+                      failed: Text('加载失败!'),
+                      complete: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.done,
+                            color: Colors.black,
+                          ),
+                          Container(
+                            width: 15.0,
+                          ),
+                          const Text(
+                            '刷新完成',
+                            style: TextStyle(color: MyColors.textBlackColor),
+                          )
+                        ],
+                      ),
+                      waterDropColor: MyColors.themeTextColor,
+                    ),
+                    enablePullDown: true,
+                    enablePullUp: controller.refreshManager.canLoadMore.value,
+                    footer: CustomFooter(
+                      builder: (context, mode) {
+                        Widget body;
+                        if (mode == LoadStatus.idle) {
+                          body = const Text("上拉加载");
+                        } else if (mode == LoadStatus.loading) {
+                          body = const CupertinoActivityIndicator();
+                        } else if (mode == LoadStatus.failed) {
+                          body = const Text("加载失败！点击重试！");
+                        } else if (mode == LoadStatus.canLoading) {
+                          body = const Text("松手,加载更多!");
+                        } else {
+                          body = const Text("没有更多数据了!");
+                        }
+                        return SizedBox(
+                          height: 55.0,
+                          child: Center(child: body),
+                        );
+                      },
+                    ),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverSafeArea(
+                          bottom: false,
+                          sliver: SliverToBoxAdapter(
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      right: 18, left: 18, bottom: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: BannerCarousel.fullScreen(
+                                    animation: true,
+                                    height: 106,
+                                    banners: controller.refreshManager.listBanners,
+                                    showIndicator: true,
+                                    indicatorBottom: false,
+                                    borderRadius: 10,
+                                    disableColor:
+                                    const Color(0xffFFFFFF).withOpacity(0.5),
+                                    activeColor: const Color(0xffFFFFFF),
+                                    customizedIndicators: const IndicatorModel.animation(
+                                      width: 5,
+                                      height: 5,
+                                      spaceBetween: 4,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      GetBuilder<CenterDetailsController>(
-                        builder: (controller) {
-                          return controller.refreshManager.dataList.isNotEmpty
-                              ? SliverList.builder(
-                            itemBuilder: (context, index) {
-                              return _buildItem(
-                                  index,
-                                  controller.refreshManager.dataList[index],
-                                  context);
-                            },
-                            itemCount: controller.refreshManager.dataList.length,
-                          )
-                              : const SliverFillRemaining(
-                            child: SizedBox(
-                              child: NoDataWidget(
-                                title: '暂无记录',
+                        GetBuilder<CenterDetailsController>(
+                          builder: (controller) {
+                            return controller.refreshManager.dataList.isNotEmpty
+                                ? SliverList.builder(
+                              itemBuilder: (context, index) {
+                                return _buildItem(
+                                    index,
+                                    controller.refreshManager.dataList[index],
+                                    context);
+                              },
+                              itemCount: controller.refreshManager.dataList.length,
+                            )
+                                : const SliverFillRemaining(
+                              child: SizedBox(
+                                child: NoDataWidget(
+                                  title: '暂无记录',
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        id: controller.refreshManager.listId,
-                      ),
-                    ],
+                            );
+                          },
+                          id: controller.refreshManager.listId,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 

@@ -36,6 +36,7 @@ class _HandPickPageState extends State<HandPickPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
         child: Obx(() => SmartRefresher(
               controller: controller.handPickManager.refreshController,
@@ -63,6 +64,7 @@ class _HandPickPageState extends State<HandPickPage>
                             );
                           }),
                 ),
+                failed: Text('加载失败!'),
                 complete: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -82,6 +84,7 @@ class _HandPickPageState extends State<HandPickPage>
                 waterDropColor: MyColors.themeTextColor,
               ),
               enablePullDown: true,
+
               enablePullUp: controller.handPickManager.canLoadMore.value,
               footer: CustomFooter(
                 builder: (context, mode) {

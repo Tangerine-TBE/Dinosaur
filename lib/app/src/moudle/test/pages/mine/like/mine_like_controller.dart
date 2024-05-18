@@ -106,22 +106,6 @@ class MineLikeController extends BaseController {
       return SizedBox();
     }
   }
-  _fetchPostList() async {
-    final response = await _repo.getLike(
-      MineReq(
-        userId: User.loginRspBean!.userId,
-        pageSize: 10,
-        orderBy: 'createTime desc',
-        pageIndex: 1,
-      ),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        list.addAll(response.data!.data!.postsList);
-        update([listId]);
-      }
-    }
-  }
   showBottomSheet() {
     Get.bottomSheet(
       backgroundColor: Colors.white,
@@ -181,7 +165,7 @@ class MineLikeController extends BaseController {
         userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
-        pageIndex: isRefresh?1:pageIndex,
+        pageIndex: isRefresh?1:pageIndex+1,
       ),
     );
     if (response.isSuccess) {
@@ -192,8 +176,8 @@ class MineLikeController extends BaseController {
             this.list.clear();
             canLoadMore.value = true;
             pageIndex = 1;
-          } else {
-            pageIndex = pageIndex + 1;
+          }else{
+            pageIndex ++;
           }
           this.list.addAll(list);
           update([listId]);

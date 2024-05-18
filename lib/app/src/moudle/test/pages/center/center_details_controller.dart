@@ -164,7 +164,7 @@ class RefreshManager {
       PushMsgReq(
           userId: User.loginRspBean!.userId,
           topicId: '',
-          pageIndex: pageIndex+1,
+          pageIndex: isRefresh ? 1 : pageIndex + 1,
           pageSize: 10,
           orderBy: 'createTime desc',
           postsType: 'Latest'),
@@ -177,10 +177,9 @@ class RefreshManager {
             dataList.clear();
             canLoadMore.value = true;
             pageIndex = 1;
-          } else {
-            pageIndex = pageIndex + 1;
+          }else{
+            pageIndex ++;
           }
-          pageIndex = pageIndex+1;
           dataList.addAll(list);
           controller.update([listId]);
         }

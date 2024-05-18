@@ -62,6 +62,7 @@ class _CommonPageState extends State<CommonPage> with AutomaticKeepAliveClientMi
                 }
             ),
           ),
+          failed: Text('加载失败!'),
           complete: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

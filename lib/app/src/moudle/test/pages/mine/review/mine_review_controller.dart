@@ -59,7 +59,7 @@ class MineReviewController extends BaseController {
         userId: User.loginRspBean!.userId,
         pageSize: 10,
         orderBy: 'createTime desc',
-        pageIndex: isRefresh ? 1 : pageIndex,
+        pageIndex: isRefresh ? 1 : pageIndex+1,
       ),
     );
     if (response.isSuccess) {
@@ -70,8 +70,8 @@ class MineReviewController extends BaseController {
             this.list.clear();
             canLoadMore.value = true;
             pageIndex = 1;
-          } else {
-            pageIndex = pageIndex + 1;
+          }else{
+            pageIndex ++;
           }
           this.list.addAll(list);
           update([listId]);

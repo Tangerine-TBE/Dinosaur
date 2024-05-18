@@ -61,6 +61,8 @@ class _DynamicPageState extends State<DynamicPage> with AutomaticKeepAliveClient
                     );
                   }),
             ),
+
+            failed: Text('加载失败'),
             complete: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

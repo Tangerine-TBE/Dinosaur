@@ -16,15 +16,18 @@ import 'package:get/get.dart';
 
 import '../../../weight/loadmore_listview.dart';
 import '../../chart/weight/awesome_chart.dart';
+
 class RefreshPage extends StatefulWidget {
   final PetController controller;
-  const RefreshPage({super.key,required this.controller});
+
+  const RefreshPage({super.key, required this.controller});
 
   @override
   State<RefreshPage> createState() => _RefreshPageState();
 }
 
-class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClientMixin{
+class _RefreshPageState extends State<RefreshPage>
+    with AutomaticKeepAliveClientMixin {
   late PetController controller;
 
   @override
@@ -32,135 +35,137 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
     super.initState();
     controller = widget.controller;
   }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Obx(
-            () => SmartRefresher(
-              controller: controller.refreshManager.refreshController,
-              onRefresh: () async {
-                controller.refreshManager.loadMoreList(true);
-              },
-              onLoading: () async {
-                controller.refreshManager.loadMoreList(false);
-              },
-              header: WaterDropHeader(
-                refresh: SizedBox(
-                  width: 25.0,
-                  height: 25.0,
-                  child: defaultTargetPlatform == TargetPlatform.iOS
-                      ? CupertinoActivityIndicator(
-                    color: MyColors.themeTextColor,
-                  )
-                      : StreamBuilder<Object>(
+        () => SmartRefresher(
+          controller: controller.refreshManager.refreshController,
+          onRefresh: () async {
+            controller.refreshManager.loadMoreList(true);
+          },
+          onLoading: () async {
+            controller.refreshManager.loadMoreList(false);
+          },
+          header: WaterDropHeader(
+            refresh: SizedBox(
+              width: 25.0,
+              height: 25.0,
+              child: defaultTargetPlatform == TargetPlatform.iOS
+                  ? CupertinoActivityIndicator(
+                      color: MyColors.themeTextColor,
+                    )
+                  : StreamBuilder<Object>(
                       stream: null,
                       builder: (context, snapshot) {
                         return Container(
                           child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                              color: MyColors.themeTextColor),
+                              strokeWidth: 2.0, color: MyColors.themeTextColor),
                         );
-                      }),
+                      },
+                    ),
+            ),
+            failed: Text('加载失败!'),
+            complete: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  Icons.done,
+                  color: Colors.black,
                 ),
-                complete: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.done,
-                      color: Colors.black,
-                    ),
+                Container(
+                  width: 15.0,
+                ),
+                const Text(
+                  '刷新完成',
+                  style: TextStyle(color: MyColors.textBlackColor),
+                )
+              ],
+            ),
+            waterDropColor: MyColors.themeTextColor,
+          ),
+          footer: CustomFooter(
+            builder: (context, mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("上拉加载");
+              } else if (mode == LoadStatus.loading) {
+                body = CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("加载失败！点击重试！");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("松手,加载更多!");
+              } else {
+                body = Text("没有更多数据了!");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
+            },
+          ),
+          enablePullDown: true,
+          enablePullUp: controller.refreshManager.canLoadMore.value,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
                     Container(
-                      width: 15.0,
+                      padding: const EdgeInsets.only(
+                          right: 18, left: 18, bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: BannerCarousel.fullScreen(
+                        animation: true,
+                        height: 106,
+                        banners: controller.refreshManager.listBanners,
+                        showIndicator: true,
+                        indicatorBottom: false,
+                        borderRadius: 10,
+                        disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
+                        activeColor: const Color(0xffFFFFFF),
+                        customizedIndicators: const IndicatorModel.animation(
+                          width: 5,
+                          height: 5,
+                          spaceBetween: 4,
+                        ),
+                      ),
                     ),
-                    const Text(
-                      '刷新完成',
-                      style: TextStyle(color: MyColors.textBlackColor),
-                    )
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-                waterDropColor: MyColors.themeTextColor,
               ),
-
-              footer: CustomFooter(
-                builder: (context, mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("上拉加载");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator();
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("加载失败！点击重试！");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text("松手,加载更多!");
-                  } else {
-                    body = Text("没有更多数据了!");
-                  }
-                  return Container(
-                    height: 55.0,
-                    child: Center(child: body),
-                  );
-                },
-              ),
-              enablePullDown: true,
-              enablePullUp: controller.refreshManager.canLoadMore.value,
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                              right: 18, left: 18, bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: BannerCarousel.fullScreen(
-                            animation: true,
-                            height: 106,
-                            banners: controller.refreshManager.listBanners,
-                            showIndicator: true,
-                            indicatorBottom: false,
-                            borderRadius: 10,
-                            disableColor: const Color(0xffFFFFFF).withOpacity(0.5),
-                            activeColor: const Color(0xffFFFFFF),
-                            customizedIndicators: const IndicatorModel.animation(
-                              width: 5,
-                              height: 5,
-                              spaceBetween: 4,
+              GetBuilder<PetController>(
+                builder: (controller) {
+                  return controller.refreshManager.dataList.isNotEmpty
+                      ? SliverList.builder(
+                          itemBuilder: (context, index) {
+                            return _buildItem(
+                                index,
+                                controller.refreshManager.dataList[index],
+                                context);
+                          },
+                          itemCount: controller.refreshManager.dataList.length,
+                        )
+                      : const SliverFillRemaining(
+                          child: SizedBox(
+                            child: NoDataWidget(
+                              title: '暂无记录',
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                  GetBuilder<PetController>(
-                    builder: (controller) {
-                      return controller.refreshManager.dataList.isNotEmpty
-                          ? SliverList.builder(
-                        itemBuilder: (context, index) {
-                          return _buildItem(
-                              index,
-                              controller.refreshManager.dataList[index],
-                              context);
-                        },
-                        itemCount: controller.refreshManager.dataList.length,
-                      )
-                          : const SliverFillRemaining(
-                        child: SizedBox(
-                          child: NoDataWidget(
-                            title: '暂无记录',
-                          ),
-                        ),
-                      );
-                    },
-                    id: controller.refreshManager.listId,
-                  ),
-                ],
+                        );
+                },
+                id: controller.refreshManager.listId,
               ),
-            ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -216,7 +221,7 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                       visible: item.topicTitle.isNotEmpty,
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+                            EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xffFF5E65).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -251,8 +256,10 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
               ),
             ],
           ),
-          if(item.content.isNotEmpty)
-              SizedBox(height: 10,),
+          if (item.content.isNotEmpty)
+            SizedBox(
+              height: 10,
+            ),
           _buildContent(index, item, context),
           Row(
             children: [
@@ -326,7 +333,9 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Divider(
             height: 1,
             color: MyColors.textGreyColor.withOpacity(0.3),
@@ -343,7 +352,10 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
     final textPainter = TextPainter(
       text: TextSpan(
         text: item.content,
-        style: TextStyle(color: MyColors.textBlackColor, fontSize: 14,fontWeight: FontWeight.w500),
+        style: TextStyle(
+            color: MyColors.textBlackColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500),
       ),
       textDirection: TextDirection.ltr,
       maxLines: 2,
@@ -379,7 +391,9 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                           TextSpan(
                             text: item.content,
                             style: TextStyle(
-                                color: MyColors.textBlackColor, fontSize: 14,fontWeight: FontWeight.w500),
+                                color: MyColors.textBlackColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
@@ -392,7 +406,10 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                 },
                 child: Text(
                   '全文',
-                  style: TextStyle(color: Colors.pink, fontSize: 14,fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      color: Colors.pink,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
             SizedBox(
@@ -426,7 +443,6 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
                     padding: EdgeInsets.only(top: 10, right: 4, left: 4),
                     child: AwesomeChartView(
                       animatedInfoKey: 'refresh_page_chart$index',
-
                       dataList: <List<int>>[
                         List<int>.from(
                             jsonDecode(item.waves[0].actions) ?? '[]')
@@ -449,6 +465,3 @@ class _RefreshPageState extends State<RefreshPage> with AutomaticKeepAliveClient
   @override
   bool get wantKeepAlive => true;
 }
-
-
-
