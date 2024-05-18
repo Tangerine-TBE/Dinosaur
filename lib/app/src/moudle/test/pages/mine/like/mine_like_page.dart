@@ -56,6 +56,7 @@ class MineLikePage extends BaseEmptyPage<MineLikeController> {
                   },
                 ),
               ),
+              failed: const Text('加载失败'),
               complete: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

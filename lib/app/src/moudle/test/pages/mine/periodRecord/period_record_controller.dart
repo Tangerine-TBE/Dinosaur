@@ -23,8 +23,11 @@ class PeriodRecordController extends BaseController {
 
   @override
   onReady() async {
-    _fetchDateTime();
-    getPeriodRecord();
+    showLoading();
+    await Future.delayed(Duration(seconds: 1));
+    await _fetchDateTime();
+    await getPeriodRecord();
+    dismiss();
     super.onReady();
   }
 
@@ -45,7 +48,7 @@ class PeriodRecordController extends BaseController {
     await _repo.savePeriodRecord(recordReq: savePeriodRecordReq);
   }
 
-  getPeriodRecord() async {
+  Future getPeriodRecord() async {
     final firstDayOfMonth =
         DateTime(DateTime.now().year, DateTime.now().month, 1);
 
@@ -61,10 +64,12 @@ class PeriodRecordController extends BaseController {
           getPeriodRecordRsp1.value = response.data!.data!;
         }
       }
+    }else{
+      showError(response.message);
     }
   }
 
-  void _fetchDateTime() {
+  Future _fetchDateTime() async{
     var now = DateTime.now();
     for (int i = 12; i >= 1; i--) {
       list.add(DateTime(now.year, now.month - i));

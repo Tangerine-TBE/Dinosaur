@@ -55,6 +55,7 @@ class MineCollectPage extends BaseEmptyPage<MineCollectController> {
                   },
                 ),
               ),
+              failed: const Text('加载失败'),
               complete: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

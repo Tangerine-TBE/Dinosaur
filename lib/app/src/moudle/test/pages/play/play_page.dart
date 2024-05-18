@@ -127,6 +127,7 @@ class _ContentFra1State extends State<ContentFra1>
               : CircularProgressIndicator(
               strokeWidth: 2.0, color: MyColors.themeTextColor),
         ),
+        failed: Text('加载失败'),
         complete: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

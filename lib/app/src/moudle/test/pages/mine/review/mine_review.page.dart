@@ -138,6 +138,7 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
                           },
                         ),
                 ),
+                failed: Text('加载失败'),
                 complete: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

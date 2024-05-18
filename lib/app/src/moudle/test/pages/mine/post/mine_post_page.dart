@@ -41,6 +41,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
             onLoading: () async {
               controller.loadMoreList(false);
             },
+
             header: WaterDropHeader(
               refresh: SizedBox(
                 width: 25.0,
@@ -57,6 +58,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
                         },
                       ),
               ),
+              failed: Text('加载失败'),
               complete: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -75,6 +77,7 @@ class MinePostPage extends BaseEmptyPage<MinePostController> {
               ),
               waterDropColor: MyColors.themeTextColor,
             ),
+
             enablePullDown: true,
             enablePullUp: controller.canLoadMore.value,
             footer: CustomFooter(
