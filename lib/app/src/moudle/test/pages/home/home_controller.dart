@@ -8,6 +8,7 @@ import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dar
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 
@@ -18,13 +19,14 @@ class HomeController extends PlayDeviceBleController {
   double? currentPage = 0.0;
 
   @override
-  void onInit()  {
+  void onInit() {
     pageController = PageController();
 
     super.onInit();
   }
+
   @override
-  void onReady(){
+  void onReady() {
     pageController.addListener(() {
       if (currentPage == 3) {
         SaveKey.loginUserExtendsInfo.save(User.loginUserInfo?.toJson());
@@ -34,6 +36,7 @@ class HomeController extends PlayDeviceBleController {
     _fetchUserData();
     super.onReady();
   }
+
   _fetchUserData() async {
     final HomeReq homeReq = HomeReq(id: User.loginRspBean!.userId);
     final response = await apiLaunch(() => _repo.getUserInfo(homeReq: homeReq),
@@ -74,10 +77,11 @@ class HomeController extends PlayDeviceBleController {
         );
       },
     );
-    if(defaultTargetPlatform == TargetPlatform.android){
-      StatusBarControl.setHidden(true, animation: StatusBarAnimation.SLIDE);
-    }
+     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),);
+    StatusBarControl.setHidden(true, animation: StatusBarAnimation.FADE);
     await Navigator.of(Get.context!).push(route);
-    StatusBarControl.setHidden(false, animation: StatusBarAnimation.SLIDE);
+    StatusBarControl.setHidden(false, animation: StatusBarAnimation.FADE);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white),);
+
   }
 }

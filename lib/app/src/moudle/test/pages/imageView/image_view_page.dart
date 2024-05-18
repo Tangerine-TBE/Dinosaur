@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/bean/finger_info.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class ImageViewPage extends StatelessWidget {
@@ -114,7 +115,6 @@ class _ImageViewState extends State<ImageView>
         ));
 
         animation.addListener(() {
-          logE('animation Matrix4');
           if (widget.controller.dragModel == Model.unKnow) {
             widget.controller.transformationController.value = animation.value;
           }
@@ -262,7 +262,7 @@ class _ImageViewState extends State<ImageView>
                           tag: widget.tagString,
                           child: CachedNetworkImage(
                             imageUrl:widget.urlString,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             width: MediaQuery.of(context).size.width,
                           ),
                         ),

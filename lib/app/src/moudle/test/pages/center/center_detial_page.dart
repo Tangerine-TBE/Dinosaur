@@ -29,6 +29,7 @@ class CenterDetailsPage extends BaseEmptyPage<CenterDetailsController> {
       value: const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
+        statusBarColor: Colors.transparent
       ),
       child: Stack(
         children: [
