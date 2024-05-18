@@ -22,19 +22,16 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
+
       backgroundColor: MyColors.cardViewBgColor,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         backgroundColor: MyColors.cardViewBgColor,
-        automaticallyImplyLeading: false,
+        centerTitle: false,
         title: SizedBox(
           height: 38,
           child: Row(
             children: [
-              const BackButton(),
-              const SizedBox(
-                width: 10,
-              ),
               CircleAvatar(
                 backgroundImage: loadImageProvider(controller.item.userAvator),
               ),
@@ -95,15 +92,15 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                       children: [
                         if (controller.item.content.isNotEmpty)
                           Padding(
-                            padding: EdgeInsets.only(left: 50, right: 20),
+                            padding: const EdgeInsets.only(left: 50, right: 20),
                             child: Text(controller.item.content),
                           ),
                         if (controller.item.content.isNotEmpty)
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         Padding(
-                          padding: EdgeInsets.only(left: 50),
+                          padding: const EdgeInsets.only(left: 50),
                           child: controller.imagePreView(
                               controller.item.images
                                   .map((e) => e.imageUrl)
@@ -113,7 +110,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                               controller.index,
                               controller.item.images),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         if (controller.item.waves.isNotEmpty &&
@@ -121,7 +118,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                           Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(left: 50),
+                                padding: const EdgeInsets.only(left: 50),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
@@ -131,7 +128,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                                         MyColors.themeTextColor
                                             .withOpacity(0.5),
                                       ])),
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                       top: 10, right: 4, left: 4),
                                   child: AwesomeChartView(
                                     dataList: <List<int>>[
