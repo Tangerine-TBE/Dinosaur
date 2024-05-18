@@ -60,8 +60,15 @@ class DetailsController extends BaseController {
         commentId: commentId,
         map: {'userId': User.loginRspBean!.userId},
       );
-      update([listId]);
+    } else {
+      list[index].isMyLike = false;
+      _repo.unLikeComment(
+        commentId: commentId,
+        map: {'userId': User.loginRspBean!.userId},
+      );
     }
+    update([listId]);
+
   }
 
   onItemMoreClick(CommentList item) {
@@ -147,6 +154,14 @@ class DetailsController extends BaseController {
         pushId: pushId,
         map: {'userId': User.loginRspBean!.userId},
       );
+    } else {
+      item.favorsNum = item.favorsNum - 1;
+      item.isMyFavor = false;
+      isCollect.value = false;
+      _repo.unCollectPush(
+        pushId: pushId,
+        map: {'userId': User.loginRspBean!.userId},
+      );
     }
   }
 
@@ -160,6 +175,10 @@ class DetailsController extends BaseController {
         pushId: pushId,
         map: {'userId': User.loginRspBean!.userId},
       );
+    } else {
+      item.likesNum = item.likesNum - 1;
+      item.isMyLike = false;
+      isLike.value = false;
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:app_base/exports.dart';
 import 'package:app_base/mvvm/model/comment_bean.dart';
 import 'package:app_base/mvvm/model/mine_bean.dart';
 import 'package:app_base/mvvm/model/push_bean.dart';
+import 'package:app_base/mvvm/repository/details_repo.dart';
 import 'package:app_base/mvvm/repository/mine_repo.dart';
 import 'package:app_base/widget/listview/smart_load_more_listview.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 
 class MineReviewController extends BaseController {
   final _repo = Get.find<MineRepo>();
+  final _detailsRepo =Get.find<DetailsRepo>();
   final list = <CommentList>[];
   final listId = 1;
   var pageIndex = 1;
@@ -34,12 +36,18 @@ class MineReviewController extends BaseController {
     super.onClose();
   }
 
-  onItemLike() {
-    logE('like');
+  onItemLike(int index) {
+    if(!list[index].isMyLike){
+      list[index].isMyLike = true;
+      _detailsRepo.likeComment(commentId: list[index].id, map: {'userId':User.loginRspBean!.userId});
+    }else{
+      list[index].isMyLike = false;
+      _detailsRepo.unLikeComment(commentId: list[index].id, map: {'userId':User.loginRspBean!.userId});
+    }
+    update([listId]);
   }
 
   naviToDetails(CommentList commentItem, int index) async {
-    //Todo 跳转到评论页面
     final response = await apiLaunch(
       () => _repo.getPostItem(postId: commentItem.postsId),
     );
@@ -126,7 +134,7 @@ class MineReviewController extends BaseController {
                     Get.back();
                   },
                   child: const Text(
-                    '举报',
+                    '删除',
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -151,19 +159,5 @@ class MineReviewController extends BaseController {
     );
   }
 
-  _fetchPostList() async {
-    final response = await _repo.getMineCommentList(
-      MineReq(
-          userId: User.loginRspBean!.userId,
-          pageSize: 10,
-          pageIndex: 1,
-          orderBy: 'createTime desc'),
-    );
-    if (response.isSuccess) {
-      if (response.data?.data != null) {
-        list.addAll(response.data!.data!.commentList);
-        update([listId]);
-      }
-    }
-  }
+
 }

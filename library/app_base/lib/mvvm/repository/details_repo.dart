@@ -22,7 +22,8 @@ class DetailsRepo extends BaseRepo {
         format: (data) => CommentCreateResponse.fromJson(data));
   }
 
-  Future<AResponse<dynamic>> likeComment({required String commentId,required Map<String, dynamic> map}) {
+  Future<AResponse<dynamic>> likeComment(
+      {required String commentId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       "${Api.likeComment}/$commentId",
       method: Method.post,
@@ -30,8 +31,17 @@ class DetailsRepo extends BaseRepo {
     );
   }
 
+  Future<AResponse<dynamic>> unLikeComment(
+      {required String commentId, required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.unLikeComment}/${commentId}",
+      method: Method.post,
+      params: map,
+    );
+  }
+
   Future<AResponse<dynamic>> collectComment(
-      {required String commentId,required Map<String, dynamic> map}) {
+      {required String commentId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       Api.collectComment,
       method: Method.post,
@@ -39,7 +49,8 @@ class DetailsRepo extends BaseRepo {
     );
   }
 
-  Future<AResponse<dynamic>> likePush({required String pushId,required Map<String, dynamic> map}) {
+  Future<AResponse<dynamic>> likePush(
+      {required String pushId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       "${Api.likePush}/$pushId",
       method: Method.post,
@@ -47,9 +58,28 @@ class DetailsRepo extends BaseRepo {
     );
   }
 
-  Future<AResponse<dynamic>> collectPush({required String pushId,required Map<String, dynamic> map}) {
+  Future<AResponse<dynamic>> collectPush(
+      {required String pushId, required Map<String, dynamic> map}) {
     return requestOnFuture(
       "${Api.collectPush}/$pushId",
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> unCollectPush(
+      {required String pushId, required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.unCollectPost}/$pushId",
+      method: Method.post,
+      params: map,
+    );
+  }
+
+  Future<AResponse<dynamic>> unLikePush(
+      {required String pushId, required Map<String, dynamic> map}) {
+    return requestOnFuture(
+      "${Api.unLikePost}/$pushId",
       method: Method.post,
       params: map,
     );

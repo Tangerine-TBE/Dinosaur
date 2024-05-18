@@ -35,6 +35,11 @@ class Api {
   static const likeCharts ='/api/v1/meng/wave/like';
   //取消点赞波形
   static const unLikeChart = '/api/v1/meng/wave/unlike';
+  //取消收藏帖子
+  static const unCollectPost = '/api/v1/meng/posts/unfavorite';
+  //取消点赞帖子
+  static const unLikePost = '/api/v1/meng/posts/unlike';
+  //点赞评论
   //推送帖子
   static const pushCharts = '/api/v1/meng/wave';
   //我的（帖子）
@@ -54,9 +59,11 @@ class Api {
   //创建评论
   static const createComment = '/api/v1/meng/comment';
   //点赞评论
-  static const likeComment = '/api/v1/meng/posts/like';
+  static const likeComment = '/api/v1/meng/comment/like';
+  //取消点赞评论
+  static const unLikeComment = '/api/v1/meng/comment/unlike';
   //收藏评论
-  static const collectComment = '/api/v1/meng/posts/favorite';
+  static const collectComment = '/api/v1/meng/comment/favorite';
   //登出
   static const logOut = '/api/v1/meng/user/logout';
   //获取登录用户信息

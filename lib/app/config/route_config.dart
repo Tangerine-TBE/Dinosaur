@@ -95,9 +95,9 @@ class RouteConfig extends ARoute {
           page: () => const FaqPageSecondContent(),
           binding: BindingsBuilder(
             () {
-              Map<String,String> content = Get.arguments;
-              Get.lazyPut(
-                  () => FaqPageSecondContentController(content: content.values.first,title: content.keys.first));
+              Map<String, String> content = Get.arguments;
+              Get.lazyPut(() => FaqPageSecondContentController(
+                  content: content.values.first, title: content.keys.first));
             },
           ),
         ),
@@ -422,6 +422,9 @@ class RouteConfig extends ARoute {
               Get.lazyPut(() => MineRepo());
               Get.lazyPut(
                 () => MineReviewController(),
+              );
+              Get.lazyPut(
+                () => DetailsRepo(),
               );
             },
           ),

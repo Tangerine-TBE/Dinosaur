@@ -509,9 +509,10 @@ class EditInfoController extends BaseController {
   showSignVoiceEditBottomSheet(ItemBean itemBean) async {
     await Get.bottomSheet(
       backgroundColor: Colors.white,
-      elevation: 0,
+      elevation: 0,isScrollControlled :true,
       SafeArea(
         child: Container(
+          height: MediaQuery.of(Get.context!).size.height /3 * 2,
           padding:
               const EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
           decoration: const BoxDecoration(
@@ -635,143 +636,151 @@ class EditInfoController extends BaseController {
                 padding: EdgeInsets.symmetric(horizontal: 34),
                 child: Divider(),
               ),
+              SizedBox(height: 20,),
               Obx(
-                () => voiceFile.isNotEmpty
-                    ? Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          margin: const EdgeInsets.only(right: 34),
-                          constraints:
-                              BoxConstraints.loose(const Size(200, 60)),
-                          decoration: BoxDecoration(
-                            color: MyColors.themeTextColor,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.record_voice_over),
-                              const SizedBox(
-                                width: 10,
+                () =>
+                     Opacity(
+                       opacity: voiceFile.isNotEmpty?1.0:0.0,
+                       child: IgnorePointer(
+                         ignoring: voiceFile.isEmpty,
+                         child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 8),
+                              margin: const EdgeInsets.only(right: 34),
+                              constraints:
+                                  BoxConstraints.loose(const Size(200, 60)),
+                              decoration: BoxDecoration(
+                                color: MyColors.themeTextColor,
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              Expanded(
-                                child: Obx(
-                                  () => InkWell(
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.record_voice_over),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Obx(
+                                      () => InkWell(
+                                        onTap: () {
+                                          if (!playVoice.value) {
+                                            startPlay(1);
+                                          } else {
+                                            stopPlay(1);
+                                          }
+                                        },
+                                        child: playVoice.value
+                                            ? AudioWave(
+                                                height: 20,
+                                                width: 90,
+                                                spacing: 2.5,
+                                                animation: true,
+                                                bars: [
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.2,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.3,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.1,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.9,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.2,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.3,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.2,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.8,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.3,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.2,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 1.0,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.5,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.6,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.7,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.3,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.2,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.4,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 0.7,
+                                                      color: Colors.black),
+                                                  AudioWaveBar(
+                                                      heightFactor: 1.0,
+                                                      color: Colors.black),
+                                                ],
+                                              )
+                                            : const Icon(Icons.play_arrow_sharp),
+                                      ),
+                                    ),
+                                  ),
+                                  const Text('29\'\''),
+                                  InkWell(
                                     onTap: () {
-                                      if (!playVoice.value) {
-                                        startPlay(1);
-                                      } else {
+                                      //delete
+                                      _editUserInfo(
+                                          User.getUserId(), {'voiceSign': ''});
+                                      if (homeRsp != null) {
+                                        homeRsp!.voiceSign = '';
+                                      }
+                                      if (play.isPlaying) {
                                         stopPlay(1);
                                       }
+                                      voiceFile.value = '';
                                     },
-                                    child: playVoice.value
-                                        ? AudioWave(
-                                            height: 20,
-                                            width: 90,
-                                            spacing: 2.5,
-                                            animation: true,
-                                            bars: [
-                                              AudioWaveBar(
-                                                  heightFactor: 0.2,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.3,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.1,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.9,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.2,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.3,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.2,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.8,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.3,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.2,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 1.0,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.5,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.6,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.7,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.3,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.2,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.4,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 0.7,
-                                                  color: Colors.black),
-                                              AudioWaveBar(
-                                                  heightFactor: 1.0,
-                                                  color: Colors.black),
-                                            ],
-                                          )
-                                        : const Icon(Icons.play_arrow_sharp),
+                                    child: const Icon(Icons.cancel_outlined),
                                   ),
-                                ),
+                                ],
                               ),
-                              const Text('29\'\''),
-                              InkWell(
-                                onTap: () {
-                                  //delete
-                                  _editUserInfo(
-                                      User.getUserId(), {'voiceSign': ''});
-                                  if (homeRsp != null) {
-                                    homeRsp!.voiceSign = '';
-                                  }
-                                  if (play.isPlaying) {
-                                    stopPlay(1);
-                                  }
-                                  voiceFile.value = '';
-                                },
-                                child: const Icon(Icons.cancel_outlined),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(),
+                       ),
+                     )
+                    ,
               ),
+              SizedBox(height: 20,),
               const SizedBox(
                 height: 10,
               ),

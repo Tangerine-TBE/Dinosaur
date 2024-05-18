@@ -297,11 +297,15 @@ class MineReviewPage extends BaseEmptyPage<MineReviewController> {
                 ),
                 InkWell(
                   onTap: () {
-                    controller.onItemLike();
+                    controller.onItemLike(index);
                   },
-                  child: const FaIcon(
-                    FontAwesomeIcons.heart,
+                  child: !controller.list[index].isMyLike ?const FaIcon(
+                    FontAwesomeIcons.solidHeart,
                     size: 14,
+                  ):const FaIcon(
+                    FontAwesomeIcons.solidHeart,
+                    size: 14,
+                    color: Colors.red,
                   ),
                 ),
               ],

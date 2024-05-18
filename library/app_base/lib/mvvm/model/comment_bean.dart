@@ -66,7 +66,7 @@ class CommentList {
   });
 
   String postsId;
-  String likesNum;
+  int likesNum;
   int sortIndex;
   int level;
   String creatorId;
@@ -78,7 +78,7 @@ class CommentList {
   int modifyTime;
   int createTime;
   String id;
-  String commentsNum;
+  int commentsNum;
   bool isMyLike;
   String userName;
   String nickName;
@@ -93,8 +93,8 @@ class CommentList {
         postsId: json["postsId"] ?? '',
         content: json["content"] ?? '',
         userId: json["userId"] ?? '',
-        likesNum: json["likesNum"] ?? '',
-        commentsNum: json["commentsNum"] ?? '',
+        likesNum: json["likesNum"] ?? 0,
+        commentsNum: json["commentsNum"] ?? 0,
         isMyLike: json["isMyLike"] ?? false,
         userName: json['userName'] ?? '',
         nickName: json['nickName'] ?? '',
@@ -107,7 +107,7 @@ class CommentList {
 
   factory CommentList.mock() => CommentList(
       postsId: '123',
-      likesNum: '123',
+      likesNum: 0,
       sortIndex: 1,
       level: 1,
       creatorId: '1231',
@@ -120,7 +120,7 @@ class CommentList {
       createTime: 188899,
       id: '1213'
           '',
-      commentsNum: '123',
+      commentsNum: 0,
       isMyLike: false,
       nickName: '超级赛亚人',
       userAvator: 'https://via.placeholder.com/150/0000F0/808080?Text=Image0',

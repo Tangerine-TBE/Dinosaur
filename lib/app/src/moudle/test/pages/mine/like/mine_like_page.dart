@@ -255,7 +255,11 @@ class MineLikePage extends BaseEmptyPage<MineLikeController> {
                   onTap: () {},
                   child: Row(
                     children: [
-                      Icon(
+                     controller.list[index].isMyFavor?Icon(
+                       Icons.star_rounded,
+                       size: 14,
+                       color: Colors.red,
+                     ): Icon(
                         Icons.star_rounded,
                         size: 14,
                         color: MyColors.textGreyColor,

@@ -438,7 +438,7 @@ class DetailsPage extends BaseEmptyPage<DetailsController> {
                     size: 12,
                   ),
                 ),
-                Text(item.commentsNum,style: TextStyle(color:MyColors.themeTextColor,),),
+                Text(item.commentsNum.toString(),style: TextStyle(color:MyColors.themeTextColor,),),
                 const SizedBox(
                   width: 40,
                 ),
