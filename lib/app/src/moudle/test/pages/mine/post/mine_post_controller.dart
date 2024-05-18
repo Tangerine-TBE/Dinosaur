@@ -134,6 +134,8 @@ class MinePostController extends BaseController {
   }
 
   naviToDetails(PostsList item, int index) {
+    item.userAvator = User.getUserAvator();
+    item.userName = User.getUserNickName();
     var map = {'item': item, 'index': index};
     navigateTo(RouteName.details, args: map);
   }
