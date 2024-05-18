@@ -6,6 +6,7 @@ import 'package:dinosaur/app/src/moudle/test/device/play_deivce_ble_controller.d
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_controller.dart';
 import 'package:dinosaur/app/src/moudle/test/pages/imageView/image_view_page.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:status_bar_control/status_bar_control.dart';
@@ -73,7 +74,9 @@ class HomeController extends PlayDeviceBleController {
         );
       },
     );
-    StatusBarControl.setHidden(true, animation: StatusBarAnimation.SLIDE);
+    if(defaultTargetPlatform == TargetPlatform.android){
+      StatusBarControl.setHidden(true, animation: StatusBarAnimation.SLIDE);
+    }
     await Navigator.of(Get.context!).push(route);
     StatusBarControl.setHidden(false, animation: StatusBarAnimation.SLIDE);
   }
